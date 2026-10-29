@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MetabolicAtlas.Api/MetabolicAtlas.Api.csproj" />
+    <Project Path="src/MetabolicAtlas.Application/MetabolicAtlas.Application.csproj" />
+    <Project Path="src/MetabolicAtlas.Domain/MetabolicAtlas.Domain.csproj" />
+    <Project Path="src/MetabolicAtlas.Import/MetabolicAtlas.Import.csproj" />
+    <Project Path="src/MetabolicAtlas.Infrastructure/MetabolicAtlas.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MetabolicAtlas.Domain.Tests/MetabolicAtlas.Domain.Tests.csproj" />
+    <Project Path="tests/MetabolicAtlas.Import.Tests/MetabolicAtlas.Import.Tests.csproj" />
+    <Project Path="tests/MetabolicAtlas.IntegrationTests/MetabolicAtlas.IntegrationTests.csproj" />
+  </Folder>
+</Solution>
