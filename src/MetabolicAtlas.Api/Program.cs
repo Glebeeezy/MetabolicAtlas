@@ -3,6 +3,7 @@ using MetabolicAtlas.Application;
 using MetabolicAtlas.Infrastructure;
 using MetabolicAtlas.Import;
 using MetabolicAtlas.Api.Endpoints;
+using MetabolicAtlas.Api.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,13 @@ builder.Services.AddCors(options =>
     });
 });
 
+// ProblemDetails + global exception handling (order matters — GlobalExceptionHandler must be last)
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddExceptionHandler<ConflictExceptionHandler>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 // OpenAPI document generation
 builder.Services.AddOpenApi();
 
@@ -45,6 +53,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowFrontend");
+
+// Global exception handling middleware — must be early in the pipeline
+app.UseExceptionHandler();
 
 // System health check
 app.MapGet("/health", () => Results.Ok(new { Status = "Healthy", Timestamp = DateTime.UtcNow }))

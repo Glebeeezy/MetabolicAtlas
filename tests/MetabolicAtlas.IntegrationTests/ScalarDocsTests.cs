@@ -1,14 +1,14 @@
 using System.Net;
-using Microsoft.AspNetCore.Mvc.Testing;
+using MetabolicAtlas.IntegrationTests.Factories;
 using Xunit;
 
 namespace MetabolicAtlas.IntegrationTests;
 
-public class ScalarDocsTests : IClassFixture<WebApplicationFactory<Program>>
+public class ScalarDocsTests : IClassFixture<TestWebApplicationFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly TestWebApplicationFactory _factory;
 
-    public ScalarDocsTests(WebApplicationFactory<Program> factory)
+    public ScalarDocsTests(TestWebApplicationFactory factory)
     {
         _factory = factory;
     }

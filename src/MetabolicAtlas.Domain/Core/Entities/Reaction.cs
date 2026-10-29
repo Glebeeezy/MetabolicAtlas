@@ -1,4 +1,5 @@
 using MetabolicAtlas.Domain.Common;
+using MetabolicAtlas.Domain.Common.Exceptions;
 using MetabolicAtlas.Domain.Core.Enums;
 
 namespace MetabolicAtlas.Domain.Core.Entities;
@@ -34,7 +35,7 @@ public class Reaction : Entity<Guid>, IAggregateRoot
     public void AddParticipant(Guid metaboliteId, ParticipantRole role, decimal stoichiometry, Guid? compartmentId = null)
     {
         if (stoichiometry <= 0)
-            throw new ArgumentOutOfRangeException(nameof(stoichiometry), "Stoichiometric coefficient must be a positive number.");
+            throw new ValidationException($"Stoichiometric coefficient must be a positive number. Provided value: {stoichiometry}.");
 
         _participants.Add(new ReactionParticipant(Guid.NewGuid(), Id, metaboliteId, role, stoichiometry, compartmentId));
         TouchUpdated();

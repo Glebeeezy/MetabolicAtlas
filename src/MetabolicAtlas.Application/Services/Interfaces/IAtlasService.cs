@@ -8,6 +8,6 @@ namespace MetabolicAtlas.Application.Services.Interfaces;
 public interface IAtlasService
 {
     Task<IReadOnlyList<MapLayoutSummaryDto>> GetLayoutsAsync(CancellationToken cancellationToken = default);
-    Task<MapLayoutDetailDto?> GetLayoutByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<MapLayoutDetailDto> GetLayoutByIdAsync(Guid id, CancellationToken cancellationToken = default);
 }
 

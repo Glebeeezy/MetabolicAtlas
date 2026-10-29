@@ -1,3 +1,4 @@
+using MetabolicAtlas.Domain.Common.Exceptions;
 using MetabolicAtlas.Domain.Core.Entities;
 using MetabolicAtlas.Domain.Core.Enums;
 using Xunit;
@@ -27,13 +28,13 @@ public class ReactionTests
     [Theory]
     [InlineData(0)]
     [InlineData(-1.5)]
-    public void Reaction_ShouldThrowArgumentOutOfRangeException_WhenStoichiometryNotPositive(decimal invalidStoichiometry)
+    public void Reaction_ShouldThrowValidationException_WhenStoichiometryNotPositive(decimal invalidStoichiometry)
     {
         // Arrange
         var reaction = new Reaction(Guid.NewGuid(), "R_TCA_01", "Reaction", ReactionDirection.ForwardOnly);
 
         // Act & Assert
-        Assert.Throws<ArgumentOutOfRangeException>(() =>
+        Assert.Throws<ValidationException>(() =>
             reaction.AddParticipant(Guid.NewGuid(), ParticipantRole.Substrate, invalidStoichiometry));
     }
 

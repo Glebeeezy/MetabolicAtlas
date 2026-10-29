@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using MetabolicAtlas.Application.Common.Interfaces;
 using MetabolicAtlas.Application.DTOs;
 using MetabolicAtlas.Application.Services.Interfaces;
+using MetabolicAtlas.Domain.Common.Exceptions;
+using MetabolicAtlas.Domain.Pathways.Entities;
 
 namespace MetabolicAtlas.Application.Services.Implementations;
 
@@ -34,7 +36,7 @@ public class AtlasService : IAtlasService
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<MapLayoutDetailDto?> GetLayoutByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<MapLayoutDetailDto> GetLayoutByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var layout = await _context.MapLayouts
             .AsNoTracking()
@@ -43,7 +45,7 @@ public class AtlasService : IAtlasService
             .FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
 
         if (layout == null)
-            return null;
+            throw new NotFoundException(nameof(MapLayout), id);
 
         var elements = layout.Elements.Select(e => new MapElementDto(
             e.Id,

@@ -20,7 +20,7 @@ public static class AtlasEndpoints
         group.MapGet("/layouts/{id:guid}", async (Guid id, IAtlasService atlasService, CancellationToken ct) =>
         {
             var layout = await atlasService.GetLayoutByIdAsync(id, ct);
-            return layout is not null ? Results.Ok(layout) : Results.NotFound();
+            return Results.Ok(layout);
         })
         .WithName("GetMapLayoutById")
         .WithSummary("Retrieve detailed map layout by ID including nodes and edges");
