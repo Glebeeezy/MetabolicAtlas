@@ -8,6 +8,6 @@ namespace MetabolicAtlas.Application.Services.Interfaces;
 public interface IPathwayService
 {
     Task<IReadOnlyList<PathwaySummaryDto>> GetPathwaysAsync(CancellationToken cancellationToken = default);
-    Task<PathwayDetailDto?> GetPathwayByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<PathwayDetailDto> GetPathwayByIdAsync(Guid id, CancellationToken cancellationToken = default);
 }
 

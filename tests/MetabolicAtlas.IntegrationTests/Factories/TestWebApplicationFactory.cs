@@ -8,46 +8,61 @@ using Moq;
 namespace MetabolicAtlas.IntegrationTests.Factories;
 
 /// <summary>
-/// Custom factory that replaces real services with in-memory stubs to avoid DB dependency.
+/// Custom factory that replaces real domain services with mock stubs to decouple tests from PostgreSQL.
 /// </summary>
 public sealed class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private readonly Mock<IAtlasService> _atlasServiceMock = new();
+    public Mock<IAtlasService> AtlasServiceMock { get; } = new();
+    public Mock<IPathwayService> PathwayServiceMock { get; } = new();
+    public Mock<IMetaboliteService> MetaboliteServiceMock { get; } = new();
+    public Mock<IReactionService> ReactionServiceMock { get; } = new();
+    public Mock<IEnzymeService> EnzymeServiceMock { get; } = new();
 
     public TestWebApplicationFactory()
     {
-        // GET /api/v1/atlas/layouts — returns an empty list
-        _atlasServiceMock
+        // Default Atlas mocks
+        AtlasServiceMock
             .Setup(s => s.GetLayoutsAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(Array.Empty<MapLayoutSummaryDto>());
 
-        // GET /api/v1/atlas/layouts/{id} — throws NotFoundException for any guid
-        _atlasServiceMock
+        AtlasServiceMock
             .Setup(s => s.GetLayoutByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new NotFoundException(nameof(MapLayoutDetailDto), Guid.Empty));
-    }
+            .ThrowsAsync(new NotFoundException("MapLayout", Guid.Empty));
 
-    /// <summary>
-    /// Configures the mock to throw <see cref="NotFoundException"/> for a specific id.
-    /// </summary>
-    public void SetupLayoutNotFound(Guid id)
-    {
-        _atlasServiceMock
-            .Setup(s => s.GetLayoutByIdAsync(id, It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new NotFoundException("MapLayout", id));
+        // Default Pathway mocks
+        PathwayServiceMock
+            .Setup(s => s.GetPathwaysAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync([
+                new PathwaySummaryDto(Guid.NewGuid(), "PWY_TCA", "TCA Cycle", "Energy", 8)
+            ]);
+
+        // Default Enzyme mocks
+        EnzymeServiceMock
+            .Setup(s => s.GetEnzymesAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync([
+                new EnzymeDto(Guid.NewGuid(), "2.3.3.1", "Citrate synthase", "P53396", "Step 1 of TCA")
+            ]);
     }
 
     protected override void ConfigureWebHost(Microsoft.AspNetCore.Hosting.IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
         {
-            // Remove real IAtlasService registration
-            var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IAtlasService));
-            if (descriptor != null)
-                services.Remove(descriptor);
-
-            // Register mock
-            services.AddSingleton(_atlasServiceMock.Object);
+            ReplaceService(services, AtlasServiceMock.Object);
+            ReplaceService(services, PathwayServiceMock.Object);
+            ReplaceService(services, MetaboliteServiceMock.Object);
+            ReplaceService(services, ReactionServiceMock.Object);
+            ReplaceService(services, EnzymeServiceMock.Object);
         });
+    }
+
+    private static void ReplaceService<TService>(IServiceCollection services, TService implementation)
+        where TService : class
+    {
+        var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(TService));
+        if (descriptor != null)
+            services.Remove(descriptor);
+
+        services.AddSingleton(implementation);
     }
 }

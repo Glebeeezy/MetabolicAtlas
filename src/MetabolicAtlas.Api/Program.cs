@@ -74,8 +74,12 @@ app.MapGet("/health", () => Results.Ok(new { Status = "Healthy", Timestamp = Dat
    .WithName("HealthCheck")
    .WithSummary("Check system health status");
 
-// Atlas endpoints
+// Domain endpoints
 app.MapAtlasEndpoints();
+app.MapPathwayEndpoints();
+app.MapMetaboliteEndpoints();
+app.MapReactionEndpoints();
+app.MapEnzymeEndpoints();
 
 app.Run();
 

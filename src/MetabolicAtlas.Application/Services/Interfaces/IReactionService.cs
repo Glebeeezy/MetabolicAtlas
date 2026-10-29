@@ -7,6 +7,6 @@ namespace MetabolicAtlas.Application.Services.Interfaces;
 /// </summary>
 public interface IReactionService
 {
-    Task<ReactionDto?> GetReactionByIdAsync(Guid id, string languageCode = "ru", CancellationToken cancellationToken = default);
+    Task<ReactionDto> GetReactionByIdAsync(Guid id, string languageCode = "ru", CancellationToken cancellationToken = default);
 }
 

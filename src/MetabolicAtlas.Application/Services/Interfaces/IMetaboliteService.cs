@@ -7,6 +7,6 @@ namespace MetabolicAtlas.Application.Services.Interfaces;
 /// </summary>
 public interface IMetaboliteService
 {
-    Task<MetaboliteDto?> GetMetaboliteByIdAsync(Guid id, string languageCode = "ru", CancellationToken cancellationToken = default);
+    Task<MetaboliteDto> GetMetaboliteByIdAsync(Guid id, string languageCode = "ru", CancellationToken cancellationToken = default);
 }
 
