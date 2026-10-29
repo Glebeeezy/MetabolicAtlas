@@ -1,6 +1,7 @@
 using Scalar.AspNetCore;
 using MetabolicAtlas.Application;
 using MetabolicAtlas.Infrastructure;
+using MetabolicAtlas.Infrastructure.Persistence.Seed;
 using MetabolicAtlas.Import;
 using MetabolicAtlas.Api.Endpoints;
 using MetabolicAtlas.Api.Exceptions;
@@ -50,6 +51,16 @@ if (app.Environment.IsDevelopment())
             .WithTheme(ScalarTheme.Moon)
             .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
     });
+
+    try
+    {
+        await DataSeeder.SeedAsync(app.Services);
+    }
+    catch (Exception ex)
+    {
+        var logger = app.Services.GetRequiredService<ILogger<Program>>();
+        logger.LogWarning(ex, "DataSeeder skipped: unable to connect to database.");
+    }
 }
 
 app.UseCors("AllowFrontend");
