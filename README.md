@@ -1,5 +1,10 @@
 # Metabolic Atlas
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![.NET](https://img.shields.io/badge/.NET-10.0-512BD4.svg)](https://dotnet.microsoft.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791.svg)](https://www.postgresql.org/)
+[![API Docs](https://img.shields.io/badge/API_Docs-Scalar-black.svg)](#api-endpoints-prefix-apiv1)
+
 An interactive human metabolism atlas: a scientifically structured biochemical database, interactive metabolic pathway maps, and educational resources.
 
 The project unites a human biochemistry reference system and a visual educational tool tailored for medical students, biochemists, nutritionists, and researchers.
