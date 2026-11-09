@@ -1,10 +1,10 @@
-using Scalar.AspNetCore;
 using MetabolicAtlas.Application;
 using MetabolicAtlas.Infrastructure;
 using MetabolicAtlas.Infrastructure.Persistence.Seed;
 using MetabolicAtlas.Import;
 using MetabolicAtlas.Api.Endpoints;
 using MetabolicAtlas.Api.Exceptions;
+using MetabolicAtlas.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,8 +35,8 @@ builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<ConflictExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
-// OpenAPI document generation
-builder.Services.AddOpenApi();
+// OpenAPI documentation configuration
+builder.Services.AddMetabolicAtlasOpenApi();
 
 var app = builder.Build();
 
@@ -44,13 +44,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference(options =>
-    {
-        options
-            .WithTitle("Metabolic Atlas API")
-            .WithTheme(ScalarTheme.Moon)
-            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
-    });
+    app.MapMetabolicAtlasScalar();
 
     try
     {
