@@ -1,85 +1,95 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  signal,
+  ViewChild,
+} from '@angular/core';
+import { Router } from '@angular/router';
 import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher.component';
 import { LocaleSwitcherComponent } from '../locale-switcher/locale-switcher.component';
 import { SidebarService } from '../../../core/services/sidebar.service';
 import { LocaleService } from '../../../core/services/locale.service';
-
-export interface HeaderPathwayItem {
-  id: string;
-  nameRu: string;
-  nameEn: string;
-  code: string;
-  route: string | any[];
-  dotColor: string;
-  isReady?: boolean;
-}
+import { AtlasStateService } from '../../../core/services/atlas-state.service';
 
 /**
- * Top application header containing sidebar toggle, quick pathway selector in the center,
- * and language / animated theme controls on the right.
+ * Top application header containing sidebar toggle, quick pathway selector in the center
+ * with horizontal scroll arrows, and language / animated theme controls on the right.
  */
 @Component({
   selector: 'ma-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, ThemeSwitcherComponent, LocaleSwitcherComponent],
+  imports: [ThemeSwitcherComponent, LocaleSwitcherComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent {
+export class HeaderComponent implements AfterViewInit, OnDestroy {
   protected readonly sidebarService = inject(SidebarService);
   protected readonly localeService = inject(LocaleService);
+  protected readonly atlasStateService = inject(AtlasStateService);
+  private readonly router = inject(Router);
 
-  protected readonly pathwayPills: HeaderPathwayItem[] = [
-    {
-      id: 'PW-TCA-CYCLE',
-      nameRu: 'ЦТК (Кребс)',
-      nameEn: 'TCA Cycle',
-      code: 'TCA',
-      route: '/atlas',
-      dotColor: '#10B981',
-      isReady: true,
-    },
-    {
-      id: 'PW-GLYCOLISIS',
-      nameRu: 'Гликолиз',
-      nameEn: 'Glycolysis',
-      code: 'GLY',
-      route: ['/pathways', 'PW-GLYCOLISIS'],
-      dotColor: 'var(--bio-substrate)',
-    },
-    {
-      id: 'PW-OXPHOS',
-      nameRu: 'Окислительное фосфорилирование',
-      nameEn: 'OxPhos / ETC',
-      code: 'ETC',
-      route: ['/pathways', 'PW-OXPHOS'],
-      dotColor: 'var(--bio-product)',
-    },
-    {
-      id: 'PW-BETA-OXIDATION',
-      nameRu: 'β-Окисление',
-      nameEn: 'β-Oxidation',
-      code: 'FAO',
-      route: ['/pathways', 'PW-BETA-OXIDATION'],
-      dotColor: 'var(--bio-cofactor)',
-    },
-    {
-      id: 'PW-GLUCONEOGENESIS',
-      nameRu: 'Глюконеогенез',
-      nameEn: 'Gluconeogenesis',
-      code: 'GNG',
-      route: ['/pathways', 'PW-GLUCONEOGENESIS'],
-      dotColor: 'var(--bio-substrate)',
-    },
-    {
-      id: 'PW-UREA-CYCLE',
-      nameRu: 'Орнитиновый цикл',
-      nameEn: 'Urea Cycle',
-      code: 'URC',
-      route: ['/pathways', 'PW-UREA-CYCLE'],
-      dotColor: 'var(--bio-enzyme)',
-    },
-  ];
+  @ViewChild('navScrollContainer') navScrollContainer?: ElementRef<HTMLDivElement>;
+
+  readonly canScrollLeft = signal<boolean>(false);
+  readonly canScrollRight = signal<boolean>(false);
+
+  private resizeObserver?: ResizeObserver;
+
+  get pathwayPills() {
+    return this.atlasStateService.pathways();
+  }
+
+  ngAfterViewInit(): void {
+    this.updateScrollState();
+
+    if (typeof window !== 'undefined' && 'ResizeObserver' in window && this.navScrollContainer) {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.updateScrollState();
+      });
+      this.resizeObserver.observe(this.navScrollContainer.nativeElement);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+  }
+
+  onSelectPathway(id: string): void {
+    this.atlasStateService.selectPathway(id);
+    if (!this.router.url.startsWith('/atlas')) {
+      this.router.navigate(['/atlas']);
+    }
+  }
+
+  updateScrollState(): void {
+    const el = this.navScrollContainer?.nativeElement;
+    if (!el) return;
+
+    const left = el.scrollLeft > 2;
+    const right = el.scrollLeft + el.clientWidth < el.scrollWidth - 2;
+
+    this.canScrollLeft.set(left);
+    this.canScrollRight.set(right);
+  }
+
+  scrollLeft(): void {
+    const el = this.navScrollContainer?.nativeElement;
+    if (!el) return;
+    el.scrollBy({ left: -180, behavior: 'smooth' });
+    setTimeout(() => this.updateScrollState(), 250);
+  }
+
+  scrollRight(): void {
+    const el = this.navScrollContainer?.nativeElement;
+    if (!el) return;
+    el.scrollBy({ left: 180, behavior: 'smooth' });
+    setTimeout(() => this.updateScrollState(), 250);
+  }
 }

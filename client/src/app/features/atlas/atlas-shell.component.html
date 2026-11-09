@@ -9,48 +9,24 @@
     <div class="context-pill">
       <span class="context-pill__status" aria-hidden="true"></span>
       <span class="context-pill__label">
-        Цикл трикарбоновых кислот (ЦТК / Цикл Кребса)
+        @if (atlasStateService.selectedPathwayId() === 'ALL') {
+          {{ localeService.locale() === 'ru' ? 'Все пути (Обзор метаболизма человека)' : 'All Pathways (Human Metabolic Atlas)' }}
+        } @else if (atlasStateService.selectedPathwayId() === 'PW-TCA-CYCLE') {
+          {{ localeService.locale() === 'ru' ? 'Цикл трикарбоновых кислот (ЦТК / Цикл Кребса)' : 'Citric Acid Cycle (TCA / Krebs Cycle)' }}
+        } @else {
+          {{ localeService.locale() === 'ru' ? atlasStateService.selectedPathway().nameRu : atlasStateService.selectedPathway().nameEn }}
+        }
       </span>
       <span class="context-pill__stats">
-        Матрикс митохондрий • 8 ферментов
+        @if (atlasStateService.selectedPathwayId() === 'ALL') {
+          {{ localeService.locale() === 'ru' ? 'Центральный метаболизм • ЦТК, субстраты и перекрестки' : 'Central Metabolism • TCA, Substrates & Crossroads' }}
+        } @else if (atlasStateService.selectedPathwayId() === 'PW-TCA-CYCLE') {
+          {{ localeService.locale() === 'ru' ? 'Матрикс митохондрий • 8 ферментов' : 'Mitochondrial Matrix • 8 Enzymes' }}
+        } @else {
+          {{ localeService.locale() === 'ru' ? atlasStateService.selectedPathway().categoryRu : atlasStateService.selectedPathway().categoryEn }} •
+          {{ atlasStateService.selectedPathway().reactionCount }} {{ localeService.locale() === 'ru' ? 'реакций' : 'reactions' }}
+        }
       </span>
-    </div>
-  </div>
-
-  <!-- Top-right overlay: Biochemical Summary Stats & Filter Badges -->
-  <div class="canvas-overlay canvas-overlay--top-right" data-interactive="true">
-    <div class="yield-badge">
-      <span class="yield-badge__title">
-        Выход на 1 Ацетил-КоА:
-      </span>
-      <button
-        type="button"
-        class="yield-tag yield-tag--btn yield-tag--nadh"
-        [class.is-filtered]="activeCarrierFilter() === 'NADH'"
-        (click)="toggleEnergyFilter('NADH')"
-        title="Нажмите, чтобы отфильтровать и подсветить стадии с выходом НАДН (3, 4, 8)"
-      >
-        3 НАДН (➔ ~7.5 АТФ)
-      </button>
-      <button
-        type="button"
-        class="yield-tag yield-tag--btn yield-tag--fadh"
-        [class.is-filtered]="activeCarrierFilter() === 'FADH2'"
-        (click)="toggleEnergyFilter('FADH2')"
-        title="Нажмите, чтобы отфильтровать и подсветить стадию с выходом ФАДН₂ (6)"
-      >
-        1 ФАДН₂ (➔ ~1.5 АТФ)
-      </button>
-      <button
-        type="button"
-        class="yield-tag yield-tag--btn yield-tag--gtp"
-        [class.is-filtered]="activeCarrierFilter() === 'GTP'"
-        (click)="toggleEnergyFilter('GTP')"
-        title="Нажмите, чтобы отфильтровать стадию субстратного фосфорилирования (5)"
-      >
-        1 ГТФ / АТФ
-      </button>
-      <span class="yield-tag yield-tag--co2">2 CO₂</span>
     </div>
   </div>
 

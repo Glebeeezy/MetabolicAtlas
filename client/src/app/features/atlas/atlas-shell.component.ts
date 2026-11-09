@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
   OnDestroy,
   OnInit,
@@ -11,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ApiService } from '../../core/services/api.service';
 import { LocaleService } from '../../core/services/locale.service';
+import { AtlasStateService } from '../../core/services/atlas-state.service';
 import {
   ALL_METABOLITES,
   COFACTOR_METABOLITES,
@@ -54,6 +56,7 @@ export type {
 export class AtlasShellComponent implements OnInit, OnDestroy {
   protected readonly api = inject(ApiService);
   protected readonly localeService = inject(LocaleService);
+  protected readonly atlasStateService = inject(AtlasStateService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly safeSvgCache = new Map<string, SafeHtml>();
 
@@ -88,10 +91,45 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   readonly hoveredMetabolite = signal<HumanMetaboliteNode | null>(null);
 
   // Interactivity signals
-  readonly isFluxAnimated = signal<boolean>(false);
+  readonly isFluxAnimated = this.atlasStateService.isFluxAnimated;
   readonly activeCarrierFilter = signal<'NADH' | 'FADH2' | 'GTP' | null>(null);
   readonly copyFeedback = signal<string | null>(null);
   private copyTimeoutId?: ReturnType<typeof setTimeout>;
+
+  constructor() {
+    effect(() => {
+      const focus = this.atlasStateService.mapFocusTarget();
+      if (!focus) return;
+
+      if (focus.pathwayId === 'ALL') {
+        this.resetZoom();
+        this.closeInspector();
+        return;
+      }
+
+      if (focus.pathwayId === 'PW-TCA-CYCLE') {
+        this.resetZoom();
+        this.onReactionClick(this.reactions[0]);
+        return;
+      }
+
+      if (focus.targetCode) {
+        const node = this.allMetabolites.find((m) => m.code === focus.targetCode);
+        if (node) {
+          this.focusOnNode(node);
+          this.onMetaboliteClick(node);
+        }
+      }
+    });
+  }
+
+  focusOnNode(node: HumanMetaboliteNode): void {
+    const centerX = node.x + node.width / 2;
+    const centerY = node.y + node.height / 2;
+    this.panX.set(Math.round((700 - centerX) * 0.7));
+    this.panY.set(Math.round((510 - centerY) * 0.7));
+    this.zoom.set(115);
+  }
 
   readonly selectedCofactorName = computed(() => {
     const met = this.selectedMetabolite();
@@ -168,6 +206,19 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   }
 
   isNodeDimmed(nodeId: string): boolean {
+    const query = this.atlasStateService.searchQuery().toLowerCase();
+    if (query) {
+      const met = this.metaboliteMap().get(nodeId);
+      if (!met) return true;
+      const match =
+        met.nameRu.toLowerCase().includes(query) ||
+        met.nameEn.toLowerCase().includes(query) ||
+        met.code.toLowerCase().includes(query) ||
+        met.formula.toLowerCase().includes(query) ||
+        met.synonymsRu.some((s) => s.toLowerCase().includes(query));
+      if (!match) return true;
+    }
+
     const filter = this.activeCarrierFilter();
     if (filter) {
       // Keep nodes participating in filtered reactions bright
@@ -198,6 +249,20 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   }
 
   isReactionDimmed(reactionId: string): boolean {
+    const query = this.atlasStateService.searchQuery().toLowerCase();
+    if (query) {
+      const rx = this.reactionMap().get(reactionId);
+      if (!rx) return true;
+      const match =
+        rx.nameRu.toLowerCase().includes(query) ||
+        rx.nameEn.toLowerCase().includes(query) ||
+        rx.enzymeRu.toLowerCase().includes(query) ||
+        rx.code.toLowerCase().includes(query) ||
+        rx.substrates.some((s) => s.name.toLowerCase().includes(query)) ||
+        rx.products.some((p) => p.name.toLowerCase().includes(query));
+      if (!match) return true;
+    }
+
     const filter = this.activeCarrierFilter();
     if (filter) {
       const r = this.reactionMap().get(reactionId);
@@ -302,7 +367,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   }
 
   toggleFluxAnimation(): void {
-    this.isFluxAnimated.update((v) => !v);
+    this.atlasStateService.toggleFlux();
   }
 
   toggleEnergyFilter(carrier: 'NADH' | 'FADH2' | 'GTP'): void {

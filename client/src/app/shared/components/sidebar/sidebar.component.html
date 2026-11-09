@@ -4,9 +4,9 @@
   aria-label="Боковая панель навигации"
 >
   <div class="sidebar__inner">
-    <!-- Sidebar Top Header -->
+    <!-- Sidebar Top Header (branding only; collapse toggle is in header) -->
     <div class="sidebar__header">
-      <a routerLink="/" class="sidebar__brand" (click)="closeOnMobile()">
+      <div class="sidebar__brand">
         <span class="brand-icon" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"></circle>
@@ -17,100 +17,37 @@
           </svg>
         </span>
         <span class="brand-text">Metabolic Atlas</span>
-      </a>
-
-      <button
-        type="button"
-        class="sidebar__collapse-btn"
-        (click)="sidebarService.toggle()"
-        [attr.aria-label]="sidebarService.isOpen() ? 'Свернуть сайдбар' : 'Развернуть сайдбар'"
-        title="Свернуть сайдбар"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect width="18" height="18" x="3" y="3" rx="2"></rect>
-          <path d="M9 3v18"></path>
-          <path d="m14 9-3 3 3 3"></path>
-        </svg>
-      </button>
+      </div>
     </div>
 
-    <!-- Main Navigation List -->
+    <!-- Scrollable Main Section: Only 1 navigation item (Interactive Map) -->
     <div class="sidebar__scrollable">
-      <!-- Section 1: Main Application Sections (moved from center bar) -->
       <div class="nav-section">
         <div class="nav-section__title">
-          {{ localeService.locale() === 'ru' ? 'Разделы атласа' : 'Navigation' }}
+          {{ localeService.locale() === 'ru' ? 'Разделы атласа' : 'Atlas Sections' }}
         </div>
 
         <ul class="nav-list">
-          @for (sec of mainSections; track sec.route) {
-            <li class="nav-list__item">
-              <a
-                [routerLink]="sec.route"
-                routerLinkActive="is-active"
-                [routerLinkActiveOptions]="{ exact: sec.route === '/atlas' }"
-                class="nav-link"
-                (click)="closeOnMobile()"
-              >
-                <span class="nav-link__icon" aria-hidden="true">
-                  @if (sec.icon === 'atlas') {
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
-                      <line x1="9" y1="3" x2="9" y2="18"></line>
-                      <line x1="15" y1="6" x2="15" y2="21"></line>
-                    </svg>
-                  } @else if (sec.icon === 'pathways') {
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="6" cy="6" r="3"></circle>
-                      <circle cx="18" cy="18" r="3"></circle>
-                      <path d="M6 9v3a6 6 0 0 0 6 6h3"></path>
-                    </svg>
-                  } @else if (sec.icon === 'search') {
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="11" cy="11" r="8"></circle>
-                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                  } @else if (sec.icon === 'articles') {
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
-                      <path d="M6 6h10"></path>
-                      <path d="M6 10h10"></path>
-                    </svg>
-                  }
-                </span>
-                <span class="nav-link__title">
-                  {{ localeService.locale() === 'ru' ? sec.nameRu : sec.nameEn }}
-                </span>
-              </a>
-            </li>
-          }
-        </ul>
-      </div>
-
-      <!-- Section 2: Human Metabolic Pathways Catalog -->
-      <div class="nav-section">
-        <div class="nav-section__title">
-          {{ localeService.locale() === 'ru' ? 'Метаболические пути человека' : 'Human Pathways' }}
-        </div>
-
-        <ul class="nav-list">
-          @for (pw of keyPathways; track pw.id) {
-            <li class="nav-list__item">
-              <a
-                [routerLink]="pw.code === 'TCA' ? '/atlas' : ['/pathways', pw.id]"
-                routerLinkActive="is-active"
-                [routerLinkActiveOptions]="{ exact: pw.code === 'TCA' }"
-                class="nav-link"
-                (click)="closeOnMobile()"
-              >
-                <span class="nav-link__dot" [style.background-color]="pw.dotColor"></span>
-                <span class="nav-link__title">
-                  {{ localeService.locale() === 'ru' ? pw.nameRu : pw.nameEn }}
-                </span>
-                <span class="nav-link__code">{{ pw.code }}</span>
-              </a>
-            </li>
-          }
+          <li class="nav-list__item">
+            <a
+              routerLink="/atlas"
+              routerLinkActive="is-active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              class="nav-link"
+              (click)="closeOnMobile()"
+            >
+              <span class="nav-link__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
+                  <line x1="9" y1="3" x2="9" y2="18"></line>
+                  <line x1="15" y1="6" x2="15" y2="21"></line>
+                </svg>
+              </span>
+              <span class="nav-link__title">
+                {{ localeService.locale() === 'ru' ? 'Интерактивная карта' : 'Interactive Map' }}
+              </span>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
