@@ -17,15 +17,39 @@
     </div>
   </div>
 
-  <!-- Top-right overlay: Biochemical Summary Stats -->
+  <!-- Top-right overlay: Biochemical Summary Stats & Filter Badges -->
   <div class="canvas-overlay canvas-overlay--top-right" data-interactive="true">
     <div class="yield-badge">
       <span class="yield-badge__title">
         Выход на 1 Ацетил-КоА:
       </span>
-      <span class="yield-tag yield-tag--nadh">3 НАДН (➔ ~7.5 АТФ)</span>
-      <span class="yield-tag yield-tag--fadh">1 ФАДН₂ (➔ ~1.5 АТФ)</span>
-      <span class="yield-tag yield-tag--gtp">1 ГТФ / АТФ</span>
+      <button
+        type="button"
+        class="yield-tag yield-tag--btn yield-tag--nadh"
+        [class.is-filtered]="activeCarrierFilter() === 'NADH'"
+        (click)="toggleEnergyFilter('NADH')"
+        title="Нажмите, чтобы отфильтровать и подсветить стадии с выходом НАДН (3, 4, 8)"
+      >
+        3 НАДН (➔ ~7.5 АТФ)
+      </button>
+      <button
+        type="button"
+        class="yield-tag yield-tag--btn yield-tag--fadh"
+        [class.is-filtered]="activeCarrierFilter() === 'FADH2'"
+        (click)="toggleEnergyFilter('FADH2')"
+        title="Нажмите, чтобы отфильтровать и подсветить стадию с выходом ФАДН₂ (6)"
+      >
+        1 ФАДН₂ (➔ ~1.5 АТФ)
+      </button>
+      <button
+        type="button"
+        class="yield-tag yield-tag--btn yield-tag--gtp"
+        [class.is-filtered]="activeCarrierFilter() === 'GTP'"
+        (click)="toggleEnergyFilter('GTP')"
+        title="Нажмите, чтобы отфильтровать стадию субстратного фосфорилирования (5)"
+      >
+        1 ГТФ / АТФ
+      </button>
       <span class="yield-tag yield-tag--co2">2 CO₂</span>
     </div>
   </div>
@@ -51,7 +75,7 @@
           markerHeight="9"
           orient="auto-start-reverse"
         >
-          <path d="M 1 2 L 11 6 L 1 10 z" fill="var(--color-reaction-line)" />
+          <path d="M 1 2 L 11 6 L 1 10 z" fill="var(--color-reaction-line, #334155)" />
         </marker>
 
         <!-- Active/Selected Reaction Arrowhead (Coral) -->
@@ -160,7 +184,7 @@
         }
       </g>
 
-      <!-- 3. Primary Reaction Arrows (Directed Flux Lines) -->
+      <!-- 3. Primary Reaction Arrows (Modular Component with Tangent Arcs & Clickable Cofactors) -->
       <g class="reactions-layer">
         @for (rx of reactions; track rx.id) {
           @let isSel = selectedReaction()?.id === rx.id;
@@ -168,85 +192,25 @@
           @let isDim = isReactionDimmed(rx.id);
 
           <g
+            ma-reaction-arrow
             class="reaction-arrow-group"
             data-interactive="true"
-            [class.is-selected]="isSel"
-            [class.is-hovered]="isHov"
-            [class.is-dimmed]="isDim"
-            (click)="onReactionClick(rx); $event.stopPropagation()"
-            (mouseenter)="hoveredReaction.set(rx)"
-            (mouseleave)="hoveredReaction.set(null)"
-            role="button"
-            tabindex="0"
-            [attr.aria-label]="rx.nameRu"
-          >
-            <!-- Wide invisible hitbox for easy, forgiving clicking -->
-            <path
-              [attr.d]="rx.pathData"
-              class="reaction-hitbox"
-              fill="none"
-              stroke="transparent"
-              stroke-width="26"
-            />
-
-            <!-- Visible sleek reaction line -->
-            <path
-              [attr.d]="rx.pathData"
-              class="reaction-line"
-              fill="none"
-              [attr.marker-end]="isSel ? 'url(#rx-arrowhead-active)' : (isHov ? 'url(#rx-arrowhead-hover)' : 'url(#rx-arrowhead)')"
-            />
-
-            <!-- Swooping Cofactor Arc with input & output labels -->
-            @if (rx.cofactorArc; as arc) {
-              <path
-                [attr.d]="arc.path"
-                class="cofactor-arc"
-                fill="none"
-                [attr.marker-end]="isSel ? 'url(#cofactor-arrowhead-active)' : 'url(#cofactor-arrowhead)'"
-              />
-
-              @if (arc.inText) {
-                <text
-                  [attr.x]="arc.inX"
-                  [attr.y]="arc.inY"
-                  [attr.text-anchor]="arc.inAnchor || 'middle'"
-                  class="cofactor-in-label"
-                >
-                  {{ arc.inText }}
-                </text>
-              }
-
-              @if (arc.outText) {
-                <text
-                  [attr.x]="arc.outX"
-                  [attr.y]="arc.outY"
-                  [attr.text-anchor]="arc.outAnchor || 'middle'"
-                  class="cofactor-out-label"
-                  [class.cofactor-out-label--energy]="arc.isEnergy"
-                  [class.cofactor-out-label--gtp]="arc.isGtp"
-                >
-                  {{ arc.outText }}
-                </text>
-              }
-            }
-
-            <!-- Enzyme tooltip upon hover -->
-            @if (isHov && !isSel) {
-              <g [attr.transform]="'translate(' + rx.tooltipX + ',' + rx.tooltipY + ')'" class="reaction-tooltip">
-                <rect x="-85" y="-22" width="170" height="24" rx="5" class="tooltip-bg" />
-                <text x="0" y="-6" text-anchor="middle" class="tooltip-text">
-                  {{ rx.enzymeShort }} • {{ rx.enzymeRu }}
-                </text>
-              </g>
-            }
-          </g>
+            [reaction]="rx"
+            [isSelected]="isSel"
+            [isHovered]="isHov"
+            [isDimmed]="isDim"
+            [isFluxAnimated]="isFluxAnimated()"
+            (reactionClick)="onReactionClick($event)"
+            (reactionHover)="hoveredReaction.set($event)"
+            (reactionLeave)="hoveredReaction.set(null)"
+            (cofactorClick)="onCofactorClick($event)"
+          ></g>
         }
       </g>
 
       <!-- 4. Metabolite Node Tiles (Substrates & Products) -->
       <g class="metabolites-layer">
-        @for (met of metabolites; track met.id) {
+        @for (met of canvasMetabolites; track met.id) {
           @let isSub = isSubstrateOfSelected(met.id);
           @let isProd = isProductOfSelected(met.id);
           @let isSel = selectedMetabolite()?.id === met.id && !selectedReaction();
@@ -328,9 +292,22 @@
     </svg>
   </div>
 
-  <!-- Bottom-right overlay: Floating Zoom & Canvas Controls -->
+  <!-- Bottom-right overlay: Floating Zoom, Flux & Canvas Controls -->
   <div class="canvas-overlay canvas-overlay--bottom-right" data-interactive="true">
-    <div class="hud-panel" role="toolbar" aria-label="Управление масштабом карты">
+    <div class="hud-panel" role="toolbar" aria-label="Управление масштабом карты и потоком">
+      <button
+        type="button"
+        class="hud-btn"
+        [class.is-active]="isFluxAnimated()"
+        (click)="toggleFluxAnimation()"
+        [title]="isFluxAnimated() ? 'Отключить анимацию потока' : 'Включить анимацию метаболического потока'"
+        aria-label="Анимация потока"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+      </button>
+
       <button
         type="button"
         class="hud-btn"
@@ -374,6 +351,7 @@
       class="context-inspector"
       data-interactive="true"
       aria-label="Контекстная панель биохимической информации"
+      (wheel)="$event.stopPropagation()"
     >
       <!-- Single-Context Inspector Header (No tabs: shows exactly what is clicked) -->
       <div class="inspector-header">
@@ -383,7 +361,7 @@
             <span class="type-text">Реакция • Стадия {{ rx.stepNumber }} из 8</span>
           } @else if (selectedMetabolite(); as met) {
             <span class="live-dot live-dot--met" aria-hidden="true"></span>
-            <span class="type-text">Химическое вещество • Метаболит</span>
+            <span class="type-text">{{ met.isCofactor ? 'Кофермент / Кофактор' : 'Химическое вещество • Метаболит' }}</span>
           }
         </div>
 
@@ -401,6 +379,13 @@
         </button>
       </div>
 
+      <!-- Copy feedback floating notification toast -->
+      @if (copyFeedback(); as feedback) {
+        <div class="copy-feedback-toast" role="status">
+          ✓ {{ feedback }}
+        </div>
+      }
+
       <!-- Reaction View (When a Reaction Arrow is clicked) -->
       @if (selectedReaction(); as rx) {
         <div class="inspector-content">
@@ -417,11 +402,11 @@
             </div>
           </div>
 
-          <!-- Section: Substrate ➔ Product Comparison Cards with Clickable Metabolite Links -->
+          <!-- Section: Substrate ➔ Product Comparison Cards with Clickable Metabolite & Cofactor Links -->
           <div class="inspector-section">
             <div class="section-title-row">
               <h3 class="section-title">Субстрат ➔ Продукт</h3>
-              <span class="section-hint">нажмите на вещество для перехода ↗</span>
+              <span class="section-hint">нажмите для перехода ↗</span>
             </div>
 
             <div class="flux-cards-container">
@@ -440,7 +425,7 @@
                       (click)="linkedMet && onMetaboliteClick(linkedMet)"
                       [attr.role]="linkedMet ? 'button' : null"
                       [attr.tabindex]="linkedMet ? 0 : null"
-                      [attr.title]="linkedMet ? ('Перейти к метаболиту: ' + linkedMet.nameRu) : null"
+                      [attr.title]="linkedMet ? ('Перейти к: ' + linkedMet.nameRu) : null"
                     >
                       <div class="participant-name-group">
                         <span class="participant-name">{{ sub.name }}</span>
@@ -471,7 +456,7 @@
                       (click)="linkedMet && onMetaboliteClick(linkedMet)"
                       [attr.role]="linkedMet ? 'button' : null"
                       [attr.tabindex]="linkedMet ? 0 : null"
-                      [attr.title]="linkedMet ? ('Перейти к метаболиту: ' + linkedMet.nameRu) : null"
+                      [attr.title]="linkedMet ? ('Перейти к: ' + linkedMet.nameRu) : null"
                     >
                       <div class="participant-name-group">
                         <span class="participant-name">{{ prod.name }}</span>
@@ -544,10 +529,10 @@
         </div>
       }
 
-      <!-- Molecule View (When a Metabolite Node is clicked) -->
+      <!-- Molecule / Cofactor View (When a Metabolite Node or Cofactor is clicked) -->
       @if (selectedMetabolite(); as met) {
         <div class="inspector-content">
-          <!-- Molecule Title -->
+          <!-- Molecule / Cofactor Title -->
           <div class="molecule-header">
             <div class="title-carbon-row">
               <h2 class="molecule-title">{{ met.nameRu }}</h2>
@@ -556,14 +541,26 @@
             <div class="molecule-en-name">{{ met.nameEn }} ({{ met.abbrevRu }})</div>
           </div>
 
-          <!-- Big Formula & 2D Structure Card (Matching Reference 2) -->
+          <!-- Big Formula & 2D Structure Card with Quick Copy -->
           <div class="structure-visual-card">
-            <div class="structure-visual-card__formula">
-              {{ met.formula }}
+            <div class="structure-visual-card__top">
+              <div class="structure-visual-card__formula">
+                {{ met.formula }}
+              </div>
+              <button
+                type="button"
+                class="quick-copy-btn"
+                (click)="copyText(met.formula, 'Формула')"
+                title="Скопировать формулу"
+                aria-label="Скопировать химическую формулу"
+              >
+                Копировать 📋
+              </button>
             </div>
+
             <div class="structure-visual-card__drawing" [innerHTML]="getSafeSvg(met.skeletalSvg)"></div>
             <div class="structure-visual-card__note">
-              Скелетная 2D-структура промежуточного метаболита
+              {{ met.isCofactor ? 'Структурная схема кофермента / кофактора' : 'Скелетная 2D-структура промежуточного метаболита' }}
             </div>
           </div>
 
@@ -572,11 +569,86 @@
             {{ met.descriptionRu }}
           </p>
 
+          <!-- MULTI-PATHWAY / MULTI-CYCLE PARTICIPATION SECTION -->
+          <div class="inspector-section">
+            <div class="section-title-row">
+              <h3 class="section-title">Участие в метаболических путях и циклах</h3>
+              <span class="section-count">({{ met.pathwaysRu?.length || 1 }})</span>
+            </div>
+
+            @if (getSortedPathways(met); as sorted) {
+              <!-- 1. Current Active Pathway (TCA Cycle) - Pinned Priority -->
+              @if (sorted.current.length > 0) {
+                <div class="pathway-group pathway-group--current">
+                  <div class="pathway-group__header">
+                    <span class="live-dot live-dot--current"></span>
+                    <span class="pathway-group__title">Текущий цикл • Цикл Кребса (ЦТК)</span>
+                    <span class="pathway-priority-tag">Активный путь</span>
+                  </div>
+
+                  <div class="pathway-items-list">
+                    @for (item of sorted.current; track item.pathwayCode + item.detailsRu) {
+                      <div
+                        class="pathway-item-card pathway-item-card--current"
+                        [class.is-clickable]="!!item.reactionCode"
+                        (click)="item.reactionCode && selectReactionByCode(item.reactionCode)"
+                        role="button"
+                        [attr.tabindex]="item.reactionCode ? 0 : null"
+                        [attr.title]="item.reactionCode ? 'Нажмите для перехода к реакции ' + item.reactionCode : null"
+                      >
+                        <div class="pathway-item-top">
+                          @if (item.stepNumber) {
+                            <span class="step-pill">Стадия {{ item.stepNumber }}</span>
+                          }
+                          <span
+                            class="role-pill"
+                            [class.role-pill--sub]="item.role === 'substrate'"
+                            [class.role-pill--prod]="item.role === 'product'"
+                            [class.role-pill--co]="item.role === 'cofactor'"
+                          >
+                            {{ getRoleNameRu(item.role) }}
+                          </span>
+                          @if (item.reactionCode) {
+                            <span class="jump-arrow">перейти ↗</span>
+                          }
+                        </div>
+                        <p class="pathway-item-desc">{{ item.detailsRu }}</p>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- 2. Other Human Pathways (Crossroads, Glycolysis, Lipids, etc.) -->
+              @if (sorted.others.length > 0) {
+                <div class="pathway-group pathway-group--others">
+                  <div class="pathway-group__header">
+                    <span class="pathway-group__title">Другие метаболические пути человека</span>
+                  </div>
+
+                  <div class="pathway-items-list">
+                    @for (item of sorted.others; track item.pathwayCode + item.pathwayNameRu) {
+                      <div class="pathway-item-card pathway-item-card--other">
+                        <div class="pathway-item-top">
+                          <span class="other-pathway-badge">{{ item.pathwayNameRu }}</span>
+                          <span class="role-pill role-pill--subtle">
+                            {{ getRoleNameRu(item.role) }}
+                          </span>
+                        </div>
+                        <p class="pathway-item-desc">{{ item.detailsRu }}</p>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            }
+          </div>
+
           <!-- Connected Reactions in TCA Cycle (Two-way link to reaction passport!) -->
           @if (getReactionsForMetabolite(met.id); as relatedRxs) {
             @if (relatedRxs.length > 0) {
               <div class="inspector-section">
-                <h3 class="section-title">Участие в стадиях цикла Кребса</h3>
+                <h3 class="section-title">Стадии на карте ЦТК</h3>
                 <div class="related-reactions-list">
                   @for (rel of relatedRxs; track rel.rx.id) {
                     <div
@@ -610,10 +682,19 @@
           <!-- Chemical properties -->
           <div class="inspector-section">
             <h3 class="section-title">Биохимические свойства</h3>
-            <div class="info-row">
-              <span class="info-label">SMILES-код:</span>
-              <span class="info-value font-mono text-xs">{{ met.smiles }}</span>
-            </div>
+            @if (met.smiles) {
+              <div class="info-row">
+                <span class="info-label">SMILES-код:</span>
+                <button
+                  type="button"
+                  class="code-copy-btn font-mono text-xs"
+                  (click)="copyText(met.smiles, 'SMILES')"
+                  title="Нажмите, чтобы скопировать SMILES"
+                >
+                  {{ met.smiles.length > 28 ? (met.smiles | slice:0:28) + '...' : met.smiles }} 📋
+                </button>
+              </div>
+            }
             <div class="info-row">
               <span class="info-label">Компартмент:</span>
               <span class="info-value">Матрикс митохондрий (H. sapiens)</span>
@@ -628,26 +709,37 @@
           <div class="inspector-section">
             <h3 class="section-title">Внешние базы данных</h3>
 
-            <div class="db-card">
-              <div class="db-card__head">
-                <span class="db-title">ChEBI</span>
-                <a
-                  [href]="'https://www.ebi.ac.uk/chebi/searchId.do?chebiId=' + met.chebi"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="db-ext-link"
-                >
-                  {{ met.chebi }} ↗
-                </a>
+            @if (met.chebi) {
+              <div class="db-card">
+                <div class="db-card__head">
+                  <span class="db-title">ChEBI</span>
+                  <a
+                    [href]="'https://www.ebi.ac.uk/chebi/searchId.do?chebiId=' + met.chebi"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="db-ext-link"
+                  >
+                    {{ met.chebi }} ↗
+                  </a>
+                </div>
               </div>
-            </div>
+            }
 
-            <div class="db-card">
-              <div class="db-card__head">
-                <span class="db-title">InChIKey</span>
-                <span class="font-mono text-xs">{{ met.inchiKey }}</span>
+            @if (met.inchiKey) {
+              <div class="db-card">
+                <div class="db-card__head">
+                  <span class="db-title">InChIKey</span>
+                  <button
+                    type="button"
+                    class="code-copy-btn font-mono text-xs"
+                    (click)="copyText(met.inchiKey, 'InChIKey')"
+                    title="Нажмите, чтобы скопировать InChIKey"
+                  >
+                    {{ met.inchiKey }} 📋
+                  </button>
+                </div>
               </div>
-            </div>
+            }
 
             <div class="db-card">
               <div class="db-card__head">

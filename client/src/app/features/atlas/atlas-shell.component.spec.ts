@@ -59,7 +59,7 @@ describe('AtlasShellComponent', () => {
     expect(component.activeTab()).toBe('reaction');
   });
 
-  it('should correctly lookup metabolites by name for reaction card linking', () => {
+  it('should correctly lookup metabolites and cofactors by name for card linking', () => {
     const fixture = TestBed.createComponent(AtlasShellComponent);
     const component = fixture.componentInstance;
 
@@ -71,8 +71,54 @@ describe('AtlasShellComponent', () => {
     expect(succinyl).toBeTruthy();
     expect(succinyl?.code).toBe('MET_SUCCINYL_COA');
 
-    const water = component.findMetaboliteByName('Вода (H₂O)');
-    expect(water).toBeUndefined();
+    const nad = component.findMetaboliteByName('НАД⁺');
+    expect(nad).toBeTruthy();
+    expect(nad?.code).toBe('MET_NAD_PLUS');
+    expect(nad?.isCofactor).toBe(true);
+
+    const unknownMet = component.findMetaboliteByName('НесуществующееВещество');
+    expect(unknownMet).toBeUndefined();
+  });
+
+  it('should select cofactor and open its passport on cofactor click', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.onCofactorClick('НАДН');
+    expect(component.selectedMetabolite()?.code).toBe('MET_NADH');
+    expect(component.selectedReaction()).toBeNull();
+    expect(component.activeTab()).toBe('molecule');
+  });
+
+  it('should sort pathways prioritizing the active TCA cycle', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+
+    const oaa = component.findMetaboliteByName('Оксалоацетат')!;
+    const sorted = component.getSortedPathways(oaa);
+
+    expect(sorted.current.length).toBeGreaterThan(0);
+    expect(sorted.current[0].pathwayCode).toBe('PWY_TCA');
+    expect(sorted.current[0].isCurrentPathway).toBe(true);
+    expect(sorted.others.length).toBeGreaterThan(0);
+  });
+
+  it('should toggle flux animation and energy filters correctly', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+
+    expect(component.isFluxAnimated()).toBe(false);
+    component.toggleFluxAnimation();
+    expect(component.isFluxAnimated()).toBe(true);
+
+    expect(component.activeCarrierFilter()).toBeNull();
+    component.toggleEnergyFilter('NADH');
+    expect(component.activeCarrierFilter()).toBe('NADH');
+    expect(component.selectedReaction()?.stepNumber).toBe(3);
+
+    component.toggleEnergyFilter('NADH');
+    expect(component.activeCarrierFilter()).toBeNull();
   });
 
   it('should find related reactions for a metabolite with their roles', () => {
