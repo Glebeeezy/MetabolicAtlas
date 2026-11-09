@@ -124,5 +124,68 @@ describe('ReactionArrowComponent', () => {
     expect(text?.getAttribute('text-anchor')).toBe('middle');
     expect(text?.getAttribute('dominant-baseline')).toBe('central');
   });
+
+  describe('Cofactor Arc Geometric Alignment & Regression Shield', () => {
+    it('should mathematically guarantee that every human reaction cofactor arc connects to the reaction arrow', async () => {
+      const { HUMAN_REACTIONS } = await import('../../atlas-data');
+
+      const sampleCubicBezier = (
+        p0: [number, number],
+        p1: [number, number],
+        p2: [number, number],
+        p3: [number, number],
+        steps = 150
+      ): [number, number][] => {
+        const pts: [number, number][] = [];
+        for (let i = 0; i <= steps; i++) {
+          const t = i / steps;
+          const mt = 1 - t;
+          const x = mt * mt * mt * p0[0] + 3 * mt * mt * t * p1[0] + 3 * mt * t * t * p2[0] + t * t * t * p3[0];
+          const y = mt * mt * mt * p0[1] + 3 * mt * mt * t * p1[1] + 3 * mt * t * t * p2[1] + t * t * t * p3[1];
+          pts.push([x, y]);
+        }
+        return pts;
+      };
+
+      for (const rx of HUMAN_REACTIONS) {
+        if (!rx.cofactorArc?.path) continue;
+
+        // Parse reaction path: M x0 y0 C x1 y1, x2 y2, x3 y3
+        const rxMatch = rx.pathData.match(
+          /M\s*([\d.]+)\s+([\d.]+)\s+C\s*([\d.]+)\s+([\d.]+),\s*([\d.]+)\s+([\d.]+),\s*([\d.]+)\s+([\d.]+)/
+        );
+        expect(rxMatch, `Reaction ${rx.code} must have valid cubic pathData`).toBeTruthy();
+        if (!rxMatch) continue;
+
+        const rxCurvePts = sampleCubicBezier(
+          [parseFloat(rxMatch[1]), parseFloat(rxMatch[2])],
+          [parseFloat(rxMatch[3]), parseFloat(rxMatch[4])],
+          [parseFloat(rxMatch[5]), parseFloat(rxMatch[6])],
+          [parseFloat(rxMatch[7]), parseFloat(rxMatch[8])]
+        );
+
+        // Extract numbers from cofactor arc path
+        const arcNumbers = rx.cofactorArc.path.replace(/[MC]/g, ' ').trim().split(/\s+/).map(Number);
+        let minDistanceToRx = Infinity;
+
+        for (let i = 0; i < arcNumbers.length; i += 2) {
+          const ax = arcNumbers[i];
+          const ay = arcNumbers[i + 1];
+          for (const [rxX, rxY] of rxCurvePts) {
+            const dist = Math.hypot(ax - rxX, ay - rxY);
+            if (dist < minDistanceToRx) {
+              minDistanceToRx = dist;
+            }
+          }
+        }
+
+        // Clean architecture invariant: cofactor arc MUST connect to the reaction path within 2.0px
+        expect(
+          minDistanceToRx,
+          `Cofactor arc for reaction ${rx.code} (Step ${rx.stepNumber}) must touch the reaction arrow (minDistance was ${minDistanceToRx.toFixed(2)}px)`
+        ).toBeLessThan(2.0);
+      }
+    });
+  });
 });
 
