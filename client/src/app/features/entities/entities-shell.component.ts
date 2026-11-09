@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { LocaleService } from '../../core/services/locale.service';
 
 /**
  * Shell placeholder component for entity detail sheets (Metabolite, Reaction, Enzyme).
@@ -10,6 +11,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntitiesShellComponent {
+  protected readonly localeService = inject(LocaleService);
   readonly type = input<string>('entity');
   readonly id = input<string>('');
 }

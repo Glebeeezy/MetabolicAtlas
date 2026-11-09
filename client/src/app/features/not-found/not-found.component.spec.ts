@@ -19,7 +19,7 @@ describe('NotFoundComponent', () => {
     const fixture = TestBed.createComponent(NotFoundComponent);
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).toContain('404');
-    expect(fixture.nativeElement.textContent).toContain('Page Not Found');
+    expect(fixture.nativeElement.textContent).toMatch(/Page Not Found|Страница не найдена/);
   });
 });
 

@@ -5,8 +5,12 @@
   (click)="toggle()"
   role="switch"
   [attr.aria-checked]="themeService.theme() === 'dark'"
-  [attr.aria-label]="themeService.theme() === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'"
-  [title]="themeService.theme() === 'dark' ? 'Переключить на светлую тему' : 'Переключить на тёмную тему'"
+  [attr.aria-label]="themeService.theme() === 'dark' 
+    ? (localeService.locale() === 'ru' ? 'Включить светлую тему' : 'Switch to light mode') 
+    : (localeService.locale() === 'ru' ? 'Включить тёмную тему' : 'Switch to dark mode')"
+  [title]="themeService.theme() === 'dark' 
+    ? (localeService.locale() === 'ru' ? 'Переключить на светлую тему' : 'Switch to light mode') 
+    : (localeService.locale() === 'ru' ? 'Переключить на тёмную тему' : 'Switch to dark mode')"
 >
   <span class="theme-toggle__track">
     <!-- Day sky clouds -->

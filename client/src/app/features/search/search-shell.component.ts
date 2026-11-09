@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { LocaleService } from '../../core/services/locale.service';
 
 /**
  * Shell placeholder component for full-text and trigram entity search.
@@ -9,5 +10,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './search-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchShellComponent {}
+export class SearchShellComponent {
+  protected readonly localeService = inject(LocaleService);
+}
 

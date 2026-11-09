@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { LocaleService } from '../../core/services/locale.service';
 
 /**
  * 404 page displayed when navigating to undefined routes.
@@ -11,5 +12,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './not-found.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NotFoundComponent {}
+export class NotFoundComponent {
+  protected readonly localeService = inject(LocaleService);
+}
 

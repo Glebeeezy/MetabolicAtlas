@@ -1,19 +1,20 @@
 <section class="shell-container">
   <div class="shell-card">
-    <div class="shell-badge">База знаний</div>
-    <h1 class="shell-title">Научные статьи и клинические корреляты</h1>
+    <div class="shell-badge">{{ localeService.locale() === 'ru' ? 'База знаний' : 'Knowledge Base' }}</div>
+    <h1 class="shell-title">{{ localeService.locale() === 'ru' ? 'Научные статьи и клинические корреляты' : 'Scientific Articles & Clinical Correlates' }}</h1>
     <p class="shell-description">
-      Академические материалы по метаболизму человека: клинические корреляты,
-      витаминные коферменты, патологии и аллостерическая регуляция.
+      {{ localeService.locale() === 'ru' 
+        ? 'Академические материалы по метаболизму человека: клинические корреляты, витаминные коферменты, патологии и аллостерическая регуляция.' 
+        : 'Academic literature on human metabolism: clinical correlates, vitamin coenzymes, pathologies, and allosteric regulation.' }}
     </p>
     @if (slug()) {
       <div class="article-param">
-        <span class="param-key">Статья:</span> <code>{{ slug() }}</code>
+        <span class="param-key">{{ localeService.locale() === 'ru' ? 'Статья:' : 'Article:' }}</span> <code>{{ slug() }}</code>
       </div>
     }
     <div class="shell-status">
       <span class="status-indicator"></span>
-      <span>Базовая архитектура готова — модуль чтения статей подключён к базе данных.</span>
+      <span>{{ localeService.locale() === 'ru' ? 'Базовая архитектура готова — модуль чтения статей подключён к базе данных.' : 'Base architecture ready — scientific article reading module connected to database.' }}</span>
     </div>
   </div>
 </section>

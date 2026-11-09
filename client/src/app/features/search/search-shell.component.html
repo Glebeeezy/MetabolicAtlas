@@ -1,14 +1,15 @@
 <section class="shell-container">
   <div class="shell-card">
-    <div class="shell-badge">Поиск и навигация</div>
-    <h1 class="shell-title">Биохимический поиск</h1>
+    <div class="shell-badge">{{ localeService.locale() === 'ru' ? 'Поиск и навигация' : 'Search & Discovery' }}</div>
+    <h1 class="shell-title">{{ localeService.locale() === 'ru' ? 'Биохимический поиск' : 'Biochemical Search' }}</h1>
     <p class="shell-description">
-      Быстрый поиск по метаболитам человека, химическим формулам, реакциям, номерам КФ (EC) и научным статьям
-      с поддержкой нечёткого триграммного поиска PostgreSQL.
+      {{ localeService.locale() === 'ru' 
+        ? 'Быстрый поиск по метаболитам человека, химическим формулам, реакциям, номерам КФ (EC) и научным статьям с поддержкой нечёткого триграммного поиска PostgreSQL.' 
+        : 'Fast search across human metabolites, chemical formulas, reactions, EC enzyme numbers, and scientific articles powered by PostgreSQL trigram fuzzy matching.' }}
     </p>
     <div class="shell-status">
       <span class="status-indicator"></span>
-      <span>Базовая архитектура готова — модуль сквозного поиска подключён к API.</span>
+      <span>{{ localeService.locale() === 'ru' ? 'Базовая архитектура готова — модуль сквозного поиска подключён к API.' : 'Base architecture ready — cross-entity search module connected to API.' }}</span>
     </div>
   </div>
 </section>

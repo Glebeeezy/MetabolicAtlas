@@ -1,20 +1,21 @@
 <section class="shell-container">
   <div class="shell-card">
-    <div class="shell-badge">Биохимическая сущность</div>
-    <h1 class="shell-title">Карточка метаболита / реакции</h1>
+    <div class="shell-badge">{{ localeService.locale() === 'ru' ? 'Биохимическая сущность' : 'Biochemical Entity' }}</div>
+    <h1 class="shell-title">{{ localeService.locale() === 'ru' ? 'Карточка метаболита / реакции' : 'Metabolite / Reaction Passport' }}</h1>
     <p class="shell-description">
-      Детальный паспорт научных свойств: молекулярная формула, идентификаторы (ChEBI, HMDB, Rhea),
-      стехиометрия и перекрёстные связи в метаболизме человека.
+      {{ localeService.locale() === 'ru' 
+        ? 'Детальный паспорт научных свойств: молекулярная формула, идентификаторы (ChEBI, HMDB, Rhea), стехиометрия и перекрёстные связи в метаболизме человека.' 
+        : 'Detailed scientific passport: molecular formula, database cross-references (ChEBI, HMDB, Rhea), stoichiometry, and human metabolic intersections.' }}
     </p>
     @if (type() && id()) {
       <div class="entity-params">
-        <span class="param-key">Тип:</span> <code>{{ type() }}</code>
-        <span class="param-key">Идентификатор:</span> <code>{{ id() }}</code>
+        <span class="param-key">{{ localeService.locale() === 'ru' ? 'Тип:' : 'Type:' }}</span> <code>{{ type() }}</code>
+        <span class="param-key">{{ localeService.locale() === 'ru' ? 'Идентификатор:' : 'Identifier:' }}</span> <code>{{ id() }}</code>
       </div>
     }
     <div class="shell-status">
       <span class="status-indicator"></span>
-      <span>Базовая архитектура готова — модуль паспорта сущностей подключён к данным.</span>
+      <span>{{ localeService.locale() === 'ru' ? 'Базовая архитектура готова — модуль паспорта сущностей подключён к данным.' : 'Base architecture ready — entity passport module connected to data layer.' }}</span>
     </div>
   </div>
 </section>

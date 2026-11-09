@@ -1,11 +1,13 @@
 <section class="not-found-container">
   <div class="not-found-card">
     <div class="not-found-code">404</div>
-    <h1 class="not-found-title">Page Not Found</h1>
+    <h1 class="not-found-title">{{ localeService.locale() === 'ru' ? 'Страница не найдена' : 'Page Not Found' }}</h1>
     <p class="not-found-text">
-      The requested biochemical pathway, entity, or article does not exist or has been moved.
+      {{ localeService.locale() === 'ru' 
+        ? 'Запрошенный метаболический путь, химическая сущность или статья не существуют или были перемещены.' 
+        : 'The requested biochemical pathway, entity, or article does not exist or has been moved.' }}
     </p>
-    <a routerLink="/" class="home-btn">← Return to Atlas</a>
+    <a routerLink="/" class="home-btn">{{ localeService.locale() === 'ru' ? '← Вернуться к атласу' : '← Return to Atlas' }}</a>
   </div>
 </section>
 

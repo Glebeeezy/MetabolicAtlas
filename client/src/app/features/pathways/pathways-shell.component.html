@@ -4,7 +4,7 @@
     <div class="shell-card">
       <div class="pathway-badge-row">
         <span class="shell-badge">{{ getLocalizedCategory(selectedPathway().category) }}</span>
-        <span class="organism-badge">🧬 Матрикс митохондрий</span>
+        <span class="organism-badge">{{ localeService.locale() === 'ru' ? '🧬 Матрикс митохондрий' : '🧬 Mitochondrial Matrix' }}</span>
       </div>
 
       <div class="title-action-row">
