@@ -127,6 +127,50 @@ export interface MetabolicCrossroad {
   textY: number;
 }
 
+
+export interface SectorLayoutConfig {
+  sectorId: string;
+  nameRu: string;
+  nameEn: string;
+  categoryRu: string;
+  categoryEn: string;
+  centerAngleRad: number;
+  radiusMin: number;
+  radiusMax: number;
+  themeColor: string;
+  gradientColors: [string, string];
+  iconSvg?: string;
+  centerX: number;
+  centerY: number;
+  boundingPoly: { x: number; y: number }[];
+  descriptionRu: string;
+  descriptionEn: string;
+  connectedHubCode?: string;
+  targetPathwayId: string;
+}
+
+export interface PathwaySuperHighway {
+  id: string;
+  sourcePathwayId: string;
+  targetPathwayId: string;
+  sourceMetaboliteCode: string;
+  targetMetaboliteCode: string;
+  nameRu: string;
+  nameEn: string;
+  pathData: string;
+  carbonFlux: string;
+  isAnabolic: boolean;
+  isCatabolic: boolean;
+  themeColor: string;
+}
+
+export interface GlobalMetabolicCanvasState {
+  lodLevel: 1 | 2 | 3;
+  activeSectorId: string | 'ALL';
+  focusMetaboliteCode: string | null;
+  camera: { x: number; y: number; zoom: number };
+}
+
 export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
   {
     id: 'b0000001-0000-0000-0000-000000000003',
@@ -138,8 +182,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     formula: 'C₄H₂O₅²⁻',
     carbons: '4C',
     carbonsEn: '4C',
-    x: 590,
-    y: 130,
+    x: 1270,
+    y: 1670,
     width: 150,
     height: 72,
     color: '#8B5CF6',
@@ -223,8 +267,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     formula: 'C₆H₅O₇³⁻',
     carbons: '6C',
     carbonsEn: '6C',
-    x: 1040,
-    y: 230,
+    x: 1720,
+    y: 1770,
     width: 140,
     height: 72,
     color: '#6366F1',
@@ -294,8 +338,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     formula: 'C₆H₅O₇³⁻',
     carbons: '6C',
     carbonsEn: '6C',
-    x: 1150,
-    y: 500,
+    x: 1830,
+    y: 2040,
     width: 140,
     height: 72,
     color: '#6366F1',
@@ -357,8 +401,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     formula: 'C₅H₄O₅²⁻',
     carbons: '5C',
     carbonsEn: '5C',
-    x: 1000,
-    y: 780,
+    x: 1680,
+    y: 2320,
     width: 150,
     height: 72,
     color: '#6366F1',
@@ -436,8 +480,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     formula: 'C₂₅H₃₆N₇O₁₉P₃S⁵⁻',
     carbons: '4C',
     carbonsEn: '4C',
-    x: 640,
-    y: 890,
+    x: 1320,
+    y: 2430,
     width: 150,
     height: 72,
     color: '#6366F1',
@@ -518,8 +562,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     formula: 'C₄H₄O₄²⁻',
     carbons: '4C',
     carbonsEn: '4C',
-    x: 290,
-    y: 780,
+    x: 970,
+    y: 2320,
     width: 140,
     height: 72,
     color: '#6366F1',
@@ -584,8 +628,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     formula: 'C₄H₂O₄²⁻',
     carbons: '4C',
     carbonsEn: '4C',
-    x: 150,
-    y: 500,
+    x: 830,
+    y: 2040,
     width: 140,
     height: 72,
     color: '#6366F1',
@@ -651,8 +695,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     formula: 'C₄H₄O₅²⁻',
     carbons: '4C',
     carbonsEn: '4C',
-    x: 270,
-    y: 220,
+    x: 950,
+    y: 1760,
     width: 140,
     height: 72,
     color: '#6366F1',
@@ -719,8 +763,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     formula: 'C₂₃H₃₄N₇O₁₇P₃S⁴⁻',
     carbons: '2C',
     carbonsEn: '2C',
-    x: 840,
-    y: 20,
+    x: 1520,
+    y: 1560,
     width: 155,
     height: 74,
     color: '#10B981',
@@ -747,13 +791,22 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
 </svg>`,
     pathwaysRu: [
       {
+        pathwayCode: 'ALL',
+        pathwayNameRu: 'Центральный хаб метаболизма клетки',
+        pathwayNameEn: 'Central Cellular Metabolic Hub',
+        isCurrentPathway: true,
+        role: 'intermediate',
+        detailsRu: 'Главный метаболический перекресток клетки: точка схождения катаболизма углеводов (ПДХ), липидов (β-окисление) и аминокислот.',
+        detailsEn: 'Central crossroads of cellular metabolism: convergence of carbohydrate, lipid, and amino acid catabolism.',
+      },
+      {
         pathwayCode: 'PWY_TCA',
         pathwayNameRu: 'Цикл трикарбоновых кислот (ЦТК)',
         pathwayNameEn: 'Citric Acid Cycle (TCA)',
-        isCurrentPathway: true,
+        isCurrentPathway: false,
         role: 'substrate',
-        detailsRu: 'Стадия 1: главный топливный субстрат; отдает ацетильную группу на оксалоацетат с образованием цитрата.',
-        detailsEn: 'Step 1: primary fuel substrate; delivers acetyl group to oxaloacetate yielding citrate.',
+        detailsRu: 'Стадия 1: внешний топливный субстрат (донор 2C-ацетила для оксалоацетата 4C). Не является регенерируемым интермедиатом самого цикла.',
+        detailsEn: 'Step 1: external fuel substrate delivering 2C-acetyl to oxaloacetate 4C. Not a regenerated intermediate of the cycle itself.',
         stepNumber: 1,
         reactionCode: 'R_CS',
         reactionNameRu: 'Конденсация оксалоацетата и ацетил-КоА',
@@ -1469,11 +1522,11 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Citrate synthase condensation',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000003', // OAA
     secondarySourceId: 'b0000001-0000-0000-0000-000000000002', // Acetyl-CoA
-    secondaryPathData: 'M 915 94 L 915 178',
+    secondaryPathData: 'M 1595 1634 L 1595 1718',
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000004', // Citrate
-    pathData: 'M 740 166 C 830 175, 940 200, 1040 250',
-    tooltipX: 915,
-    tooltipY: 205,
+    pathData: 'M 1420 1706 C 1510 1715, 1620 1740, 1720 1790',
+    tooltipX: 1595,
+    tooltipY: 1745,
     enzymeRu: 'Цитратсинтаза',
     enzymeEn: 'Citrate synthase',
     enzymeShort: 'CS',
@@ -1494,22 +1547,22 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'tangent-swoop',
-      path: 'M 975 150 C 960 175, 946 200, 942 209 C 948 212, 995 210, 1035 180',
+      path: 'M 1655 1690 C 1640 1715, 1626 1740, 1622 1749 C 1628 1752, 1675 1750, 1715 1720',
       inCofactor: 'Вода (H₂O)',
       inCofactorEn: 'Water (H₂O)',
       inText: '+ H₂O',
       inTextRu: '+ H₂O',
       inTextEn: '+ H₂O',
-      inX: 975,
-      inY: 132,
+      inX: 1655,
+      inY: 1672,
       inAnchor: 'middle',
       outCofactor: 'Кофермент A (КоА-SH)',
       outCofactorEn: 'Coenzyme A (CoA-SH)',
       outText: 'КоА-SH',
       outTextRu: 'КоА-SH',
       outTextEn: 'CoA-SH',
-      outX: 1055,
-      outY: 165,
+      outX: 1735,
+      outY: 1705,
       inItems: [{ name: 'Вода (H₂O)', nameEn: 'Water (H₂O)', text: '+ H₂O', textRu: '+ H₂O', textEn: '+ H₂O' }],
       outItems: [{ name: 'Кофермент A (КоА-SH)', nameEn: 'Coenzyme A (CoA-SH)', text: 'КоА-SH', textRu: 'КоА-SH', textEn: 'CoA-SH' }],
     },
@@ -1528,9 +1581,9 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Aconitate hydratase isomerization',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000004', // Citrate
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000005', // Isocitrate
-    pathData: 'M 1110 302 C 1140 360, 1180 430, 1220 500',
-    tooltipX: 1170,
-    tooltipY: 400,
+    pathData: 'M 1790 1842 C 1820 1900, 1860 1970, 1900 2040',
+    tooltipX: 1850,
+    tooltipY: 1940,
     enzymeRu: 'Аконитаза 2 (митохондриальная)',
     enzymeEn: 'Aconitate hydratase 2',
     enzymeShort: 'ACO2',
@@ -1547,21 +1600,21 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'tangent-swoop',
-      path: 'M 1230 340 C 1195 360, 1168 385, 1161 397 C 1168 409, 1195 435, 1230 455',
+      path: 'M 1910 1880 C 1875 1900, 1848 1925, 1841 1937 C 1848 1949, 1875 1975, 1910 1995',
       inCofactor: 'Вода (H₂O)',
       inCofactorEn: 'Water (H₂O)',
       inText: '− H₂O',
       inTextRu: '− H₂O',
       inTextEn: '− H₂O',
-      inX: 1250,
-      inY: 335,
+      inX: 1930,
+      inY: 1875,
       outCofactor: 'Вода (H₂O)',
       outCofactorEn: 'Water (H₂O)',
       outText: '+ H₂O',
       outTextRu: '+ H₂O',
       outTextEn: '+ H₂O',
-      outX: 1250,
-      outY: 460,
+      outX: 1930,
+      outY: 2000,
       inItems: [{ name: 'Вода (H₂O)', nameEn: 'Water (H₂O)', text: '− H₂O', textRu: '− H₂O', textEn: '− H₂O' }],
       outItems: [{ name: 'Вода (H₂O)', nameEn: 'Water (H₂O)', text: '+ H₂O', textRu: '+ H₂O', textEn: '+ H₂O' }],
     },
@@ -1578,9 +1631,9 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Isocitrate oxidative decarboxylation',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000005', // Isocitrate
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000006', // aKG
-    pathData: 'M 1200 572 C 1180 660, 1150 720, 1110 780',
-    tooltipX: 1170,
-    tooltipY: 670,
+    pathData: 'M 1880 2112 C 1860 2200, 1830 2260, 1790 2320',
+    tooltipX: 1850,
+    tooltipY: 2210,
     enzymeRu: 'Изоцитратдегидрогеназа 3 (НАД⁺)',
     enzymeEn: 'Isocitrate dehydrogenase 3 (NAD⁺)',
     enzymeShort: 'IDH3',
@@ -1601,21 +1654,21 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'tangent-swoop',
-      path: 'M 1235 600 C 1195 625, 1172 660, 1166 680 C 1172 700, 1195 720, 1220 735',
+      path: 'M 1915 2140 C 1875 2165, 1852 2200, 1846 2220 C 1852 2240, 1875 2260, 1900 2275',
       inCofactor: 'НАД⁺',
       inCofactorEn: 'NAD⁺',
       inText: 'НАД⁺',
       inTextRu: 'НАД⁺',
       inTextEn: 'NAD⁺',
-      inX: 1245,
-      inY: 585,
+      inX: 1925,
+      inY: 2125,
       outCofactor: 'НАДН',
       outCofactorEn: 'NADH',
       outText: 'НАДН + CO₂ ↑',
       outTextRu: 'НАДН + CO₂ ↑',
       outTextEn: 'NADH + CO₂ ↑',
-      outX: 1240,
-      outY: 745,
+      outX: 1920,
+      outY: 2285,
       isEnergy: true,
       inItems: [{ name: 'НАД⁺', nameEn: 'NAD⁺', text: 'НАД⁺', textRu: 'НАД⁺', textEn: 'NAD⁺' }],
       outItems: [
@@ -1641,9 +1694,9 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'α-Ketoglutarate dehydrogenase',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000006', // aKG
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000007', // Succinyl-CoA
-    pathData: 'M 1030 852 C 960 910, 880 926, 790 926',
-    tooltipX: 890,
-    tooltipY: 900,
+    pathData: 'M 1710 2392 C 1640 2450, 1560 2466, 1470 2466',
+    tooltipX: 1570,
+    tooltipY: 2440,
     enzymeRu: 'α-Кетоглутаратдегидрогеназный комплекс',
     enzymeEn: 'α-Ketoglutarate dehydrogenase complex',
     enzymeShort: 'OGDH',
@@ -1665,21 +1718,21 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'tangent-swoop',
-      path: 'M 985 935 C 955 915, 930 911, 918 911 C 905 911, 880 925, 850 955',
+      path: 'M 1665 2475 C 1635 2455, 1610 2451, 1598 2451 C 1585 2451, 1560 2465, 1530 2495',
       inCofactor: 'НАД⁺',
       inCofactorEn: 'NAD⁺',
       inText: 'НАД⁺ + КоА-SH',
       inTextRu: 'НАД⁺ + КоА-SH',
       inTextEn: 'NAD⁺ + CoA-SH',
-      inX: 990,
-      inY: 945,
+      inX: 1670,
+      inY: 2485,
       outCofactor: 'НАДН',
       outCofactorEn: 'NADH',
       outText: 'НАДН + CO₂ ↑',
       outTextRu: 'НАДН + CO₂ ↑',
       outTextEn: 'NADH + CO₂ ↑',
-      outX: 840,
-      outY: 975,
+      outX: 1520,
+      outY: 2515,
       isEnergy: true,
       inItems: [
         { name: 'НАД⁺', nameEn: 'NAD⁺', text: 'НАД⁺', textRu: 'НАД⁺', textEn: 'NAD⁺', dx: -34 },
@@ -1708,9 +1761,9 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Succinate-CoA ligase (substrate-level phosphorylation)',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000007', // Succinyl-CoA
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000008', // Succinate
-    pathData: 'M 640 926 C 530 926, 430 910, 360 852',
-    tooltipX: 490,
-    tooltipY: 900,
+    pathData: 'M 1320 2466 C 1210 2466, 1110 2450, 1040 2392',
+    tooltipX: 1170,
+    tooltipY: 2440,
     enzymeRu: 'Сукцинил-КоА-синтетаза (Сукцинат-КоА-лигаза)',
     enzymeEn: 'Succinyl-CoA synthetase',
     enzymeShort: 'SUCLG2',
@@ -1731,21 +1784,21 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'lateral-loop',
-      path: 'M 560 955 C 535 925, 505 911, 485 911 C 465 911, 440 925, 415 950',
+      path: 'M 1240 2495 C 1215 2465, 1185 2451, 1165 2451 C 1145 2451, 1120 2465, 1095 2490',
       inCofactor: 'ГДФ',
       inCofactorEn: 'GDP',
       inText: 'ГДФ + Фᵢ',
       inTextRu: 'ГДФ + Фᵢ',
       inTextEn: 'GDP + Pᵢ',
-      inX: 560,
-      inY: 975,
+      inX: 1240,
+      inY: 2515,
       outCofactor: 'ГТФ',
       outCofactorEn: 'GTP',
       outText: 'ГТФ + КоА-SH',
       outTextRu: 'ГТФ + КоА-SH',
       outTextEn: 'GTP + CoA-SH',
-      outX: 415,
-      outY: 970,
+      outX: 1095,
+      outY: 2510,
       isGtp: true,
       inItems: [
         { name: 'ГДФ', nameEn: 'GDP', text: 'ГДФ', textRu: 'ГДФ', textEn: 'GDP', dx: -26, isGtp: true },
@@ -1769,9 +1822,9 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Succinate dehydrogenase oxidation',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000008', // Succinate
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000009', // Fumarate
-    pathData: 'M 330 780 C 270 710, 225 640, 215 572',
-    tooltipX: 250,
-    tooltipY: 660,
+    pathData: 'M 1010 2320 C 950 2250, 905 2180, 895 2112',
+    tooltipX: 930,
+    tooltipY: 2200,
     enzymeRu: 'Сукцинатдегидрогеназа / Комплекс II',
     enzymeEn: 'Succinate dehydrogenase / Complex II',
     enzymeShort: 'SDH',
@@ -1790,21 +1843,21 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'tangent-swoop',
-      path: 'M 175 715 C 215 695, 240 675, 250 668 C 240 655, 215 635, 175 620',
+      path: 'M 855 2255 C 895 2235, 920 2215, 930 2208 C 920 2195, 895 2175, 855 2160',
       inCofactor: 'ФАД',
       inCofactorEn: 'FAD',
       inText: 'ФАД',
       inTextRu: 'ФАД',
       inTextEn: 'FAD',
-      inX: 135,
-      inY: 715,
+      inX: 815,
+      inY: 2255,
       outCofactor: 'ФАДН₂',
       outCofactorEn: 'FADH₂',
       outText: 'ФАДН₂ ➔ Q₁₀',
       outTextRu: 'ФАДН₂ ➔ Q₁₀',
       outTextEn: 'FADH₂ ➔ Q₁₀',
-      outX: 125,
-      outY: 615,
+      outX: 805,
+      outY: 2155,
       isEnergy: true,
       inItems: [{ name: 'ФАД', nameEn: 'FAD', text: 'ФАД', textRu: 'ФАД', textEn: 'FAD', dx: 0 }],
       outItems: [
@@ -1827,9 +1880,9 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Fumarate hydratase trans-hydration',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000009', // Fumarate
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000010', // Malate
-    pathData: 'M 220 500 C 230 420, 260 350, 300 292',
-    tooltipX: 255,
-    tooltipY: 370,
+    pathData: 'M 900 2040 C 910 1960, 940 1890, 980 1832',
+    tooltipX: 935,
+    tooltipY: 1910,
     enzymeRu: 'Фумараза (митохондриальная фумаратгидратаза)',
     enzymeEn: 'Fumarate hydratase',
     enzymeShort: 'FH',
@@ -1847,14 +1900,14 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'through-cross',
-      path: 'M 145 370 C 185 370, 225 380, 249 388',
+      path: 'M 825 1910 C 865 1910, 905 1920, 929 1928',
       inCofactor: 'Вода (H₂O)',
       inCofactorEn: 'Water (H₂O)',
       inText: '+ H₂O',
       inTextRu: '+ H₂O',
       inTextEn: '+ H₂O',
-      inX: 115,
-      inY: 370,
+      inX: 795,
+      inY: 1910,
       isEnergy: false,
       inItems: [{ name: 'Вода (H₂O)', nameEn: 'Water (H₂O)', text: '+ H₂O', textRu: '+ H₂O', textEn: '+ H₂O', dx: 0 }],
     },
@@ -1871,9 +1924,9 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Malate dehydrogenase oxidation',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000010', // Malate
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000003', // OAA
-    pathData: 'M 370 220 C 430 160, 510 150, 590 166',
-    tooltipX: 490,
-    tooltipY: 175,
+    pathData: 'M 1050 1760 C 1110 1700, 1190 1690, 1270 1706',
+    tooltipX: 1170,
+    tooltipY: 1715,
     enzymeRu: 'Малатдегидрогеназа 2 (митохондриальная)',
     enzymeEn: 'Malate dehydrogenase 2',
     enzymeShort: 'MDH2',
@@ -1893,21 +1946,21 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'perpendicular-dip',
-      path: 'M 430 115 C 455 145, 468 165, 473 165 C 478 165, 495 145, 525 115',
+      path: 'M 1110 1655 C 1135 1685, 1148 1705, 1153 1705 C 1158 1705, 1175 1685, 1205 1655',
       inCofactor: 'НАД⁺',
       inCofactorEn: 'NAD⁺',
       inText: 'НАД⁺',
       inTextRu: 'НАД⁺',
       inTextEn: 'NAD⁺',
-      inX: 430,
-      inY: 98,
+      inX: 1110,
+      inY: 1638,
       outCofactor: 'НАДН',
       outCofactorEn: 'NADH',
       outText: 'НАДН + H⁺',
       outTextRu: 'НАДН + H⁺',
       outTextEn: 'NADH + H⁺',
-      outX: 535,
-      outY: 98,
+      outX: 1215,
+      outY: 1638,
       isEnergy: true,
       inItems: [{ name: 'НАД⁺', nameEn: 'NAD⁺', text: 'НАД⁺', textRu: 'НАД⁺', textEn: 'NAD⁺', dx: 0 }],
       outItems: [
@@ -1930,60 +1983,297 @@ export const HUMAN_CROSSROADS: MetabolicCrossroad[] = [
     nameRu: 'Гликолиз ➔ Пируват ➔ ПДХ (3C ➔ 2C)',
     nameEn: 'Glycolysis ➔ Pyruvate ➔ PDH (3C ➔ 2C)',
     direction: 'in',
-    startX: 610,
-    startY: 57,
-    endX: 830,
-    endY: 57,
-    textX: 615,
-    textY: 44,
+    startX: 1290,
+    startY: 1597,
+    endX: 1510,
+    endY: 1597,
+    textX: 1295,
+    textY: 1584,
   },
   {
     id: 'cr-cit-out',
     nameRu: 'Выход: Цитратный челнок ➔ Синтез липидов',
     nameEn: 'Exit: Citrate shuttle ➔ Lipid synthesis',
     direction: 'out',
-    startX: 1180,
-    startY: 266,
-    endX: 1330,
-    endY: 266,
-    textX: 1185,
-    textY: 252,
+    startX: 1860,
+    startY: 1806,
+    endX: 2010,
+    endY: 1806,
+    textX: 1865,
+    textY: 1792,
   },
   {
     id: 'cr-akg-cross',
     nameRu: 'Обмен аминокислот ⇋ Глутамат',
     nameEn: 'Amino acid exchange ⇋ Glutamate',
     direction: 'out',
-    startX: 1140,
-    startY: 816,
-    endX: 1300,
-    endY: 845,
-    textX: 1145,
-    textY: 835,
+    startX: 1820,
+    startY: 2356,
+    endX: 1980,
+    endY: 2385,
+    textX: 1825,
+    textY: 2375,
   },
   {
     id: 'cr-heme-out',
     nameRu: 'Синтез гема (порфиринов / Hb)',
     nameEn: 'Heme synthesis (porphyrins / Hb)',
     direction: 'out',
-    startX: 710,
-    startY: 962,
-    endX: 710,
-    endY: 1000,
-    textX: 610,
-    textY: 1010,
+    startX: 1390,
+    startY: 2502,
+    endX: 1390,
+    endY: 2540,
+    textX: 1290,
+    textY: 2550,
   },
   {
     id: 'cr-gng-out',
     nameRu: 'Выход: ОАО ➔ Глюконеогенез (PEPCK-M)',
     nameEn: 'Exit: OAA ➔ Gluconeogenesis (PEPCK-M)',
     direction: 'out',
-    startX: 590,
-    startY: 140,
-    endX: 470,
-    endY: 90,
-    textX: 380,
-    textY: 76,
+    startX: 1270,
+    startY: 1680,
+    endX: 1150,
+    endY: 1630,
+    textX: 1060,
+    textY: 1616,
   },
 ];
 
+export const SECTOR_LAYOUT_CONFIGS: SectorLayoutConfig[] = [
+  {
+    sectorId: 'PW-GLYCOLISIS',
+    nameRu: 'Углеводный сектор (Гликолиз / ПДХ)',
+    nameEn: 'Carbohydrate Sector (Glycolysis / PDH)',
+    categoryRu: 'Углеводный обмен',
+    categoryEn: 'Carbohydrate Metabolism',
+    centerAngleRad: -Math.PI / 2, // -90 deg (North / 12:00)
+    radiusMin: 350,
+    radiusMax: 1400,
+    themeColor: '#F59E0B',
+    gradientColors: ['rgba(245, 158, 11, 0.14)', 'rgba(245, 158, 11, 0.01)'],
+    centerX: 1600,
+    centerY: 850,
+    boundingPoly: [
+      { x: 1050, y: 250 },
+      { x: 2150, y: 250 },
+      { x: 1950, y: 1350 },
+      { x: 1250, y: 1350 }
+    ],
+    descriptionRu: 'Расщепление глюкозы до пирувата (10 стадий) с последующим окислительным декарбоксилированием в ПДХ прямо в Ацетил-КоА.',
+    descriptionEn: '10-step oxidation of glucose to pyruvate with pyruvate dehydrogenase complex feeding straight into Acetyl-CoA.',
+    connectedHubCode: 'MET_ACETYL_COA',
+    targetPathwayId: 'PW-GLYCOLISIS'
+  },
+  {
+    sectorId: 'PW-BETA-OXIDATION',
+    nameRu: 'Липидный сектор (β-Окисление / Липиды)',
+    nameEn: 'Lipid Sector (β-Oxidation / Lipids)',
+    categoryRu: 'Липидный обмен',
+    categoryEn: 'Lipid Metabolism',
+    centerAngleRad: Math.PI, // 180 deg (West / 9:00)
+    radiusMin: 350,
+    radiusMax: 1400,
+    themeColor: '#8B5CF6',
+    gradientColors: ['rgba(139, 92, 246, 0.14)', 'rgba(139, 92, 246, 0.01)'],
+    centerX: 620,
+    centerY: 1750,
+    boundingPoly: [
+      { x: 180, y: 1300 },
+      { x: 1100, y: 1300 },
+      { x: 1100, y: 2250 },
+      { x: 180, y: 2250 }
+    ],
+    descriptionRu: 'Катаболизм жирных кислот (β-окисление), генерация ацетил-КоА, кетогенез и цитозольный липогенез через цитратный челнок.',
+    descriptionEn: 'Fatty acid breakdown via beta-oxidation, acetyl-CoA yield, ketogenesis and fatty acid synthesis via citrate shuttle.',
+    connectedHubCode: 'MET_ACETYL_COA',
+    targetPathwayId: 'PW-BETA-OXIDATION'
+  },
+  {
+    sectorId: 'PW-TCA-CYCLE',
+    nameRu: 'Цикл трикарбоновых кислот (ЦТК / Кребс)',
+    nameEn: 'Citric Acid Cycle (TCA / Krebs Cycle)',
+    categoryRu: 'Энергетический цикл',
+    categoryEn: 'Energy Cycle',
+    centerAngleRad: 0,
+    radiusMin: 0,
+    radiusMax: 600,
+    themeColor: '#10B981',
+    gradientColors: ['rgba(16, 185, 129, 0.14)', 'rgba(16, 185, 129, 0.01)'],
+    centerX: 1380,
+    centerY: 2110,
+    boundingPoly: [
+      { x: 740, y: 1650 },
+      { x: 2020, y: 1650 },
+      { x: 2020, y: 2580 },
+      { x: 740, y: 2580 }
+    ],
+    descriptionRu: 'Центральный окислительный 8-стадийный цикл клетки в матриксе митохондрий, поставляющий НАДН и ФАДН₂ для АТФ-синтазы.',
+    descriptionEn: 'Central 8-step catalytic mitochondrial matrix engine generating reducing equivalents NADH & FADH₂.',
+    connectedHubCode: 'MET_ACETYL_COA',
+    targetPathwayId: 'PW-TCA-CYCLE'
+  },
+  {
+    sectorId: 'PW-UREA-CYCLE',
+    nameRu: 'Белковый сектор (Аминокислоты / Мочевина)',
+    nameEn: 'Amino Acid Sector (Amino Acids / Urea)',
+    categoryRu: 'Аминокислотный обмен',
+    categoryEn: 'Amino Acid Metabolism',
+    centerAngleRad: 0, // 0 deg (East / 3:00)
+    radiusMin: 350,
+    radiusMax: 1400,
+    themeColor: '#E11D48',
+    gradientColors: ['rgba(225, 29, 72, 0.14)', 'rgba(225, 29, 72, 0.01)'],
+    centerX: 2550,
+    centerY: 1750,
+    boundingPoly: [
+      { x: 2080, y: 1300 },
+      { x: 3020, y: 1300 },
+      { x: 3020, y: 2250 },
+      { x: 2080, y: 2250 }
+    ],
+    descriptionRu: 'Катаболизм аминокислот, трансаминирование (АлАТ, АсАТ) и орнитиновый цикл мочевины с фумаратным шунтом к ЦТК.',
+    descriptionEn: 'Amino acid transamination, nitrogen disposal via urea cycle, and Krebs bicycle linking through fumarate.',
+    connectedHubCode: 'MET_AKG',
+    targetPathwayId: 'PW-UREA-CYCLE'
+  },
+  {
+    sectorId: 'PW-OXPHOS',
+    nameRu: 'Дыхательная цепь (OxPhos / АТФ)',
+    nameEn: 'Oxidative Phosphorylation (OxPhos / ATP)',
+    categoryRu: 'Биоэнергетика',
+    categoryEn: 'Bioenergetics',
+    centerAngleRad: Math.PI / 2, // 90 deg (South / 6:00)
+    radiusMin: 350,
+    radiusMax: 1400,
+    themeColor: '#0EA5E9',
+    gradientColors: ['rgba(14, 165, 233, 0.14)', 'rgba(14, 165, 233, 0.01)'],
+    centerX: 1400,
+    centerY: 2850,
+    boundingPoly: [
+      { x: 740, y: 2650 },
+      { x: 2080, y: 2650 },
+      { x: 2080, y: 3120 },
+      { x: 740, y: 3120 }
+    ],
+    descriptionRu: 'Электронно-транспортная цепь (Комплексы I-IV) и АТФ-синтаза (Комплекс V) на кристах митохондрий (28-32 АТФ на глюкозу).',
+    descriptionEn: 'Mitochondrial cristae electron transport chain complexes I-IV and ATP synthase driving aerobic phosphorylation.',
+    connectedHubCode: 'MET_SUCCINATE',
+    targetPathwayId: 'PW-OXPHOS'
+  }
+];
+
+export const PATHWAY_SUPER_HIGHWAYS: PathwaySuperHighway[] = [
+  {
+    id: 'hw-gly-pdh',
+    sourcePathwayId: 'PW-GLYCOLISIS',
+    targetPathwayId: 'ALL',
+    sourceMetaboliteCode: 'MET_PYRUVATE',
+    targetMetaboliteCode: 'MET_ACETYL_COA',
+    nameRu: 'ПДХ Комплекс (Пируват ➔ Ацетил-КоА)',
+    nameEn: 'PDH Complex (Pyruvate ➔ Acetyl-CoA)',
+    pathData: 'M 1600 1250 L 1600 1560',
+    carbonFlux: '3C ➔ 2C + CO₂',
+    isAnabolic: false,
+    isCatabolic: true,
+    themeColor: '#F59E0B'
+  },
+  {
+    id: 'hw-fao-hub',
+    sourcePathwayId: 'PW-BETA-OXIDATION',
+    targetPathwayId: 'ALL',
+    sourceMetaboliteCode: 'MET_PALMITATE',
+    targetMetaboliteCode: 'MET_ACETYL_COA',
+    nameRu: 'β-Окисление жирных кислот ➔ Ацетил-КоА',
+    nameEn: 'β-Oxidation of fatty acids ➔ Acetyl-CoA',
+    pathData: 'M 1000 1600 L 1520 1600',
+    carbonFlux: '16C ➔ 8 × 2C',
+    isAnabolic: false,
+    isCatabolic: true,
+    themeColor: '#8B5CF6'
+  },
+  {
+    id: 'hw-hub-tca',
+    sourcePathwayId: 'ALL',
+    targetPathwayId: 'PW-TCA-CYCLE',
+    sourceMetaboliteCode: 'MET_ACETYL_COA',
+    targetMetaboliteCode: 'MET_CITRATE',
+    nameRu: 'Вход в ЦТК: Цитратсинтаза (Стадия 1)',
+    nameEn: 'Entry to TCA: Citrate synthase (Step 1)',
+    pathData: 'M 1595 1634 L 1595 1718',
+    carbonFlux: '2C + 4C ➔ 6C',
+    isAnabolic: false,
+    isCatabolic: true,
+    themeColor: '#10B981'
+  },
+  {
+    id: 'hw-citrate-shuttle',
+    sourcePathwayId: 'PW-TCA-CYCLE',
+    targetPathwayId: 'PW-BETA-OXIDATION',
+    sourceMetaboliteCode: 'MET_CITRATE',
+    targetMetaboliteCode: 'MET_CYT_ACETYL_COA',
+    nameRu: 'Цитратный челнок ➔ Цитозольный липогенез',
+    nameEn: 'Citrate shuttle ➔ Cytosolic lipogenesis',
+    pathData: 'M 1720 1790 C 1500 1850, 1200 1850, 950 1800',
+    carbonFlux: '6C (Цитрат) ➔ 2C',
+    isAnabolic: true,
+    isCatabolic: false,
+    themeColor: '#8B5CF6'
+  },
+  {
+    id: 'hw-amino-acetyl',
+    sourcePathwayId: 'PW-UREA-CYCLE',
+    targetPathwayId: 'ALL',
+    sourceMetaboliteCode: 'MET_LEU_LYS',
+    targetMetaboliteCode: 'MET_ACETYL_COA',
+    nameRu: 'Кетогенные аминокислоты (Leu, Lys) ➔ Ацетил-КоА',
+    nameEn: 'Ketogenic amino acids (Leu, Lys) ➔ Acetyl-CoA',
+    pathData: 'M 2200 1600 L 1675 1600',
+    carbonFlux: 'АК ➔ 2C',
+    isAnabolic: false,
+    isCatabolic: true,
+    themeColor: '#E11D48'
+  },
+  {
+    id: 'hw-amino-akg',
+    sourcePathwayId: 'PW-UREA-CYCLE',
+    targetPathwayId: 'PW-TCA-CYCLE',
+    sourceMetaboliteCode: 'MET_GLU',
+    targetMetaboliteCode: 'MET_AKG',
+    nameRu: 'Трансаминирование АК ⇋ α-Кетоглутарат',
+    nameEn: 'AA transamination ⇋ α-Ketoglutarate',
+    pathData: 'M 2200 2200 C 2050 2280, 1950 2320, 1830 2340',
+    carbonFlux: '5C',
+    isAnabolic: false,
+    isCatabolic: true,
+    themeColor: '#E11D48'
+  },
+  {
+    id: 'hw-urea-fumarate',
+    sourcePathwayId: 'PW-UREA-CYCLE',
+    targetPathwayId: 'PW-TCA-CYCLE',
+    sourceMetaboliteCode: 'MET_ARGININOSUCCINATE',
+    targetMetaboliteCode: 'MET_FUMARATE',
+    nameRu: 'Шунт цикла мочевины (ASL) ➔ Фумарат',
+    nameEn: 'Urea cycle shunt (ASL) ➔ Fumarate',
+    pathData: 'M 2200 2000 C 1800 2150, 1300 2150, 970 2040',
+    carbonFlux: '4C',
+    isAnabolic: false,
+    isCatabolic: true,
+    themeColor: '#E11D48'
+  },
+  {
+    id: 'hw-tca-oxphos',
+    sourcePathwayId: 'PW-TCA-CYCLE',
+    targetPathwayId: 'PW-OXPHOS',
+    sourceMetaboliteCode: 'MET_SUCCINATE',
+    targetMetaboliteCode: 'MET_ETC_COMPLEX_II',
+    nameRu: 'ЦТК ➔ OxPhos (СДГ / Комплекс II & НАДН)',
+    nameEn: 'TCA ➔ OxPhos (SDH / Complex II & NADH)',
+    pathData: 'M 1040 2390 C 1040 2550, 1400 2580, 1400 2700',
+    carbonFlux: 'ФАДН₂ / НАДН ➔ 30-32 АТФ',
+    isAnabolic: false,
+    isCatabolic: true,
+    themeColor: '#0EA5E9'
+  }
+];

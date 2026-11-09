@@ -23,6 +23,11 @@ import {
   HumanReactionArrow,
   MetabolicCrossroad,
   PathwayParticipation,
+  PATHWAY_SUPER_HIGHWAYS,
+  PathwaySuperHighway,
+  SECTOR_LAYOUT_CONFIGS,
+  SectorLayoutConfig,
+  GlobalMetabolicCanvasState,
 } from './atlas-data';
 import { ReactionArrowComponent } from './components/reaction-arrow/reaction-arrow.component';
 import { ChemicalStructureComponent } from './components/chemical-structure/chemical-structure.component';
@@ -36,6 +41,8 @@ export {
   ALL_METABOLITES,
   HUMAN_REACTIONS,
   HUMAN_CROSSROADS,
+  SECTOR_LAYOUT_CONFIGS,
+  PATHWAY_SUPER_HIGHWAYS,
 };
 
 export type {
@@ -43,6 +50,9 @@ export type {
   HumanReactionArrow,
   MetabolicCrossroad,
   PathwayParticipation,
+  SectorLayoutConfig,
+  PathwaySuperHighway,
+  GlobalMetabolicCanvasState,
 };
 
 @Component({
@@ -76,12 +86,17 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
 
   private dragStartX = 0;
   private dragStartY = 0;
+  private dragStartClientX = 0;
+  private dragStartClientY = 0;
+  private hasMovedDrag = false;
 
   // Static datasets
   readonly canvasMetabolites = HUMAN_METABOLITES; // Tile nodes on canvas
   readonly allMetabolites = ALL_METABOLITES;       // Includes all cofactors
   readonly reactions = HUMAN_REACTIONS;
   readonly crossroads = HUMAN_CROSSROADS;
+  readonly sectorConfigs = SECTOR_LAYOUT_CONFIGS;
+  readonly superHighways = PATHWAY_SUPER_HIGHWAYS;
 
   // Active selections (Mutex)
   readonly selectedReaction = signal<HumanReactionArrow | null>(null);
@@ -89,6 +104,17 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   readonly activeTab = signal<InspectorTab>('reaction');
   readonly hoveredReaction = signal<HumanReactionArrow | null>(null);
   readonly hoveredMetabolite = signal<HumanMetaboliteNode | null>(null);
+  readonly hoveredSector = signal<SectorLayoutConfig | null>(null);
+  readonly hoveredHighway = signal<PathwaySuperHighway | null>(null);
+  readonly selectedHighway = signal<PathwaySuperHighway | null>(null);
+
+  // LOD Level: 1 (Macro 15-45%), 2 (Meso 45-90%), 3 (Micro 90-250%)
+  readonly lodLevel = computed<1 | 2 | 3>(() => {
+    const z = this.zoom();
+    if (z < 45) return 1;
+    if (z < 90) return 2;
+    return 3;
+  });
 
   // Interactivity signals
   readonly isFluxAnimated = this.atlasStateService.isFluxAnimated;
@@ -102,14 +128,20 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
       if (!focus) return;
 
       if (focus.pathwayId === 'ALL') {
-        this.resetZoom();
+        this.zoomToMacro();
         this.closeInspector();
         return;
       }
 
       if (focus.pathwayId === 'PW-TCA-CYCLE') {
-        this.resetZoom();
+        this.focusOnTca();
         this.onReactionClick(this.reactions[0]);
+        return;
+      }
+
+      const sector = this.sectorConfigs.find((s) => s.targetPathwayId === focus.pathwayId);
+      if (sector) {
+        this.focusOnSector(sector);
         return;
       }
 
@@ -126,9 +158,41 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   focusOnNode(node: HumanMetaboliteNode): void {
     const centerX = node.x + node.width / 2;
     const centerY = node.y + node.height / 2;
-    this.panX.set(Math.round((700 - centerX) * 0.7));
-    this.panY.set(Math.round((510 - centerY) * 0.7));
     this.zoom.set(115);
+    this.panX.set(Math.round((1600 - centerX) * 1.15));
+    this.panY.set(Math.round((1600 - centerY) * 1.15));
+  }
+
+  focusOnTca(): void {
+    this.zoom.set(85);
+    this.panX.set(Math.round((1600 - 1380) * 0.85));
+    this.panY.set(Math.round((1600 - 2060) * 0.85));
+  }
+
+  focusOnSector(sector: SectorLayoutConfig): void {
+    this.zoom.set(65);
+    this.panX.set(Math.round((1600 - sector.centerX) * 0.65));
+    this.panY.set(Math.round((1600 - sector.centerY) * 0.65));
+  }
+
+  zoomToMacro(): void {
+    this.zoom.set(38);
+    this.panX.set(0);
+    this.panY.set(0);
+  }
+
+  getPolyPoints(poly: { x: number; y: number }[]): string {
+    return poly.map((p) => `${p.x},${p.y}`).join(' ');
+  }
+
+  onSectorClick(sector: SectorLayoutConfig): void {
+    if (this.hasMovedDrag) return;
+    this.atlasStateService.selectPathway(sector.targetPathwayId);
+  }
+
+  onHighwayClick(hw: PathwaySuperHighway): void {
+    if (this.hasMovedDrag) return;
+    this.selectedHighway.set(this.selectedHighway()?.id === hw.id ? null : hw);
   }
 
   readonly selectedCofactorName = computed(() => {
@@ -324,6 +388,11 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
 
     this.onWindowMouseMoveHandler = (e: MouseEvent) => {
       if (this.isDragging()) {
+        const dx = Math.abs(e.clientX - this.dragStartClientX);
+        const dy = Math.abs(e.clientY - this.dragStartClientY);
+        if (dx > 4 || dy > 4) {
+          this.hasMovedDrag = true;
+        }
         this.panX.set(e.clientX - this.dragStartX);
         this.panY.set(e.clientY - this.dragStartY);
       }
@@ -350,12 +419,14 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   }
 
   onReactionClick(reaction: HumanReactionArrow): void {
+    if (this.hasMovedDrag) return;
     this.selectedReaction.set(reaction);
     this.selectedMetabolite.set(null);
     this.activeTab.set('reaction');
   }
 
   onMetaboliteClick(metabolite: HumanMetaboliteNode): void {
+    if (this.hasMovedDrag) return;
     this.selectedMetabolite.set(metabolite);
     this.selectedReaction.set(null);
     this.activeTab.set('molecule');
@@ -523,22 +594,32 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   onViewportMouseDown(event: MouseEvent): void {
     if (event.button !== 0) return;
     const target = event.target as HTMLElement;
-    if (target.closest('[data-interactive="true"]')) return;
+    // Do not initiate map dragging when clicking inside the inspector panel or HUD control buttons
+    if (
+      target.closest('.context-inspector') ||
+      target.closest('.hud-panel') ||
+      target.closest('.context-pill')
+    ) {
+      return;
+    }
 
     this.isDragging.set(true);
+    this.hasMovedDrag = false;
     this.dragStartX = event.clientX - this.panX();
     this.dragStartY = event.clientY - this.panY();
+    this.dragStartClientX = event.clientX;
+    this.dragStartClientY = event.clientY;
   }
 
   onWheel(event: WheelEvent): void {
     const target = event.target as HTMLElement;
-    // When hovering over the right inspector panel or any interactive card, let native scrolling work smoothly!
-    if (target.closest('.context-inspector') || target.closest('[data-interactive="true"]')) {
+    // Only suppress map zoom when hovering over the right inspector panel to allow its native text scrolling
+    if (target.closest('.context-inspector')) {
       return;
     }
     event.preventDefault();
-    const zoomDelta = event.deltaY < 0 ? 12 : -12;
-    this.zoom.update((z) => Math.max(30, Math.min(250, z + zoomDelta)));
+    const zoomDelta = event.deltaY < 0 ? 10 : -10;
+    this.zoom.update((z) => Math.max(15, Math.min(250, z + zoomDelta)));
   }
 
   zoomIn(): void {
@@ -546,7 +627,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   }
 
   zoomOut(): void {
-    this.zoom.update((z) => Math.max(z - 15, 30));
+    this.zoom.update((z) => Math.max(z - 15, 15));
   }
 
   resetZoom(): void {

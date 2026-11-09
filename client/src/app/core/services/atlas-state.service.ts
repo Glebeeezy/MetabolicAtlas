@@ -51,10 +51,10 @@ export const HUMAN_PATHWAYS_CATALOG: PathwayMeta[] = [
     dotColor: '#10B981',
     status: 'ready',
     reactionCount: 8,
-    metaboliteCount: 9,
+    metaboliteCount: 8,
     connectedHubCode: 'MET_AC_COA',
-    descriptionRu: 'Центральный метаболический цикл клеточного дыхания в матриксе митохондрий человека.',
-    descriptionEn: 'Central aerobic metabolic cycle of cellular respiration in mitochondrial matrix.',
+    descriptionRu: 'Центральный циклический конвейер клеточного дыхания (8 ферментов, 8 интермедиатов цикла), окисляющий ацетильный остаток Ацетил-КоА.',
+    descriptionEn: 'Central catalytic cycle of cellular respiration (8 enzymes, 8 cycle intermediates), oxidising acetyl moiety from Acetyl-CoA.',
   },
   {
     id: 'PW-GLYCOLISIS',

@@ -1,6 +1,7 @@
 <section
   class="canvas-viewport"
-  [attr.aria-label]="localeService.locale() === 'ru' ? 'Интерактивная карта метаболизма: Цикл трикарбоновых кислот' : 'Interactive Metabolic Atlas: Citric Acid Cycle'"
+  [class.is-dragging]="isDragging()"
+  [attr.aria-label]="localeService.locale() === 'ru' ? 'Интерактивная карта метаболизма человека' : 'Interactive Human Metabolic Atlas'"
   (mousedown)="onViewportMouseDown($event)"
   (wheel)="onWheel($event)"
 >
@@ -19,13 +20,14 @@
       </span>
       <span class="context-pill__stats">
         @if (atlasStateService.selectedPathwayId() === 'ALL') {
-          {{ localeService.locale() === 'ru' ? 'Центральный метаболизм • ЦТК, субстраты и перекрестки' : 'Central Metabolism • TCA, Substrates & Crossroads' }}
+          {{ localeService.locale() === 'ru' ? 'Центральный метаболизм • Секторы, хаб Ацетил-КоА и супер-магистрали' : 'Central Metabolism • Sectors, Acetyl-CoA Hub & Superhighways' }}
         } @else if (atlasStateService.selectedPathwayId() === 'PW-TCA-CYCLE') {
           {{ localeService.locale() === 'ru' ? 'Матрикс митохондрий • 8 ферментов' : 'Mitochondrial Matrix • 8 Enzymes' }}
         } @else {
           {{ localeService.locale() === 'ru' ? atlasStateService.selectedPathway().categoryRu : atlasStateService.selectedPathway().categoryEn }} •
           {{ atlasStateService.selectedPathway().reactionCount }} {{ localeService.locale() === 'ru' ? 'реакций' : 'reactions' }}
         }
+        <span class="lod-badge">LOD {{ lodLevel() }}</span>
       </span>
     </div>
   </div>
@@ -37,7 +39,7 @@
   >
     <svg
       class="canvas-svg"
-      viewBox="0 0 1400 1020"
+      viewBox="0 0 3200 3200"
       preserveAspectRatio="xMidYMid meet"
     >
       <defs>
@@ -108,17 +110,138 @@
 
         <!-- Subtle Matrix Hull Glow -->
         <radialGradient id="matrixGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.03" />
-          <stop offset="85%" stop-color="#38BDF8" stop-opacity="0.005" />
+          <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.04" />
+          <stop offset="85%" stop-color="#38BDF8" stop-opacity="0.008" />
           <stop offset="100%" stop-color="transparent" />
         </radialGradient>
+
+        <!-- Central Hub Beacon Halo Glow -->
+        <radialGradient id="hubBeaconGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#10B981" stop-opacity="0.32" />
+          <stop offset="50%" stop-color="#10B981" stop-opacity="0.10" />
+          <stop offset="100%" stop-color="#10B981" stop-opacity="0" />
+        </radialGradient>
+
+        <!-- Sector Radial Gradients -->
+        @for (sector of sectorConfigs; track sector.sectorId) {
+          <radialGradient [id]="'grad-' + sector.sectorId" cx="50%" cy="50%" r="65%">
+            <stop offset="0%" [attr.stop-color]="sector.themeColor" stop-opacity="0.14" />
+            <stop offset="65%" [attr.stop-color]="sector.themeColor" stop-opacity="0.03" />
+            <stop offset="100%" [attr.stop-color]="sector.themeColor" stop-opacity="0" />
+          </radialGradient>
+        }
       </defs>
 
-      <!-- 1. Mitochondrial Compartment Backdrop -->
+      <!-- 0. Global Polar Coordinates Reference Rings & Sectors -->
+      <g class="polar-grid-layer" pointer-events="none">
+        <circle cx="1600" cy="1600" r="320" class="polar-grid-circle" />
+        <circle cx="1600" cy="1600" r="650" class="polar-grid-circle" />
+        <circle cx="1600" cy="1600" r="1050" class="polar-grid-circle" />
+        <circle cx="1600" cy="1600" r="1480" class="polar-grid-circle polar-grid-circle--outer" />
+        <line x1="1600" y1="120" x2="1600" y2="3080" class="polar-axis-line" />
+        <line x1="120" y1="1600" x2="3080" y2="1600" class="polar-axis-line" />
+      </g>
+
+      <!-- 1. Sector Continents (Macro View LOD 1 & 2) -->
+      <g class="sectors-layer">
+        @for (sector of sectorConfigs; track sector.sectorId) {
+          @let isActive = atlasStateService.selectedPathwayId() === sector.targetPathwayId;
+          @let isHov = hoveredSector()?.sectorId === sector.sectorId;
+
+          <g
+            class="sector-continent-group"
+            [class.is-active]="isActive"
+            [class.is-hovered]="isHov"
+            (click)="onSectorClick(sector); $event.stopPropagation()"
+            (mouseenter)="hoveredSector.set(sector)"
+            (mouseleave)="hoveredSector.set(null)"
+            role="button"
+            tabindex="0"
+            [attr.aria-label]="localeService.locale() === 'ru' ? sector.nameRu : sector.nameEn"
+          >
+            <!-- Continent boundary polygon -->
+            <polygon
+              [attr.points]="getPolyPoints(sector.boundingPoly)"
+              [attr.fill]="'url(#grad-' + sector.sectorId + ')'"
+              [attr.stroke]="sector.themeColor"
+              class="sector-polygon"
+            />
+
+            <!-- Sector Macro Label Badge (Visible at Macro LOD 1) -->
+            @if (lodLevel() === 1) {
+              <g [attr.transform]="'translate(' + sector.centerX + ',' + sector.centerY + ')'" class="sector-badge-card" pointer-events="none">
+                <rect x="-140" y="-28" width="280" height="56" rx="14" class="sector-badge-card__bg" />
+                <rect x="-140" y="-28" width="280" height="56" rx="14" class="sector-badge-card__border" [attr.stroke]="sector.themeColor" />
+                <circle cx="-116" cy="0" r="5" [attr.fill]="sector.themeColor" />
+                <text x="-98" y="-4" class="sector-badge-card__title">
+                  {{ localeService.locale() === 'ru' ? sector.nameRu : sector.nameEn }}
+                </text>
+                <text x="-98" y="14" class="sector-badge-card__desc">
+                  {{ localeService.locale() === 'ru' ? sector.categoryRu : sector.categoryEn }}
+                </text>
+              </g>
+            }
+          </g>
+        }
+      </g>
+
+      <!-- 2. Pathway Super-Highways (Flux Channels connecting Sectors) -->
+      <g class="superhighways-layer">
+        @for (hw of superHighways; track hw.id) {
+          @let isSel = selectedHighway()?.id === hw.id;
+          @let isHov = hoveredHighway()?.id === hw.id;
+
+          <g
+            class="superhighway-group"
+            [class.is-active]="isSel"
+            [class.is-hovered]="isHov"
+            (click)="onHighwayClick(hw); $event.stopPropagation()"
+            (mouseenter)="hoveredHighway.set(hw)"
+            (mouseleave)="hoveredHighway.set(null)"
+            role="button"
+            tabindex="0"
+            [attr.aria-label]="localeService.locale() === 'ru' ? hw.nameRu : hw.nameEn"
+          >
+            <!-- Wide transparent hitbox -->
+            <path
+              [attr.d]="hw.pathData"
+              class="superhighway-hitbox"
+              fill="none"
+              stroke="transparent"
+              stroke-width="32"
+            />
+            <!-- Outer soft glow track -->
+            <path
+              [attr.d]="hw.pathData"
+              class="superhighway-glow"
+              [attr.stroke]="hw.themeColor"
+              fill="none"
+              stroke-width="8"
+            />
+            <!-- Core line with flow dashes -->
+            <path
+              [attr.d]="hw.pathData"
+              class="superhighway-core"
+              [class.is-animated]="isFluxAnimated()"
+              [attr.stroke]="hw.themeColor"
+              fill="none"
+              stroke-width="3"
+            />
+          </g>
+        }
+      </g>
+
+      <!-- 3. Central Hub Beacon (Acetyl-CoA Anchor 1600, 1600) -->
+      <g class="central-hub-beacon" pointer-events="none">
+        <circle cx="1600" cy="1600" r="160" fill="url(#hubBeaconGlow)" class="beacon-pulse-halo" />
+        <circle cx="1600" cy="1600" r="110" fill="none" stroke="#10B981" stroke-width="1.5" stroke-dasharray="6 6" class="beacon-orbit-ring" />
+      </g>
+
+      <!-- 4. Mitochondrial Compartment Backdrop for TCA Cycle -->
       <g class="compartment-layer" pointer-events="none">
         <rect
-          x="70"
-          y="15"
+          x="750"
+          y="1555"
           width="1260"
           height="990"
           rx="36"
@@ -127,7 +250,7 @@
         />
       </g>
 
-      <!-- 2. Metabolic Crossroads (Outbound & Inbound Pathways) -->
+      <!-- 5. Metabolic Crossroads (Outbound & Inbound Pathways) -->
       <g class="crossroads-layer" pointer-events="none">
         @for (cr of crossroads; track cr.id) {
           <g class="crossroad-item">
@@ -274,6 +397,37 @@
   <!-- Bottom-right overlay: Floating Zoom, Flux & Canvas Controls -->
   <div class="canvas-overlay canvas-overlay--bottom-right" data-interactive="true">
     <div class="hud-panel" role="toolbar" [attr.aria-label]="localeService.locale() === 'ru' ? 'Управление масштабом карты и потоком' : 'Map zoom and flux controls'">
+      <!-- Quick Macro View (Overview) -->
+      <button
+        type="button"
+        class="hud-btn"
+        (click)="zoomToMacro()"
+        [title]="localeService.locale() === 'ru' ? 'Макро-обзор всей карты (LOD 1)' : 'Macro view of the entire universe (LOD 1)'"
+        [attr.aria-label]="localeService.locale() === 'ru' ? 'Макро-обзор' : 'Macro view'"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+      </button>
+
+      <!-- Quick TCA Focus -->
+      <button
+        type="button"
+        class="hud-btn"
+        (click)="focusOnTca()"
+        [title]="localeService.locale() === 'ru' ? 'Фокус на Цикле Кребса (ЦТК)' : 'Focus on Citric Acid Cycle (TCA)'"
+        [attr.aria-label]="localeService.locale() === 'ru' ? 'Фокус на ЦТК' : 'Focus on TCA'"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+        </svg>
+      </button>
+
+      <div class="hud-divider" aria-hidden="true"></div>
+
+      <!-- Flux animation toggle -->
       <button
         type="button"
         class="hud-btn"
@@ -287,6 +441,7 @@
         </svg>
       </button>
 
+      <!-- Zoom In (+) -->
       <button
         type="button"
         class="hud-btn"
@@ -300,16 +455,18 @@
         </svg>
       </button>
 
+      <!-- Zoom value display / Reset to 100% -->
       <button
         type="button"
         class="hud-zoom-value"
         (click)="resetZoom()"
-        [title]="localeService.locale() === 'ru' ? 'Сбросить масштаб и центрировать' : 'Reset zoom and center'"
+        [title]="localeService.locale() === 'ru' ? 'Сбросить масштаб на 100%' : 'Reset zoom to 100%'"
         [attr.aria-label]="localeService.locale() === 'ru' ? 'Сбросить масштаб' : 'Reset zoom'"
       >
         {{ zoom() }}%
       </button>
 
+      <!-- Zoom Out (-) -->
       <button
         type="button"
         class="hud-btn"

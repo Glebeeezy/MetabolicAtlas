@@ -27,8 +27,13 @@
   cursor: grab;
   user-select: none;
 
-  &:active {
-    cursor: grabbing;
+  &:active,
+  &.is-dragging {
+    cursor: grabbing !important;
+
+    * {
+      cursor: grabbing !important;
+    }
   }
 }
 
@@ -50,11 +55,204 @@
 }
 
 .canvas-svg {
-  width: 1400px;
-  height: 1020px;
+  width: 3200px;
+  height: 3200px;
   max-width: none;
   max-height: none;
   overflow: visible;
+}
+
+/* ==========================================================================
+   0. Polar Grid & Sector Continents & Super-Highways
+   ========================================================================== */
+.polar-grid-circle {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.08);
+  stroke-width: 1.5px;
+  stroke-dasharray: 4 6;
+
+  &--outer {
+    stroke: rgba(148, 163, 184, 0.14);
+    stroke-dasharray: none;
+    stroke-width: 2px;
+  }
+}
+
+.polar-axis-line {
+  stroke: rgba(148, 163, 184, 0.06);
+  stroke-width: 1.2px;
+  stroke-dasharray: 6 6;
+}
+
+.sector-continent-group {
+  cursor: pointer;
+  outline: none;
+
+  .sector-polygon {
+    stroke-width: 2px;
+    stroke-opacity: 0.45;
+    transition: all 0.25s ease;
+  }
+
+  &:hover .sector-polygon {
+    stroke-width: 3px;
+    stroke-opacity: 0.95;
+    filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.15));
+  }
+
+  &.is-active .sector-polygon {
+    stroke-width: 3.5px;
+    stroke-opacity: 1;
+  }
+
+  .sector-badge-card {
+    transition: transform 0.2s ease;
+
+    &__bg {
+      fill: var(--color-bg-surface);
+      fill-opacity: 0.88;
+      backdrop-filter: blur(8px);
+    }
+
+    &__border {
+      fill: none;
+      stroke-width: 1.5px;
+      stroke-opacity: 0.55;
+      transition: stroke-opacity 0.2s ease;
+    }
+
+    &__title {
+      font-size: 13px;
+      font-weight: 700;
+      fill: var(--color-text-main);
+      dominant-baseline: central;
+      letter-spacing: -0.01em;
+    }
+
+    &__desc {
+      font-size: 10.5px;
+      font-weight: 500;
+      fill: var(--color-text-muted);
+      dominant-baseline: central;
+    }
+  }
+
+  &:hover .sector-badge-card__border {
+    stroke-opacity: 1;
+  }
+}
+
+.superhighway-group {
+  cursor: pointer;
+  outline: none;
+
+  .superhighway-hitbox {
+    cursor: pointer;
+    pointer-events: stroke;
+  }
+
+  .superhighway-glow {
+    stroke-opacity: 0.22;
+    transition: all 0.25s ease;
+  }
+
+  .superhighway-core {
+    stroke-linecap: round;
+    stroke-dasharray: 8 6;
+    stroke-opacity: 0.85;
+    transition: all 0.2s ease;
+
+    &.is-animated {
+      animation: highwayFlow 1.6s linear infinite;
+    }
+  }
+
+  &:hover {
+    .superhighway-glow {
+      stroke-width: 14px;
+      stroke-opacity: 0.5;
+    }
+
+    .superhighway-core {
+      stroke-width: 4px;
+      stroke-opacity: 1;
+    }
+  }
+
+  &.is-active {
+    .superhighway-glow {
+      stroke-width: 16px;
+      stroke-opacity: 0.6;
+    }
+
+    .superhighway-core {
+      stroke-width: 4.5px;
+      stroke-opacity: 1;
+    }
+  }
+}
+
+.central-hub-beacon {
+  .beacon-pulse-halo {
+    animation: beaconGlowPulse 3.5s ease-in-out infinite;
+  }
+
+  .beacon-orbit-ring {
+    animation: orbitDashRotate 30s linear infinite;
+    transform-origin: 1600px 1600px;
+  }
+}
+
+@keyframes highwayFlow {
+  from {
+    stroke-dashoffset: 28;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes beaconGlowPulse {
+  0%, 100% {
+    transform: scale(0.95);
+    opacity: 0.6;
+    transform-origin: 1600px 1600px;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+    transform-origin: 1600px 1600px;
+  }
+}
+
+@keyframes orbitDashRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hud-divider {
+  width: 1px;
+  height: 18px;
+  background-color: var(--color-border-subtle);
+  margin: 0 3px;
+}
+
+.lod-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1.5px 6px;
+  border-radius: 9999px;
+  background-color: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-left: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.25);
 }
 
 /* ==========================================================================

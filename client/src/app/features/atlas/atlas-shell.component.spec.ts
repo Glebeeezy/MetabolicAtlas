@@ -211,15 +211,90 @@ describe('AtlasShellComponent', () => {
     }
   });
 
-  it('should reposition Acetyl-CoA above Reaction 1 without colliding with Reaction 8', () => {
+  it('should reposition Acetyl-CoA at global central hub (1520, 1560) without colliding with Reaction 8', () => {
     const acetyl = HUMAN_METABOLITES.find((m) => m.code === 'MET_ACETYL_COA')!;
-    expect(acetyl.x).toBe(840);
-    expect(acetyl.y).toBe(20);
+    expect(acetyl.x).toBe(1520);
+    expect(acetyl.y).toBe(1560);
     expect(acetyl.isHub).toBe(true);
 
-    // Reaction 8 path connects Malate (x: 270..410) to OAA (x: 590), totally free from x: 840
+    // Reaction 8 path connects Malate to OAA (x: 1270), safely clear from x: 1520
     const mdh = HUMAN_REACTIONS.find((r) => r.code === 'R_MDH')!;
-    expect(mdh.pathData).toContain('590 166');
+    expect(mdh.pathData).toContain('1270 1706');
+  });
+
+  it('should calculate LOD level based on zoom correctly', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.zoom.set(35);
+    expect(component.lodLevel()).toBe(1);
+
+    component.zoom.set(65);
+    expect(component.lodLevel()).toBe(2);
+
+    component.zoom.set(115);
+    expect(component.lodLevel()).toBe(3);
+  });
+
+  it('should have 5 sector continents and super-highways configured', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+
+    expect(component.sectorConfigs.length).toBe(5);
+    const tcaSector = component.sectorConfigs.find((s) => s.sectorId === 'PW-TCA-CYCLE');
+    expect(tcaSector).toBeTruthy();
+    expect(tcaSector?.centerX).toBe(1380);
+    expect(tcaSector?.centerY).toBe(2110);
+
+    const glySector = component.sectorConfigs.find((s) => s.sectorId === 'PW-GLYCOLISIS');
+    expect(glySector).toBeTruthy();
+
+    expect(component.superHighways.length).toBeGreaterThanOrEqual(6);
+    const pdhHw = component.superHighways.find((h) => h.id === 'hw-gly-pdh');
+    expect(pdhHw).toBeTruthy();
+  });
+
+  it('should verify Acetyl-CoA is the external metabolic hub and not an intermediate of TCA', () => {
+    const acetyl = HUMAN_METABOLITES.find((m) => m.code === 'MET_ACETYL_COA')!;
+    expect(acetyl.isHub).toBe(true);
+
+    const tcaEntry = acetyl.pathwaysRu.find((p) => p.pathwayCode === 'PWY_TCA');
+    expect(tcaEntry).toBeTruthy();
+    expect(tcaEntry?.isCurrentPathway).toBe(false);
+    expect(tcaEntry?.role).toBe('substrate');
+
+    const hubEntry = acetyl.pathwaysRu.find((p) => p.pathwayCode === 'ALL');
+    expect(hubEntry).toBeTruthy();
+    expect(hubEntry?.isCurrentPathway).toBe(true);
+  });
+
+  it('should allow wheel zoom when cursor is over a sector polygon or reaction', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.zoom.set(100);
+
+    // Simulate wheel event over a sector polygon
+    const polygonTarget = document.createElement('polygon');
+    polygonTarget.classList.add('sector-polygon');
+    const wheelEvent = new WheelEvent('wheel', { deltaY: -100, bubbles: true });
+    Object.defineProperty(wheelEvent, 'target', { value: polygonTarget });
+
+    component.onWheel(wheelEvent);
+    expect(component.zoom()).toBe(110);
+
+    // When over inspector, zoom should be ignored
+    const inspectorTarget = document.createElement('div');
+    const inspectorEl = document.createElement('aside');
+    inspectorEl.classList.add('context-inspector');
+    inspectorEl.appendChild(inspectorTarget);
+    const wheelEventInspector = new WheelEvent('wheel', { deltaY: -100, bubbles: true });
+    Object.defineProperty(wheelEventInspector, 'target', { value: inspectorTarget });
+
+    component.onWheel(wheelEventInspector);
+    expect(component.zoom()).toBe(110); // unchanged
   });
 
   it('should perform global cross-highlighting when a cofactor is selected', () => {
