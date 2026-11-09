@@ -150,19 +150,31 @@ describe('ReactionArrowComponent', () => {
       for (const rx of HUMAN_REACTIONS) {
         if (!rx.cofactorArc?.path) continue;
 
-        // Parse reaction path: M x0 y0 C x1 y1, x2 y2, x3 y3
-        const rxMatch = rx.pathData.match(
+        // Parse reaction path: M x0 y0 C x1 y1, x2 y2, x3 y3 OR M x0 y0 L x1 y1
+        let rxCurvePts: [number, number][] = [];
+        const cubicMatch = rx.pathData.match(
           /M\s*([\d.]+)\s+([\d.]+)\s+C\s*([\d.]+)\s+([\d.]+),\s*([\d.]+)\s+([\d.]+),\s*([\d.]+)\s+([\d.]+)/
         );
-        expect(rxMatch, `Reaction ${rx.code} must have valid cubic pathData`).toBeTruthy();
-        if (!rxMatch) continue;
-
-        const rxCurvePts = sampleCubicBezier(
-          [parseFloat(rxMatch[1]), parseFloat(rxMatch[2])],
-          [parseFloat(rxMatch[3]), parseFloat(rxMatch[4])],
-          [parseFloat(rxMatch[5]), parseFloat(rxMatch[6])],
-          [parseFloat(rxMatch[7]), parseFloat(rxMatch[8])]
-        );
+        if (cubicMatch) {
+          rxCurvePts = sampleCubicBezier(
+            [parseFloat(cubicMatch[1]), parseFloat(cubicMatch[2])],
+            [parseFloat(cubicMatch[3]), parseFloat(cubicMatch[4])],
+            [parseFloat(cubicMatch[5]), parseFloat(cubicMatch[6])],
+            [parseFloat(cubicMatch[7]), parseFloat(cubicMatch[8])]
+          );
+        } else {
+          const lineMatch = rx.pathData.match(/M\s*([\d.]+)\s+([\d.]+)\s+L\s*([\d.]+)\s+([\d.]+)/);
+          expect(lineMatch, `Reaction ${rx.code} must have valid pathData (cubic Bezier or Line)`).toBeTruthy();
+          if (!lineMatch) continue;
+          const x0 = parseFloat(lineMatch[1]);
+          const y0 = parseFloat(lineMatch[2]);
+          const x1 = parseFloat(lineMatch[3]);
+          const y1 = parseFloat(lineMatch[4]);
+          for (let i = 0; i <= 150; i++) {
+            const t = i / 150;
+            rxCurvePts.push([x0 + t * (x1 - x0), y0 + t * (y1 - y0)]);
+          }
+        }
 
         // Extract numbers from cofactor arc path
         const arcNumbers = rx.cofactorArc.path.replace(/[MC]/g, ' ').trim().split(/\s+/).map(Number);

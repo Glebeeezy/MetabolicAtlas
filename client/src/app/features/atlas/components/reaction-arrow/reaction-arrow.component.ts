@@ -53,9 +53,15 @@ export interface ReactionArrowData {
   code: string;
   nameRu: string;
   nameEn: string;
+  pathwayCode?: string;
+  pathwayNameRu?: string;
+  pathwayNameEn?: string;
+  compartmentRu?: string;
+  compartmentEn?: string;
   sourceMetaboliteId: string;
   targetMetaboliteId: string;
   secondarySourceId?: string;
+  secondaryTargetId?: string;
   secondaryPathData?: string;
   pathData: string;
   tooltipX: number;
@@ -77,6 +83,10 @@ export interface ReactionArrowData {
   inhibitorsEn?: string[];
   mechanismRu: string;
   mechanismEn?: string;
+  energyBalanceRu?: string;
+  energyBalanceEn?: string;
+  netAtpYieldRu?: string;
+  netAtpYieldEn?: string;
   clinicalNoteRu?: string;
   clinicalNoteEn?: string;
 }

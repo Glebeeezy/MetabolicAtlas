@@ -261,6 +261,134 @@
 .compartment-rect {
   stroke: rgba(255, 255, 255, 0.07);
   stroke-width: 1.5px;
+
+  &--cytosol {
+    stroke: rgba(245, 158, 11, 0.22);
+    stroke-dasharray: 8 6;
+  }
+
+  &--matrix {
+    stroke: rgba(16, 185, 129, 0.22);
+  }
+}
+
+.compartment-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  user-select: none;
+
+  &--amber {
+    fill: #f59e0b;
+    opacity: 0.75;
+  }
+
+  &--emerald {
+    fill: #10b981;
+    opacity: 0.75;
+  }
+}
+
+.membrane-line {
+  stroke-width: 2px;
+
+  &--omm {
+    stroke: rgba(16, 185, 129, 0.4);
+    stroke-dasharray: 6 3;
+  }
+
+  &--imm {
+    stroke: rgba(16, 185, 129, 0.85);
+  }
+}
+
+.membrane-label {
+  font-size: 9px;
+  font-weight: 600;
+  fill: #64748b;
+  letter-spacing: 0.04em;
+  user-select: none;
+}
+
+.ims-strip {
+  fill: rgba(16, 185, 129, 0.04);
+}
+
+.mpc-channel-marker {
+  user-select: none;
+}
+
+.mpc-channel-bg {
+  fill: #0f172a;
+  stroke: #10b981;
+  stroke-width: 1.5px;
+}
+
+.mpc-channel-text {
+  font-size: 10px;
+  font-weight: 800;
+  fill: #34d399;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.zone-banner {
+  user-select: none;
+}
+
+.zone-banner-bg {
+  stroke-width: 1px;
+
+  &--amber {
+    fill: rgba(15, 23, 42, 0.88);
+    stroke: rgba(245, 158, 11, 0.4);
+  }
+
+  &--emerald {
+    fill: rgba(15, 23, 42, 0.88);
+    stroke: rgba(16, 185, 129, 0.4);
+  }
+}
+
+.zone-banner-text {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  dominant-baseline: central;
+
+  &--amber {
+    fill: #f59e0b;
+  }
+
+  &--emerald {
+    fill: #10b981;
+  }
+}
+
+.pdh-cluster-boundary {
+  user-select: none;
+}
+
+.pdh-cluster-rect {
+  fill: rgba(245, 158, 11, 0.035);
+  stroke: rgba(245, 158, 11, 0.38);
+  stroke-dasharray: 6 4;
+  stroke-width: 1.5px;
+}
+
+.pdh-badge-bg {
+  fill: #0f172a;
+  stroke: #f59e0b;
+  stroke-width: 1.2px;
+}
+
+.pdh-badge-text {
+  font-size: 10px;
+  font-weight: 800;
+  fill: #f59e0b;
+  letter-spacing: 0.08em;
+  dominant-baseline: central;
 }
 
 /* ==========================================================================
@@ -808,6 +936,32 @@
     letter-spacing: 0.02em;
     color: var(--color-text-secondary);
   }
+
+  .compartment-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: rgba(148, 163, 184, 0.12);
+    color: #94a3b8;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+
+    &--cyto {
+      background: rgba(245, 158, 11, 0.12);
+      color: #f59e0b;
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    &--matrix {
+      background: rgba(16, 185, 129, 0.12);
+      color: #10b981;
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+  }
 }
 
 .live-dot {
@@ -872,6 +1026,22 @@
   letter-spacing: 0.05em;
   color: var(--color-substrate-accent);
   margin-bottom: 0.35rem;
+
+  &--gly {
+    color: #f59e0b;
+  }
+
+  &--pdh {
+    color: #fbbf24;
+  }
+
+  &--mpc {
+    color: #34d399;
+  }
+
+  &--tca {
+    color: #38bdf8;
+  }
 }
 
 .rx-title {
@@ -900,6 +1070,145 @@
     font-family: var(--font-mono);
     color: #fbbf24;
     font-weight: 700;
+  }
+}
+
+.rx-energy-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.65rem;
+}
+
+.rx-energy-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: var(--radius-sm);
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  font-size: 0.725rem;
+
+  &--net {
+    border-color: rgba(16, 185, 129, 0.25);
+    background: rgba(16, 185, 129, 0.04);
+  }
+}
+
+.rx-energy-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  &--impact {
+    color: #fbbf24;
+  }
+
+  &--net {
+    color: #34d399;
+  }
+}
+
+.rx-energy-text {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.energetics-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  margin-top: 1.25rem;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  &__badge {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #fbbf24;
+  }
+
+  &__ratio {
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+.energetics-row {
+  padding: 0.6rem 0.7rem;
+  border-radius: var(--radius-sm);
+
+  &--anaerobic {
+    background: rgba(239, 68, 68, 0.06);
+    border-left: 3px solid #ef4444;
+  }
+
+  &--aerobic {
+    background: rgba(16, 185, 129, 0.07);
+    border-left: 3px solid #10b981;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.775rem;
+    color: var(--color-text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  &__formula {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.35rem;
+  }
+
+  &__desc {
+    font-size: 0.7rem;
+    line-height: 1.4;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+}
+
+.energetics-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+
+  &--anaerobic {
+    background: #ef4444;
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+  }
+
+  &--aerobic {
+    background: #10b981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
   }
 }
 

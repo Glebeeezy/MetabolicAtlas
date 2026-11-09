@@ -135,7 +135,25 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
 
       if (focus.pathwayId === 'PW-TCA-CYCLE') {
         this.focusOnTca();
-        this.onReactionClick(this.reactions[0]);
+        const defaultRx = this.reactions.find((r) => r.code === 'R_CS') || this.reactions[0];
+        if (defaultRx) this.onReactionClick(defaultRx);
+        return;
+      }
+
+      if (focus.pathwayId === 'PW-GLYCOLISIS') {
+        const sector = this.sectorConfigs.find((s) => s.targetPathwayId === 'PW-GLYCOLISIS');
+        if (sector) this.focusOnSector(sector);
+        const hk = this.reactions.find((r) => r.code === 'R_HK');
+        if (hk) this.onReactionClick(hk);
+        return;
+      }
+
+      if (focus.pathwayId === 'PW-PDH') {
+        this.zoom.set(95);
+        this.panX.set(0);
+        this.panY.set(Math.round((1600 - 1460) * 0.95));
+        const pdh = this.reactions.find((r) => r.code === 'R_PDH');
+        if (pdh) this.onReactionClick(pdh);
         return;
       }
 
@@ -373,7 +391,10 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.setupGlobalPanListeners();
     // Default selection: Step 1 (Citrate Synthase) so the user sees rich details immediately!
-    this.onReactionClick(this.reactions[0]);
+    const defaultRx = this.reactions.find((r) => r.code === 'R_CS') || this.reactions[0];
+    if (defaultRx) {
+      this.onReactionClick(defaultRx);
+    }
   }
 
   ngOnDestroy(): void {
@@ -463,24 +484,59 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     }
   }
 
+  findMetabolite(nameRu?: string, nameEn?: string): HumanMetaboliteNode | undefined {
+    if (nameRu) {
+      const found = this.findMetaboliteByName(nameRu);
+      if (found) return found;
+    }
+    if (nameEn) {
+      const found = this.findMetaboliteByName(nameEn);
+      if (found) return found;
+    }
+    return undefined;
+  }
+
   findMetaboliteByName(name: string): HumanMetaboliteNode | undefined {
     if (!name) return undefined;
     const clean = name.trim().toLowerCase();
-    return this.allMetabolites.find((m) => {
+    const withoutParen = clean.replace(/\s*\([^)]*\)/g, '').trim();
+
+    // 1. Exact match on official names, code, or exact abbreviations
+    const exact = this.allMetabolites.find((m) => {
       const ru = m.nameRu.toLowerCase();
       const en = m.nameEn.toLowerCase();
       const abbrevRu = m.abbrevRu.toLowerCase();
       const abbrevEn = m.abbrevEn.toLowerCase();
-      if (ru === clean || en === clean || abbrevRu === clean || abbrevEn === clean) return true;
-      if (clean.startsWith(ru) || clean.startsWith(en) || clean.startsWith(abbrevRu) || clean.startsWith(abbrevEn)) return true;
-      if (m.synonymsRu.some((s) => {
-        const sClean = s.toLowerCase();
-        return sClean === clean || clean.startsWith(sClean) || sClean.startsWith(clean);
-      })) return true;
-      if (m.synonymsEn && m.synonymsEn.some((s) => {
-        const sClean = s.toLowerCase();
-        return sClean === clean || clean.startsWith(sClean) || sClean.startsWith(clean);
-      })) return true;
+      const code = m.code.toLowerCase();
+      return (
+        ru === clean ||
+        en === clean ||
+        code === clean ||
+        abbrevRu === clean ||
+        abbrevEn === clean ||
+        (withoutParen.length > 0 && (ru === withoutParen || en === withoutParen))
+      );
+    });
+    if (exact) return exact;
+
+    // 2. Exact match on synonyms
+    const exactSyn = this.allMetabolites.find((m) => {
+      const matchSyn = (syn: string) => {
+        const s = syn.toLowerCase();
+        return s === clean || (withoutParen.length > 0 && s === withoutParen);
+      };
+      return m.synonymsRu?.some(matchSyn) || m.synonymsEn?.some(matchSyn);
+    });
+    if (exactSyn) return exactSyn;
+
+    // 3. Prefix match ONLY on full names (length >= 4), never on short abbreviations
+    return this.allMetabolites.find((m) => {
+      const ru = m.nameRu.toLowerCase();
+      const en = m.nameEn.toLowerCase();
+      if (ru.length >= 4 && (clean.startsWith(ru) || ru.startsWith(clean))) return true;
+      if (en.length >= 4 && (clean.startsWith(en) || en.startsWith(clean))) return true;
+      if (m.synonymsRu?.some((s) => s.length >= 4 && (clean.startsWith(s.toLowerCase()) || s.toLowerCase().startsWith(clean)))) return true;
+      if (m.synonymsEn?.some((s) => s.length >= 4 && (clean.startsWith(s.toLowerCase()) || s.toLowerCase().startsWith(clean)))) return true;
       return false;
     });
   }
@@ -492,7 +548,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     for (const r of this.reactions) {
       if (r.sourceMetaboliteId === metId || r.secondarySourceId === metId) {
         list.push({ rx: r, role: 'substrate' });
-      } else if (r.targetMetaboliteId === metId) {
+      } else if (r.targetMetaboliteId === metId || r.secondaryTargetId === metId) {
         list.push({ rx: r, role: 'product' });
       } else if (targetMet && targetMet.isCofactor) {
         const matches = (candidate: string) => {
@@ -540,14 +596,27 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     const current: PathwayParticipation[] = [];
     const others: PathwayParticipation[] = [];
     const list = met.pathwaysRu || [];
+    const activePathwayId = this.atlasStateService.selectedPathwayId();
 
     for (const p of list) {
-      if (p.isCurrentPathway) {
+      const matchesActive =
+        (activePathwayId === 'PW-GLYCOLISIS' && p.pathwayCode === 'PW-GLYCOLISIS') ||
+        (activePathwayId === 'PW-PDH' && (p.pathwayCode === 'PW-PDH' || p.pathwayCode === 'PW-MPC')) ||
+        (activePathwayId === 'PW-TCA-CYCLE' && (p.pathwayCode === 'PW-TCA-CYCLE' || p.pathwayCode === 'PWY_TCA'));
+
+      if (matchesActive || (activePathwayId === 'ALL' && p.isCurrentPathway)) {
         current.push(p);
       } else {
         others.push(p);
       }
     }
+
+    if (current.length === 0 && list.length > 0) {
+      current.push(...list.filter((p) => p.isCurrentPathway));
+      others.length = 0;
+      others.push(...list.filter((p) => !p.isCurrentPathway));
+    }
+
     return { current, others };
   }
 

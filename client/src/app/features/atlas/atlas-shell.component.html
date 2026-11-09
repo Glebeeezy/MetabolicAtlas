@@ -108,6 +108,13 @@
           <path d="M 1 1.5 L 7 4 L 1 6.5 z" fill="#E2E8F0" />
         </marker>
 
+        <!-- Cytosolic Hull Glow -->
+        <radialGradient id="cytosolGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.05" />
+          <stop offset="85%" stop-color="#F59E0B" stop-opacity="0.01" />
+          <stop offset="100%" stop-color="transparent" />
+        </radialGradient>
+
         <!-- Subtle Matrix Hull Glow -->
         <radialGradient id="matrixGlow" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.04" />
@@ -237,17 +244,86 @@
         <circle cx="1600" cy="1600" r="110" fill="none" stroke="#10B981" stroke-width="1.5" stroke-dasharray="6 6" class="beacon-orbit-ring" />
       </g>
 
-      <!-- 4. Mitochondrial Compartment Backdrop for TCA Cycle -->
+      <!-- 4. Cellular Compartment Backdrops: Cytosol, Envelope & Mitochondrial Matrix -->
       <g class="compartment-layer" pointer-events="none">
+        <!-- Cytosol Compartment (Glycolysis steps 1-10) -->
+        <rect
+          x="1240"
+          y="230"
+          width="720"
+          height="1120"
+          rx="32"
+          class="compartment-rect compartment-rect--cytosol"
+          fill="url(#cytosolGlow)"
+        />
+        <!-- Glycolysis Cytosolic Banner -->
+        <g class="zone-banner zone-banner--amber">
+          <rect x="1420" y="240" width="360" height="24" rx="6" class="zone-banner-bg zone-banner-bg--amber" />
+          <text x="1600" y="256" text-anchor="middle" class="zone-banner-text zone-banner-text--amber">
+            {{ localeService.locale() === 'ru' ? 'ГЛИКОЛИЗ • 10 СТАДИЙ (ЦИТОПЛАЗМА)' : 'GLYCOLYSIS • 10 STEPS (CYTOSOL)' }}
+          </text>
+        </g>
+
+        <!-- Outer & Inner Mitochondrial Membranes (Mitochondrial Envelope) -->
+        <g class="membrane-boundary-group">
+          <!-- Outer Mitochondrial Membrane (OMM) -->
+          <line x1="1200" y1="1355" x2="2000" y2="1355" class="membrane-line membrane-line--omm" />
+          <text x="1210" y="1350" class="membrane-label">
+            {{ localeService.locale() === 'ru' ? 'Наружная мембрана митохондрий (НММ)' : 'Outer Mitochondrial Membrane (OMM)' }}
+          </text>
+
+          <!-- Intermembrane Space (IMS) -->
+          <rect x="1200" y="1357" width="800" height="26" class="ims-strip" />
+
+          <!-- Inner Mitochondrial Membrane (IMM) -->
+          <line x1="1200" y1="1385" x2="2000" y2="1385" class="membrane-line membrane-line--imm" />
+          <text x="1210" y="1398" class="membrane-label">
+            {{ localeService.locale() === 'ru' ? 'Внутренняя мембрана митохондрий (ВММ)' : 'Inner Mitochondrial Membrane (IMM)' }}
+          </text>
+
+          <!-- MPC (Mitochondrial Pyruvate Carrier) Gateway Marker -->
+          <g transform="translate(1600, 1370)" class="mpc-channel-marker">
+            <rect x="-42" y="-12" width="84" height="24" rx="6" class="mpc-channel-bg" />
+            <text x="0" y="4" class="mpc-channel-text">MPC1/2</text>
+          </g>
+        </g>
+
+        <!-- Dedicated PDH Complex Transition Frame in Matrix -->
+        <g class="pdh-cluster-boundary">
+          <rect
+            x="1310"
+            y="1395"
+            width="580"
+            height="156"
+            rx="18"
+            class="pdh-cluster-rect"
+          />
+          <g transform="translate(1325, 1404)">
+            <rect x="0" y="0" width="240" height="22" rx="4" class="pdh-badge-bg" />
+            <text x="120" y="14" text-anchor="middle" class="pdh-badge-text">
+              {{ localeService.locale() === 'ru' ? 'КОМПЛЕКС ПДХ (E1 • E2 • E3)' : 'PDH COMPLEX (E1 • E2 • E3)' }}
+            </text>
+          </g>
+        </g>
+
+        <!-- Mitochondrial Matrix Compartment (TCA Cycle & PDH) -->
         <rect
           x="750"
-          y="1555"
+          y="1395"
           width="1260"
-          height="990"
+          height="1150"
           rx="36"
-          class="compartment-rect"
+          class="compartment-rect compartment-rect--matrix"
           fill="url(#matrixGlow)"
         />
+
+        <!-- TCA Matrix Banner -->
+        <g class="zone-banner zone-banner--emerald">
+          <rect x="1390" y="1650" width="420" height="24" rx="6" class="zone-banner-bg zone-banner-bg--emerald" />
+          <text x="1600" y="1666" text-anchor="middle" class="zone-banner-text zone-banner-text--emerald">
+            {{ localeService.locale() === 'ru' ? 'ЦИКЛ ТРИКАРБОНОВЫХ КИСЛОТ • 8 ФЕРМЕНТОВ (МАТРИКС)' : 'TCA CYCLE • 8 ENZYMES (MITOCHONDRIAL MATRIX)' }}
+          </text>
+        </g>
       </g>
 
       <!-- 5. Metabolic Crossroads (Outbound & Inbound Pathways) -->
@@ -495,13 +571,33 @@
           @if (selectedReaction(); as rx) {
             <span class="live-dot live-dot--rx" aria-hidden="true"></span>
             <span class="type-text">
-              {{ localeService.locale() === 'ru' ? ('Реакция • Стадия ' + rx.stepNumber + ' из 8') : ('Reaction • Step ' + rx.stepNumber + ' of 8') }}
+              @if (rx.pathwayCode === 'PW-GLYCOLISIS') {
+                {{ localeService.locale() === 'ru' ? ('Гликолиз • Стадия ' + rx.stepNumber + ' из 10') : ('Glycolysis • Step ' + rx.stepNumber + ' of 10') }}
+              } @else if (rx.pathwayCode === 'PW-MPC') {
+                {{ localeService.locale() === 'ru' ? 'Мембранный транспорт • MPC1/2' : 'Membrane Transport • MPC1/2' }}
+              } @else if (rx.pathwayCode === 'PW-PDH') {
+                {{ localeService.locale() === 'ru' ? 'ПДХ-комплекс (E1-E2-E3)' : 'PDH Complex (E1-E2-E3)' }}
+              } @else if (rx.pathwayCode === 'PW-TCA-CYCLE') {
+                {{ localeService.locale() === 'ru' ? ('Цикл Кребса (ЦТК) • Стадия ' + rx.stepNumber + ' из 8') : ('TCA Cycle • Step ' + rx.stepNumber + ' of 8') }}
+              } @else {
+                {{ rx.nameRu }}
+              }
             </span>
+            @if (rx.compartmentRu) {
+              <span class="compartment-pill" [class.compartment-pill--cyto]="rx.compartmentRu === 'Цитозоль'" [class.compartment-pill--matrix]="rx.compartmentRu.includes('Матрикс')">
+                {{ localeService.locale() === 'ru' ? rx.compartmentRu : rx.compartmentEn }}
+              </span>
+            }
           } @else if (selectedMetabolite(); as met) {
             <span class="live-dot live-dot--met" aria-hidden="true"></span>
             <span class="type-text">
               {{ met.isCofactor ? (localeService.locale() === 'ru' ? 'Кофермент / Кофактор' : 'Coenzyme / Cofactor') : (localeService.locale() === 'ru' ? 'Химическое вещество • Метаболит' : 'Chemical Entity • Metabolite') }}
             </span>
+            @if (met.compartmentRu) {
+              <span class="compartment-pill" [class.compartment-pill--cyto]="met.compartmentRu === 'Цитозоль'" [class.compartment-pill--matrix]="met.compartmentRu.includes('Матрикс')">
+                {{ localeService.locale() === 'ru' ? met.compartmentRu : met.compartmentEn }}
+              </span>
+            }
           }
         </div>
 
@@ -531,8 +627,22 @@
         <div class="inspector-content">
           <!-- Step Title -->
           <div class="rx-header">
-            <span class="step-badge">
-              {{ localeService.locale() === 'ru' ? ('Стадия ' + rx.stepNumber + ' из 8') : ('Step ' + rx.stepNumber + ' of 8') }}
+            <span
+              class="step-badge"
+              [class.step-badge--gly]="rx.pathwayCode === 'PW-GLYCOLISIS'"
+              [class.step-badge--pdh]="rx.pathwayCode === 'PW-PDH'"
+              [class.step-badge--mpc]="rx.pathwayCode === 'PW-MPC'"
+              [class.step-badge--tca]="rx.pathwayCode === 'PW-TCA-CYCLE'"
+            >
+              @if (rx.pathwayCode === 'PW-GLYCOLISIS') {
+                {{ localeService.locale() === 'ru' ? ('Гликолиз • Стадия ' + rx.stepNumber + ' из 10') : ('Glycolysis • Step ' + rx.stepNumber + ' of 10') }}
+              } @else if (rx.pathwayCode === 'PW-MPC') {
+                {{ localeService.locale() === 'ru' ? 'Шлюз MPC1/2 • Внутренняя мембрана' : 'MPC1/2 Gateway • IMM' }}
+              } @else if (rx.pathwayCode === 'PW-PDH') {
+                {{ localeService.locale() === 'ru' ? 'Комплекс ПДХ • E1-E2-E3' : 'PDH Complex • E1-E2-E3' }}
+              } @else {
+                {{ localeService.locale() === 'ru' ? ('ЦТК (Цикл Кребса) • Стадия ' + rx.stepNumber + ' из 8') : ('TCA Cycle • Step ' + rx.stepNumber + ' of 8') }}
+              }
             </span>
             <h2 class="rx-title">{{ localeService.locale() === 'ru' ? rx.nameRu : rx.nameEn }}</h2>
             <div class="rx-meta-pill">
@@ -542,6 +652,22 @@
               <span>•</span>
               <span class="energy-font">ΔG°' = {{ rx.deltaG0 }}</span>
             </div>
+
+            <!-- Reaction Energetics Strip -->
+            @if (rx.energyBalanceRu) {
+              <div class="rx-energy-strip">
+                <div class="rx-energy-pill">
+                  <span class="rx-energy-tag rx-energy-tag--impact">{{ localeService.locale() === 'ru' ? 'Баланс стадии:' : 'Step Impact:' }}</span>
+                  <span class="rx-energy-text">{{ localeService.locale() === 'ru' ? rx.energyBalanceRu : rx.energyBalanceEn }}</span>
+                </div>
+                @if (rx.netAtpYieldRu) {
+                  <div class="rx-energy-pill rx-energy-pill--net">
+                    <span class="rx-energy-tag rx-energy-tag--net">{{ localeService.locale() === 'ru' ? 'Итог:' : 'Net:' }}</span>
+                    <span class="rx-energy-text">{{ localeService.locale() === 'ru' ? rx.netAtpYieldRu : rx.netAtpYieldEn }}</span>
+                  </div>
+                }
+              </div>
+            }
           </div>
 
           <!-- Section: Substrate ➔ Product Comparison Cards with Clickable Metabolite & Cofactor Links -->
@@ -559,7 +685,7 @@
                 </div>
                 <div class="flux-card__list">
                   @for (sub of rx.substrates; track sub.name) {
-                    @let linkedMet = findMetaboliteByName(sub.name);
+                    @let linkedMet = findMetabolite(sub.name, sub.nameEn);
                     <div
                       class="participant-row"
                       [class.is-co]="sub.isCo"
@@ -590,7 +716,7 @@
                 </div>
                 <div class="flux-card__list">
                   @for (prod of rx.products; track prod.name) {
-                    @let linkedMet = findMetaboliteByName(prod.name);
+                    @let linkedMet = findMetabolite(prod.name, prod.nameEn);
                     <div
                       class="participant-row"
                       [class.is-co]="prod.isCo"
@@ -670,6 +796,47 @@
               </div>
             </div>
           }
+
+          <!-- Aerobic vs Anaerobic Power Comparison (for Glycolysis / PDH reactions) -->
+          @if (rx.pathwayCode === 'PW-GLYCOLISIS' || rx.pathwayCode === 'PW-PDH' || rx.pathwayCode === 'PW-MPC') {
+            <div class="inspector-section energetics-card">
+              <div class="energetics-card__header">
+                <span class="energetics-card__badge">⚡ {{ localeService.locale() === 'ru' ? 'Энергетическая мощь: Аэробный vs Анаэробный' : 'Energy Power: Aerobic vs Anaerobic' }}</span>
+                <span class="energetics-card__ratio">16× {{ localeService.locale() === 'ru' ? 'больше энергии' : 'more energy' }}</span>
+              </div>
+              <div class="energetics-card__body">
+                <div class="energetics-row energetics-row--anaerobic">
+                  <div class="energetics-row__title">
+                    <span class="energetics-dot energetics-dot--anaerobic"></span>
+                    <strong>{{ localeService.locale() === 'ru' ? 'Анаэробный гликолиз (без O₂)' : 'Anaerobic Glycolysis (no O₂)' }}</strong>
+                  </div>
+                  <div class="energetics-row__formula font-mono">
+                    {{ localeService.locale() === 'ru' ? '1 Глюкоза ➔ 2 Лактат + 2 АТФ' : '1 Glucose ➔ 2 Lactate + 2 ATP' }}
+                  </div>
+                  <p class="energetics-row__desc">
+                    {{ localeService.locale() === 'ru'
+                      ? 'НАДН расходуется на восстановление пирувата в лактат (ЛДГ). Чистый выход: ровно +2 АТФ (~61 кДж/моль запасаемой энергии). Быстрый взрыв мощности (спринт), но вызывает утомление и лактатацидоз.'
+                      : 'NADH is consumed to reduce pyruvate to lactate by LDH. Net yield: exactly +2 ATP (~61 kJ/mol stored). Rapid power burst (sprint), limited by fatigue and lactic acidosis.' }}
+                  </p>
+                </div>
+
+                <div class="energetics-row energetics-row--aerobic">
+                  <div class="energetics-row__title">
+                    <span class="energetics-dot energetics-dot--aerobic"></span>
+                    <strong>{{ localeService.locale() === 'ru' ? 'Полное аэробное дыхание (Гликолиз + ПДХ + ЦТК + ОкФос)' : 'Complete Aerobic Respiration (Gly + PDH + TCA + OxPhos)' }}</strong>
+                  </div>
+                  <div class="energetics-row__formula font-mono">
+                    {{ localeService.locale() === 'ru' ? '1 Глюкоза + 6 O₂ ➔ 6 CO₂ + 6 H₂O + 30–32 АТФ' : '1 Glucose + 6 O₂ ➔ 6 CO₂ + 6 H₂O + 30–32 ATP' }}
+                  </div>
+                  <p class="energetics-row__desc">
+                    {{ localeService.locale() === 'ru'
+                      ? 'Пируват окисляется в ПДХ и ЦТК, а 10 восстановительных эквивалентов (НАДН, ФАДН₂) питают дыхательную цепь. Чистый выход: 30–32 АТФ (~1000 кДж/моль) — в 15–16 раз эффективнее!'
+                      : 'Pyruvate oxidizes via PDH and TCA, funneling 10 reducing equivalents (NADH, FADH₂) into respiratory chain. Net yield: 30–32 ATP (~1000 kJ/mol) — 15–16× higher energetic yield!' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          }
         </div>
       }
 
@@ -734,7 +901,7 @@
                   <div class="pathway-group__header">
                     <span class="live-dot live-dot--current"></span>
                     <span class="pathway-group__title">
-                      {{ localeService.locale() === 'ru' ? 'Текущий цикл • Цикл Кребса (ЦТК)' : 'Current Cycle • Krebs Cycle (TCA)' }}
+                      {{ localeService.locale() === 'ru' ? (sorted.current[0].pathwayNameRu || 'Текущий активный путь') : (sorted.current[0].pathwayNameEn || 'Current Active Pathway') }}
                     </span>
                     <span class="pathway-priority-tag">
                       {{ localeService.locale() === 'ru' ? 'Активный путь' : 'Active Pathway' }}
@@ -789,14 +956,29 @@
 
                   <div class="pathway-items-list">
                     @for (item of sorted.others; track item.pathwayCode + item.pathwayNameRu) {
-                      <div class="pathway-item-card pathway-item-card--other">
+                      <div
+                        class="pathway-item-card pathway-item-card--other"
+                        [class.is-clickable]="!!item.reactionCode"
+                        (click)="item.reactionCode && selectReactionByCode(item.reactionCode)"
+                        role="button"
+                        [attr.tabindex]="item.reactionCode ? 0 : null"
+                        [attr.title]="item.reactionCode ? (localeService.locale() === 'ru' ? ('Нажмите для перехода к реакции ' + item.reactionCode) : ('Click to view reaction ' + item.reactionCode)) : null"
+                      >
                         <div class="pathway-item-top">
                           <span class="other-pathway-badge">
                             {{ localeService.locale() === 'ru' ? item.pathwayNameRu : (item.pathwayNameEn || item.pathwayNameRu) }}
                           </span>
+                          @if (item.stepNumber) {
+                            <span class="step-pill">
+                              {{ localeService.locale() === 'ru' ? ('Стадия ' + item.stepNumber) : ('Step ' + item.stepNumber) }}
+                            </span>
+                          }
                           <span class="role-pill role-pill--subtle">
                             {{ getRoleName(item.role) }}
                           </span>
+                          @if (item.reactionCode) {
+                            <span class="jump-arrow">{{ localeService.locale() === 'ru' ? 'перейти ↗' : 'view ↗' }}</span>
+                          }
                         </div>
                         <p class="pathway-item-desc">
                           {{ localeService.locale() === 'ru' ? item.detailsRu : (item.detailsEn || item.detailsRu) }}
@@ -809,12 +991,12 @@
             }
           </div>
 
-          <!-- Connected Reactions in TCA Cycle (Two-way link to reaction passport!) -->
+          <!-- Connected Reactions (Two-way link to reaction passport!) -->
           @if (getReactionsForMetabolite(met.id); as relatedRxs) {
             @if (relatedRxs.length > 0) {
               <div class="inspector-section">
                 <h3 class="section-title">
-                  {{ localeService.locale() === 'ru' ? 'Стадии на карте ЦТК' : 'TCA Cycle Steps' }}
+                  {{ localeService.locale() === 'ru' ? 'Связанные стадии на карте' : 'Connected Pathway Steps' }}
                 </h3>
                 <div class="related-reactions-list">
                   @for (rel of relatedRxs; track rel.rx.id) {

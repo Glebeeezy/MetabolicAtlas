@@ -38,6 +38,8 @@ export interface HumanMetaboliteNode {
   structureSvg?: string;
   isCofactor?: boolean;
   isHub?: boolean;
+  compartmentRu?: string;
+  compartmentEn?: string;
   pathwaysRu: PathwayParticipation[];
 }
 
@@ -86,9 +88,15 @@ export interface HumanReactionArrow {
   code: string;
   nameRu: string;
   nameEn: string;
+  pathwayCode?: string;
+  pathwayNameRu?: string;
+  pathwayNameEn?: string;
+  compartmentRu?: string;
+  compartmentEn?: string;
   sourceMetaboliteId: string;
   targetMetaboliteId: string;
   secondarySourceId?: string;
+  secondaryTargetId?: string;
   secondaryPathData?: string;
   pathData: string;
   tooltipX: number;
@@ -110,6 +118,10 @@ export interface HumanReactionArrow {
   inhibitorsEn?: string[];
   mechanismRu: string;
   mechanismEn?: string;
+  energyBalanceRu?: string;
+  energyBalanceEn?: string;
+  netAtpYieldRu?: string;
+  netAtpYieldEn?: string;
   clinicalNoteRu?: string;
   clinicalNoteEn?: string;
 }
@@ -118,6 +130,11 @@ export interface MetabolicCrossroad {
   id: string;
   nameRu: string;
   nameEn: string;
+  pathwayCode?: string;
+  pathwayNameRu?: string;
+  pathwayNameEn?: string;
+  compartmentRu?: string;
+  compartmentEn?: string;
   direction: 'in' | 'out';
   startX: number;
   startY: number;
@@ -173,8 +190,761 @@ export interface GlobalMetabolicCanvasState {
 
 export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
   {
+    "id": "b0000002-0000-0000-0000-000000000001",
+    "code": "MET_GLUCOSE",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "D-Глюкоза",
+    "nameEn": "D-Glucose",
+    "abbrevRu": "Глю",
+    "abbrevEn": "Glc",
+    "formula": "C₆H₁₂O₆",
+    "carbons": "6C",
+    "carbonsEn": "6C",
+    "x": 1520,
+    "y": 280,
+    "width": 160,
+    "height": 74,
+    "color": "#F59E0B",
+    "isHub": true,
+    "smiles": "C(C1C(C(C(C(O1)O)O)O)O)O",
+    "chebi": "CHEBI:17234",
+    "inchiKey": "WQZGKKKJIJFFOK-GASJEMHNSA-N",
+    "descriptionRu": "Главный первичный моносахарид энергетического обмена человека. Поступает из крови в цитозоль клеток через переносчики семейства GLUT (SLC2A). Служит исходным субстратом гликолиза, пентозофосфатного пути и синтеза гликогена.",
+    "descriptionEn": "Primary hexose monosaccharide and ubiquitous cellular fuel of human metabolism. Enters cells from blood plasma via facilitative glucose transporters (GLUT1-4).",
+    "synonymsRu": [
+      "Глюкоза",
+      "D-Глюкопираноза",
+      "Декстроза",
+      "Виноградный сахар"
+    ],
+    "synonymsEn": [
+      "D-Glucose",
+      "Dextrose",
+      "D-Glucopyranose",
+      "Blood sugar"
+    ],
+    "skeletalSvg": "<polygon points=\"24,12 36,18 36,30 24,36 12,30 12,18\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"36\" cy=\"18\" r=\"3\" fill=\"#EF4444\"/><circle cx=\"24\" cy=\"36\" r=\"3\" fill=\"#EF4444\"/><circle cx=\"12\" cy=\"18\" r=\"3\" fill=\"#EF4444\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <polygon points=\"120,20 155,40 155,75 120,95 85,75 85,40\" class=\"chem-ring\" stroke=\"#94A3B8\" stroke-width=\"2.2\" fill=\"none\"/>\n  <circle cx=\"155\" cy=\"40\" r=\"4.5\" fill=\"#EF4444\"/>\n  <text x=\"168\" y=\"42\" class=\"atom-o\" fill=\"#EF4444\" font-weight=\"700\" text-anchor=\"start\" dominant-baseline=\"central\">O</text>\n  <line x1=\"120\" y1=\"20\" x2=\"120\" y2=\"6\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <text x=\"120\" y=\"2\" class=\"atom-c\" fill=\"#CBD5E1\" font-weight=\"600\" text-anchor=\"middle\" dominant-baseline=\"central\">CH₂OH</text>\n  <line x1=\"85\" y1=\"40\" x2=\"68\" y2=\"30\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <text x=\"60\" y=\"25\" class=\"atom-o\" fill=\"#EF4444\" font-weight=\"700\" text-anchor=\"end\" dominant-baseline=\"central\">HO</text>\n  <line x1=\"85\" y1=\"75\" x2=\"68\" y2=\"85\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <text x=\"60\" y=\"90\" class=\"atom-o\" fill=\"#EF4444\" font-weight=\"700\" text-anchor=\"end\" dominant-baseline=\"central\">OH</text>\n  <line x1=\"120\" y1=\"95\" x2=\"120\" y2=\"108\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <text x=\"120\" y=\"114\" class=\"atom-o\" fill=\"#EF4444\" font-weight=\"700\" text-anchor=\"middle\" dominant-baseline=\"central\">OH</text>\n  <line x1=\"155\" y1=\"75\" x2=\"175\" y2=\"85\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <text x=\"182\" y=\"90\" class=\"atom-o\" fill=\"#EF4444\" font-weight=\"700\" text-anchor=\"start\" dominant-baseline=\"central\">OH</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз (Цитозоль)",
+        "pathwayNameEn": "Glycolysis (Cytosol)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 1 (Гексокиназа HK): необратимо фосфорилируется с затратой 1 АТФ в глюкозо-6-фосфат (G6P).",
+        "detailsEn": "Step 1 (Hexokinase HK): irreversibly phosphorylated consuming 1 ATP into glucose 6-phosphate (G6P).",
+        "stepNumber": 1,
+        "reactionCode": "R_HK",
+        "reactionNameRu": "Фосфорилирование глюкозы гексокиназой",
+        "reactionNameEn": "Hexokinase phosphorylation of glucose"
+      },
+      {
+        "pathwayCode": "PWY_LELOIR",
+        "pathwayNameRu": "Путь Лелуара (Метаболизм галактозы)",
+        "pathwayNameEn": "Leloir Pathway (Galactose Metabolism)",
+        "isCurrentPathway": false,
+        "role": "product",
+        "detailsRu": "Конечный продукт превращения галактозы в печени: Галактоза ➔ Gal-1-P ➔ УДФ-глюкоза ➔ G1P ➔ G6P ➔ Свободная D-глюкоза (через глюкозо-6-фосфатазу G6PC) для нормогликемии.",
+        "detailsEn": "Terminal hepatic product from galactose: Galactose ➔ Gal-1-P ➔ UDP-Glc ➔ G1P ➔ G6P ➔ Free D-glucose (via G6PC) for systemic blood glucose control."
+      },
+      {
+        "pathwayCode": "PWY_PPP",
+        "pathwayNameRu": "Пентозофосфатный путь (ПФП)",
+        "pathwayNameEn": "Pentose Phosphate Pathway",
+        "isCurrentPathway": false,
+        "role": "substrate",
+        "detailsRu": "Через G6P направляется в окислительную ветвь для синтеза НАДФН и рибозо-5-фосфата.",
+        "detailsEn": "Channels via G6P into oxidative branch to generate NADPH and ribose 5-phosphate."
+      }
+    ]
+  },
+  {
+    "id": "b0000002-0000-0000-0000-000000000002",
+    "code": "MET_G6P",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Глюкозо-6-фосфат",
+    "nameEn": "Glucose 6-phosphate",
+    "abbrevRu": "Г6Ф",
+    "abbrevEn": "G6P",
+    "formula": "C₆H₁₁O₉P²⁻",
+    "carbons": "6C",
+    "carbonsEn": "6C",
+    "x": 1520,
+    "y": 390,
+    "width": 160,
+    "height": 74,
+    "color": "#F59E0B",
+    "isHub": true,
+    "smiles": "C(C1C(C(C(C(O1)O)O)O)O)OP(=O)([O-])[O-]",
+    "chebi": "CHEBI:14314",
+    "inchiKey": "NBSCHQHZLSJFNQ-GASJEMHNSA-L",
+    "descriptionRu": "Ключевой фосфорилированный узел углеводного метаболизма («ловушка глюкозы в клетке»). Не способен диффундировать через мембрану. Перекрёсток гликолиза, гликогеногенеза, пентозофосфатного шунта и гликогенолиза.",
+    "descriptionEn": "Monomeric glucose locked inside the cytoplasm via hexokinase phosphorylation. Master metabolic crossroads for glycolysis, glycogenesis, and pentose phosphate pathway.",
+    "synonymsRu": [
+      "Глюкозо-6-фосфат",
+      "Г6Ф",
+      "Эфир Робисона"
+    ],
+    "synonymsEn": [
+      "Glucose 6-phosphate",
+      "G6P",
+      "Robison ester"
+    ],
+    "skeletalSvg": "<polygon points=\"24,12 36,18 36,30 24,36 12,30 12,18\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"12\" cy=\"18\" r=\"3\" fill=\"#EF4444\"/><circle cx=\"24\" cy=\"8\" r=\"3\" fill=\"#F59E0B\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <polygon points=\"100,30 135,50 135,80 100,98 65,80 65,50\" class=\"chem-ring\" stroke=\"#94A3B8\" stroke-width=\"2.2\" fill=\"none\"/>\n  <circle cx=\"135\" cy=\"50\" r=\"4\" fill=\"#EF4444\"/>\n  <line x1=\"100\" y1=\"30\" x2=\"100\" y2=\"15\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <line x1=\"100\" y1=\"15\" x2=\"135\" y2=\"15\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <rect x=\"140\" y=\"4\" width=\"70\" height=\"22\" rx=\"4\" fill=\"rgba(245,158,11,0.18)\" stroke=\"#F59E0B\" stroke-width=\"1.2\"/>\n  <text x=\"175\" y=\"15\" fill=\"#F59E0B\" font-weight=\"700\" font-size=\"11\" text-anchor=\"middle\" dominant-baseline=\"central\">O-PO₃²⁻</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз (Цитозоль)",
+        "pathwayNameEn": "Glycolysis (Cytosol)",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Стадия 1 (Гексокиназа HK): продукт фосфорилирования D-глюкозы за счет АТФ.",
+        "detailsEn": "Step 1 (Hexokinase HK): product of D-glucose phosphorylation by ATP.",
+        "stepNumber": 1,
+        "reactionCode": "R_HK"
+      },
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз (Цитозоль)",
+        "pathwayNameEn": "Glycolysis (Cytosol)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 2 (Фосфоглюкоизомераза GPI): обратимо изомеризуется во фруктозо-6-фосфат (F6P).",
+        "detailsEn": "Step 2 (GPI): reversibly isomerized into ketose fructose 6-phosphate (F6P).",
+        "stepNumber": 2,
+        "reactionCode": "R_GPI"
+      },
+      {
+        "pathwayCode": "PWY_LELOIR",
+        "pathwayNameRu": "Путь Лелуара (Метаболизм галактозы)",
+        "pathwayNameEn": "Leloir Pathway (Galactose Metabolism)",
+        "isCurrentPathway": false,
+        "role": "product",
+        "detailsRu": "Узел слияния галактозы: фосфоглюкомутаза 1 (PGM1) обратимо превращает глюкозо-1-фосфат (G1P) из пути Лелуара в G6P, направляя углеводы молока в гликолиз.",
+        "detailsEn": "Galactose junction point: phosphoglucomutase 1 (PGM1) converts G1P from Leloir pathway into G6P, funneling milk carbohydrate into glycolysis."
+      },
+      {
+        "pathwayCode": "PWY_PPP",
+        "pathwayNameRu": "Пентозофосфатный путь (ПФП)",
+        "pathwayNameEn": "Pentose Phosphate Pathway",
+        "isCurrentPathway": false,
+        "role": "substrate",
+        "detailsRu": "Окисляется G6PDH с генерацией первой молекулы НАДФН для антиоксидантной защиты.",
+        "detailsEn": "First committed substrate of pentose phosphate pathway producing NADPH."
+      },
+      {
+        "pathwayCode": "PWY_GLYCOGEN",
+        "pathwayNameRu": "Синтез гликогена",
+        "pathwayNameEn": "Glycogen Synthesis",
+        "isCurrentPathway": false,
+        "role": "substrate",
+        "detailsRu": "Изомеризуется фосфоглюкомутазой в G1P для активации в УДФ-глюкозу.",
+        "detailsEn": "Precursor of glucose 1-phosphate and UDP-glucose for glycogen storage."
+      }
+    ]
+  },
+  {
+    "id": "b0000002-0000-0000-0000-000000000003",
+    "code": "MET_F6P",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Фруктозо-6-фосфат",
+    "nameEn": "Fructose 6-phosphate",
+    "abbrevRu": "Ф6Ф",
+    "abbrevEn": "F6P",
+    "formula": "C₆H₁₁O₉P²⁻",
+    "carbons": "6C",
+    "carbonsEn": "6C",
+    "x": 1520,
+    "y": 500,
+    "width": 160,
+    "height": 74,
+    "color": "#F59E0B",
+    "smiles": "C(C1(C(C(C(O1)COP(=O)([O-])[O-])O)O)O)O",
+    "chebi": "CHEBI:15946",
+    "inchiKey": "BGWGXPAPYGQALX-UHFFFAOYSA-L",
+    "descriptionRu": "Кетогексозный фосфорилированный интермедиат. Субстрат ключевого необратимого звена гликолиза — фосфофруктокиназы-1 (PFK-1).",
+    "descriptionEn": "Ketohexose phosphate intermediate in the preparatory phase of glycolysis, phosphorylated to F1,6BP.",
+    "synonymsRu": [
+      "Фруктозо-6-фосфат",
+      "Ф6Ф",
+      "Эфир Нейберга"
+    ],
+    "synonymsEn": [
+      "Fructose 6-phosphate",
+      "F6P",
+      "Neuberg ester"
+    ],
+    "skeletalSvg": "<polygon points=\"24,14 34,22 30,34 18,34 14,22\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"34\" cy=\"22\" r=\"3\" fill=\"#EF4444\"/><circle cx=\"14\" cy=\"22\" r=\"3\" fill=\"#F59E0B\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <polygon points=\"105,32 135,48 125,78 85,78 75,48\" class=\"chem-ring\" stroke=\"#94A3B8\" stroke-width=\"2.2\" fill=\"none\"/>\n  <circle cx=\"105\" cy=\"32\" r=\"4\" fill=\"#EF4444\"/>\n  <line x1=\"75\" y1=\"48\" x2=\"60\" y2=\"40\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <text x=\"52\" y=\"36\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"end\">HOCH₂</text>\n  <line x1=\"135\" y1=\"48\" x2=\"155\" y2=\"40\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <rect x=\"160\" y=\"30\" width=\"65\" height=\"20\" rx=\"4\" fill=\"rgba(245,158,11,0.18)\" stroke=\"#F59E0B\" stroke-width=\"1.2\"/>\n  <text x=\"192\" y=\"40\" fill=\"#F59E0B\" font-weight=\"700\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"central\">O-PO₃²⁻</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз (Цитозоль)",
+        "pathwayNameEn": "Glycolysis (Cytosol)",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Стадия 2 (Фосфоглюкоизомераза GPI): образуется изомеризацией G6P.",
+        "detailsEn": "Step 2 (GPI): synthesized by reversible isomerization of G6P.",
+        "stepNumber": 2,
+        "reactionCode": "R_GPI"
+      },
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз (Цитозоль)",
+        "pathwayNameEn": "Glycolysis (Cytosol)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 3 (Фосфофруктокиназа-1 PFK-1): главный регуляторный перекресток; фосфорилируется с расходом второй АТФ в Ф-1,6-БФ.",
+        "detailsEn": "Step 3 (PFK-1): primary rate-limiting control point; irreversibly phosphorylated consuming second ATP to form F1,6BP.",
+        "stepNumber": 3,
+        "reactionCode": "R_PFK1"
+      },
+      {
+        "pathwayCode": "PWY_FRUCTOLYSIS",
+        "pathwayNameRu": "Фруктолиз (Мышцы / Адипоциты)",
+        "pathwayNameEn": "Fructolysis (Muscle / Adipose)",
+        "isCurrentPathway": false,
+        "role": "product",
+        "detailsRu": "Внепеченочный вход фруктозы: неспецифическая гексокиназа (HK) способна прямо фосфорилировать фруктозу в F6P, вводя ее на стадию 3 гликолиза.",
+        "detailsEn": "Extrahepatic fructose entry: non-specific hexokinase directly phosphorylates fructose to F6P, entering glycolysis at step 3."
+      }
+    ]
+  },
+  {
+    "id": "b0000002-0000-0000-0000-000000000004",
+    "code": "MET_F16BP",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Фруктозо-1,6-бисфосфат",
+    "nameEn": "Fructose 1,6-bisphosphate",
+    "abbrevRu": "Ф1,6БФ",
+    "abbrevEn": "F1,6BP",
+    "formula": "C₆H₁₀O₁₂P₂⁴⁻",
+    "carbons": "6C",
+    "carbonsEn": "6C",
+    "x": 1520,
+    "y": 610,
+    "width": 160,
+    "height": 74,
+    "color": "#F59E0B",
+    "isHub": true,
+    "smiles": "C(C1(C(C(C(O1)COP(=O)([O-])[O-])O)O)O)OP(=O)([O-])[O-]",
+    "chebi": "CHEBI:28013",
+    "inchiKey": "RNBNDBCJAYNGJH-UHFFFAOYSA-J",
+    "descriptionRu": "Дважды фосфорилированный гексозный интермедиат. Продукт главной регуляторной точки гликолиза (PFK-1). Расщепляется альдолазой на две триозы (ГАФ и ДАФ). Служит прямым аллостерическим активатором пируваткиназы (прямая связь / feedforward).",
+    "descriptionEn": "Bisphosphorylated hexose committed to glycolytic cleavage by aldolase into GAP and DHAP. Serves as potent feedforward activator of pyruvate kinase.",
+    "synonymsRu": [
+      "Фруктозо-1,6-дифосфат",
+      "Ф1,6БФ",
+      "Эфир Хардена-Янга"
+    ],
+    "synonymsEn": [
+      "Fructose 1,6-bisphosphate",
+      "F1,6BP",
+      "Harden-Young ester"
+    ],
+    "skeletalSvg": "<circle cx=\"10\" cy=\"18\" r=\"3\" fill=\"#F59E0B\"/><polygon points=\"24,14 34,22 30,34 18,34 14,22\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"38\" cy=\"18\" r=\"3\" fill=\"#F59E0B\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <polygon points=\"110,34 140,50 130,78 90,78 80,50\" class=\"chem-ring\" stroke=\"#94A3B8\" stroke-width=\"2.2\" fill=\"none\"/>\n  <circle cx=\"110\" cy=\"34\" r=\"4\" fill=\"#EF4444\"/>\n  <rect x=\"8\" y=\"42\" width=\"60\" height=\"20\" rx=\"4\" fill=\"rgba(245,158,11,0.18)\" stroke=\"#F59E0B\" stroke-width=\"1.2\"/>\n  <text x=\"38\" y=\"52\" fill=\"#F59E0B\" font-weight=\"700\" font-size=\"9.5\" text-anchor=\"middle\" dominant-baseline=\"central\">⁻²O₃P-O</text>\n  <line x1=\"68\" y1=\"52\" x2=\"80\" y2=\"50\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <line x1=\"140\" y1=\"50\" x2=\"160\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <rect x=\"162\" y=\"42\" width=\"60\" height=\"20\" rx=\"4\" fill=\"rgba(245,158,11,0.18)\" stroke=\"#F59E0B\" stroke-width=\"1.2\"/>\n  <text x=\"192\" y=\"52\" fill=\"#F59E0B\" font-weight=\"700\" font-size=\"9.5\" text-anchor=\"middle\" dominant-baseline=\"central\">O-PO₃²⁻</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз",
+        "pathwayNameEn": "Glycolysis",
+        "isCurrentPathway": true,
+        "role": "intermediate",
+        "detailsRu": "Стадия 4: расщепляется альдолазой на глицеральдегид-3-фосфат (ГАФ) и дигидроксиацетонфосфат (ДАФ).",
+        "detailsEn": "Step 4: cleaved by aldolase into glyceraldehyde 3-phosphate (GAP) and dihydroxyacetone phosphate (DHAP).",
+        "stepNumber": 4,
+        "reactionCode": "R_ALDO"
+      }
+    ]
+  },
+  {
+    "id": "b0000002-0000-0000-0000-000000000005",
+    "code": "MET_DHAP",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Дигидроксиацетонфосфат",
+    "nameEn": "Dihydroxyacetone phosphate",
+    "abbrevRu": "ДАФ",
+    "abbrevEn": "DHAP",
+    "formula": "C₃H₅O₆P²⁻",
+    "carbons": "3C",
+    "carbonsEn": "3C",
+    "x": 1300,
+    "y": 720,
+    "width": 155,
+    "height": 74,
+    "color": "#8B5CF6",
+    "isHub": true,
+    "smiles": "C(C(=O)CO)OP(=O)([O-])[O-]",
+    "chebi": "CHEBI:16108",
+    "inchiKey": "GNGACRATGGDKBX-UHFFFAOYSA-L",
+    "descriptionRu": "Кетотриозный фосфат, мост между гликолизом и липидным обменом. Восстанавливается в глицерол-3-фосфат для синтеза триглицеридов и фосфолипидов. Изомеризуется в ГАФ триозофосфатизомеразой.",
+    "descriptionEn": "Ketotriose phosphate linking glycolysis with lipid biosynthesis via glycerol 3-phosphate dehydrogenase.",
+    "synonymsRu": [
+      "Дигидроксиацетонфосфат",
+      "ДАФ",
+      "Глицеронфосфат"
+    ],
+    "synonymsEn": [
+      "Dihydroxyacetone phosphate",
+      "DHAP",
+      "Glycerone phosphate"
+    ],
+    "skeletalSvg": "<path d=\"M 12 18 L 24 24 L 36 18\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"24\" y1=\"24\" x2=\"24\" y2=\"34\" stroke=\"currentColor\" stroke-width=\"1.6\"/><circle cx=\"24\" cy=\"34\" r=\"2.5\" fill=\"#EF4444\"/><circle cx=\"36\" cy=\"18\" r=\"3\" fill=\"#F59E0B\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"35\" y=\"52\" fill=\"#CBD5E1\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">HO-CH₂</text>\n  <line x1=\"60\" y1=\"52\" x2=\"95\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <line x1=\"92\" y1=\"52\" x2=\"92\" y2=\"24\" stroke=\"#94A3B8\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n  <line x1=\"98\" y1=\"52\" x2=\"98\" y2=\"24\" stroke=\"#94A3B8\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n  <text x=\"95\" y=\"16\" fill=\"#EF4444\" font-weight=\"700\" font-size=\"12\" text-anchor=\"middle\">O</text>\n  <line x1=\"95\" y1=\"52\" x2=\"135\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <text x=\"142\" y=\"52\" fill=\"#CBD5E1\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">CH₂</text>\n  <line x1=\"155\" y1=\"52\" x2=\"175\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <rect x=\"178\" y=\"40\" width=\"55\" height=\"24\" rx=\"4\" fill=\"rgba(139,92,246,0.18)\" stroke=\"#8B5CF6\" stroke-width=\"1.2\"/>\n  <text x=\"205\" y=\"52\" fill=\"#8B5CF6\" font-weight=\"700\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"central\">O-PO₃²⁻</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз (Цитозоль)",
+        "pathwayNameEn": "Glycolysis (Cytosol)",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Стадия 4 (Альдолаза A): образуется при расщеплении фруктозо-1,6-бисфосфата.",
+        "detailsEn": "Step 4 (Aldolase A): product formed from F1,6BP cleavage.",
+        "stepNumber": 4,
+        "reactionCode": "R_ALDO"
+      },
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз (Цитозоль)",
+        "pathwayNameEn": "Glycolysis (Cytosol)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 5 (Триозофосфатизомераза TPI): конвертируется в ГАФ, увлекая поток углерода во вторую фазу гликолиза.",
+        "detailsEn": "Step 5 (TPI): isomerized to GAP, routing carbon flux into payoff phase.",
+        "stepNumber": 5,
+        "reactionCode": "R_TPI"
+      },
+      {
+        "pathwayCode": "PWY_FRUCTOLYSIS",
+        "pathwayNameRu": "Печеночный фруктолиз",
+        "pathwayNameEn": "Hepatic Fructolysis",
+        "isCurrentPathway": false,
+        "role": "product",
+        "detailsRu": "Вход фруктозы в печени: фруктокиназа KHK дает F1P, который альдолазой B (ALDOB) расщепляется прямо на ДАФ и глицеральдегид в обход главного регулятора PFK-1.",
+        "detailsEn": "Hepatic fructose entry: fructokinase KHK forms F1P, cleaved by aldolase B (ALDOB) directly into DHAP and glyceraldehyde bypassing PFK-1."
+      },
+      {
+        "pathwayCode": "PWY_LIPID_SYN",
+        "pathwayNameRu": "Синтез триглицеридов",
+        "pathwayNameEn": "Triglyceride Synthesis",
+        "isCurrentPathway": false,
+        "role": "substrate",
+        "detailsRu": "Восстанавливается в глицерол-3-фосфат для эстерификации жирных кислот.",
+        "detailsEn": "Reduced to glycerol 3-phosphate serving as the glycerol backbone for lipid synthesis."
+      }
+    ]
+  },
+  {
+    "id": "b0000002-0000-0000-0000-000000000006",
+    "code": "MET_G3P",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Глицеральдегид-3-фосфат",
+    "nameEn": "Glyceraldehyde 3-phosphate",
+    "abbrevRu": "ГАФ",
+    "abbrevEn": "G3P",
+    "formula": "C₃H₅O₆P²⁻",
+    "carbons": "3C",
+    "carbonsEn": "3C",
+    "x": 1520,
+    "y": 720,
+    "width": 160,
+    "height": 74,
+    "color": "#F59E0B",
+    "isHub": true,
+    "smiles": "C(C(C=O)O)OP(=O)([O-])[O-]",
+    "chebi": "CHEBI:17138",
+    "inchiKey": "LIZAPCGDNGTJPI-UHFFFAOYSA-L",
+    "descriptionRu": "Альдотриозный фосфат, центральный метаболит энергопроизводящей фазы гликолиза. Все дальнейшие стадии протекают в двукратном расчете на одну молекулу глюкозы (2 × 3C).",
+    "descriptionEn": "Aldotriose phosphate intermediate launching the energy-payoff phase of glycolysis (2x flux per glucose).",
+    "synonymsRu": [
+      "Глицеральдегид-3-фосфат",
+      "ГАФ",
+      "3-ФГА"
+    ],
+    "synonymsEn": [
+      "Glyceraldehyde 3-phosphate",
+      "G3P",
+      "GAP"
+    ],
+    "skeletalSvg": "<path d=\"M 12 18 L 24 24 L 36 18\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"12\" cy=\"18\" r=\"3\" fill=\"#EF4444\"/><circle cx=\"36\" cy=\"18\" r=\"3\" fill=\"#F59E0B\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"35\" y=\"30\" fill=\"#EF4444\" font-weight=\"700\" font-size=\"12\" text-anchor=\"middle\">O=CH</text>\n  <line x1=\"55\" y1=\"34\" x2=\"90\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <text x=\"100\" y=\"55\" fill=\"#CBD5E1\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">CH(OH)</text>\n  <line x1=\"125\" y1=\"52\" x2=\"155\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <rect x=\"160\" y=\"40\" width=\"60\" height=\"24\" rx=\"4\" fill=\"rgba(245,158,11,0.18)\" stroke=\"#F59E0B\" stroke-width=\"1.2\"/>\n  <text x=\"190\" y=\"52\" fill=\"#F59E0B\" font-weight=\"700\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"central\">O-PO₃²⁻</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз (Цитозоль)",
+        "pathwayNameEn": "Glycolysis (Cytosol)",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Стадии 4 и 5: образуется напрямую из F1,6BP (альдолаза) и изомеризацией ДАФ (TPI).",
+        "detailsEn": "Steps 4 & 5: synthesized directly from F1,6BP (aldolase) and via DHAP isomerization (TPI).",
+        "stepNumber": 5,
+        "reactionCode": "R_TPI"
+      },
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз (Цитозоль)",
+        "pathwayNameEn": "Glycolysis (Cytosol)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 6 (GAPDH): окислительно фосфорилируется в 1,3-БФГ с выходом +2 НАДН на молекулу глюкозы.",
+        "detailsEn": "Step 6 (GAPDH): oxidatively phosphorylated to 1,3-BPG yielding +2 NADH per original glucose.",
+        "stepNumber": 6,
+        "reactionCode": "R_GAPDH"
+      },
+      {
+        "pathwayCode": "PWY_FRUCTOLYSIS",
+        "pathwayNameRu": "Печеночный фруктолиз",
+        "pathwayNameEn": "Hepatic Fructolysis",
+        "isCurrentPathway": false,
+        "role": "product",
+        "detailsRu": "Второй осколок альдолазы B (глицеральдегид) фосфорилируется триозокиназой (TK) в ГАФ, завершая слияние фруктозы с гликолизом.",
+        "detailsEn": "Second fragment of aldolase B (glyceraldehyde) is phosphorylated by triokinase (TK) into GAP, completing fructose integration into glycolysis."
+      }
+    ]
+  },
+  {
+    "id": "b0000002-0000-0000-0000-000000000007",
+    "code": "MET_13BPG",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "1,3-Бисфосфоглицерат",
+    "nameEn": "1,3-Bisphosphoglycerate",
+    "abbrevRu": "1,3-БФГ",
+    "abbrevEn": "1,3-BPG",
+    "formula": "C₃H₄O₁₀P₂⁴⁻",
+    "carbons": "3C",
+    "carbonsEn": "3C",
+    "x": 1520,
+    "y": 830,
+    "width": 160,
+    "height": 74,
+    "color": "#F59E0B",
+    "smiles": "C(C(C(=O)OP(=O)([O-])[O-])O)OP(=O)([O-])[O-]",
+    "chebi": "CHEBI:16001",
+    "inchiKey": "XKGCLGVOLLCOOF-UHFFFAOYSA-J",
+    "descriptionRu": "Высокоэнергетический ацилфосфатный интермедиат гликолиза с высоким потенциалом переноса фосфатной группы (ΔG°' гидролиза = -49.3 кДж/моль), превосходящим АТФ.",
+    "descriptionEn": "High-energy mixed anhydride intermediate containing acyl-phosphate bond capable of substrate-level phosphorylation.",
+    "synonymsRu": [
+      "1,3-Бисфосфоглицерат",
+      "1,3-БФГ",
+      "1,3-Дифосфоглицерат"
+    ],
+    "synonymsEn": [
+      "1,3-Bisphosphoglycerate",
+      "1,3-BPG",
+      "1,3-Diphosphoglycerate"
+    ],
+    "skeletalSvg": "<circle cx=\"10\" cy=\"18\" r=\"3\" fill=\"#F59E0B\"/><path d=\"M 14 18 L 24 24 L 34 18\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"38\" cy=\"18\" r=\"3\" fill=\"#F59E0B\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <rect x=\"8\" y=\"40\" width=\"55\" height=\"22\" rx=\"4\" fill=\"rgba(245,158,11,0.18)\" stroke=\"#F59E0B\" stroke-width=\"1.2\"/>\n  <text x=\"35\" y=\"51\" fill=\"#F59E0B\" font-weight=\"700\" font-size=\"9\" text-anchor=\"middle\" dominant-baseline=\"central\">⁻²O₃P-O</text>\n  <line x1=\"65\" y1=\"51\" x2=\"88\" y2=\"51\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <text x=\"96\" y=\"51\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">C(=O)</text>\n  <line x1=\"115\" y1=\"51\" x2=\"140\" y2=\"51\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <text x=\"148\" y=\"51\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">CH(OH)</text>\n  <line x1=\"170\" y1=\"51\" x2=\"182\" y2=\"51\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <rect x=\"185\" y=\"40\" width=\"50\" height=\"22\" rx=\"4\" fill=\"rgba(245,158,11,0.18)\" stroke=\"#F59E0B\" stroke-width=\"1.2\"/>\n  <text x=\"210\" y=\"51\" fill=\"#F59E0B\" font-weight=\"700\" font-size=\"9\" text-anchor=\"middle\" dominant-baseline=\"central\">O-PO₃²⁻</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз",
+        "pathwayNameEn": "Glycolysis",
+        "isCurrentPathway": true,
+        "role": "intermediate",
+        "detailsRu": "Стадия 7: отдает фосфат на АДФ через PGK1 с образованием первой порции АТФ и 3-фосфоглицерата.",
+        "detailsEn": "Step 7: donates high-energy phosphate to ADP via PGK1 generating ATP and 3-phosphoglycerate.",
+        "stepNumber": 7,
+        "reactionCode": "R_PGK"
+      }
+    ]
+  },
+  {
+    "id": "b0000002-0000-0000-0000-000000000008",
+    "code": "MET_3PG",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "3-Фосфоглицерат",
+    "nameEn": "3-Phosphoglycerate",
+    "abbrevRu": "3-ФГ",
+    "abbrevEn": "3-PG",
+    "formula": "C₃H₄O₇P³⁻",
+    "carbons": "3C",
+    "carbonsEn": "3C",
+    "x": 1520,
+    "y": 940,
+    "width": 160,
+    "height": 74,
+    "color": "#F59E0B",
+    "smiles": "C(C(C(=O)[O-])O)OP(=O)([O-])[O-]",
+    "chebi": "CHEBI:17794",
+    "inchiKey": "OSJPPGNTCRNICK-UHFFFAOYSA-K",
+    "descriptionRu": "Продукт первого субстратного фосфорилирования гликолиза. Предшественник биосинтеза аминокислоты серина (через фосфогидроксипируват).",
+    "descriptionEn": "Carboxylate intermediate formed in the first ATP-generating step of glycolysis; precursor for serine synthesis.",
+    "synonymsRu": [
+      "3-Фосфоглицерат",
+      "3-ФГ",
+      "D-3-Фосфоглицериновая кислота"
+    ],
+    "synonymsEn": [
+      "3-Phosphoglycerate",
+      "3-PG",
+      "Glycerate 3-phosphate"
+    ],
+    "skeletalSvg": "<path d=\"M 12 24 L 24 18 L 36 24\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"12\" cy=\"24\" r=\"3\" fill=\"#EF4444\"/><circle cx=\"36\" cy=\"24\" r=\"3\" fill=\"#F59E0B\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"38\" y=\"52\" fill=\"#EF4444\" font-weight=\"700\" font-size=\"11\" text-anchor=\"middle\">⁻OOC</text>\n  <line x1=\"60\" y1=\"52\" x2=\"95\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <text x=\"110\" y=\"52\" fill=\"#CBD5E1\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">CH(OH)</text>\n  <line x1=\"135\" y1=\"52\" x2=\"165\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <rect x=\"170\" y=\"40\" width=\"60\" height=\"24\" rx=\"4\" fill=\"rgba(245,158,11,0.18)\" stroke=\"#F59E0B\" stroke-width=\"1.2\"/>\n  <text x=\"200\" y=\"52\" fill=\"#F59E0B\" font-weight=\"700\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"central\">O-PO₃²⁻</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз",
+        "pathwayNameEn": "Glycolysis",
+        "isCurrentPathway": true,
+        "role": "intermediate",
+        "detailsRu": "Стадия 8: изомеризуется фосфоглицератмутазой (PGAM1) в 2-фосфоглицерат.",
+        "detailsEn": "Step 8: isomerized into 2-phosphoglycerate by phosphoglycerate mutase 1.",
+        "stepNumber": 8,
+        "reactionCode": "R_PGAM"
+      }
+    ]
+  },
+  {
+    "id": "b0000002-0000-0000-0000-000000000009",
+    "code": "MET_2PG",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "2-Фосфоглицерат",
+    "nameEn": "2-Phosphoglycerate",
+    "abbrevRu": "2-ФГ",
+    "abbrevEn": "2-PG",
+    "formula": "C₃H₄O₇P³⁻",
+    "carbons": "3C",
+    "carbonsEn": "3C",
+    "x": 1520,
+    "y": 1050,
+    "width": 160,
+    "height": 74,
+    "color": "#F59E0B",
+    "smiles": "C(C(C(=O)[O-])OP(=O)([O-])[O-])O",
+    "chebi": "CHEBI:17835",
+    "inchiKey": "GZCGUPFRVQAUEE-UHFFFAOYSA-K",
+    "descriptionRu": "Интермедиат предпоследней стадии гликолиза. Подвергается дегидратации енолазой с образованием енольного высокоэнергетического фосфоенолпирувата (ФЕП).",
+    "descriptionEn": "Penultimate intermediate of glycolysis, dehydrated by enolase to generate high-energy phosphoenolpyruvate.",
+    "synonymsRu": [
+      "2-Фосфоглицерат",
+      "2-ФГ",
+      "Glycerate 2-phosphate"
+    ],
+    "synonymsEn": [
+      "2-Phosphoglycerate",
+      "2-PG",
+      "D-2-Phosphoglyceric acid"
+    ],
+    "skeletalSvg": "<path d=\"M 12 18 L 24 24 L 36 18\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"24\" cy=\"24\" r=\"3\" fill=\"#F59E0B\"/><circle cx=\"36\" cy=\"18\" r=\"3\" fill=\"#EF4444\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"40\" y=\"52\" fill=\"#EF4444\" font-weight=\"700\" font-size=\"11\" text-anchor=\"middle\">⁻OOC</text>\n  <line x1=\"62\" y1=\"52\" x2=\"98\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <text x=\"115\" y=\"52\" fill=\"#CBD5E1\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">CH</text>\n  <line x1=\"115\" y1=\"40\" x2=\"115\" y2=\"24\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <rect x=\"85\" y=\"4\" width=\"60\" height=\"20\" rx=\"4\" fill=\"rgba(245,158,11,0.18)\" stroke=\"#F59E0B\" stroke-width=\"1.2\"/>\n  <text x=\"115\" y=\"14\" fill=\"#F59E0B\" font-weight=\"700\" font-size=\"9.5\" text-anchor=\"middle\" dominant-baseline=\"central\">O-PO₃²⁻</text>\n  <line x1=\"130\" y1=\"52\" x2=\"165\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <text x=\"185\" y=\"52\" fill=\"#CBD5E1\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">CH₂OH</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз",
+        "pathwayNameEn": "Glycolysis",
+        "isCurrentPathway": true,
+        "role": "intermediate",
+        "detailsRu": "Стадия 9: дегидратируется енолазой (ENO1-3) в фосфоенолпируват с отщеплением H₂O.",
+        "detailsEn": "Step 9: dehydrated by enolase yielding phosphoenolpyruvate and 1 water molecule.",
+        "stepNumber": 9,
+        "reactionCode": "R_ENO"
+      }
+    ]
+  },
+  {
+    "id": "b0000002-0000-0000-0000-000000000010",
+    "code": "MET_PEP",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Фосфоенолпируват",
+    "nameEn": "Phosphoenolpyruvate",
+    "abbrevRu": "ФЕП",
+    "abbrevEn": "PEP",
+    "formula": "C₃H₂O₆P³⁻",
+    "carbons": "3C",
+    "carbonsEn": "3C",
+    "x": 1520,
+    "y": 1160,
+    "width": 160,
+    "height": 74,
+    "color": "#F59E0B",
+    "isHub": true,
+    "smiles": "C=C(C(=O)[O-])OP(=O)([O-])[O-]",
+    "chebi": "CHEBI:18021",
+    "inchiKey": "DTBNPXWJVRWANO-UHFFFAOYSA-K",
+    "descriptionRu": "Соединение с наивысшим фосфатным потенциалом в живой клетке (ΔG°' гидролиза = -61.9 кДж/моль). Субстрат пируваткиназной реакции. Центральный пункт сопряжения гликолиза и глюконеогенеза (образуется из оксалоацетата через PEPCK).",
+    "descriptionEn": "Highest-energy phosphate donor in living cells (-61.9 kJ/mol). Critical crossroads connecting glycolysis and gluconeogenesis via PEPCK.",
+    "synonymsRu": [
+      "Фосфоенолпируват",
+      "ФЕП",
+      "Фосфоенолпировиноградная кислота"
+    ],
+    "synonymsEn": [
+      "Phosphoenolpyruvate",
+      "PEP",
+      "2-Phosphoenolpyruvate"
+    ],
+    "skeletalSvg": "<line x1=\"12\" y1=\"26\" x2=\"24\" y2=\"20\" stroke=\"currentColor\" stroke-width=\"2.2\"/><line x1=\"12\" y1=\"22\" x2=\"24\" y2=\"16\" stroke=\"currentColor\" stroke-width=\"1.4\"/><circle cx=\"24\" cy=\"18\" r=\"3\" fill=\"#F59E0B\"/><circle cx=\"36\" cy=\"24\" r=\"3\" fill=\"#EF4444\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"35\" y=\"52\" fill=\"#CBD5E1\" font-size=\"12\" font-weight=\"700\" text-anchor=\"middle\">CH₂=</text>\n  <line x1=\"55\" y1=\"48\" x2=\"90\" y2=\"48\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <line x1=\"55\" y1=\"54\" x2=\"90\" y2=\"54\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <text x=\"100\" y=\"52\" fill=\"#CBD5E1\" font-size=\"12\" font-weight=\"600\" text-anchor=\"middle\">C</text>\n  <line x1=\"100\" y1=\"40\" x2=\"100\" y2=\"24\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <rect x=\"70\" y=\"4\" width=\"60\" height=\"20\" rx=\"4\" fill=\"rgba(245,158,11,0.18)\" stroke=\"#F59E0B\" stroke-width=\"1.2\"/>\n  <text x=\"100\" y=\"14\" fill=\"#F59E0B\" font-weight=\"700\" font-size=\"9.5\" text-anchor=\"middle\" dominant-baseline=\"central\">O-PO₃²⁻</text>\n  <line x1=\"110\" y1=\"52\" x2=\"145\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <text x=\"165\" y=\"52\" fill=\"#EF4444\" font-weight=\"700\" font-size=\"12\" text-anchor=\"middle\">COO⁻</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз (Цитозоль)",
+        "pathwayNameEn": "Glycolysis (Cytosol)",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Стадия 9 (Енолаза ENO): образуется при дегидратации 2-фосфоглицерата с запасанием макроэргической энергии.",
+        "detailsEn": "Step 9 (Enolase ENO): synthesized via 2-PG dehydration capturing high phosphate group transfer energy.",
+        "stepNumber": 9,
+        "reactionCode": "R_ENO"
+      },
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз (Цитозоль)",
+        "pathwayNameEn": "Glycolysis (Cytosol)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 10 (Пируваткиназа PK): отдает высокоэнергетический фосфат на АДФ с генерацией АТФ и пирувата.",
+        "detailsEn": "Step 10 (Pyruvate kinase PK): donates high-energy phosphate to ADP yielding ATP and pyruvate.",
+        "stepNumber": 10,
+        "reactionCode": "R_PK"
+      },
+      {
+        "pathwayCode": "PW-GLUCONEOGENESIS",
+        "pathwayNameRu": "Глюконеогенез",
+        "pathwayNameEn": "Gluconeogenesis",
+        "isCurrentPathway": false,
+        "role": "product",
+        "detailsRu": "Образуется из оксалоацетата под действием PEPCK-M (PCK2) или цитозольной PEPCK-C (PCK1).",
+        "detailsEn": "Formed from oxaloacetate by phosphoenolpyruvate carboxykinase (PEPCK-M/C)."
+      }
+    ]
+  },
+  {
+    "id": "b0000002-0000-0000-0000-000000000011",
+    "code": "MET_PYRUVATE",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Пируват (Цитозоль)",
+    "nameEn": "Pyruvate (Cytosolic)",
+    "abbrevRu": "Пир (Цит)",
+    "abbrevEn": "Pyr (Cyt)",
+    "formula": "C₃H₃O₃⁻",
+    "carbons": "3C",
+    "carbonsEn": "3C",
+    "x": 1520,
+    "y": 1270,
+    "width": 160,
+    "height": 74,
+    "color": "#F59E0B",
+    "isHub": true,
+    "smiles": "CC(=O)C(=O)[O-]",
+    "chebi": "CHEBI:15361",
+    "inchiKey": "LCTONWCANYUPML-UHFFFAOYSA-M",
+    "descriptionRu": "Конечный продукт цитоплазматического гликолиза. Фундаментальный метаболический перекресток клетки: транспортируется в матрикс митохондрий через MPC1/2, восстанавливается в лактат (ЛДГ) при гипоксии или трансаминируется в L-аланин (АлАТ).",
+    "descriptionEn": "End product of cytoplasmic glycolysis. Major cellular crossroads: transported into mitochondrial matrix via MPC1/2, converted into lactate by LDH under hypoxia, or transaminated to alanine.",
+    "synonymsRu": [
+      "Пируват",
+      "Пировиноградная кислота",
+      "2-Оксопропаноат"
+    ],
+    "synonymsEn": [
+      "Pyruvate",
+      "Pyruvic acid",
+      "2-Oxopropanoate"
+    ],
+    "skeletalSvg": "<path d=\"M 12 24 L 24 18 L 36 24\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"24\" y1=\"18\" x2=\"24\" y2=\"8\" stroke=\"currentColor\" stroke-width=\"1.6\"/><circle cx=\"24\" cy=\"8\" r=\"2.5\" fill=\"#EF4444\"/><circle cx=\"36\" cy=\"24\" r=\"3\" fill=\"#EF4444\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"45\" y=\"52\" fill=\"#CBD5E1\" font-size=\"12\" font-weight=\"600\" text-anchor=\"middle\">H₃C</text>\n  <line x1=\"65\" y1=\"52\" x2=\"105\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <line x1=\"102\" y1=\"52\" x2=\"102\" y2=\"24\" stroke=\"#94A3B8\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n  <line x1=\"108\" y1=\"52\" x2=\"108\" y2=\"24\" stroke=\"#94A3B8\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n  <text x=\"105\" y=\"16\" fill=\"#EF4444\" font-weight=\"700\" font-size=\"12\" text-anchor=\"middle\">O</text>\n  <line x1=\"105\" y1=\"52\" x2=\"145\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <text x=\"165\" y=\"52\" fill=\"#EF4444\" font-weight=\"700\" font-size=\"12\" text-anchor=\"middle\">COO⁻</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз",
+        "pathwayNameEn": "Glycolysis",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Конечный продукт гликолиза (2 молекулы на одну глюкозу).",
+        "detailsEn": "End product of glycolysis (2 molecules per 1 glucose).",
+        "stepNumber": 10,
+        "reactionCode": "R_PK"
+      },
+      {
+        "pathwayCode": "PW-TCA-CYCLE",
+        "pathwayNameRu": "Митохондриальный транспорт и ПДХ",
+        "pathwayNameEn": "Mitochondrial Inflow & PDH",
+        "isCurrentPathway": false,
+        "role": "substrate",
+        "detailsRu": "Транспортируется в матрикс переносчиком MPC1/2 для окисления в Ацетил-КоА.",
+        "detailsEn": "Transported into matrix via MPC1/2 translocase for conversion to Acetyl-CoA."
+      }
+    ]
+  },
+  {
+    "id": "b0000002-0000-0000-0000-000000000012",
+    "code": "MET_PYR_MIT",
+    "compartmentRu": "Матрикс митохондрий",
+    "compartmentEn": "Mitochondrial Matrix",
+    "nameRu": "Пируват (Матрикс)",
+    "nameEn": "Pyruvate (Mitochondrial)",
+    "abbrevRu": "Пир (Мит)",
+    "abbrevEn": "Pyr (Mit)",
+    "formula": "C₃H₃O₃⁻",
+    "carbons": "3C",
+    "carbonsEn": "3C",
+    "x": 1520,
+    "y": 1400,
+    "width": 160,
+    "height": 74,
+    "color": "#10B981",
+    "isHub": true,
+    "smiles": "CC(=O)C(=O)[O-]",
+    "chebi": "CHEBI:15361",
+    "inchiKey": "LCTONWCANYUPML-UHFFFAOYSA-M",
+    "descriptionRu": "Интрамитохондриальный пул пирувата в матриксе митохондрий. Непосредственный субстрат мультиферментного ПДХ-комплекса (окисление в Ацетил-КоА) и пируваткарбоксилазы (карбоксилирование в оксалоацетат для анаплероза ЦТК).",
+    "descriptionEn": "Intramitochondrial pool of pyruvate inside matrix. Substrate for pyruvate dehydrogenase (yielding Acetyl-CoA) and pyruvate carboxylase (anaplerotic replenishment of oxaloacetate).",
+    "synonymsRu": [
+      "Пируват митохондриальный",
+      "Пируват матрикса"
+    ],
+    "synonymsEn": [
+      "Mitochondrial pyruvate",
+      "Matrix pyruvate"
+    ],
+    "skeletalSvg": "<path d=\"M 12 24 L 24 18 L 36 24\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"24\" y1=\"18\" x2=\"24\" y2=\"8\" stroke=\"currentColor\" stroke-width=\"1.6\"/><circle cx=\"24\" cy=\"8\" r=\"2.5\" fill=\"#10B981\"/><circle cx=\"36\" cy=\"24\" r=\"3\" fill=\"#EF4444\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"45\" y=\"52\" fill=\"#CBD5E1\" font-size=\"12\" font-weight=\"600\" text-anchor=\"middle\">H₃C</text>\n  <line x1=\"65\" y1=\"52\" x2=\"105\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <line x1=\"102\" y1=\"52\" x2=\"102\" y2=\"24\" stroke=\"#94A3B8\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n  <line x1=\"108\" y1=\"52\" x2=\"108\" y2=\"24\" stroke=\"#94A3B8\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n  <text x=\"105\" y=\"16\" fill=\"#EF4444\" font-weight=\"700\" font-size=\"12\" text-anchor=\"middle\">O</text>\n  <line x1=\"105\" y1=\"52\" x2=\"145\" y2=\"52\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <text x=\"165\" y=\"52\" fill=\"#EF4444\" font-weight=\"700\" font-size=\"12\" text-anchor=\"middle\">COO⁻</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-MPC",
+        "pathwayNameRu": "Мембранный транспорт (MPC1/2)",
+        "pathwayNameEn": "Membrane Transport (MPC1/2)",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Шлюз MPC1/2: доставлен из цитозоля в матрикс митохондрий.",
+        "detailsEn": "MPC1/2 gateway: translocated from cytosol into mitochondrial matrix.",
+        "stepNumber": 1,
+        "reactionCode": "R_MPC"
+      },
+      {
+        "pathwayCode": "PW-PDH",
+        "pathwayNameRu": "Комплекс ПДХ (Матрикс)",
+        "pathwayNameEn": "PDH Complex (Matrix)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 1 (Комплекс ПДХ E1-E2-E3): окислительно декарбоксилируется в центральный Ацетил-КоА с выделением CO₂ и выходом НАДН.",
+        "detailsEn": "Step 1 (PDH Complex E1-E2-E3): oxidatively decarboxylated into central Acetyl-CoA with CO₂ release and NADH yield.",
+        "stepNumber": 1,
+        "reactionCode": "R_PDH"
+      }
+    ]
+  },
+  {
     id: 'b0000001-0000-0000-0000-000000000003',
     code: 'MET_OAA',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'Оксалоацетат',
     nameEn: 'Oxaloacetate',
     abbrevRu: 'ОАО',
@@ -260,6 +1030,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
   {
     id: 'b0000001-0000-0000-0000-000000000004',
     code: 'MET_CITRATE',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'Цитрат',
     nameEn: 'Citrate',
     abbrevRu: 'ЦИТ',
@@ -331,6 +1103,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
   {
     id: 'b0000001-0000-0000-0000-000000000005',
     code: 'MET_ISOCITRATE',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'Изоцитрат',
     nameEn: 'Isocitrate',
     abbrevRu: 'ИЗО',
@@ -394,6 +1168,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
   {
     id: 'b0000001-0000-0000-0000-000000000006',
     code: 'MET_AKG',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'α-Кетоглутарат',
     nameEn: 'α-Ketoglutarate',
     abbrevRu: 'α-КГ',
@@ -555,6 +1331,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
   {
     id: 'b0000001-0000-0000-0000-000000000008',
     code: 'MET_SUCCINATE',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'Сукцинат',
     nameEn: 'Succinate',
     abbrevRu: 'СУК',
@@ -621,6 +1399,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
   {
     id: 'b0000001-0000-0000-0000-000000000009',
     code: 'MET_FUMARATE',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'Фумарат',
     nameEn: 'Fumarate',
     abbrevRu: 'ФУМ',
@@ -688,6 +1468,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
   {
     id: 'b0000001-0000-0000-0000-000000000010',
     code: 'MET_MALATE',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'L-Малат',
     nameEn: 'L-Malate',
     abbrevRu: 'МАЛ',
@@ -756,6 +1538,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
   {
     id: 'b0000001-0000-0000-0000-000000000002',
     code: 'MET_ACETYL_COA',
+    compartmentRu: 'Центральный хаб (Матрикс)',
+    compartmentEn: 'Central Hub (Matrix)',
     nameRu: 'Ацетил-КоА',
     nameEn: 'Acetyl-CoA',
     abbrevRu: 'Ац-КоА',
@@ -853,6 +1637,137 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
 ];
 
 export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
+  {
+    "id": "c0000001-0000-0000-0000-000000000012",
+    "code": "MET_ATP",
+    "nameRu": "Аденозинтрифосфат",
+    "nameEn": "Adenosine triphosphate",
+    "abbrevRu": "АТФ",
+    "abbrevEn": "ATP",
+    "formula": "C₁₀H₁₂N₅O₁₃P₃⁴⁻",
+    "carbons": "10C",
+    "carbonsEn": "10C",
+    "x": 0,
+    "y": 0,
+    "width": 0,
+    "height": 0,
+    "color": "#F59E0B",
+    "isCofactor": true,
+    "smiles": "C1C(C(C(O1)N2C=NC3=C2N=CN=C3N)O)OP(=O)([O-])OP(=O)([O-])OP(=O)([O-])[O-]",
+    "chebi": "CHEBI:30616",
+    "inchiKey": "ZKHQWZAMYRWXGA-KQYNXXCUSA-J",
+    "descriptionRu": "Универсальная энергетическая валюта клетки. Содержит две высокоэнергетические фосфоангидридные связи (ΔG°' гидролиза ≈ -30.5 кДж/моль). Расходуется на стадиях 1 (HK) и 3 (PFK-1), регенерируется на стадиях 7 (PGK) и 10 (PK).",
+    "descriptionEn": "Universal energy currency of human cellular metabolism. Consumed in preparatory phase of glycolysis, generated in payoff phase.",
+    "synonymsRu": [
+      "АТФ",
+      "Аденозинтрифосфат"
+    ],
+    "synonymsEn": [
+      "ATP",
+      "Adenosine triphosphate"
+    ],
+    "skeletalSvg": "<circle cx=\"20\" cy=\"20\" r=\"14\" fill=\"#F59E0B\" fill-opacity=\"0.2\"/><text x=\"20\" y=\"24\" fill=\"#F59E0B\" font-size=\"11\" font-weight=\"800\" text-anchor=\"middle\">ATP</text>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <rect x=\"15\" y=\"35\" width=\"60\" height=\"28\" rx=\"6\" fill=\"rgba(245,158,11,0.2)\" stroke=\"#F59E0B\" stroke-width=\"1.5\"/>\n  <text x=\"45\" y=\"52\" fill=\"#F59E0B\" font-weight=\"800\" font-size=\"11\" text-anchor=\"middle\" dominant-baseline=\"central\">Adenosine</text>\n  <line x1=\"75\" y1=\"49\" x2=\"100\" y2=\"49\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"110\" y=\"52\" fill=\"#F59E0B\" font-weight=\"700\" font-size=\"10\" text-anchor=\"middle\">P~P~P</text>\n  <text x=\"175\" y=\"52\" fill=\"#EF4444\" font-weight=\"700\" font-size=\"10\" text-anchor=\"middle\">4-</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз",
+        "pathwayNameEn": "Glycolysis",
+        "isCurrentPathway": false,
+        "role": "cofactor",
+        "detailsRu": "Генерируется на стадиях 7 (PGK) и 10 (PK) субстратным фосфорилированием (+4 брутто, +2 нетто АТФ / глюкозу).",
+        "detailsEn": "Generated in steps 7 (PGK) and 10 (PK) via substrate-level phosphorylation (net +2 ATP / glucose)."
+      }
+    ]
+  },
+  {
+    "id": "c0000001-0000-0000-0000-000000000013",
+    "code": "MET_ADP",
+    "nameRu": "Аденозиндифосфат",
+    "nameEn": "Adenosine diphosphate",
+    "abbrevRu": "АДФ",
+    "abbrevEn": "ADP",
+    "formula": "C₁₀H₁₂N₅O₁₀P₂³⁻",
+    "carbons": "10C",
+    "carbonsEn": "10C",
+    "x": 0,
+    "y": 0,
+    "width": 0,
+    "height": 0,
+    "color": "#94A3B8",
+    "isCofactor": true,
+    "smiles": "C1C(C(C(O1)N2C=NC3=C2N=CN=C3N)O)OP(=O)([O-])OP(=O)([O-])[O-]",
+    "chebi": "CHEBI:456216",
+    "inchiKey": "XTWYTFMLZFPYCI-KQYNXXCUSA-K",
+    "descriptionRu": "Продукт дефосфорилирования АТФ; акцептор фосфатной группы при субстратном фосфорилировании в гликолизе.",
+    "descriptionEn": "Adenosine diphosphate, phosphate acceptor during glycolytic substrate-level phosphorylation.",
+    "synonymsRu": [
+      "АДФ",
+      "Аденозиндифосфат"
+    ],
+    "synonymsEn": [
+      "ADP",
+      "Adenosine diphosphate"
+    ],
+    "skeletalSvg": "<circle cx=\"20\" cy=\"20\" r=\"14\" fill=\"#94A3B8\" fill-opacity=\"0.2\"/><text x=\"20\" y=\"24\" fill=\"#94A3B8\" font-size=\"11\" font-weight=\"800\" text-anchor=\"middle\">ADP</text>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <rect x=\"25\" y=\"35\" width=\"60\" height=\"28\" rx=\"6\" fill=\"rgba(148,163,184,0.2)\" stroke=\"#94A3B8\" stroke-width=\"1.5\"/>\n  <text x=\"55\" y=\"52\" fill=\"#CBD5E1\" font-weight=\"800\" font-size=\"11\" text-anchor=\"middle\" dominant-baseline=\"central\">Adenosine</text>\n  <line x1=\"85\" y1=\"49\" x2=\"110\" y2=\"49\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"130\" y=\"52\" fill=\"#94A3B8\" font-weight=\"700\" font-size=\"10\" text-anchor=\"middle\">P~P</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз",
+        "pathwayNameEn": "Glycolysis",
+        "isCurrentPathway": false,
+        "role": "cofactor",
+        "detailsRu": "Фосфорилируется в АТФ на стадиях 7 (PGK) и 10 (PK).",
+        "detailsEn": "Phosphorylated to ATP in steps 7 and 10."
+      }
+    ]
+  },
+  {
+    "id": "c0000001-0000-0000-0000-000000000014",
+    "code": "MET_PROTON",
+    "nameRu": "Протон (H⁺)",
+    "nameEn": "Proton (H⁺)",
+    "abbrevRu": "H⁺",
+    "abbrevEn": "H⁺",
+    "formula": "H⁺",
+    "carbons": "0C",
+    "carbonsEn": "0C",
+    "x": 0,
+    "y": 0,
+    "width": 0,
+    "height": 0,
+    "color": "#E2E8F0",
+    "isCofactor": true,
+    "smiles": "[H+]",
+    "chebi": "CHEBI:15378",
+    "inchiKey": "GPRLSGONYQIRFK-UHFFFAOYSA-N",
+    "descriptionRu": "Ион водорода (гидрон), ключевой регулятор кислотно-основного гомеостаза клетки и субстрат/продукт дегидрогеназных и киназных реакций.",
+    "descriptionEn": "Hydron cation / proton participating in acid-base equilibrium and dehydrogenase coenzyme cycles.",
+    "synonymsRu": [
+      "Протон",
+      "Ион водорода",
+      "H+"
+    ],
+    "synonymsEn": [
+      "Proton",
+      "Hydrogen ion",
+      "H+"
+    ],
+    "skeletalSvg": "<circle cx=\"20\" cy=\"20\" r=\"10\" fill=\"#E2E8F0\" fill-opacity=\"0.2\"/><text x=\"20\" y=\"24\" fill=\"#E2E8F0\" font-size=\"12\" font-weight=\"800\" text-anchor=\"middle\">H⁺</text>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <circle cx=\"120\" cy=\"50\" r=\"24\" fill=\"rgba(226,232,240,0.15)\" stroke=\"#E2E8F0\" stroke-width=\"2\"/>\n  <text x=\"120\" y=\"55\" fill=\"#E2E8F0\" font-size=\"18\" font-weight=\"800\" text-anchor=\"middle\">H⁺</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GLYCOLISIS",
+        "pathwayNameRu": "Гликолиз",
+        "pathwayNameEn": "Glycolysis",
+        "isCurrentPathway": false,
+        "role": "cofactor",
+        "detailsRu": "Выделяется при фосфорилировании гексоз и окислении НАД+; расходуется пируваткиназой.",
+        "detailsEn": "Product of hexose kinase reactions and GAPDH; consumed by pyruvate kinase."
+      }
+    ]
+  },
   {
     id: 'b0000001-0000-0000-0000-000000000012',
     code: 'MET_NAD_PLUS',
@@ -1344,8 +2259,8 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
   {
     id: 'b0000001-0000-0000-0000-000000000018',
     code: 'MET_CO2',
-    nameRu: 'Углекислый газ (CO₂)',
-    nameEn: 'Carbon dioxide',
+    nameRu: 'Диоксид углерода (CO₂)',
+    nameEn: 'Carbon dioxide (CO₂)',
     abbrevRu: 'CO₂',
     abbrevEn: 'CO₂',
     formula: 'CO₂',
@@ -1361,8 +2276,8 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     inchiKey: 'CURLTTPVMYMDTN-UHFFFAOYSA-N',
     descriptionRu: 'Конечный продукт декарбоксилирования. В ЦТК выделяются 2 молекулы CO₂ (стадии 3 и 4), что соответствует полному сгоранию 2 углеродов ацетильной группы.',
     descriptionEn: 'End-product of oxidative decarboxylation. Two CO₂ molecules are released per cycle revolution (steps 3 and 4), corresponding to complete oxidation of the two acetyl carbons.',
-    synonymsRu: ['Диоксид углерода', 'Углекислый газ', 'CO₂'],
-    synonymsEn: ['Carbon dioxide', 'CO₂', 'Carbonic anhydride'],
+    synonymsRu: ['Диоксид углерода', 'Углекислый газ', 'CO₂', 'Двуокись углерода', 'Угольный ангидрид'],
+    synonymsEn: ['Carbon dioxide', 'CO₂', 'Carbonic anhydride', 'Carbonic acid gas'],
     skeletalSvg: '<line x1="10" y1="20" x2="40" y2="20" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="20" r="3" fill="#EF4444"/><circle cx="40" cy="20" r="3" fill="#EF4444"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
   <text x="50" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">O</text>
@@ -1375,6 +2290,17 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
 </svg>`,
     isCofactor: true,
     pathwaysRu: [
+      {
+        pathwayCode: 'PW-PDH',
+        pathwayNameRu: 'Комплекс ПДХ (Матрикс)',
+        pathwayNameEn: 'PDH Complex (Matrix)',
+        isCurrentPathway: true,
+        role: 'product',
+        detailsRu: 'Окислительное декарбоксилирование пирувата: выделение 1 молекулы CO₂ на молекулу пирувата (2 CO₂ на глюкозу).',
+        detailsEn: 'Oxidative decarboxylation of pyruvate: release of 1 CO₂ per pyruvate (2 CO₂ per glucose).',
+        stepNumber: 1,
+        reactionCode: 'R_PDH',
+      },
       {
         pathwayCode: 'PWY_TCA',
         pathwayNameRu: 'Цикл трикарбоновых кислот (ЦТК)',
@@ -1515,9 +2441,1045 @@ export const ALL_METABOLITES: HumanMetaboliteNode[] = [
 
 export const HUMAN_REACTIONS: HumanReactionArrow[] = [
   {
+    "id": "d0000002-0000-0000-0000-000000000001",
+    "stepNumber": 1,
+    "code": "R_HK",
+    "pathwayCode": "PW-GLYCOLISIS",
+    "pathwayNameRu": "Гликолиз (Эмбден-Мейергоф)",
+    "pathwayNameEn": "Glycolysis",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Фосфорилирование глюкозы гексокиназой",
+    "nameEn": "Hexokinase phosphorylation of glucose",
+    "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000001",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000002",
+    "pathData": "M 1600 354 L 1600 390",
+    "tooltipX": 1600,
+    "tooltipY": 372,
+    "enzymeRu": "Гексокиназа 1 / Глюкокиназа",
+    "enzymeEn": "Hexokinase 1 / Glucokinase",
+    "enzymeShort": "HK1 / GCK",
+    "ecNumber": "2.7.1.1",
+    "gene": "HK1, HK2, GCK",
+    "uniprotId": "P19367",
+    "isReversible": false,
+    "deltaG0": "-16.7 кДж/моль",
+    "substrates": [
+      {
+        "name": "D-Глюкоза",
+        "nameEn": "D-Glucose",
+        "formula": "C₆H₁₂O₆"
+      },
+      {
+        "name": "Аденозинтрифосфат",
+        "nameEn": "ATP",
+        "formula": "C₁₀H₁₂N₅O₁₃P₃⁴⁻",
+        "isCo": true
+      }
+    ],
+    "products": [
+      {
+        "name": "Глюкозо-6-фосфат",
+        "nameEn": "Glucose 6-phosphate",
+        "formula": "C₆H₁₁O₉P²⁻"
+      },
+      {
+        "name": "Аденозиндифосфат",
+        "nameEn": "ADP",
+        "formula": "C₁₀H₁₂N₅O₁₀P₂³⁻",
+        "isCo": true
+      },
+      {
+        "name": "Протон (H⁺)",
+        "nameEn": "Proton (H⁺)",
+        "formula": "H⁺",
+        "isCo": true
+      }
+    ],
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 1510 360 C 1560 364, 1590 370, 1600 372 C 1590 374, 1560 380, 1510 384",
+      "inCofactor": "Аденозинтрифосфат",
+      "inCofactorEn": "ATP",
+      "inText": "+ АТФ",
+      "inTextRu": "+ АТФ",
+      "inTextEn": "+ ATP",
+      "inX": 1465,
+      "inY": 360,
+      "outCofactor": "Аденозиндифосфат",
+      "outCofactorEn": "ADP",
+      "outText": "АДФ + H⁺",
+      "outTextRu": "АДФ + H⁺",
+      "outTextEn": "ADP + H⁺",
+      "outX": 1455,
+      "outY": 384,
+      "inItems": [
+        {
+          "name": "Аденозинтрифосфат",
+          "nameEn": "ATP",
+          "text": "+ АТФ",
+          "textRu": "+ АТФ",
+          "textEn": "+ ATP",
+          "isEnergy": true
+        }
+      ],
+      "outItems": [
+        {
+          "name": "Аденозиндифосфат",
+          "nameEn": "ADP",
+          "text": "АДФ",
+          "textRu": "АДФ",
+          "textEn": "ADP"
+        }
+      ]
+    },
+    "inhibitorsRu": [
+      "Глюкозо-6-фосфат (для HK1-3)",
+      "АТФ (конкурентно)"
+    ],
+    "inhibitorsEn": [
+      "Glucose 6-phosphate (for HK1-3)",
+      "ATP"
+    ],
+    "mechanismRu": "Перенос γ-фосфатной группы АТФ на гидроксил 6-го углерода глюкозы с образованием отрицательно заряженного эфира, захватывающего глюкозу внутри клетки.",
+    "mechanismEn": "Transfer of gamma-phosphate group from Mg-ATP complex to C6 hydroxyl of glucose.",
+    "clinicalNoteRu": "Мутации в гене глюкокиназы (GCK) вызывают MODY2 диабет; повышенная экспрессия HK2 характерна для злокачественных опухолей (эффект Варбурга).",
+    "energyBalanceRu": "Расход: -1 АТФ (инвестиция)",
+    "energyBalanceEn": "Cost: -1 ATP (investment)",
+    "netAtpYieldRu": "Баланс: -1 АТФ (фаза затрат)",
+    "netAtpYieldEn": "Cumulative: -1 ATP (investment phase)"
+  },
+  {
+    "id": "d0000002-0000-0000-0000-000000000002",
+    "stepNumber": 2,
+    "code": "R_GPI",
+    "pathwayCode": "PW-GLYCOLISIS",
+    "pathwayNameRu": "Гликолиз (Эмбден-Мейергоф)",
+    "pathwayNameEn": "Glycolysis",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Изомеризация глюкозо-6-фосфата во фруктозо-6-фосфат",
+    "nameEn": "Phosphoglucose isomerase conversion of G6P to F6P",
+    "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000002",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000003",
+    "pathData": "M 1600 464 L 1600 500",
+    "tooltipX": 1600,
+    "tooltipY": 482,
+    "enzymeRu": "Глюкозо-6-фосфатизомераза",
+    "enzymeEn": "Glucose-6-phosphate isomerase",
+    "enzymeShort": "GPI",
+    "ecNumber": "5.3.1.9",
+    "gene": "GPI",
+    "uniprotId": "P06744",
+    "isReversible": true,
+    "deltaG0": "+1.7 кДж/моль",
+    "substrates": [
+      {
+        "name": "Глюкозо-6-фосфат",
+        "nameEn": "Glucose 6-phosphate",
+        "formula": "C₆H₁₁O₉P²⁻"
+      }
+    ],
+    "products": [
+      {
+        "name": "Фруктозо-6-фосфат",
+        "nameEn": "Fructose 6-phosphate",
+        "formula": "C₆H₁₁O₉P²⁻"
+      }
+    ],
+    "mechanismRu": "Обратимая альдо-кето изомеризация через ендиольный интермедиат с раскрытием пиранозного кольца и замыканием пятичленного фуранозного цикла.",
+    "mechanismEn": "Reversible isomerization of aldohexose to ketohexose via cis-enediolate intermediate.",
+    "clinicalNoteRu": "Дефицит GPI — редкая причина наследственной несефероцитарной гемолитической анемии (2-е место среди гликолитических энзимопатий).",
+    "energyBalanceRu": "Энергонейтрально (изомеризация)",
+    "energyBalanceEn": "Isoenergetic (isomerization)",
+    "netAtpYieldRu": "Баланс: -1 АТФ",
+    "netAtpYieldEn": "Cumulative: -1 ATP"
+  },
+  {
+    "id": "d0000002-0000-0000-0000-000000000003",
+    "stepNumber": 3,
+    "code": "R_PFK1",
+    "pathwayCode": "PW-GLYCOLISIS",
+    "pathwayNameRu": "Гликолиз (Эмбден-Мейергоф)",
+    "pathwayNameEn": "Glycolysis",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Фосфорилирование фруктозо-6-фосфата (PFK-1)",
+    "nameEn": "Phosphofructokinase-1 phosphorylation of F6P",
+    "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000003",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000004",
+    "pathData": "M 1600 574 L 1600 610",
+    "tooltipX": 1600,
+    "tooltipY": 592,
+    "enzymeRu": "Фосфофруктокиназа-1",
+    "enzymeEn": "Phosphofructokinase-1",
+    "enzymeShort": "PFK-1",
+    "ecNumber": "2.7.1.11",
+    "gene": "PFKM, PFKL, PFKP",
+    "uniprotId": "P08237",
+    "isReversible": false,
+    "deltaG0": "-14.2 кДж/моль",
+    "substrates": [
+      {
+        "name": "Фруктозо-6-фосфат",
+        "nameEn": "Fructose 6-phosphate",
+        "formula": "C₆H₁₁O₉P²⁻"
+      },
+      {
+        "name": "Аденозинтрифосфат",
+        "nameEn": "ATP",
+        "formula": "C₁₀H₁₂N₅O₁₃P₃⁴⁻",
+        "isCo": true
+      }
+    ],
+    "products": [
+      {
+        "name": "Фруктозо-1,6-бисфосфат",
+        "nameEn": "Fructose 1,6-bisphosphate",
+        "formula": "C₆H₁₀O₁₂P₂⁴⁻"
+      },
+      {
+        "name": "Аденозиндифосфат",
+        "nameEn": "ADP",
+        "formula": "C₁₀H₁₂N₅O₁₀P₂³⁻",
+        "isCo": true
+      },
+      {
+        "name": "Протон (H⁺)",
+        "nameEn": "Proton (H⁺)",
+        "formula": "H⁺",
+        "isCo": true
+      }
+    ],
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 1510 580 C 1560 584, 1590 590, 1600 592 C 1590 594, 1560 600, 1510 604",
+      "inCofactor": "Аденозинтрифосфат",
+      "inCofactorEn": "ATP",
+      "inText": "+ АТФ",
+      "inTextRu": "+ АТФ",
+      "inTextEn": "+ ATP",
+      "inX": 1465,
+      "inY": 580,
+      "outCofactor": "Аденозиндифосфат",
+      "outCofactorEn": "ADP",
+      "outText": "АДФ + H⁺",
+      "outTextRu": "АДФ + H⁺",
+      "outTextEn": "ADP + H⁺",
+      "outX": 1455,
+      "outY": 604,
+      "inItems": [
+        {
+          "name": "Аденозинтрифосфат",
+          "nameEn": "ATP",
+          "text": "+ АТФ",
+          "textRu": "+ АТФ",
+          "textEn": "+ ATP",
+          "isEnergy": true
+        }
+      ],
+      "outItems": [
+        {
+          "name": "Аденозиндифосфат",
+          "nameEn": "ADP",
+          "text": "АДФ",
+          "textRu": "АДФ",
+          "textEn": "ADP"
+        }
+      ]
+    },
+    "activatorsRu": [
+      "Фруктозо-2,6-бисфосфат (самый мощный)",
+      "АМФ",
+      "АДФ"
+    ],
+    "activatorsEn": [
+      "Fructose 2,6-bisphosphate",
+      "AMP",
+      "ADP"
+    ],
+    "inhibitorsRu": [
+      "АТФ (аллостерический ингибитор)",
+      "Цитрат (сигнал ЦТК)",
+      "Ионы H⁺ / Лактат"
+    ],
+    "inhibitorsEn": [
+      "ATP (allosteric)",
+      "Citrate",
+      "Protons (H⁺) / Acidosis"
+    ],
+    "mechanismRu": "Главный пейсмейкерный шлюз гликолиза. Необратимое фосфорилирование C1 гидроксила фруктозо-6-фосфата с затратой второй молекулы АТФ.",
+    "mechanismEn": "Rate-limiting commitment step of glycolysis. Strongly allosterically activated by F2,6BP and AMP, inhibited by high ATP and citrate.",
+    "clinicalNoteRu": "Болезнь Таруи (гликогеноз VII типа) — дефицит PFKM в мышцах, приводящий к миопатии и непереносимости физических нагрузок.",
+    "energyBalanceRu": "Расход: -1 АТФ (вторая инвестиция)",
+    "energyBalanceEn": "Cost: -1 ATP (second investment)",
+    "netAtpYieldRu": "Баланс: -2 АТФ (конец фазы инвестиций)",
+    "netAtpYieldEn": "Cumulative: -2 ATP (investment phase end)"
+  },
+  {
+    "id": "d0000002-0000-0000-0000-000000000004",
+    "stepNumber": 4,
+    "code": "R_ALDO",
+    "pathwayCode": "PW-GLYCOLISIS",
+    "pathwayNameRu": "Гликолиз (Эмбден-Мейергоф)",
+    "pathwayNameEn": "Glycolysis",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Альдолазное расщепление на две триозы (ГАФ и ДАФ)",
+    "nameEn": "Aldolase cleavage of F1,6BP into GAP and DHAP",
+    "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000004",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000006",
+    "secondaryTargetId": "b0000002-0000-0000-0000-000000000005",
+    "secondaryPathData": "M 1600 684 C 1500 690, 1400 700, 1375 720",
+    "pathData": "M 1600 684 L 1600 720",
+    "tooltipX": 1600,
+    "tooltipY": 702,
+    "enzymeRu": "Фруктозобисфосфатальдолаза",
+    "enzymeEn": "Fructose-bisphosphate aldolase",
+    "enzymeShort": "ALDOA",
+    "ecNumber": "4.1.2.13",
+    "gene": "ALDOA, ALDOB, ALDOC",
+    "uniprotId": "P04075",
+    "isReversible": true,
+    "deltaG0": "+23.8 кДж/моль",
+    "substrates": [
+      {
+        "name": "Фруктозо-1,6-бисфосфат",
+        "nameEn": "Fructose 1,6-bisphosphate",
+        "formula": "C₆H₁₀O₁₂P₂⁴⁻"
+      }
+    ],
+    "products": [
+      {
+        "name": "Глицеральдегид-3-фосфат",
+        "nameEn": "Glyceraldehyde 3-phosphate",
+        "formula": "C₃H₅O₆P²⁻"
+      },
+      {
+        "name": "Дигидроксиацетонфосфат",
+        "nameEn": "Dihydroxyacetone phosphate",
+        "formula": "C₃H₅O₆P²⁻"
+      }
+    ],
+    "mechanismRu": "Обратимый ретроальдольный распад гексозобисфосфата через образование основания Шиффа между лизином фермента и карбонилом C2 субстрата.",
+    "mechanismEn": "Class I aldolase mechanism forming a covalent Schiff base intermediate with active site lysine residue.",
+    "clinicalNoteRu": "Мутации ALDOB в печени вызывают наследственную непереносимость фруктозы (HFI) с накоплением фруктозо-1-фосфата и гипогликемией.",
+    "energyBalanceRu": "Расщепление C₆ ➔ 2×C₃",
+    "energyBalanceEn": "Cleavage C₆ ➔ 2×C₃",
+    "netAtpYieldRu": "Баланс: -2 АТФ (удвоение последующего потока)",
+    "netAtpYieldEn": "Cumulative: -2 ATP (subsequent flux doubled)"
+  },
+  {
+    "id": "d0000002-0000-0000-0000-000000000005",
+    "stepNumber": 5,
+    "code": "R_TPI",
+    "pathwayCode": "PW-GLYCOLISIS",
+    "pathwayNameRu": "Гликолиз (Эмбден-Мейергоф)",
+    "pathwayNameEn": "Glycolysis",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Изомеризация дигидроксиацетонфосфата в ГАФ",
+    "nameEn": "Triosephosphate isomerase conversion of DHAP to GAP",
+    "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000005",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000006",
+    "pathData": "M 1455 757 L 1520 757",
+    "tooltipX": 1487,
+    "tooltipY": 742,
+    "enzymeRu": "Триозофосфатизомераза",
+    "enzymeEn": "Triosephosphate isomerase",
+    "enzymeShort": "TPI1",
+    "ecNumber": "5.3.1.1",
+    "gene": "TPI1",
+    "uniprotId": "P60174",
+    "isReversible": true,
+    "deltaG0": "+7.5 кДж/моль",
+    "substrates": [
+      {
+        "name": "Дигидроксиацетонфосфат",
+        "nameEn": "Dihydroxyacetone phosphate",
+        "formula": "C₃H₅O₆P²⁻"
+      }
+    ],
+    "products": [
+      {
+        "name": "Глицеральдегид-3-фосфат",
+        "nameEn": "Glyceraldehyde 3-phosphate",
+        "formula": "C₃H₅O₆P²⁻"
+      }
+    ],
+    "mechanismRu": "«Каталитически совершенный» фермент, скорость которого ограничена лишь диффузией субстрата. Переносит протон через стереоспецифичный ендиолатный интермедиат.",
+    "mechanismEn": "Diffusion-limited \"kinetically perfect\" enzyme converting DHAP to GAP with diffusion-controlled kcat/Km.",
+    "clinicalNoteRu": "Дефицит TPI1 — тяжелейшая гликолитическая энзимопатия с летальным исходом в детстве из-за прогрессирующей нейродегенерации и гемолиза.",
+    "energyBalanceRu": "Конверсия ДАФ ➔ ГАФ",
+    "energyBalanceEn": "Conversion DHAP ➔ GAP",
+    "netAtpYieldRu": "Баланс: -2 АТФ (обе триозы готовы к фазе отдачи)",
+    "netAtpYieldEn": "Cumulative: -2 ATP (both trioses enter payoff phase)"
+  },
+  {
+    "id": "d0000002-0000-0000-0000-000000000006",
+    "stepNumber": 6,
+    "code": "R_GAPDH",
+    "pathwayCode": "PW-GLYCOLISIS",
+    "pathwayNameRu": "Гликолиз (Эмбден-Мейергоф)",
+    "pathwayNameEn": "Glycolysis",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Окисление ГАФ с генерацией НАДН (GAPDH)",
+    "nameEn": "GAPDH oxidation and phosphorylation to 1,3-BPG",
+    "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000006",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000007",
+    "pathData": "M 1600 794 L 1600 830",
+    "tooltipX": 1600,
+    "tooltipY": 812,
+    "enzymeRu": "Глицеральдегид-3-фосфатдегидрогеназа",
+    "enzymeEn": "Glyceraldehyde-3-phosphate dehydrogenase",
+    "enzymeShort": "GAPDH",
+    "ecNumber": "1.2.1.12",
+    "gene": "GAPDH",
+    "uniprotId": "P04406",
+    "isReversible": true,
+    "deltaG0": "+6.3 кДж/моль",
+    "substrates": [
+      {
+        "name": "Глицеральдегид-3-фосфат",
+        "nameEn": "Glyceraldehyde 3-phosphate",
+        "formula": "C₃H₅O₆P²⁻"
+      },
+      {
+        "name": "Неорганический фосфат (Фᵢ)",
+        "nameEn": "Inorganic phosphate",
+        "formula": "HPO₄²⁻",
+        "isCo": true
+      },
+      {
+        "name": "НАД⁺",
+        "nameEn": "NAD⁺",
+        "formula": "C₂₁H₂₆N₇O₁₄P₂⁺",
+        "isCo": true
+      }
+    ],
+    "products": [
+      {
+        "name": "1,3-Бисфосфоглицерат",
+        "nameEn": "1,3-Bisphosphoglycerate",
+        "formula": "C₃H₄O₁₀P₂⁴⁻"
+      },
+      {
+        "name": "НАДН",
+        "nameEn": "NADH",
+        "formula": "C₂₁H₂₇N₇O₁₄P₂²⁻",
+        "isCo": true
+      },
+      {
+        "name": "Протон (H⁺)",
+        "nameEn": "Proton (H⁺)",
+        "formula": "H⁺",
+        "isCo": true
+      }
+    ],
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 1510 800 C 1560 804, 1590 810, 1600 812 C 1590 814, 1560 820, 1510 824",
+      "inCofactor": "НАД⁺",
+      "inCofactorEn": "NAD⁺",
+      "inText": "+ Фᵢ + НАД⁺",
+      "inTextRu": "+ Фᵢ + НАД⁺",
+      "inTextEn": "+ Pi + NAD⁺",
+      "inX": 1445,
+      "inY": 800,
+      "outCofactor": "НАДН",
+      "outCofactorEn": "NADH",
+      "outText": "НАДН + H⁺",
+      "outTextRu": "НАДН + H⁺",
+      "outTextEn": "NADH + H⁺",
+      "outX": 1445,
+      "outY": 824,
+      "isEnergy": true,
+      "inItems": [
+        {
+          "name": "НАД⁺",
+          "nameEn": "NAD⁺",
+          "text": "+ НАД⁺",
+          "textRu": "+ НАД⁺",
+          "textEn": "+ NAD⁺"
+        }
+      ],
+      "outItems": [
+        {
+          "name": "НАДН",
+          "nameEn": "NADH",
+          "text": "НАДН",
+          "textRu": "НАДН",
+          "textEn": "NADH",
+          "isEnergy": true
+        }
+      ]
+    },
+    "inhibitorsRu": [
+      "Йодацетат (алкилирует Cys152)",
+      "Мышьяк / Арсенат (разобщает фосфорилирование)"
+    ],
+    "inhibitorsEn": [
+      "Iodoacetate",
+      "Arsenate"
+    ],
+    "mechanismRu": "Окислительно-восстановительная реакция с образованием ковалентного тиополуацетального интермедиата с Cys152 активного центра и последующим фосфоролизом неорганическим фосфатом.",
+    "mechanismEn": "Coupled oxidation of aldehyde to acyl-enzyme thioester with NAD+ reduction, followed by phosphorolysis to acyl-phosphate.",
+    "clinicalNoteRu": "Арсенат заменяет неорганический фосфат, образуя нестабильный 1-арсено-3-фосфоглицерат, который гидролизуется в обход синтеза АТФ (токсичность мышьяка).",
+    "energyBalanceRu": "Выход: +2 НАДН на молекулу глюкозы",
+    "energyBalanceEn": "Yield: +2 NADH per glucose",
+    "netAtpYieldRu": "Дыхательный потенциал: +3...5 АТФ в ДЦ (аэробно)",
+    "netAtpYieldEn": "Respiratory potential: +3...5 ATP via ETC (aerobic)"
+  },
+  {
+    "id": "d0000002-0000-0000-0000-000000000007",
+    "stepNumber": 7,
+    "code": "R_PGK",
+    "pathwayCode": "PW-GLYCOLISIS",
+    "pathwayNameRu": "Гликолиз (Эмбден-Мейергоф)",
+    "pathwayNameEn": "Glycolysis",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Субстратное фосфорилирование АТФ (PGK1)",
+    "nameEn": "Phosphoglycerate kinase substrate-level ATP generation",
+    "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000007",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000008",
+    "pathData": "M 1600 904 L 1600 940",
+    "tooltipX": 1600,
+    "tooltipY": 922,
+    "enzymeRu": "Фосфоглицераткиназа 1",
+    "enzymeEn": "Phosphoglycerate kinase 1",
+    "enzymeShort": "PGK1",
+    "ecNumber": "2.7.2.3",
+    "gene": "PGK1",
+    "uniprotId": "P00558",
+    "isReversible": true,
+    "deltaG0": "-18.5 кДж/моль",
+    "substrates": [
+      {
+        "name": "1,3-Бисфосфоглицерат",
+        "nameEn": "1,3-Bisphosphoglycerate",
+        "formula": "C₃H₄O₁₀P₂⁴⁻"
+      },
+      {
+        "name": "Аденозиндифосфат",
+        "nameEn": "ADP",
+        "formula": "C₁₀H₁₂N₅O₁₀P₂³⁻",
+        "isCo": true
+      }
+    ],
+    "products": [
+      {
+        "name": "3-Фосфоглицерат",
+        "nameEn": "3-Phosphoglycerate",
+        "formula": "C₃H₄O₇P³⁻"
+      },
+      {
+        "name": "Аденозинтрифосфат",
+        "nameEn": "ATP",
+        "formula": "C₁₀H₁₂N₅O₁₃P₃⁴⁻",
+        "isCo": true
+      }
+    ],
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 1510 910 C 1560 914, 1590 920, 1600 922 C 1590 924, 1560 930, 1510 934",
+      "inCofactor": "Аденозиндифосфат",
+      "inCofactorEn": "ADP",
+      "inText": "+ АДФ",
+      "inTextRu": "+ АДФ",
+      "inTextEn": "+ ADP",
+      "inX": 1465,
+      "inY": 910,
+      "outCofactor": "Аденозинтрифосфат",
+      "outCofactorEn": "ATP",
+      "outText": "⚡ АТФ (2x)",
+      "outTextRu": "⚡ АТФ (2x)",
+      "outTextEn": "⚡ ATP (2x)",
+      "outX": 1450,
+      "outY": 934,
+      "isEnergy": true,
+      "inItems": [
+        {
+          "name": "Аденозиндифосфат",
+          "nameEn": "ADP",
+          "text": "+ АДФ",
+          "textRu": "+ АДФ",
+          "textEn": "+ ADP"
+        }
+      ],
+      "outItems": [
+        {
+          "name": "Аденозинтрифосфат",
+          "nameEn": "ATP",
+          "text": "⚡ АТФ",
+          "textRu": "⚡ АТФ",
+          "textEn": "⚡ ATP",
+          "isEnergy": true
+        }
+      ]
+    },
+    "mechanismRu": "Первая стадия гликолиза, окупающая затраты энергии. Перенос высокоэнергетического 1-ацилфосфата с 1,3-БФГ на АДФ с генерацией 2 молекул АТФ на глюкозу.",
+    "mechanismEn": "First substrate-level phosphorylation reaction compensating for preparatory phase ATP consumption.",
+    "clinicalNoteRu": "Дефицит сцепленной с X-хромосомой PGK1 проявляется гемолитической анемией и миопатией с рабдомиолизом при нагрузках.",
+    "energyBalanceRu": "Выход: +2 АТФ субстратно (2 триозы)",
+    "energyBalanceEn": "Yield: +2 ATP substrate-level (2 trioses)",
+    "netAtpYieldRu": "Баланс: 0 АТФ (точка безубыточности / возврат инвестиций)",
+    "netAtpYieldEn": "Cumulative: 0 ATP (break-even point reached)"
+  },
+  {
+    "id": "d0000002-0000-0000-0000-000000000008",
+    "stepNumber": 8,
+    "code": "R_PGAM",
+    "pathwayCode": "PW-GLYCOLISIS",
+    "pathwayNameRu": "Гликолиз (Эмбден-Мейергоф)",
+    "pathwayNameEn": "Glycolysis",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Изомеризация 3-PG в 2-PG (мутазная реакция)",
+    "nameEn": "Phosphoglycerate mutase conversion of 3-PG to 2-PG",
+    "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000008",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000009",
+    "pathData": "M 1600 1014 L 1600 1050",
+    "tooltipX": 1600,
+    "tooltipY": 1032,
+    "enzymeRu": "Фосфоглицератмутаза 1",
+    "enzymeEn": "Phosphoglycerate mutase 1",
+    "enzymeShort": "PGAM1",
+    "ecNumber": "5.4.2.11",
+    "gene": "PGAM1, PGAM2",
+    "uniprotId": "P18669",
+    "isReversible": true,
+    "deltaG0": "+4.4 кДж/моль",
+    "substrates": [
+      {
+        "name": "3-Фосфоглицерат",
+        "nameEn": "3-Phosphoglycerate",
+        "formula": "C₃H₄O₇P³⁻"
+      }
+    ],
+    "products": [
+      {
+        "name": "2-Фосфоглицерат",
+        "nameEn": "2-Phosphoglycerate",
+        "formula": "C₃H₄O₇P³⁻"
+      }
+    ],
+    "mechanismRu": "Внутримолекулярный перенос фосфата с C3 на C2 через 2,3-бисфосфоглицератный (2,3-БФГ) интермедиат с фосфорилированным остатком гистидина фермента.",
+    "mechanismEn": "Histidine-dependent mutase mechanism via transient 2,3-bisphosphoglycerate enzyme-bound intermediate.",
+    "clinicalNoteRu": "Гликогеноз X типа — дефицит мышечной PGAM2 с непереносимостью физической активности и спазмами.",
+    "energyBalanceRu": "Изомеризация 3-PG ➔ 2-PG",
+    "energyBalanceEn": "Isomerization 3-PG ➔ 2-PG",
+    "netAtpYieldRu": "Баланс: 0 АТФ",
+    "netAtpYieldEn": "Cumulative: 0 ATP"
+  },
+  {
+    "id": "d0000002-0000-0000-0000-000000000009",
+    "stepNumber": 9,
+    "code": "R_ENO",
+    "pathwayCode": "PW-GLYCOLISIS",
+    "pathwayNameRu": "Гликолиз (Эмбден-Мейергоф)",
+    "pathwayNameEn": "Glycolysis",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Дегидратация 2-PG енолазой с образованием ФЕП",
+    "nameEn": "Enolase dehydration of 2-PG to phosphoenolpyruvate",
+    "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000009",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000010",
+    "pathData": "M 1600 1124 L 1600 1160",
+    "tooltipX": 1600,
+    "tooltipY": 1142,
+    "enzymeRu": "Енолаза",
+    "enzymeEn": "Enolase (Phosphopyruvate hydratase)",
+    "enzymeShort": "ENO1",
+    "ecNumber": "4.2.1.11",
+    "gene": "ENO1, ENO2, ENO3",
+    "uniprotId": "P06733",
+    "isReversible": true,
+    "deltaG0": "+7.5 кДж/моль",
+    "substrates": [
+      {
+        "name": "2-Фосфоглицерат",
+        "nameEn": "2-Phosphoglycerate",
+        "formula": "C₃H₄O₇P³⁻"
+      }
+    ],
+    "products": [
+      {
+        "name": "Фосфоенолпируват",
+        "nameEn": "Phosphoenolpyruvate",
+        "formula": "C₃H₂O₆P³⁻"
+      },
+      {
+        "name": "Вода (H₂O)",
+        "nameEn": "Water (H₂O)",
+        "formula": "H₂O",
+        "isCo": true
+      }
+    ],
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 1600 1142 C 1570 1142, 1540 1142, 1510 1142",
+      "outCofactor": "Вода (H₂O)",
+      "outCofactorEn": "Water (H₂O)",
+      "outText": "- H₂O",
+      "outTextRu": "- H₂O",
+      "outTextEn": "- H₂O",
+      "outX": 1475,
+      "outY": 1142,
+      "outItems": [
+        {
+          "name": "Вода (H₂O)",
+          "nameEn": "Water (H₂O)",
+          "text": "- H₂O",
+          "textRu": "- H₂O",
+          "textEn": "- H₂O"
+        }
+      ]
+    },
+    "inhibitorsRu": [
+      "Фторид-ионы (F⁻ в присутствии фосфата и Mg²⁺)"
+    ],
+    "inhibitorsEn": [
+      "Fluoride ion (complex with Mg2+ and phosphate)"
+    ],
+    "mechanismRu": "Элиминирование молекулы воды с образованием нестабильного енольного эфира, фиксирующего высокую энергию гидролиза фосфатной связи.",
+    "mechanismEn": "Elimination of H2O creating high-energy enol-phosphate bond trapped in the enol tautomer.",
+    "clinicalNoteRu": "Фторид натрия добавляется в клинические пробирки для забора крови на сахар для ингибирования енолазы и остановки спонтанного гликолиза in vitro.",
+    "energyBalanceRu": "Синтез макроэрга ФЕП (-2 H₂O)",
+    "energyBalanceEn": "Synthesis of high-energy PEP (-2 H₂O)",
+    "netAtpYieldRu": "Баланс: 0 АТФ (накопление свободной энергии)",
+    "netAtpYieldEn": "Cumulative: 0 ATP (free energy trapped in PEP)"
+  },
+  {
+    "id": "d0000002-0000-0000-0000-000000000010",
+    "stepNumber": 10,
+    "code": "R_PK",
+    "pathwayCode": "PW-GLYCOLISIS",
+    "pathwayNameRu": "Гликолиз (Эмбден-Мейергоф)",
+    "pathwayNameEn": "Glycolysis",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Синтез пирувата пируваткиназой (PKM)",
+    "nameEn": "Pyruvate kinase conversion of PEP to pyruvate with ATP yield",
+    "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000010",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000011",
+    "pathData": "M 1600 1234 L 1600 1270",
+    "tooltipX": 1600,
+    "tooltipY": 1252,
+    "enzymeRu": "Пируваткиназа M1/M2 / L/R",
+    "enzymeEn": "Pyruvate kinase",
+    "enzymeShort": "PKM / PKLR",
+    "ecNumber": "2.7.1.40",
+    "gene": "PKM, PKLR",
+    "uniprotId": "P14618",
+    "isReversible": false,
+    "deltaG0": "-31.4 кДж/моль",
+    "substrates": [
+      {
+        "name": "Фосфоенолпируват",
+        "nameEn": "Phosphoenolpyruvate",
+        "formula": "C₃H₂O₆P³⁻"
+      },
+      {
+        "name": "Аденозиндифосфат",
+        "nameEn": "ADP",
+        "formula": "C₁₀H₁₂N₅O₁₀P₂³⁻",
+        "isCo": true
+      },
+      {
+        "name": "Протон (H⁺)",
+        "nameEn": "Proton (H⁺)",
+        "formula": "H⁺",
+        "isCo": true
+      }
+    ],
+    "products": [
+      {
+        "name": "Пируват (Цитозоль)",
+        "nameEn": "Pyruvate (Cytosolic)",
+        "formula": "C₃H₃O₃⁻"
+      },
+      {
+        "name": "Аденозинтрифосфат",
+        "nameEn": "ATP",
+        "formula": "C₁₀H₁₂N₅O₁₃P₃⁴⁻",
+        "isCo": true
+      }
+    ],
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 1510 1240 C 1560 1244, 1590 1250, 1600 1252 C 1590 1254, 1560 1260, 1510 1264",
+      "inCofactor": "Аденозиндифосфат",
+      "inCofactorEn": "ADP",
+      "inText": "+ АДФ",
+      "inTextRu": "+ АДФ",
+      "inTextEn": "+ ADP",
+      "inX": 1465,
+      "inY": 1240,
+      "outCofactor": "Аденозинтрифосфат",
+      "outCofactorEn": "ATP",
+      "outText": "⚡ АТФ (2x)",
+      "outTextRu": "⚡ АТФ (2x)",
+      "outTextEn": "⚡ ATP (2x)",
+      "outX": 1450,
+      "outY": 1264,
+      "isEnergy": true,
+      "inItems": [
+        {
+          "name": "Аденозиндифосфат",
+          "nameEn": "ADP",
+          "text": "+ АДФ",
+          "textRu": "+ АДФ",
+          "textEn": "+ ADP"
+        }
+      ],
+      "outItems": [
+        {
+          "name": "Аденозинтрифосфат",
+          "nameEn": "ATP",
+          "text": "⚡ АТФ",
+          "textRu": "⚡ АТФ",
+          "textEn": "⚡ ATP",
+          "isEnergy": true
+        }
+      ]
+    },
+    "activatorsRu": [
+      "Фруктозо-1,6-бисфосфат (feedforward активация)"
+    ],
+    "activatorsEn": [
+      "Fructose 1,6-bisphosphate (feedforward)"
+    ],
+    "inhibitorsRu": [
+      "АТФ (аллостерический)",
+      "Ацетил-КоА",
+      "L-Аланин"
+    ],
+    "inhibitorsEn": [
+      "ATP",
+      "Acetyl-CoA",
+      "L-Alanine"
+    ],
+    "mechanismRu": "Сильно экзергоническая реакция переноса фосфата с енолфосфата на АДФ. Необратимость обеспечивается мгновенной спонтанной кетоенольной таутомеризацией енолпирувата в устойчивую кетоформу.",
+    "mechanismEn": "Substrate-level phosphorylation driven by extremely favorable tautomerization of enolpyruvate into ketopyruvate.",
+    "clinicalNoteRu": "Дефицит эритроцитарной PKLR — самая частая причина наследственной гемолитической анемии, вызванной ферментопатиями гликолиза.",
+    "energyBalanceRu": "Выход: +2 АТФ субстратно (2 триозы)",
+    "energyBalanceEn": "Yield: +2 ATP substrate-level (2 trioses)",
+    "netAtpYieldRu": "ЧИСТАЯ ПРИБЫЛЬ: +2 АТФ (чистый анаэробный итог гликолиза)",
+    "netAtpYieldEn": "NET PROFIT: +2 ATP (net anaerobic glycolytic yield)"
+  },
+  {
+    "id": "d0000002-0000-0000-0000-000000000011",
+    "stepNumber": 1,
+    "code": "R_MPC",
+    "pathwayCode": "PW-MPC",
+    "pathwayNameRu": "Митохондриальный транспорт пирувата",
+    "pathwayNameEn": "Mitochondrial Pyruvate Transport",
+    "compartmentRu": "Внутренняя мембрана митохондрий (ВММ)",
+    "compartmentEn": "Inner Mitochondrial Membrane (IMM)",
+    "nameRu": "Транспорт пирувата через митохондриальный переносчик (MPC1/2)",
+    "nameEn": "Mitochondrial pyruvate carrier translocase (MPC1/MPC2)",
+    "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000011",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000012",
+    "pathData": "M 1600 1344 L 1600 1400",
+    "tooltipX": 1600,
+    "tooltipY": 1372,
+    "enzymeRu": "Митохондриальный пируватный переносчик",
+    "enzymeEn": "Mitochondrial pyruvate carrier complex",
+    "enzymeShort": "MPC1 / MPC2",
+    "ecNumber": "Transporter (SLC54)",
+    "gene": "MPC1, MPC2",
+    "uniprotId": "Q9Y5U8",
+    "isReversible": true,
+    "deltaG0": "-8.4 кДж/моль",
+    "substrates": [
+      {
+        "name": "Пируват (Цитозоль)",
+        "nameEn": "Pyruvate (Cytosolic)",
+        "formula": "C₃H₃O₃⁻"
+      }
+    ],
+    "products": [
+      {
+        "name": "Пируват (Матрикс)",
+        "nameEn": "Pyruvate (Mitochondrial)",
+        "formula": "C₃H₃O₃⁻"
+      }
+    ],
+    "mechanismRu": "Симпорт пирувата с протоном H⁺ через внутреннюю мембрану митохондрий, движимый электрохимическим градиентом дыхательной цепи.",
+    "mechanismEn": "Proton-symport translocase across inner mitochondrial membrane driven by proton-motive force.",
+    "clinicalNoteRu": "Дефицит MPC вызывает тяжелый неонатальный лактатацидоз и задержку психомоторного развития; фармакологическое ингибирование MPC исследуется при диабете 2 типа.",
+    "energyBalanceRu": "Протон-зависимый транспорт (H⁺-симпорт)",
+    "energyBalanceEn": "Proton-coupled symport into matrix",
+    "netAtpYieldRu": "Вход в митохондриальный матрикс",
+    "netAtpYieldEn": "Matrix entry step"
+  },
+  {
+    "id": "d0000002-0000-0000-0000-000000000012",
+    "stepNumber": 1,
+    "code": "R_PDH",
+    "pathwayCode": "PW-PDH",
+    "pathwayNameRu": "Пируватдегидрогеназный комплекс (ПДХ)",
+    "pathwayNameEn": "Pyruvate Dehydrogenase Complex (PDH)",
+    "compartmentRu": "Матрикс митохондрий",
+    "compartmentEn": "Mitochondrial Matrix",
+    "nameRu": "Окислительное декарбоксилирование пирувата в Ацетил-КоА (ПДХ)",
+    "nameEn": "Pyruvate dehydrogenase complex conversion of pyruvate to Acetyl-CoA",
+    "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000012",
+    "targetMetaboliteId": "b0000001-0000-0000-0000-000000000002",
+    "pathData": "M 1600 1474 L 1600 1560",
+    "tooltipX": 1600,
+    "tooltipY": 1517,
+    "enzymeRu": "Пируватдегидрогеназный мультиферментный комплекс",
+    "enzymeEn": "Pyruvate dehydrogenase multienzyme complex (E1-E2-E3)",
+    "enzymeShort": "ПДХ (PDH Complex)",
+    "ecNumber": "1.2.4.1 / 2.3.1.12 / 1.8.1.4",
+    "gene": "PDHA1, DLAT, DLD, PDHX",
+    "uniprotId": "P08559",
+    "isReversible": false,
+    "deltaG0": "-33.4 кДж/моль",
+    "substrates": [
+      {
+        "name": "Пируват (Матрикс)",
+        "nameEn": "Pyruvate (Mitochondrial)",
+        "formula": "C₃H₃O₃⁻"
+      },
+      {
+        "name": "НАД⁺",
+        "nameEn": "NAD⁺",
+        "formula": "C₂₁H₂₆N₇O₁₄P₂⁺",
+        "isCo": true
+      },
+      {
+        "name": "Кофермент A (КоА-SH)",
+        "nameEn": "Coenzyme A (CoA-SH)",
+        "formula": "C₂₁H₃₆N₇O₁₆P₃S",
+        "isCo": true
+      }
+    ],
+    "products": [
+      {
+        "name": "Ацетил-КоА",
+        "nameEn": "Acetyl-CoA",
+        "formula": "C₂₃H₃₄N₇O₁₇P₃S⁴⁻"
+      },
+      {
+        "name": "НАДН",
+        "nameEn": "NADH",
+        "formula": "C₂₁H₂₇N₇O₁₄P₂²⁻",
+        "isCo": true
+      },
+      {
+        "name": "Диоксид углерода (CO₂)",
+        "nameEn": "Carbon dioxide (CO₂)",
+        "formula": "CO₂",
+        "isCo": true
+      },
+      {
+        "name": "Протон (H⁺)",
+        "nameEn": "Proton (H⁺)",
+        "formula": "H⁺",
+        "isCo": true
+      }
+    ],
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 1510 1495 C 1560 1505, 1590 1514, 1600 1517 C 1590 1520, 1560 1529, 1510 1539",
+      "inCofactor": "НАД⁺",
+      "inCofactorEn": "NAD⁺",
+      "inText": "+ КоА-SH + НАД⁺",
+      "inTextRu": "+ КоА-SH + НАД⁺",
+      "inTextEn": "+ CoA-SH + NAD⁺",
+      "inX": 1410,
+      "inY": 1495,
+      "outCofactor": "НАДН",
+      "outCofactorEn": "NADH",
+      "outText": "НАДН + CO₂ ↑",
+      "outTextRu": "НАДН + CO₂ ↑",
+      "outTextEn": "NADH + CO₂ ↑",
+      "outX": 1410,
+      "outY": 1538,
+      "isEnergy": true,
+      "inItems": [
+        {
+          "name": "Кофермент A (КоА-SH)",
+          "nameEn": "Coenzyme A (CoA-SH)",
+          "text": "+ КоА-SH",
+          "textRu": "+ КоА-SH",
+          "textEn": "+ CoA-SH",
+          "dx": -38
+        },
+        {
+          "name": "НАД⁺",
+          "nameEn": "NAD⁺",
+          "text": "+ НАД⁺",
+          "textRu": "+ НАД⁺",
+          "textEn": "+ NAD⁺",
+          "dx": 30
+        }
+      ],
+      "outItems": [
+        {
+          "name": "НАДН",
+          "nameEn": "NADH",
+          "text": "НАДН",
+          "textRu": "НАДН",
+          "textEn": "NADH",
+          "dx": -34,
+          "isEnergy": true
+        },
+        {
+          "name": "Диоксид углерода (CO₂)",
+          "nameEn": "Carbon dioxide (CO₂)",
+          "text": "+ CO₂ ↑",
+          "textRu": "+ CO₂ ↑",
+          "textEn": "+ CO₂ ↑",
+          "dx": 30
+        }
+      ]
+    },
+    "activatorsRu": [
+      "НАД⁺",
+      "КоА-SH",
+      "АДФ",
+      "Ионы Ca²⁺",
+      "Инсулин (через фосфатазу PDP1)"
+    ],
+    "activatorsEn": [
+      "NAD⁺",
+      "CoA-SH",
+      "ADP",
+      "Ca2+",
+      "Insulin (via PDP1 phosphatase)"
+    ],
+    "inhibitorsRu": [
+      "Ацетил-КоА",
+      "НАДН",
+      "АТФ (через киназу PDK1-4)"
+    ],
+    "inhibitorsEn": [
+      "Acetyl-CoA",
+      "NADH",
+      "ATP (via PDK1-4 kinase)"
+    ],
+    "mechanismRu": "Трехэтапный координированный катализ мультиферментного кластера: 1) Декарбоксилирование пирувата на тиаминдифосфате (E1 / TPP); 2) Окисление гидроксиэтильной группы с переносом на липоевую кислоту и образование ацетил-КоА (E2); 3) Регенерация липоамида через ФАД с восстановлением НАД⁺ в НАДН (E3 / DLD).",
+    "mechanismEn": "Sequential multi-enzyme decarboxylation (E1-TPP), transacetylation to lipoamide and CoA-SH (E2), and flavoprotein reoxidation yielding NADH (E3).",
+    "clinicalNoteRu": "Дефицит E1-альфа (PDHA1) — наиболее частая причина наследственного синдрома Ли (подострой некротизирующей энцефаломиелопатии); дефицит тиамина (витамина B1) нарушает работу E1, вызывая болезнь Бери-бери.",
+    "energyBalanceRu": "Выход: +2 НАДН + 2 Ацетил-КоА + 2 CO₂ (на глюкозу)",
+    "energyBalanceEn": "Yield: +2 NADH + 2 Acetyl-CoA + 2 CO₂ (per glucose)",
+    "netAtpYieldRu": "Дыхательный потенциал: +5 АТФ в ДЦ (на 2 пирувата)",
+    "netAtpYieldEn": "Respiratory potential: +5 ATP via ETC (per 2 pyruvates)"
+  },
+  {
     id: 'd0000001-0000-0000-0000-000000000001',
     stepNumber: 1,
     code: 'R_CS',
+    pathwayCode: 'PW-TCA-CYCLE',
+    pathwayNameRu: 'Цикл трикарбоновых кислот (ЦТК)',
+    pathwayNameEn: 'Citric Acid Cycle (TCA)',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'Конденсация оксалоацетата и ацетил-КоА',
     nameEn: 'Citrate synthase condensation',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000003', // OAA
@@ -1572,11 +3534,20 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     mechanismEn: 'Condensation of acetyl-CoA methyl carbon with oxaloacetate carbonyl carbon to form citryl-CoA, followed by thioester hydrolysis driving the reaction forward.',
     clinicalNoteRu: 'Начальная стадия цикла; сильно экзергоническая реакция, делающая процесс необратимым in vivo.',
     clinicalNoteEn: 'Initial committed step; strongly exergonic reaction driving cycle unidirectionality in vivo.',
+    energyBalanceRu: '0 АТФ (конденсация)',
+    energyBalanceEn: '0 ATP (condensation)',
+    netAtpYieldRu: '+7 АТФ (с учетом гликолиза и ПДХ)',
+    netAtpYieldEn: '+7 ATP (cumulative with glycolysis and PDH)'
   },
   {
     id: 'd0000001-0000-0000-0000-000000000002',
     stepNumber: 2,
     code: 'R_ACO',
+    pathwayCode: 'PW-TCA-CYCLE',
+    pathwayNameRu: 'Цикл трикарбоновых кислот (ЦТК)',
+    pathwayNameEn: 'Citric Acid Cycle (TCA)',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'Изомеризация цитрата в изоцитрат',
     nameEn: 'Aconitate hydratase isomerization',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000004', // Citrate
@@ -1622,11 +3593,20 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     mechanismEn: 'Stereospecific dehydration of citrate to cis-aconitate intermediate, followed by rehydration to isocitrate coordinated by a [4Fe-4S] iron-sulfur cluster.',
     clinicalNoteRu: 'Ингибируется фторацетатом (образующим фторцитрат — токсический яд).',
     clinicalNoteEn: 'Inhibited by fluoroacetate (which is converted into fluorocitrate, a potent suicide inhibitor).',
+    energyBalanceRu: '0 АТФ (изомеризация)',
+    energyBalanceEn: '0 ATP (isomerization)',
+    netAtpYieldRu: '+7 АТФ',
+    netAtpYieldEn: '+7 ATP'
   },
   {
     id: 'd0000001-0000-0000-0000-000000000003',
     stepNumber: 3,
     code: 'R_IDH',
+    pathwayCode: 'PW-TCA-CYCLE',
+    pathwayNameRu: 'Цикл трикарбоновых кислот (ЦТК)',
+    pathwayNameEn: 'Citric Acid Cycle (TCA)',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'Окислительное декарбоксилирование изоцитрата',
     nameEn: 'Isocitrate oxidative decarboxylation',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000005', // Isocitrate
@@ -1649,7 +3629,7 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     products: [
       { name: 'α-Кетоглутарат', nameEn: 'α-Ketoglutarate', formula: 'C₅H₄O₅²⁻' },
       { name: 'НАДН', nameEn: 'NADH', formula: 'C₂₁H₂₉N₇O₁₄P₂', isCo: true },
-      { name: 'Углекислый газ (CO₂ ↑)', nameEn: 'Carbon dioxide (CO₂ ↑)', formula: 'CO₂', isCo: true },
+      { name: 'Диоксид углерода (CO₂)', nameEn: 'Carbon dioxide (CO₂)', formula: 'CO₂', isCo: true },
       { name: 'Протон (H⁺)', nameEn: 'Proton (H⁺)', formula: 'H⁺', isCo: true },
     ],
     cofactorArc: {
@@ -1674,7 +3654,7 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
       outItems: [
         { name: 'НАДН', nameEn: 'NADH', text: 'НАДН', textRu: 'НАДН', textEn: 'NADH', dx: -45, isEnergy: true },
         { name: 'Протон (H⁺)', nameEn: 'Proton (H⁺)', text: '+ H⁺', textRu: '+ H⁺', textEn: '+ H⁺', dx: 0 },
-        { name: 'Углекислый газ (CO₂)', nameEn: 'Carbon dioxide (CO₂)', text: '+ CO₂ ↑', textRu: '+ CO₂ ↑', textEn: '+ CO₂ ↑', dx: 52 },
+        { name: 'Диоксид углерода (CO₂)', nameEn: 'Carbon dioxide (CO₂)', text: '+ CO₂ ↑', textRu: '+ CO₂ ↑', textEn: '+ CO₂ ↑', dx: 52 },
       ],
     },
     activatorsRu: ['АДФ', 'Ca²⁺'],
@@ -1685,11 +3665,20 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     mechanismEn: 'Oxidation of the secondary alcohol to oxalosuccinate, followed by irreversible decarboxylation yielding α-ketoglutarate and the first CO₂.',
     clinicalNoteRu: 'Главный регуляторный переключатель скорости клеточного дыхания у человека. Активируется при энергодефиците (высокий АДФ).',
     clinicalNoteEn: 'Primary rate-limiting control point of respiration. Strongly activated allosterically by ADP during energy demand.',
+    energyBalanceRu: '+2 НАДН (5 АТФ) + 2 CO₂ (за 2 оборота)',
+    energyBalanceEn: '+2 NADH (5 ATP) + 2 CO₂ (2 turns)',
+    netAtpYieldRu: '+12 АТФ',
+    netAtpYieldEn: '+12 ATP'
   },
   {
     id: 'd0000001-0000-0000-0000-000000000004',
     stepNumber: 4,
     code: 'R_KGDH',
+    pathwayCode: 'PW-TCA-CYCLE',
+    pathwayNameRu: 'Цикл трикарбоновых кислот (ЦТК)',
+    pathwayNameEn: 'Citric Acid Cycle (TCA)',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'Окислительное декарбоксилирование α-кетоглутарата',
     nameEn: 'α-Ketoglutarate dehydrogenase',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000006', // aKG
@@ -1713,7 +3702,7 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     products: [
       { name: 'Сукцинил-КоА', nameEn: 'Succinyl-CoA', formula: 'C₂₅H₃₆N₇O₁₉P₃S⁵⁻' },
       { name: 'НАДН', nameEn: 'NADH', formula: 'C₂₁H₂₉N₇O₁₄P₂', isCo: true },
-      { name: 'Углекислый газ (CO₂ ↑)', nameEn: 'Carbon dioxide (CO₂ ↑)', formula: 'CO₂', isCo: true },
+      { name: 'Диоксид углерода (CO₂)', nameEn: 'Carbon dioxide (CO₂)', formula: 'CO₂', isCo: true },
       { name: 'Протон (H⁺)', nameEn: 'Proton (H⁺)', formula: 'H⁺', isCo: true },
     ],
     cofactorArc: {
@@ -1741,7 +3730,7 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
       outItems: [
         { name: 'НАДН', nameEn: 'NADH', text: 'НАДН', textRu: 'НАДН', textEn: 'NADH', dx: -48, isEnergy: true },
         { name: 'Протон (H⁺)', nameEn: 'Proton (H⁺)', text: '+ H⁺', textRu: '+ H⁺', textEn: '+ H⁺', dx: 2 },
-        { name: 'Углекислый газ (CO₂)', nameEn: 'Carbon dioxide (CO₂)', text: '+ CO₂ ↑', textRu: '+ CO₂ ↑', textEn: '+ CO₂ ↑', dx: 54 },
+        { name: 'Диоксид углерода (CO₂)', nameEn: 'Carbon dioxide (CO₂)', text: '+ CO₂ ↑', textRu: '+ CO₂ ↑', textEn: '+ CO₂ ↑', dx: 54 },
       ],
     },
     activatorsRu: ['Ca²⁺'],
@@ -1752,11 +3741,20 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     mechanismEn: 'Multi-enzyme complex (E1, E2, E3) homologous to PDH. Requires 5 coenzymes: thiamine pyrophosphate (TPP), lipoate, CoA (B₅), FAD (B₂), NAD⁺ (B₃).',
     clinicalNoteRu: 'Дефицит витамина B₁ (тиамина) при алкоголизме (синдром Вернике-Корсакова) или бери-бери блокирует эту реакцию, вызывая энергетический коллапс ЦНС.',
     clinicalNoteEn: 'Thiamine (vitamin B₁) deficiency (Wernicke-Korsakoff syndrome, beriberi) impairs complex function, precipitating neuroenergetic failure.',
+    energyBalanceRu: '+2 НАДН (5 АТФ) + 2 CO₂ (за 2 оборота)',
+    energyBalanceEn: '+2 NADH (5 ATP) + 2 CO₂ (2 turns)',
+    netAtpYieldRu: '+17 АТФ',
+    netAtpYieldEn: '+17 ATP'
   },
   {
     id: 'd0000001-0000-0000-0000-000000000005',
     stepNumber: 5,
     code: 'R_SCS',
+    pathwayCode: 'PW-TCA-CYCLE',
+    pathwayNameRu: 'Цикл трикарбоновых кислот (ЦТК)',
+    pathwayNameEn: 'Citric Acid Cycle (TCA)',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'Субстратное фосфорилирование (Синтез ГТФ / АТФ)',
     nameEn: 'Succinate-CoA ligase (substrate-level phosphorylation)',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000007', // Succinyl-CoA
@@ -1813,11 +3811,20 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     mechanismEn: 'Energy from high-energy thioester bond cleavage is coupled to GDP phosphorylation into GTP via an active-site phosphohistidine intermediate.',
     clinicalNoteRu: 'Тканевая специфичность человека: в печени и почках преобладает ГТФ-специфичная изоформа (ген SUCLG2, необходима для глюконеогенеза), в сердце и мозге — АТФ-специфичная (ген SUCLA2).',
     clinicalNoteEn: 'Human tissue specificity: liver/kidney express GTP-specific isoform (SUCLG2, linked to gluconeogenesis), whereas heart/brain express ATP-specific (SUCLA2).',
+    energyBalanceRu: '+2 ГТФ (2 АТФ субстратно за 2 оборота)',
+    energyBalanceEn: '+2 GTP (2 ATP substrate-level per 2 turns)',
+    netAtpYieldRu: '+19 АТФ',
+    netAtpYieldEn: '+19 ATP'
   },
   {
     id: 'd0000001-0000-0000-0000-000000000006',
     stepNumber: 6,
     code: 'R_SDH',
+    pathwayCode: 'PW-TCA-CYCLE',
+    pathwayNameRu: 'Цикл трикарбоновых кислот (ЦТК)',
+    pathwayNameEn: 'Citric Acid Cycle (TCA)',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'Окисление сукцината в фумарат',
     nameEn: 'Succinate dehydrogenase oxidation',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000008', // Succinate
@@ -1871,11 +3878,20 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     mechanismEn: 'Stereospecific trans-dehydrogenation of succinate. Sole cycle enzyme embedded in the inner mitochondrial membrane, transferring electrons directly to ubiquinone (CoQ₁₀).',
     clinicalNoteRu: 'Генетические мутации в субъединицах SDH человека приводят к параганглиомам и феохромоцитомам (накопление сукцината стабилизирует онкогенный фактор HIF-1α).',
     clinicalNoteEn: 'SDH subunit germline mutations cause paragangliomas and pheochromocytomas (succinate accumulation inhibits prolyl hydroxylases and stabilizes HIF-1α).',
+    energyBalanceRu: '+2 ФАДH₂ (3 АТФ через комплекс II)',
+    energyBalanceEn: '+2 FADH₂ (3 ATP via complex II)',
+    netAtpYieldRu: '+22 АТФ',
+    netAtpYieldEn: '+22 ATP'
   },
   {
     id: 'd0000001-0000-0000-0000-000000000007',
     stepNumber: 7,
     code: 'R_FUM',
+    pathwayCode: 'PW-TCA-CYCLE',
+    pathwayNameRu: 'Цикл трикарбоновых кислот (ЦТК)',
+    pathwayNameEn: 'Citric Acid Cycle (TCA)',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'Гидратация фумарата в L-малат',
     nameEn: 'Fumarate hydratase trans-hydration',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000009', // Fumarate
@@ -1915,11 +3931,20 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     mechanismEn: 'Stereospecific trans-addition of water across the carbon-carbon double bond of fumarate, yielding solely L-malate.',
     clinicalNoteRu: 'Классический опухолевый супрессор человека. Герминальные мутации гена FH вызывают наследственный лейомиоматоз и почечно-клеточный рак (синдром HLRCC).',
     clinicalNoteEn: 'Tumor suppressor; germline mutations in FH cause hereditary leiomyomatosis and renal cell cancer (HLRCC syndrome).',
+    energyBalanceRu: '0 АТФ (гидратация)',
+    energyBalanceEn: '0 ATP (hydration)',
+    netAtpYieldRu: '+22 АТФ',
+    netAtpYieldEn: '+22 ATP'
   },
   {
     id: 'd0000001-0000-0000-0000-000000000008',
     stepNumber: 8,
     code: 'R_MDH',
+    pathwayCode: 'PW-TCA-CYCLE',
+    pathwayNameRu: 'Цикл трикарбоновых кислот (ЦТК)',
+    pathwayNameEn: 'Citric Acid Cycle (TCA)',
+    compartmentRu: 'Матрикс митохондрий',
+    compartmentEn: 'Mitochondrial Matrix',
     nameRu: 'Окисление L-малата в оксалоацетат',
     nameEn: 'Malate dehydrogenase oxidation',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000010', // Malate
@@ -1974,10 +3999,48 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     mechanismEn: 'Reversible oxidation of L-malate secondary hydroxyl group to regenerate oxaloacetate and produce the third NADH of the cycle.',
     clinicalNoteRu: 'Термодинамически неблагоприятная реакция (ΔG°\' = +29.7 кДж/моль), сдвигаемая вправо постоянным и быстрым расходом оксалоацетата цитратсинтазой.',
     clinicalNoteEn: 'Thermodynamically endergonic (ΔG°\' = +29.7 kJ/mol), driven forward in vivo by rapid removal of oxaloacetate by citrate synthase.',
+    energyBalanceRu: '+2 НАДН (5 АТФ через комплекс I)',
+    energyBalanceEn: '+2 NADH (5 ATP via complex I)',
+    netAtpYieldRu: '+30...32 АТФ (полное сгорание глюкозы)',
+    netAtpYieldEn: '+30...32 ATP (full glucose oxidation)'
   },
 ];
 
 export const HUMAN_CROSSROADS: MetabolicCrossroad[] = [
+  {
+    id: 'cr-galactose-leloir',
+    nameRu: 'Галактоза (Путь Лелуара) ➔ Г6Ф (G6P)',
+    nameEn: 'Galactose (Leloir Pathway) ➔ G6P',
+    pathwayCode: 'PWY_LELOIR',
+    pathwayNameRu: 'Путь Лелуара',
+    pathwayNameEn: 'Leloir Pathway',
+    compartmentRu: 'Цитозоль',
+    compartmentEn: 'Cytosol',
+    direction: 'in',
+    startX: 1330,
+    startY: 427,
+    endX: 1520,
+    endY: 427,
+    textX: 1335,
+    textY: 414,
+  },
+  {
+    id: 'cr-fructose-entry',
+    nameRu: 'Фруктоза (Фруктолиз) ➔ Ф6Ф / ДАФ + ГАФ',
+    nameEn: 'Fructose (Fructolysis) ➔ F6P / DHAP + GAP',
+    pathwayCode: 'PWY_FRUCTOLYSIS',
+    pathwayNameRu: 'Фруктолиз',
+    pathwayNameEn: 'Fructolysis',
+    compartmentRu: 'Цитозоль',
+    compartmentEn: 'Cytosol',
+    direction: 'in',
+    startX: 1330,
+    startY: 537,
+    endX: 1520,
+    endY: 537,
+    textX: 1335,
+    textY: 524,
+  },
   {
     id: 'cr-pdh-in',
     nameRu: 'Гликолиз ➔ Пируват ➔ ПДХ (3C ➔ 2C)',

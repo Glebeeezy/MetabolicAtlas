@@ -23,8 +23,14 @@ describe('AtlasStateService', () => {
     const focus = service.mapFocusTarget();
     expect(focus).toBeTruthy();
     expect(focus?.pathwayId).toBe('PW-GLYCOLISIS');
-    expect(focus?.targetCode).toBe('MET_AC_COA');
-    expect(focus?.crossroadId).toBe('cr-pdh-in');
+    expect(focus?.targetCode).toBe('MET_ACETYL_COA');
+    expect(focus?.crossroadId).toBeUndefined();
+
+    service.selectPathway('PW-PDH');
+    expect(service.selectedPathwayId()).toBe('PW-PDH');
+    const pdhFocus = service.mapFocusTarget();
+    expect(pdhFocus?.crossroadId).toBe('cr-pdh-in');
+    expect(pdhFocus?.targetCode).toBe('MET_ACETYL_COA');
   });
 
   it('should toggle flux and chemical structure flags', () => {
