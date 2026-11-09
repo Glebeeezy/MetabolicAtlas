@@ -6,6 +6,12 @@
   min-height: 0;
   position: relative;
   overflow: hidden;
+
+  --color-reaction-line: #38bdf8;
+  --color-cofactor-line: #94a3b8;
+  --color-reaction-active: #fb7185;
+  --color-substrate-accent: #38bdf8;
+  --color-product-accent: #fb7185;
 }
 
 .canvas-viewport {
@@ -45,23 +51,24 @@
 
 .canvas-svg {
   width: 1400px;
-  height: 1000px;
+  height: 1020px;
   max-width: none;
   max-height: none;
   overflow: visible;
 }
 
-/* Compartment */
+/* ==========================================================================
+   1. Mitochondrial Compartment Backdrop
+   ========================================================================== */
 .compartment-rect {
   stroke: var(--color-border-subtle);
-  stroke-width: 2px;
+  stroke-width: 1.5px;
   stroke-dasharray: 8 6;
-  transition: stroke var(--transition-fast);
 }
 
 .compartment-title {
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.08em;
   fill: var(--color-text-secondary);
 }
@@ -72,24 +79,150 @@
   fill: var(--color-text-muted);
 }
 
-/* Edges */
-.map-edge {
-  fill: none;
-  stroke: var(--color-border-strong);
-  stroke-width: 2.2px;
-  transition: all var(--transition-fast);
+/* ==========================================================================
+   2. Crossroads (Inbound & Outbound Inflow Lines)
+   ========================================================================== */
+.crossroad-line {
+  stroke: #475569;
+  stroke-dasharray: 5 4;
+  stroke-width: 1.8px;
+}
 
-  &--hovered {
-    stroke: var(--color-primary);
-    stroke-width: 3.5px;
-    filter: drop-shadow(0 0 6px var(--color-primary-glow));
+.crossroad-badge-bg {
+  fill: var(--color-bg-surface);
+  stroke: var(--color-border-subtle);
+  stroke-width: 1px;
+}
+
+.crossroad-text {
+  font-size: 9.5px;
+  font-weight: 600;
+  fill: var(--color-text-muted);
+  user-select: none;
+}
+
+/* ==========================================================================
+   3. Primary Reaction Arrows (Direct Flux Flow)
+   ========================================================================== */
+.reaction-arrow-group {
+  cursor: pointer;
+  outline: none;
+  transition: opacity 0.2s ease;
+
+  .reaction-hitbox {
+    cursor: pointer;
+    pointer-events: stroke;
+  }
+
+  .reaction-line {
+    stroke: #334e68;
+    stroke-width: 2.8px;
+    transition: stroke 0.18s ease, stroke-width 0.18s ease, filter 0.18s ease;
+  }
+
+  .cofactor-arc {
+    stroke: #64748b;
+    stroke-width: 1.8px;
+    transition: stroke 0.18s ease;
+  }
+
+  .cofactor-arc-label {
+    font-size: 10px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    fill: #94a3b8;
+    user-select: none;
+    transition: fill 0.18s ease;
+
+    &--energy {
+      fill: #fbbf24;
+    }
+
+    &--gtp {
+      fill: #34d399;
+    }
+  }
+
+  /* Hover state */
+  &.is-hovered:not(.is-selected) {
+    .reaction-line {
+      stroke: var(--color-substrate-accent);
+      stroke-width: 3.5px;
+      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
+    }
+
+    .cofactor-arc {
+      stroke: var(--color-substrate-accent);
+    }
+  }
+
+  /* Active / Selected reaction state (Coral Highlight) */
+  &.is-selected {
+    .reaction-line {
+      stroke: var(--color-reaction-active);
+      stroke-width: 3.8px;
+      filter: drop-shadow(0 0 10px rgba(251, 113, 133, 0.75));
+    }
+
+    .cofactor-arc {
+      stroke: #cbd5e1;
+      stroke-width: 2px;
+    }
+
+    .cofactor-arc-label {
+      fill: #f8fafc;
+      font-weight: 800;
+    }
+  }
+
+  /* Dimmed state when another reaction is focused */
+  &.is-dimmed {
+    opacity: 0.18;
   }
 }
 
-/* Metabolite Node */
-.metabolite-node {
+.reaction-tooltip {
+  pointer-events: none;
+  animation: fadeIn 0.15s ease-out;
+
+  .tooltip-bg {
+    fill: #0f172a;
+    stroke: var(--color-substrate-accent);
+    stroke-width: 1.2px;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6));
+  }
+
+  .tooltip-text {
+    font-size: 9.5px;
+    font-weight: 700;
+    fill: #f8fafc;
+    letter-spacing: -0.01em;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   4. Metabolite Node Tiles (Zero-Jitter: Fixed translation, dynamic borders)
+   ========================================================================== */
+.metabolite-tile {
   cursor: pointer;
-  transition: transform var(--transition-fast);
+  outline: none;
+  transition: opacity 0.2s ease;
+
+  .node-hitbox {
+    cursor: pointer;
+    pointer-events: all;
+  }
 
   &__bg {
     fill: var(--color-bg-surface);
@@ -99,106 +232,116 @@
 
   &__border {
     fill: none;
-    stroke-width: 2px;
-    transition: all var(--transition-fast);
+    stroke: var(--color-border-subtle);
+    stroke-width: 1.5px;
+    transition: stroke 0.18s ease, stroke-width 0.18s ease, filter 0.18s ease;
   }
 
-  &__label {
+  &__structure {
+    pointer-events: none;
+    color: var(--color-text-secondary);
+  }
+
+  &__title {
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
     fill: var(--color-text-primary);
     pointer-events: none;
+    letter-spacing: -0.01em;
   }
 
-  &:hover {
-    transform: scale(1.05);
-
-    .metabolite-node__border {
-      stroke-width: 3px;
-      filter: drop-shadow(0 0 8px var(--color-primary-glow));
-    }
-  }
-
-  &.is-selected {
-    .metabolite-node__border {
-      stroke-width: 3.5px;
-      stroke: var(--color-primary) !important;
-      filter: drop-shadow(0 0 10px var(--color-primary-glow));
-    }
-  }
-
-  &.is-acetyl {
-    .metabolite-node__border {
-      stroke: var(--bio-substrate);
-    }
-  }
-}
-
-/* Reaction Node */
-.reaction-node {
-  cursor: pointer;
-  transition: transform var(--transition-fast);
-
-  &__bg {
-    fill: var(--color-bg-surface);
-    filter: drop-shadow(var(--shadow-sm));
-  }
-
-  &__border {
-    fill: none;
-    stroke: var(--bio-enzyme);
-    stroke-width: 2.2px;
-    transition: all var(--transition-fast);
-  }
-
-  &__label {
+  &__formula {
     font-size: 9.5px;
-    font-weight: 700;
-    fill: var(--color-text-primary);
-    letter-spacing: -0.02em;
+    font-weight: 500;
+    font-family: var(--font-mono);
+    fill: var(--color-text-muted);
     pointer-events: none;
   }
 
-  &:hover {
-    transform: scale(1.15);
+  /* Carbon count tag in top right */
+  .carbon-tag-bg {
+    fill: rgba(56, 189, 248, 0.1);
+    stroke: rgba(56, 189, 248, 0.3);
+    stroke-width: 0.75px;
+  }
 
-    .reaction-node__border {
-      stroke-width: 3.5px;
-      filter: drop-shadow(0 0 10px var(--color-primary-glow));
+  .carbon-tag-text {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 800;
+    fill: var(--color-substrate-accent);
+  }
+
+  /* Dynamic Role Badges */
+  .role-badge-bg--sub {
+    fill: rgba(56, 189, 248, 0.18);
+    stroke: var(--color-substrate-accent);
+    stroke-width: 0.75px;
+  }
+
+  .role-badge-text--sub {
+    font-family: var(--font-sans);
+    font-size: 8px;
+    font-weight: 700;
+    fill: var(--color-substrate-accent);
+  }
+
+  .role-badge-bg--prod {
+    fill: rgba(251, 113, 133, 0.18);
+    stroke: var(--color-product-accent);
+    stroke-width: 0.75px;
+  }
+
+  .role-badge-text--prod {
+    font-family: var(--font-sans);
+    font-size: 8px;
+    font-weight: 700;
+    fill: var(--color-product-accent);
+  }
+
+  /* Hover state */
+  &:hover:not(.is-dimmed) {
+    .metabolite-tile__border {
+      stroke: var(--color-substrate-accent);
+      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
     }
   }
 
+  /* Selected directly */
   &.is-selected {
-    transform: scale(1.15);
-
-    .reaction-node__border {
-      stroke: var(--color-primary);
-      stroke-width: 4px;
-      filter: drop-shadow(0 0 12px var(--color-primary-glow));
+    .metabolite-tile__border {
+      stroke: var(--color-substrate-accent) !important;
+      stroke-width: 2.5px;
+      filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.65));
     }
   }
-}
 
-/* Cofactor Callouts */
-.cofactor-text {
-  font-size: 9.5px;
-  font-weight: 600;
-  fill: var(--color-text-muted);
-  user-select: none;
-
-  &--energy {
-    fill: var(--bio-energy);
-    font-weight: 700;
+  /* Substrate role: Neon Cyan */
+  &.is-substrate {
+    .metabolite-tile__border {
+      stroke: var(--color-substrate-accent) !important;
+      stroke-width: 2.5px;
+      filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.7));
+    }
   }
 
-  &--gtp {
-    fill: var(--bio-product);
-    font-weight: 700;
+  /* Product role: Bright Coral */
+  &.is-product {
+    .metabolite-tile__border {
+      stroke: var(--color-product-accent) !important;
+      stroke-width: 2.5px;
+      filter: drop-shadow(0 0 12px rgba(251, 113, 133, 0.7));
+    }
+  }
+
+  /* Dimmed */
+  &.is-dimmed {
+    opacity: 0.18;
   }
 }
 
 /* ==========================================================================
-   Overlays & HUD Controls
+   Overlays & HUD Floating Controls
    ========================================================================== */
 .canvas-overlay {
   position: absolute;
@@ -236,8 +379,8 @@
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #10B981;
-    box-shadow: 0 0 8px #10B981;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
   }
 
   &__label {
@@ -351,32 +494,32 @@
 }
 
 /* ==========================================================================
-   Side Entity Inspector (Flyout Panel)
+   5. Right Context Inspector (Matches Reference Screens #2 & #3)
    ========================================================================== */
-.entity-inspector {
+.context-inspector {
   position: absolute;
   top: 1rem;
   right: 1rem;
   bottom: 1rem;
-  width: 360px;
+  width: 440px;
   max-width: calc(100% - 2rem);
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-floating);
   display: flex;
   flex-direction: column;
   z-index: 30;
   overflow: hidden;
-  animation: slideIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slideInInspector 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes slideIn {
+@keyframes slideInInspector {
   from {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(40px);
   }
   to {
     opacity: 1;
@@ -384,23 +527,36 @@
   }
 }
 
-.inspector-header {
+.inspector-tabs-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.25rem 0.75rem;
+  padding: 0.5rem 1rem 0;
   border-bottom: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-surface);
 }
 
-.inspector-badge {
-  font-size: 0.7rem;
+.tabs-nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tab-btn {
+  padding: 0.65rem 0.85rem;
+  font-size: 0.825rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.2rem 0.5rem;
-  border-radius: var(--radius-full);
-  background: var(--color-primary-subtle);
-  color: var(--color-primary);
+  color: var(--color-text-secondary);
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+
+  &.is-active {
+    color: var(--color-substrate-accent);
+    border-bottom-color: var(--color-substrate-accent);
+  }
 }
 
 .inspector-close-btn {
@@ -423,59 +579,63 @@
   flex: 1;
   overflow-y: auto;
   padding: 1.25rem;
-}
 
-.inspector-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 1rem;
-  gap: 0.75rem;
-  color: var(--color-text-secondary);
-  font-size: 0.85rem;
-}
-
-.loading-spinner {
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--color-border-subtle);
-  border-top-color: var(--color-primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-strong);
+    border-radius: 3px;
   }
 }
 
-.inspector-title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--color-text-primary);
-  margin-bottom: 0.5rem;
-}
-
-.reaction-code-pill {
-  display: inline-block;
-  font-size: 0.725rem;
-  font-family: var(--font-mono);
-  color: var(--color-text-secondary);
-  padding: 0.15rem 0.45rem;
-  background: var(--color-bg-hover);
-  border-radius: var(--radius-sm);
-  margin-bottom: 0.75rem;
-}
-
-.inspector-desc {
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
-  line-height: 1.5;
+/* ==========================================================================
+   Reaction Details (Tab: Реакция)
+   ========================================================================== */
+.rx-header {
   margin-bottom: 1.25rem;
 }
 
+.step-badge {
+  display: inline-block;
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-substrate-accent);
+  margin-bottom: 0.35rem;
+}
+
+.rx-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  line-height: 1.3;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.rx-meta-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+
+  .code-font {
+    font-family: var(--font-mono);
+    color: var(--color-text-secondary);
+    font-weight: 600;
+  }
+
+  .energy-font {
+    font-family: var(--font-mono);
+    color: #fbbf24;
+    font-weight: 700;
+  }
+}
+
+/* Sections */
 .inspector-section {
   margin-top: 1.25rem;
   padding-top: 1rem;
@@ -491,110 +651,134 @@
   margin-bottom: 0.75rem;
 }
 
-.info-row {
-  display: flex;
-  justify-content: space-between;
+/* Substrate ➔ Product Comparative Flux Cards */
+.flux-cards-container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 0.35rem 0;
-  font-size: 0.825rem;
+  gap: 0.6rem;
 }
 
-.info-label {
-  color: var(--color-text-secondary);
+.flux-divider-arrow {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-text-muted);
+  user-select: none;
 }
 
-.info-value {
-  color: var(--color-text-primary);
-  font-weight: 600;
-}
-
-.font-mono {
-  font-family: var(--font-mono);
-}
-
-.db-chip {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 0.75rem;
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  margin-bottom: 0.5rem;
-}
-
-.db-name {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--color-text-secondary);
-}
-
-.db-link {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--color-primary);
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-.synonyms-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-
-  li {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.5rem;
-    background: var(--color-bg-surface);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-sm);
-    color: var(--color-text-secondary);
-  }
-}
-
-.enzyme-card {
+.flux-card {
   padding: 0.75rem;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &--substrate {
+    border: 1.5px solid var(--color-substrate-accent);
+    background: rgba(56, 189, 248, 0.04);
+
+    .flux-card__tag {
+      color: var(--color-substrate-accent);
+    }
+  }
+
+  &--product {
+    border: 1.5px solid var(--color-product-accent);
+    background: rgba(251, 113, 133, 0.04);
+
+    .flux-card__tag {
+      color: var(--color-product-accent);
+    }
+  }
+
+  &__tag {
+    font-size: 0.675rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+}
+
+.participant-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+
+  .participant-name {
+    font-size: 0.775rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .participant-formula {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+  }
+
+  &.is-co {
+    opacity: 0.85;
+
+    .participant-name {
+      color: var(--color-text-secondary);
+    }
+  }
+}
+
+/* Enzyme Details */
+.enzyme-details-card {
+  padding: 0.85rem;
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-md);
+
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.925rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 0.4rem;
+  }
 }
 
-.enzyme-name {
-  font-size: 0.875rem;
+.gene-pill {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
   font-weight: 700;
-  color: var(--color-text-primary);
+  color: var(--color-substrate-accent);
+  background: rgba(56, 189, 248, 0.12);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
 }
 
-.enzyme-meta {
+.enzyme-meta-row {
   display: flex;
-  gap: 0.4rem;
-  margin-top: 0.4rem;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
 }
 
-.ec-pill {
-  font-size: 0.7rem;
+.ec-badge {
+  font-size: 0.725rem;
   font-family: var(--font-mono);
-  padding: 0.15rem 0.4rem;
-  background: rgba(99, 102, 241, 0.12);
-  color: var(--color-primary);
+  color: #c084fc;
+  background: rgba(192, 132, 252, 0.12);
+  padding: 0.15rem 0.45rem;
   border-radius: var(--radius-sm);
-  font-weight: 600;
 }
 
-.uniprot-pill {
-  font-size: 0.7rem;
+.uniprot-link {
+  font-size: 0.725rem;
   font-family: var(--font-mono);
-  padding: 0.15rem 0.4rem;
-  background: rgba(16, 185, 129, 0.12);
-  color: #10B981;
-  border-radius: var(--radius-sm);
-  font-weight: 600;
+  color: #10b981;
   text-decoration: none;
 
   &:hover {
@@ -602,55 +786,231 @@
   }
 }
 
-.enzyme-desc {
-  margin-top: 0.5rem;
-  font-size: 0.775rem;
+.enzyme-mechanism-desc {
+  font-size: 0.8rem;
+  line-height: 1.5;
   color: var(--color-text-secondary);
-  line-height: 1.45;
+  margin-bottom: 0.6rem;
 }
 
-.participants-list {
+.clinical-note-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  background: rgba(245, 158, 11, 0.08);
+  border-left: 3px solid #f59e0b;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+
+  .clinical-note-icon {
+    font-size: 0.9rem;
+    line-height: 1;
+  }
+
+  .clinical-note-text {
+    font-size: 0.775rem;
+    line-height: 1.45;
+    color: #fde68a;
+  }
+}
+
+/* Regulation */
+.regulation-grid {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.participants-group {
+.reg-box {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.2rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+
+  &--pos {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+
+    .reg-title {
+      color: #34d399;
+      font-weight: 700;
+    }
+  }
+
+  &--neg {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+
+    .reg-title {
+      color: #f87171;
+      font-weight: 700;
+    }
+  }
+
+  .reg-tags {
+    color: var(--color-text-primary);
+    font-size: 0.775rem;
+  }
 }
 
-.group-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
+/* ==========================================================================
+   Molecule Details (Tab: Вещество)
+   ========================================================================== */
+.molecule-header {
+  margin-bottom: 1rem;
 }
 
-.participant-item {
+.title-carbon-row {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  font-size: 0.8rem;
-  padding: 0.25rem 0.5rem;
-  background: var(--color-bg-surface);
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.molecule-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.carbon-pill {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: var(--color-substrate-accent);
+  background: rgba(56, 189, 248, 0.15);
+  padding: 0.2rem 0.55rem;
   border-radius: var(--radius-sm);
 }
 
-.part-coef {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  color: var(--color-primary);
+.molecule-en-name {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.2rem;
 }
 
-.part-name {
-  color: var(--color-text-primary);
-}
-
-.reaction-arrow {
+/* Visual Card with big formula and 2D chemical structure */
+.structure-visual-card {
+  padding: 1.25rem 1rem;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  margin-bottom: 1rem;
+
+  &__formula {
+    font-family: var(--font-mono);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--color-substrate-accent);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.75rem;
+  }
+
+  &__drawing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 50px;
+    margin-bottom: 0.6rem;
+    color: var(--color-text-secondary);
+
+    svg, path {
+      transform: scale(1.4);
+    }
+  }
+
+  &__note {
+    font-size: 0.725rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+}
+
+.molecule-desc {
+  font-size: 0.825rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+}
+
+/* General properties row */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  font-size: 0.8rem;
+
+  .info-label {
+    color: var(--color-text-secondary);
+  }
+
+  .info-value {
+    color: var(--color-text-primary);
+  }
+}
+
+.text-xs {
+  font-size: 0.725rem;
+}
+
+.font-bold {
   font-weight: 700;
-  color: var(--color-primary);
-  font-size: 1rem;
+}
+
+/* External Database Cards */
+.db-card {
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  margin-bottom: 0.45rem;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .db-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+  }
+
+  .db-ext-link {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--color-substrate-accent);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Synonyms Tags */
+.synonyms-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+
+  .syn-tag {
+    font-size: 0.725rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-subtle);
+    color: var(--color-text-secondary);
+  }
 }
