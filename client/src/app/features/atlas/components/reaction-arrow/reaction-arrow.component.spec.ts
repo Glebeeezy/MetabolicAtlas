@@ -112,6 +112,17 @@ describe('ReactionArrowComponent', () => {
 
     chips[3].dispatchEvent(new MouseEvent('click'));
     expect(host.clickedCofactor).toBe('Углекислый газ (CO₂)');
+
+    // Verify concentric coordinate model: rect is centered at -w/2 and text has text-anchor="middle"
+    const rect = chips[0].querySelector('rect');
+    const text = chips[0].querySelector('text');
+    expect(rect).toBeTruthy();
+    expect(text).toBeTruthy();
+    const rectWidth = parseFloat(rect?.getAttribute('width') || '0');
+    const rectX = parseFloat(rect?.getAttribute('x') || '0');
+    expect(rectX).toBeCloseTo(-rectWidth / 2, 1);
+    expect(text?.getAttribute('text-anchor')).toBe('middle');
+    expect(text?.getAttribute('dominant-baseline')).toBe('central');
   });
 });
 

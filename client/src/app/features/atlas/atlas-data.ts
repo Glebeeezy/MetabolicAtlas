@@ -31,6 +31,7 @@ export interface HumanMetaboliteNode {
   skeletalSvg: string;
   structureSvg?: string;
   isCofactor?: boolean;
+  isHub?: boolean;
   pathwaysRu: PathwayParticipation[];
 }
 
@@ -116,8 +117,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     abbrevEn: 'OAA',
     formula: 'C₄H₂O₅²⁻',
     carbons: '4C',
-    x: 640,
-    y: 80,
+    x: 590,
+    y: 130,
     width: 150,
     height: 72,
     color: '#8B5CF6',
@@ -128,23 +129,23 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     synonymsRu: ['Оксалоацетат', 'ОАО', 'Щавелевоуксусная кислота', '2-оксобутандиоат'],
     skeletalSvg: '<path d="M 12 18 L 22 24 L 32 18 L 42 24" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="12" cy="18" r="3" fill="#EF4444"/><circle cx="42" cy="24" r="3" fill="#EF4444"/><circle cx="22" cy="12" r="2.5" fill="#EF4444"/><line x1="22" y1="24" x2="22" y2="12" stroke="currentColor" stroke-width="1.6"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
-  <text x="28" y="34" class="atom-o">O⁻</text>
-  <line x1="38" y1="38" x2="65" y2="52" class="chem-bond"/>
-  <line x1="62" y1="52" x2="62" y2="78" class="chem-bond-double-1"/>
-  <line x1="68" y1="52" x2="68" y2="78" class="chem-bond-double-2"/>
-  <text x="65" y="88" class="atom-o">O</text>
-  <line x1="65" y1="52" x2="105" y2="52" class="chem-bond"/>
-  <line x1="102" y1="52" x2="102" y2="24" class="chem-bond-double-1"/>
-  <line x1="108" y1="52" x2="108" y2="24" class="chem-bond-double-2"/>
-  <text x="105" y="16" class="atom-o">O</text>
-  <line x1="105" y1="52" x2="140" y2="66" class="chem-bond"/>
-  <text x="148" y="68" class="atom-c">CH₂</text>
-  <line x1="162" y1="64" x2="185" y2="52" class="chem-bond"/>
-  <line x1="182" y1="52" x2="182" y2="24" class="chem-bond-double-1"/>
-  <line x1="188" y1="52" x2="188" y2="24" class="chem-bond-double-2"/>
-  <text x="185" y="16" class="atom-o">O</text>
-  <line x1="185" y1="52" x2="208" y2="64" class="chem-bond"/>
-  <text x="218" y="70" class="atom-o">O⁻</text>
+  <text x="28" y="34" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">O⁻</text>
+  <line x1="38" y1="38" x2="65" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="62" y1="52" x2="62" y2="78" class="chem-bond-double-1" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="68" y1="52" x2="68" y2="78" class="chem-bond-double-2" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="65" y="88" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">O</text>
+  <line x1="65" y1="52" x2="105" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="102" y1="52" x2="102" y2="24" class="chem-bond-double-1" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="108" y1="52" x2="108" y2="24" class="chem-bond-double-2" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="105" y="16" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">O</text>
+  <line x1="105" y1="52" x2="140" y2="66" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="148" y="68" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH₂</text>
+  <line x1="162" y1="64" x2="185" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="182" y1="52" x2="182" y2="24" class="chem-bond-double-1" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="188" y1="52" x2="188" y2="24" class="chem-bond-double-2" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="185" y="16" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">O</text>
+  <line x1="185" y1="52" x2="208" y2="64" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="218" y="70" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">O⁻</text>
 </svg>`,
     pathwaysRu: [
       {
@@ -190,7 +191,7 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     formula: 'C₆H₅O₇³⁻',
     carbons: '6C',
     x: 1040,
-    y: 190,
+    y: 230,
     width: 140,
     height: 72,
     color: '#6366F1',
@@ -201,18 +202,18 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     synonymsRu: ['Цитрат', 'ЦИТ', 'Лимонная кислота', '2-гидроксипропан-1,2,3-трикарбоксилат'],
     skeletalSvg: '<path d="M 10 20 L 22 26 L 34 20 L 46 26" stroke="currentColor" stroke-width="1.6" fill="none"/><line x1="22" y1="26" x2="22" y2="10" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="20" r="3" fill="#EF4444"/><circle cx="46" cy="26" r="3" fill="#EF4444"/><circle cx="22" cy="10" r="3" fill="#EF4444"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
-  <text x="24" y="52" class="atom-o">⁻OOC</text>
-  <line x1="48" y1="52" x2="74" y2="52" class="chem-bond"/>
-  <text x="84" y="52" class="atom-c">CH₂</text>
-  <line x1="96" y1="52" x2="120" y2="52" class="chem-bond"/>
-  <line x1="120" y1="52" x2="120" y2="28" class="chem-bond"/>
-  <text x="120" y="18" class="atom-o">OH</text>
-  <line x1="120" y1="52" x2="120" y2="76" class="chem-bond"/>
-  <text x="120" y="86" class="atom-o">COO⁻</text>
-  <line x1="120" y1="52" x2="144" y2="52" class="chem-bond"/>
-  <text x="154" y="52" class="atom-c">CH₂</text>
-  <line x1="166" y1="52" x2="192" y2="52" class="chem-bond"/>
-  <text x="214" y="52" class="atom-o">COO⁻</text>
+  <text x="24" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">⁻OOC</text>
+  <line x1="48" y1="52" x2="74" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="84" y="52" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH₂</text>
+  <line x1="96" y1="52" x2="120" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="120" y1="52" x2="120" y2="28" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="120" y="18" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">OH</text>
+  <line x1="120" y1="52" x2="120" y2="76" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="120" y="86" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">COO⁻</text>
+  <line x1="120" y1="52" x2="144" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="154" y="52" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH₂</text>
+  <line x1="166" y1="52" x2="192" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="214" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">COO⁻</text>
 </svg>`,
     pathwaysRu: [
       {
@@ -250,8 +251,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     abbrevEn: 'ICT',
     formula: 'C₆H₅O₇³⁻',
     carbons: '6C',
-    x: 1140,
-    y: 480,
+    x: 1150,
+    y: 500,
     width: 140,
     height: 72,
     color: '#6366F1',
@@ -262,19 +263,19 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     synonymsRu: ['Изоцитрат', 'ИЗО', 'Изолимонная кислота', '1-гидроксипропан-1,2,3-трикарбоксилат'],
     skeletalSvg: '<path d="M 10 24 L 22 18 L 34 24 L 46 18" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="24" r="3" fill="#EF4444"/><circle cx="46" cy="18" r="3" fill="#EF4444"/><circle cx="34" cy="32" r="3" fill="#EF4444"/><line x1="34" y1="24" x2="34" y2="32" stroke="currentColor" stroke-width="1.6"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
-  <text x="22" y="52" class="atom-o">⁻OOC</text>
-  <line x1="46" y1="52" x2="68" y2="52" class="chem-bond"/>
-  <line x1="72" y1="46" x2="72" y2="26" class="chem-bond"/>
-  <text x="72" y="16" class="atom-o">OH</text>
-  <text x="72" y="54" class="atom-c">CH</text>
-  <line x1="82" y1="52" x2="114" y2="52" class="chem-bond"/>
-  <line x1="120" y1="58" x2="120" y2="76" class="chem-bond"/>
-  <text x="120" y="86" class="atom-o">COO⁻</text>
-  <text x="120" y="54" class="atom-c">CH</text>
-  <line x1="130" y1="52" x2="158" y2="52" class="chem-bond"/>
-  <text x="166" y="54" class="atom-c">CH₂</text>
-  <line x1="178" y1="52" x2="198" y2="52" class="chem-bond"/>
-  <text x="218" y="52" class="atom-o">COO⁻</text>
+  <text x="22" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">⁻OOC</text>
+  <line x1="46" y1="52" x2="68" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="72" y1="46" x2="72" y2="26" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="72" y="16" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">OH</text>
+  <text x="72" y="54" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH</text>
+  <line x1="82" y1="52" x2="114" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="120" y1="58" x2="120" y2="76" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="120" y="86" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">COO⁻</text>
+  <text x="120" y="54" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH</text>
+  <line x1="130" y1="52" x2="158" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="166" y="54" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH₂</text>
+  <line x1="178" y1="52" x2="198" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="218" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">COO⁻</text>
 </svg>`,
     pathwaysRu: [
       {
@@ -306,7 +307,7 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     formula: 'C₅H₄O₅²⁻',
     carbons: '5C',
     x: 1000,
-    y: 770,
+    y: 780,
     width: 150,
     height: 72,
     color: '#6366F1',
@@ -317,17 +318,17 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     synonymsRu: ['α-Кетоглутарат', '2-оксоглутарат', 'α-КГ', '2-оксопентандиоат'],
     skeletalSvg: '<path d="M 10 20 L 22 26 L 34 18 L 46 24" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="20" r="3" fill="#EF4444"/><circle cx="46" cy="24" r="3" fill="#EF4444"/><circle cx="34" cy="10" r="2.5" fill="#EF4444"/><line x1="34" y1="18" x2="34" y2="10" stroke="currentColor" stroke-width="1.6"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
-  <text x="24" y="52" class="atom-o">⁻OOC</text>
-  <line x1="50" y1="52" x2="78" y2="52" class="chem-bond"/>
-  <line x1="75" y1="52" x2="75" y2="26" class="chem-bond-double-1"/>
-  <line x1="81" y1="52" x2="81" y2="26" class="chem-bond-double-2"/>
-  <text x="78" y="16" class="atom-o">O</text>
-  <line x1="78" y1="52" x2="114" y2="52" class="chem-bond"/>
-  <text x="124" y="52" class="atom-c">CH₂</text>
-  <line x1="136" y1="52" x2="164" y2="52" class="chem-bond"/>
-  <text x="174" y="52" class="atom-c">CH₂</text>
-  <line x1="186" y1="52" x2="208" y2="52" class="chem-bond"/>
-  <text x="224" y="52" class="atom-o">COO⁻</text>
+  <text x="24" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">⁻OOC</text>
+  <line x1="50" y1="52" x2="78" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="75" y1="52" x2="75" y2="26" class="chem-bond-double-1" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="81" y1="52" x2="81" y2="26" class="chem-bond-double-2" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="78" y="16" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">O</text>
+  <line x1="78" y1="52" x2="114" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="124" y="52" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH₂</text>
+  <line x1="136" y1="52" x2="164" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="174" y="52" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH₂</text>
+  <line x1="186" y1="52" x2="208" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="224" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">COO⁻</text>
 </svg>`,
     pathwaysRu: [
       {
@@ -373,7 +374,7 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     formula: 'C₂₅H₃₆N₇O₁₉P₃S⁵⁻',
     carbons: '4C',
     x: 640,
-    y: 880,
+    y: 890,
     width: 150,
     height: 72,
     color: '#6366F1',
@@ -384,20 +385,20 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     synonymsRu: ['Сукцинил-КоА', 'Сукцинил-коэнзим А', 'Сук-КоА'],
     skeletalSvg: '<path d="M 10 24 L 20 18 L 30 24 L 40 18" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="24" r="3" fill="#EF4444"/><circle cx="40" cy="18" r="3" fill="#10B981"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
-  <text x="22" y="52" class="atom-o">⁻OOC</text>
-  <line x1="48" y1="52" x2="74" y2="52" class="chem-bond"/>
-  <text x="82" y="52" class="atom-c">CH₂</text>
-  <line x1="94" y1="52" x2="118" y2="52" class="chem-bond"/>
-  <text x="126" y="52" class="atom-c">CH₂</text>
-  <line x1="138" y1="52" x2="162" y2="52" class="chem-bond"/>
-  <line x1="159" y1="52" x2="159" y2="26" class="chem-bond-double-1"/>
-  <line x1="165" y1="52" x2="165" y2="26" class="chem-bond-double-2"/>
-  <text x="162" y="16" class="atom-o">O</text>
-  <line x1="162" y1="52" x2="188" y2="52" class="chem-bond"/>
-  <text x="194" y="52" class="atom-s">S</text>
-  <line x1="200" y1="52" x2="212" y2="52" class="chem-bond"/>
-  <rect x="212" y="40" width="26" height="22" rx="4" class="coa-badge-bg"/>
-  <text x="225" y="52" class="coa-badge-text">CoA</text>
+  <text x="22" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">⁻OOC</text>
+  <line x1="48" y1="52" x2="74" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="82" y="52" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH₂</text>
+  <line x1="94" y1="52" x2="118" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="126" y="52" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH₂</text>
+  <line x1="138" y1="52" x2="162" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="159" y1="52" x2="159" y2="26" class="chem-bond-double-1" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="165" y1="52" x2="165" y2="26" class="chem-bond-double-2" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="162" y="16" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">O</text>
+  <line x1="162" y1="52" x2="188" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="194" y="52" class="atom-s" fill="#F59E0B" font-weight="700" text-anchor="middle" dominant-baseline="central">S</text>
+  <line x1="200" y1="52" x2="212" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <rect x="212" y="40" width="26" height="22" rx="4" class="coa-badge-bg" fill="rgba(16, 185, 129, 0.2)" stroke="#10B981" stroke-width="1.5"/>
+  <text x="225" y="52" class="coa-badge-text" fill="#10B981" font-weight="800" text-anchor="middle" dominant-baseline="central">CoA</text>
 </svg>`,
     pathwaysRu: [
       {
@@ -443,7 +444,7 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     formula: 'C₄H₄O₄²⁻',
     carbons: '4C',
     x: 290,
-    y: 770,
+    y: 780,
     width: 140,
     height: 72,
     color: '#6366F1',
@@ -454,13 +455,13 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     synonymsRu: ['Сукцинат', 'СУК', 'Янтарная кислота', 'Бутандиоат'],
     skeletalSvg: '<path d="M 10 20 L 22 26 L 34 18 L 46 24" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="20" r="3" fill="#EF4444"/><circle cx="46" cy="24" r="3" fill="#EF4444"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
-  <text x="26" y="52" class="atom-o">⁻OOC</text>
-  <line x1="52" y1="52" x2="86" y2="52" class="chem-bond"/>
-  <text x="96" y="52" class="atom-c">CH₂</text>
-  <line x1="110" y1="52" x2="144" y2="52" class="chem-bond"/>
-  <text x="154" y="52" class="atom-c">CH₂</text>
-  <line x1="168" y1="52" x2="202" y2="52" class="chem-bond"/>
-  <text x="218" y="52" class="atom-o">COO⁻</text>
+  <text x="26" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">⁻OOC</text>
+  <line x1="52" y1="52" x2="86" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="96" y="52" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH₂</text>
+  <line x1="110" y1="52" x2="144" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="154" y="52" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH₂</text>
+  <line x1="168" y1="52" x2="202" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="218" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">COO⁻</text>
 </svg>`,
     pathwaysRu: [
       {
@@ -498,8 +499,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     abbrevEn: 'FUM',
     formula: 'C₄H₂O₄²⁻',
     carbons: '4C',
-    x: 160,
-    y: 480,
+    x: 150,
+    y: 500,
     width: 140,
     height: 72,
     color: '#6366F1',
@@ -510,14 +511,14 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     synonymsRu: ['Фумарат', 'ФУМ', 'Фумаровая кислота', 'транс-бутендиоат'],
     skeletalSvg: '<path d="M 10 24 L 20 18 L 32 24 L 44 18" stroke="currentColor" stroke-width="1.6" fill="none"/><line x1="20" y1="21" x2="32" y2="27" stroke="currentColor" stroke-width="1.2"/><circle cx="10" cy="24" r="3" fill="#EF4444"/><circle cx="44" cy="18" r="3" fill="#EF4444"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
-  <text x="24" y="28" class="atom-o">⁻OOC</text>
-  <line x1="48" y1="34" x2="82" y2="52" class="chem-bond"/>
-  <text x="88" y="54" class="atom-c">CH</text>
-  <line x1="102" y1="49" x2="136" y2="49" class="chem-bond-double-1"/>
-  <line x1="102" y1="55" x2="136" y2="55" class="chem-bond-double-2"/>
-  <text x="146" y="54" class="atom-c">CH</text>
-  <line x1="156" y1="56" x2="188" y2="74" class="chem-bond"/>
-  <text x="212" y="78" class="atom-o">COO⁻</text>
+  <text x="24" y="28" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">⁻OOC</text>
+  <line x1="48" y1="34" x2="82" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="88" y="54" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH</text>
+  <line x1="102" y1="49" x2="136" y2="49" class="chem-bond-double-1" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="102" y1="55" x2="136" y2="55" class="chem-bond-double-2" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="146" y="54" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH</text>
+  <line x1="156" y1="56" x2="188" y2="74" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="212" y="78" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">COO⁻</text>
 </svg>`,
     pathwaysRu: [
       {
@@ -555,8 +556,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     abbrevEn: 'MAL',
     formula: 'C₄H₄O₅²⁻',
     carbons: '4C',
-    x: 290,
-    y: 190,
+    x: 270,
+    y: 220,
     width: 140,
     height: 72,
     color: '#6366F1',
@@ -567,15 +568,15 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     synonymsRu: ['L-Малат', 'МАЛ', 'Яблочная кислота', '(2S)-2-гидроксибутандиоат'],
     skeletalSvg: '<path d="M 10 24 L 22 18 L 34 24 L 46 18" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="24" r="3" fill="#EF4444"/><circle cx="46" cy="18" r="3" fill="#EF4444"/><circle cx="22" cy="10" r="2.5" fill="#EF4444"/><line x1="22" y1="18" x2="22" y2="10" stroke="currentColor" stroke-width="1.6"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
-  <text x="24" y="52" class="atom-o">⁻OOC</text>
-  <line x1="50" y1="52" x2="84" y2="52" class="chem-bond"/>
-  <text x="94" y="52" class="atom-c">CH₂</text>
-  <line x1="108" y1="52" x2="142" y2="52" class="chem-bond"/>
-  <line x1="148" y1="44" x2="148" y2="24" class="chem-bond"/>
-  <text x="148" y="16" class="atom-o">OH</text>
-  <text x="148" y="52" class="atom-c">CH</text>
-  <line x1="158" y1="52" x2="198" y2="52" class="chem-bond"/>
-  <text x="218" y="52" class="atom-o">COO⁻</text>
+  <text x="24" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">⁻OOC</text>
+  <line x1="50" y1="52" x2="84" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="94" y="52" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH₂</text>
+  <line x1="108" y1="52" x2="142" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="148" y1="44" x2="148" y2="24" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="148" y="16" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">OH</text>
+  <text x="148" y="52" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">CH</text>
+  <line x1="158" y1="52" x2="198" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="218" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">COO⁻</text>
 </svg>`,
     pathwaysRu: [
       {
@@ -613,11 +614,12 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     abbrevEn: 'Ac-CoA',
     formula: 'C₂₃H₃₄N₇O₁₇P₃S⁴⁻',
     carbons: '2C',
-    x: 870,
-    y: 35,
-    width: 140,
-    height: 72,
+    x: 840,
+    y: 20,
+    width: 155,
+    height: 74,
     color: '#10B981',
+    isHub: true,
     smiles: 'CC(=O)SCCNC(=O)CCNC(=O)C(C(C)(C)COP(=O)([O-])OP(=O)([O-])OCC1C(C(C(O1)N2C=NC3=C2N=CN=C3N)O)OP(=O)([O-])[O-])O',
     chebi: 'CHEBI:57288',
     inchiKey: 'ZSLZBFCDCINBEF-UHFFFAOYSA-N',
@@ -625,16 +627,16 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     synonymsRu: ['Ацетил-КоА', 'Ацетил-коэнзим А', 'Ац-КоА'],
     skeletalSvg: '<path d="M 12 18 L 24 24 L 36 18" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="12" cy="18" r="3" fill="#10B981"/><circle cx="36" cy="18" r="3" fill="#EF4444"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
-  <text x="36" y="52" class="atom-c">H₃C</text>
-  <line x1="54" y1="52" x2="95" y2="52" class="chem-bond"/>
-  <line x1="92" y1="52" x2="92" y2="25" class="chem-bond-double-1"/>
-  <line x1="98" y1="52" x2="98" y2="25" class="chem-bond-double-2"/>
-  <text x="95" y="16" class="atom-o">O</text>
-  <line x1="95" y1="52" x2="140" y2="52" class="chem-bond"/>
-  <text x="148" y="52" class="atom-s">S</text>
-  <line x1="156" y1="52" x2="175" y2="52" class="chem-bond"/>
-  <rect x="175" y="38" width="48" height="28" rx="6" class="coa-badge-bg"/>
-  <text x="199" y="53" class="coa-badge-text">CoA</text>
+  <text x="36" y="52" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">H₃C</text>
+  <line x1="54" y1="52" x2="95" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="92" y1="52" x2="92" y2="25" class="chem-bond-double-1" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="98" y1="52" x2="98" y2="25" class="chem-bond-double-2" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="95" y="16" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">O</text>
+  <line x1="95" y1="52" x2="140" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="148" y="52" class="atom-s" fill="#F59E0B" font-weight="700" text-anchor="middle" dominant-baseline="central">S</text>
+  <line x1="156" y1="52" x2="175" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <rect x="175" y="38" width="48" height="28" rx="6" class="coa-badge-bg" fill="rgba(16, 185, 129, 0.2)" stroke="#10B981" stroke-width="1.5"/>
+  <text x="199" y="53" class="coa-badge-text" fill="#10B981" font-weight="800" text-anchor="middle" dominant-baseline="central">CoA</text>
 </svg>`,
     pathwaysRu: [
       {
@@ -1019,14 +1021,14 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     synonymsRu: ['Коэнзим А', 'КоА', 'КоА-SH', 'CoA', 'CoA-SH'],
     skeletalSvg: '<path d="M 10 24 L 20 18 L 30 24 L 40 18" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="24" r="3" fill="#10B981"/><circle cx="40" cy="18" r="3" fill="#38BDF8"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
-  <text x="24" y="52" class="atom-s">H-S</text>
-  <line x1="42" y1="52" x2="68" y2="52" class="chem-bond"/>
-  <text x="96" y="52" class="atom-c">Цистеамин</text>
-  <line x1="124" y1="52" x2="144" y2="52" class="chem-bond"/>
-  <text x="170" y="52" class="atom-c">Пантотенат</text>
-  <line x1="196" y1="52" x2="210" y2="52" class="chem-bond"/>
-  <rect x="210" y="38" width="28" height="26" rx="4" class="coa-badge-bg"/>
-  <text x="224" y="52" class="coa-badge-text">ADP</text>
+  <text x="24" y="52" class="atom-s" fill="#F59E0B" font-weight="700" text-anchor="middle" dominant-baseline="central">H-S</text>
+  <line x1="42" y1="52" x2="68" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="96" y="52" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">Цистеамин</text>
+  <line x1="124" y1="52" x2="144" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="170" y="52" class="atom-c" fill="#CBD5E1" font-weight="600" text-anchor="middle" dominant-baseline="central">Пантотенат</text>
+  <line x1="196" y1="52" x2="210" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <rect x="210" y="38" width="28" height="26" rx="4" class="coa-badge-bg" fill="rgba(16, 185, 129, 0.2)" stroke="#10B981" stroke-width="1.5"/>
+  <text x="224" y="52" class="coa-badge-text" fill="#10B981" font-weight="800" text-anchor="middle" dominant-baseline="central">ADP</text>
 </svg>`,
     isCofactor: true,
     pathwaysRu: [
@@ -1075,16 +1077,16 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     skeletalSvg: '<path d="M 20 20 L 30 30" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="20" cy="20" r="4" fill="#94A3B8"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
   <circle cx="120" cy="52" r="18" fill="rgba(192, 132, 252, 0.2)" stroke="#C084FC" stroke-width="2"/>
-  <text x="120" y="54" class="atom-p">P</text>
-  <line x1="117" y1="34" x2="117" y2="18" class="chem-bond-double-1"/>
-  <line x1="123" y1="34" x2="123" y2="18" class="chem-bond-double-2"/>
-  <text x="120" y="10" class="atom-o">O</text>
-  <line x1="102" y1="52" x2="80" y2="52" class="chem-bond"/>
-  <text x="70" y="52" class="atom-o">⁻O</text>
-  <line x1="138" y1="52" x2="160" y2="52" class="chem-bond"/>
-  <text x="170" y="52" class="atom-o">O⁻</text>
-  <line x1="120" y1="70" x2="120" y2="86" class="chem-bond"/>
-  <text x="120" y="94" class="atom-o">OH</text>
+  <text x="120" y="54" class="atom-p" fill="#C084FC" font-weight="800" text-anchor="middle" dominant-baseline="central">P</text>
+  <line x1="117" y1="34" x2="117" y2="18" class="chem-bond-double-1" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="123" y1="34" x2="123" y2="18" class="chem-bond-double-2" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="120" y="10" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">O</text>
+  <line x1="102" y1="52" x2="80" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="70" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">⁻O</text>
+  <line x1="138" y1="52" x2="160" y2="52" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="170" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">O⁻</text>
+  <line x1="120" y1="70" x2="120" y2="86" class="chem-bond" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="120" y="94" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">OH</text>
 </svg>`,
     isCofactor: true,
     pathwaysRu: [
@@ -1125,13 +1127,13 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     synonymsRu: ['Диоксид углерода', 'Углекислый газ', 'CO₂'],
     skeletalSvg: '<line x1="10" y1="20" x2="40" y2="20" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="20" r="3" fill="#EF4444"/><circle cx="40" cy="20" r="3" fill="#EF4444"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
-  <text x="50" y="52" class="atom-o">O</text>
-  <line x1="62" y1="48" x2="108" y2="48" class="chem-bond-double-1"/>
-  <line x1="62" y1="56" x2="108" y2="56" class="chem-bond-double-2"/>
-  <text x="120" y="52" class="atom-c">C</text>
-  <line x1="132" y1="48" x2="178" y2="48" class="chem-bond-double-1"/>
-  <line x1="132" y1="56" x2="178" y2="56" class="chem-bond-double-2"/>
-  <text x="190" y="52" class="atom-o">O</text>
+  <text x="50" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">O</text>
+  <line x1="62" y1="48" x2="108" y2="48" class="chem-bond-double-1" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="62" y1="56" x2="108" y2="56" class="chem-bond-double-2" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="120" y="52" class="atom-c" fill="#CBD5E1" font-weight="700" text-anchor="middle" dominant-baseline="central">C</text>
+  <line x1="132" y1="48" x2="178" y2="48" class="chem-bond-double-1" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="132" y1="56" x2="178" y2="56" class="chem-bond-double-2" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="190" y="52" class="atom-o" fill="#EF4444" font-weight="700" text-anchor="middle" dominant-baseline="central">O</text>
 </svg>`,
     isCofactor: true,
     pathwaysRu: [
@@ -1227,13 +1229,15 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     synonymsRu: ['Вода', 'H2O', 'Оксид водорода'],
     skeletalSvg: '<circle cx="20" cy="20" r="3.5" fill="#38BDF8"/>',
     structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
-  <circle cx="120" cy="42" r="16" fill="rgba(56, 189, 248, 0.2)" stroke="#38BDF8" stroke-width="2"/>
-  <text x="120" y="44" class="atom-o">O</text>
-  <line x1="108" y1="52" x2="82" y2="76" class="chem-bond"/>
-  <text x="74" y="82" class="atom-c">H</text>
-  <line x1="132" y1="52" x2="158" y2="76" class="chem-bond"/>
-  <text x="166" y="82" class="atom-c">H</text>
-  <text x="120" y="74" class="atom-c" font-size="10px">104.5°</text>
+  <circle cx="120" cy="38" r="18" fill="rgba(56, 189, 248, 0.2)" stroke="#38BDF8" stroke-width="2"/>
+  <text x="120" y="38" fill="#38BDF8" font-size="16" font-weight="800" text-anchor="middle" dominant-baseline="central">O</text>
+  <line x1="108" y1="48" x2="84" y2="72" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="76" cy="80" r="12" fill="rgba(226, 232, 240, 0.15)" stroke="#94A3B8" stroke-width="1.5"/>
+  <text x="76" y="80" fill="#F1F5F9" font-size="13" font-weight="700" text-anchor="middle" dominant-baseline="central">H</text>
+  <line x1="132" y1="48" x2="156" y2="72" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="164" cy="80" r="12" fill="rgba(226, 232, 240, 0.15)" stroke="#94A3B8" stroke-width="1.5"/>
+  <text x="164" y="80" fill="#F1F5F9" font-size="13" font-weight="700" text-anchor="middle" dominant-baseline="central">H</text>
+  <text x="120" y="70" fill="#64748B" font-size="11" font-weight="600" text-anchor="middle" dominant-baseline="central">104.5°</text>
 </svg>`,
     isCofactor: true,
     pathwaysRu: [
@@ -1262,11 +1266,11 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Citrate synthase condensation',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000003', // OAA
     secondarySourceId: 'b0000001-0000-0000-0000-000000000002', // Acetyl-CoA
-    secondaryPathData: 'M 940 107 L 940 133',
+    secondaryPathData: 'M 915 94 L 915 178',
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000004', // Citrate
-    pathData: 'M 790 125 C 890 125, 980 160, 1040 205',
+    pathData: 'M 740 166 C 830 175, 940 200, 1040 250',
     tooltipX: 915,
-    tooltipY: 145,
+    tooltipY: 205,
     enzymeRu: 'Цитратсинтаза',
     enzymeEn: 'Citrate synthase',
     enzymeShort: 'CS',
@@ -1286,18 +1290,17 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
       { name: 'Протон (H⁺)', formula: 'H⁺', isCo: true },
     ],
     cofactorArc: {
-      preset: 'perpendicular-dip',
-      path: 'M 875 75 C 885 115, 912 142, 920 142 C 928 142, 955 115, 965 85',
+      preset: 'tangent-swoop',
+      path: 'M 975 160 C 1010 140, 1060 150, 1075 180 C 1085 200, 1070 225, 1040 240',
       inCofactor: 'Вода (H₂O)',
       inText: '+ H₂O',
-      inX: 875,
-      inY: 65,
+      inX: 980,
+      inY: 128,
       inAnchor: 'middle',
       outCofactor: 'Кофермент A (КоА-SH)',
       outText: 'КоА-SH',
-      outX: 975,
-      outY: 75,
-      outAnchor: 'start',
+      outX: 1080,
+      outY: 160,
       inItems: [{ name: 'Вода (H₂O)', text: '+ H₂O' }],
       outItems: [{ name: 'Кофермент A (КоА-SH)', text: 'КоА-SH' }],
     },
@@ -1313,9 +1316,9 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Aconitate hydratase isomerization',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000004', // Citrate
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000005', // Isocitrate
-    pathData: 'M 1110 262 C 1140 330, 1170 400, 1190 480',
-    tooltipX: 1160,
-    tooltipY: 370,
+    pathData: 'M 1110 302 C 1140 360, 1180 430, 1220 500',
+    tooltipX: 1170,
+    tooltipY: 400,
     enzymeRu: 'Аконитаза 2 (митохондриальная)',
     enzymeEn: 'Aconitate hydratase 2',
     enzymeShort: 'ACO2',
@@ -1332,17 +1335,15 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'tangent-swoop',
-      path: 'M 1210 325 C 1180 345, 1160 365, 1155 370 C 1150 375, 1175 415, 1205 435',
+      path: 'M 1240 350 C 1220 370, 1210 390, 1210 400 C 1210 410, 1220 430, 1240 450',
       inCofactor: 'Вода (H₂O)',
       inText: '− H₂O',
-      inX: 1220,
-      inY: 320,
-      inAnchor: 'start',
+      inX: 1255,
+      inY: 345,
       outCofactor: 'Вода (H₂O)',
       outText: '+ H₂O',
-      outX: 1215,
-      outY: 445,
-      outAnchor: 'start',
+      outX: 1255,
+      outY: 455,
       inItems: [{ name: 'Вода (H₂O)', text: '− H₂O' }],
       outItems: [{ name: 'Вода (H₂O)', text: '+ H₂O' }],
     },
@@ -1357,9 +1358,9 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Isocitrate oxidative decarboxylation',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000005', // Isocitrate
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000006', // aKG
-    pathData: 'M 1180 552 C 1160 640, 1120 710, 1080 770',
-    tooltipX: 1145,
-    tooltipY: 660,
+    pathData: 'M 1200 572 C 1180 660, 1150 720, 1110 780',
+    tooltipX: 1170,
+    tooltipY: 670,
     enzymeRu: 'Изоцитратдегидрогеназа 3 (НАД⁺)',
     enzymeEn: 'Isocitrate dehydrogenase 3',
     enzymeShort: 'IDH3',
@@ -1380,22 +1381,21 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'tangent-swoop',
-      path: 'M 1230 600 C 1180 625, 1150 655, 1140 660 C 1130 665, 1165 700, 1220 725',
+      path: 'M 1260 550 C 1310 590, 1315 650, 1260 710',
       inCofactor: 'НАД⁺',
       inText: 'НАД⁺',
-      inX: 1245,
-      inY: 595,
-      inAnchor: 'start',
+      inX: 1260,
+      inY: 535,
       outCofactor: 'НАДН',
       outText: 'НАДН + CO₂ ↑',
       outX: 1240,
-      outY: 735,
-      outAnchor: 'start',
+      outY: 725,
       isEnergy: true,
       inItems: [{ name: 'НАД⁺', text: 'НАД⁺' }],
       outItems: [
-        { name: 'НАДН', text: 'НАДН', dx: 0, isEnergy: true },
-        { name: 'Углекислый газ (CO₂)', text: 'CO₂ ↑', dx: 52 },
+        { name: 'НАДН', text: 'НАДН', dx: -45, isEnergy: true },
+        { name: 'Протон (H⁺)', text: '+ H⁺', dx: 0 },
+        { name: 'Углекислый газ (CO₂)', text: '+ CO₂ ↑', dx: 52 },
       ],
     },
     activatorsRu: ['АДФ', 'Ca²⁺'],
@@ -1411,9 +1411,9 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'α-Ketoglutarate dehydrogenase',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000006', // aKG
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000007', // Succinyl-CoA
-    pathData: 'M 1000 825 C 930 870, 830 895, 790 905',
+    pathData: 'M 1030 852 C 960 910, 880 926, 790 926',
     tooltipX: 890,
-    tooltipY: 880,
+    tooltipY: 900,
     enzymeRu: 'α-Кетоглутаратдегидрогеназный комплекс',
     enzymeEn: 'α-Ketoglutarate dehydrogenase complex',
     enzymeShort: 'OGDH',
@@ -1435,25 +1435,24 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'tangent-swoop',
-      path: 'M 945 925 C 915 895, 890 882, 880 880 C 870 878, 850 915, 835 950',
+      path: 'M 1020 920 C 975 970, 915 980, 825 945',
       inCofactor: 'НАД⁺',
       inText: 'НАД⁺ + КоА',
-      inX: 955,
-      inY: 935,
-      inAnchor: 'start',
+      inX: 990,
+      inY: 940,
       outCofactor: 'НАДН',
       outText: 'НАДН + CO₂ ↑',
-      outX: 740,
-      outY: 965,
-      outAnchor: 'start',
+      outX: 850,
+      outY: 975,
       isEnergy: true,
       inItems: [
-        { name: 'НАД⁺', text: 'НАД⁺', dx: 0 },
-        { name: 'Кофермент A (КоА-SH)', text: 'КоА', dx: 46 },
+        { name: 'НАД⁺', text: 'НАД⁺', dx: -28 },
+        { name: 'Кофермент A (КоА-SH)', text: '+ КоА', dx: 24 },
       ],
       outItems: [
-        { name: 'НАДН', text: 'НАДН', dx: 0, isEnergy: true },
-        { name: 'Углекислый газ (CO₂)', text: 'CO₂ ↑', dx: 50 },
+        { name: 'НАДН', text: 'НАДН', dx: -48, isEnergy: true },
+        { name: 'Протон (H⁺)', text: '+ H⁺', dx: 2 },
+        { name: 'Углекислый газ (CO₂)', text: '+ CO₂ ↑', dx: 54 },
       ],
     },
     activatorsRu: ['Ca²⁺'],
@@ -1469,9 +1468,9 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Succinate-CoA ligase (substrate-level phosphorylation)',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000007', // Succinyl-CoA
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000008', // Succinate
-    pathData: 'M 640 910 C 530 910, 440 870, 390 842',
-    tooltipX: 510,
-    tooltipY: 890,
+    pathData: 'M 640 926 C 530 926, 430 910, 360 852',
+    tooltipX: 490,
+    tooltipY: 900,
     enzymeRu: 'Сукцинил-КоА-синтетаза (Сукцинат-КоА-лигаза)',
     enzymeEn: 'Succinyl-CoA synthetase',
     enzymeShort: 'SUCLG2',
@@ -1492,25 +1491,23 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'lateral-loop',
-      path: 'M 580 960 C 555 915, 530 897, 520 895 C 510 893, 475 915, 450 960',
+      path: 'M 610 950 C 555 990, 485 990, 400 930',
       inCofactor: 'ГДФ',
       inText: 'ГДФ + Фᵢ',
-      inX: 580,
+      inX: 560,
       inY: 975,
-      inAnchor: 'middle',
       outCofactor: 'ГТФ',
       outText: 'ГТФ + КоА',
-      outX: 445,
+      outX: 435,
       outY: 975,
-      outAnchor: 'middle',
       isGtp: true,
       inItems: [
-        { name: 'ГДФ', text: 'ГДФ', dx: -30, isGtp: true },
-        { name: 'Неорганический фосфат (Фᵢ)', text: 'Фᵢ', dx: 18 },
+        { name: 'ГДФ', text: 'ГДФ', dx: -26, isGtp: true },
+        { name: 'Неорганический фосфат (Фᵢ)', text: '+ Фᵢ', dx: 26 },
       ],
       outItems: [
-        { name: 'ГТФ', text: 'ГТФ', dx: -30, isGtp: true },
-        { name: 'Кофермент A (КоА-SH)', text: 'КоА', dx: 18 },
+        { name: 'ГТФ', text: 'ГТФ', dx: -26, isGtp: true, isEnergy: true },
+        { name: 'Кофермент A (КоА-SH)', text: '+ КоА', dx: 26 },
       ],
     },
     mechanismRu: 'Разрыв богатой энергией тиоэфирной связи сукцинил-КоА сопряжен с фосфорилированием гуанозиндифосфата (ГДФ) до ГТФ через фосфогистидиновый интермедиат фермента.',
@@ -1524,7 +1521,7 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Succinate dehydrogenase oxidation',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000008', // Succinate
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000009', // Fumarate
-    pathData: 'M 320 770 C 270 700, 220 620, 210 552',
+    pathData: 'M 330 780 C 270 710, 225 640, 215 572',
     tooltipX: 250,
     tooltipY: 660,
     enzymeRu: 'Сукцинатдегидрогеназа / Комплекс II',
@@ -1545,22 +1542,20 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'tangent-swoop',
-      path: 'M 175 700 C 215 680, 240 665, 245 660 C 250 655, 220 620, 185 605',
+      path: 'M 185 700 C 220 680, 240 660, 240 655 C 240 645, 215 620, 185 605',
       inCofactor: 'ФАД',
       inText: 'ФАД',
-      inX: 160,
-      inY: 710,
-      inAnchor: 'end',
+      inX: 135,
+      inY: 700,
       outCofactor: 'ФАДН₂',
       outText: 'ФАДН₂ ➔ Q₁₀',
-      outX: 165,
-      outY: 595,
-      outAnchor: 'end',
+      outX: 125,
+      outY: 600,
       isEnergy: true,
-      inItems: [{ name: 'ФАД', text: 'ФАД' }],
+      inItems: [{ name: 'ФАД', text: 'ФАД', dx: 0 }],
       outItems: [
-        { name: 'ФАДН₂', text: 'ФАДН₂', dx: -54, isEnergy: true },
-        { name: 'Кофермент Q₁₀ (Убихинон)', text: '➔ Q₁₀', dx: 0 },
+        { name: 'ФАДН₂', text: 'ФАДН₂', dx: -34, isEnergy: true },
+        { name: 'Кофермент Q₁₀ (Убихинон)', text: '➔ Q₁₀', dx: 34 },
       ],
     },
     inhibitorsRu: ['Малонат (конкурентный)', 'Оксалоацетат'],
@@ -1575,7 +1570,7 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Fumarate hydratase trans-hydration',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000009', // Fumarate
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000010', // Malate
-    pathData: 'M 220 480 C 240 400, 270 330, 310 262',
+    pathData: 'M 220 500 C 230 420, 260 350, 300 292',
     tooltipX: 255,
     tooltipY: 370,
     enzymeRu: 'Фумараза (митохондриальная фумаратгидратаза)',
@@ -1595,14 +1590,13 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'through-cross',
-      path: 'M 180 370 C 215 370, 245 370, 255 370',
+      path: 'M 155 370 L 255 370',
       inCofactor: 'Вода (H₂O)',
       inText: '+ H₂O',
-      inX: 165,
-      inY: 374,
-      inAnchor: 'end',
+      inX: 120,
+      inY: 370,
       isEnergy: false,
-      inItems: [{ name: 'Вода (H₂O)', text: '+ H₂O' }],
+      inItems: [{ name: 'Вода (H₂O)', text: '+ H₂O', dx: 0 }],
     },
     mechanismRu: 'Стереоспецифическое транс-присоединение молекулы воды по двойной углерод-углеродной связи фумарата с образованием исключительно L-изомера яблочной кислоты.',
     clinicalNoteRu: 'Классический опухолевый супрессор человека. Герминальные мутации гена FH вызывают наследственный лейомиоматоз и почечно-клеточный рак (синдром HLRCC).',
@@ -1615,9 +1609,9 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Malate dehydrogenase oxidation',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000010', // Malate
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000003', // OAA
-    pathData: 'M 390 190 C 470 140, 560 120, 640 115',
-    tooltipX: 520,
-    tooltipY: 135,
+    pathData: 'M 370 220 C 430 160, 510 150, 590 166',
+    tooltipX: 490,
+    tooltipY: 175,
     enzymeRu: 'Малатдегидрогеназа 2 (митохондриальная)',
     enzymeEn: 'Malate dehydrogenase 2',
     enzymeShort: 'MDH2',
@@ -1637,22 +1631,20 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     cofactorArc: {
       preset: 'perpendicular-dip',
-      path: 'M 470 80 C 490 110, 510 128, 520 130 C 530 132, 555 110, 575 80',
+      path: 'M 440 120 C 470 145, 510 145, 535 120',
       inCofactor: 'НАД⁺',
       inText: 'НАД⁺',
-      inX: 465,
-      inY: 70,
-      inAnchor: 'middle',
+      inX: 440,
+      inY: 100,
       outCofactor: 'НАДН',
       outText: 'НАДН + H⁺',
-      outX: 585,
-      outY: 70,
-      outAnchor: 'middle',
+      outX: 540,
+      outY: 100,
       isEnergy: true,
-      inItems: [{ name: 'НАД⁺', text: 'НАД⁺' }],
+      inItems: [{ name: 'НАД⁺', text: 'НАД⁺', dx: 0 }],
       outItems: [
-        { name: 'НАДН', text: 'НАДН', dx: -24, isEnergy: true },
-        { name: 'Протон (H⁺)', text: '+ H⁺', dx: 26 },
+        { name: 'НАДН', text: 'НАДН', dx: -28, isEnergy: true },
+        { name: 'Протон (H⁺)', text: '+ H⁺', dx: 28 },
       ],
     },
     inhibitorsRu: ['Высокие концентрации оксалоацетата'],
@@ -1666,56 +1658,56 @@ export const HUMAN_CROSSROADS: MetabolicCrossroad[] = [
     id: 'cr-pdh-in',
     nameRu: 'Гликолиз ➔ Пируват ➔ ПДХ (3C ➔ 2C)',
     direction: 'in',
-    startX: 700,
-    startY: 42,
-    endX: 860,
-    endY: 42,
-    textX: 660,
-    textY: 28,
+    startX: 610,
+    startY: 57,
+    endX: 830,
+    endY: 57,
+    textX: 615,
+    textY: 44,
   },
   {
     id: 'cr-cit-out',
     nameRu: 'Выход: Цитратный челнок ➔ Синтез липидов',
     direction: 'out',
     startX: 1180,
-    startY: 226,
+    startY: 266,
     endX: 1330,
-    endY: 226,
+    endY: 266,
     textX: 1185,
-    textY: 212,
+    textY: 252,
   },
   {
     id: 'cr-akg-cross',
     nameRu: 'Обмен аминокислот ⇋ Глутамат',
     direction: 'out',
-    startX: 1150,
-    startY: 806,
-    endX: 1310,
-    endY: 835,
-    textX: 1155,
-    textY: 825,
+    startX: 1140,
+    startY: 816,
+    endX: 1300,
+    endY: 845,
+    textX: 1145,
+    textY: 835,
   },
   {
     id: 'cr-heme-out',
     nameRu: 'Синтез гема (порфиринов / Hb)',
     direction: 'out',
-    startX: 715,
-    startY: 952,
-    endX: 715,
-    endY: 990,
-    textX: 620,
-    textY: 998,
+    startX: 710,
+    startY: 962,
+    endX: 710,
+    endY: 1000,
+    textX: 610,
+    textY: 1010,
   },
   {
     id: 'cr-gng-out',
     nameRu: 'Выход: ОАО ➔ Глюконеогенез (PEPCK-M)',
     direction: 'out',
-    startX: 640,
-    startY: 95,
-    endX: 530,
-    endY: 55,
-    textX: 430,
-    textY: 45,
+    startX: 590,
+    startY: 140,
+    endX: 470,
+    endY: 90,
+    textX: 380,
+    textY: 76,
   },
 ];
 

@@ -213,12 +213,13 @@ describe('AtlasShellComponent', () => {
 
   it('should reposition Acetyl-CoA above Reaction 1 without colliding with Reaction 8', () => {
     const acetyl = HUMAN_METABOLITES.find((m) => m.code === 'MET_ACETYL_COA')!;
-    expect(acetyl.x).toBe(870);
-    expect(acetyl.y).toBe(35);
+    expect(acetyl.x).toBe(840);
+    expect(acetyl.y).toBe(20);
+    expect(acetyl.isHub).toBe(true);
 
-    // Reaction 8 path connects Malate (x: 290..430) to OAA (x: 640), totally free from x: 870
+    // Reaction 8 path connects Malate (x: 270..410) to OAA (x: 590), totally free from x: 840
     const mdh = HUMAN_REACTIONS.find((r) => r.code === 'R_MDH')!;
-    expect(mdh.pathData).toContain('M 390 190');
+    expect(mdh.pathData).toContain('590 166');
   });
 
   it('should perform global cross-highlighting when a cofactor is selected', () => {

@@ -218,6 +218,7 @@
             [class.is-product]="isProd"
             [class.is-selected]="isSel"
             [class.is-dimmed]="isDim"
+            [class.is-hub]="met.isHub"
             [attr.transform]="'translate(' + met.x + ',' + met.y + ')'"
             (click)="onMetaboliteClick(met); $event.stopPropagation()"
             (mouseenter)="hoveredMetabolite.set(met)"
@@ -265,7 +266,7 @@
               {{ met.formula }}
             </text>
 
-            <!-- Role Badge when reaction is selected (Вход / Выход) -->
+            <!-- Role Badge when reaction is selected (Вход / Выход) or Hub Badge -->
             @if (isSub) {
               <g [attr.transform]="'translate(10, ' + (met.height - 18) + ')'">
                 <rect width="96" height="15" rx="3" class="role-badge-bg role-badge-bg--sub" />
@@ -278,6 +279,13 @@
                 <rect width="90" height="15" rx="3" class="role-badge-bg role-badge-bg--prod" />
                 <text x="45" y="11" text-anchor="middle" class="role-badge-text role-badge-text--prod">
                   Выход (Продукт)
+                </text>
+              </g>
+            } @else if (met.isHub) {
+              <g [attr.transform]="'translate(10, ' + (met.height - 18) + ')'">
+                <rect width="112" height="15" rx="3" class="role-badge-bg role-badge-bg--hub" />
+                <text x="56" y="11" text-anchor="middle" class="role-badge-text role-badge-text--hub">
+                  ⚡ ХАБ МЕТАБОЛИЗМА
                 </text>
               </g>
             }
@@ -553,7 +561,12 @@
               </button>
             </div>
 
-            <div class="structure-visual-card__drawing" [innerHTML]="getSafeSvg(met.structureSvg || met.skeletalSvg)"></div>
+            <div class="structure-visual-card__drawing">
+              <ma-chemical-structure
+                [svgContent]="met.structureSvg || met.skeletalSvg"
+                [altText]="'2D-структура: ' + met.nameRu"
+              />
+            </div>
             <div class="structure-visual-card__note">
               {{ met.isCofactor ? 'Структурная схема кофермента / кофактора' : 'Скелетная 2D-структура промежуточного метаболита' }}
             </div>

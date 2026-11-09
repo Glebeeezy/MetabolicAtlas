@@ -137,6 +137,7 @@ export interface ReactionArrowData {
         >
           @for (item of arc.inItems; track item.name + item.text) {
             @let isItemSel = isCofactorActive(item.name);
+            @let chipW = getChipWidth(item.text);
             <svg:g
               class="cofactor-pill-item"
               [class.is-active]="isItemSel"
@@ -148,18 +149,19 @@ export interface ReactionArrowData {
             >
               <svg:title>Нажмите, чтобы открыть информацию о {{ item.name }}</svg:title>
               <svg:rect
-                x="-4"
-                y="-13"
-                [attr.width]="getChipWidth(item.text)"
-                height="17"
-                rx="4"
+                [attr.x]="-chipW / 2"
+                y="-10"
+                [attr.width]="chipW"
+                height="20"
+                rx="5"
                 class="cofactor-chip-bg"
                 [class.cofactor-chip-bg--active]="isItemSel"
               />
               <svg:text
                 x="0"
                 y="0"
-                [attr.text-anchor]="arc.inAnchor || 'start'"
+                text-anchor="middle"
+                dominant-baseline="central"
                 class="cofactor-pill-text cofactor-pill-text--in"
                 [class.cofactor-pill-text--active]="isItemSel"
               >
@@ -169,8 +171,10 @@ export interface ReactionArrowData {
           }
         </svg:g>
       } @else if (arc.inText) {
+        @let chipW = getChipWidth(arc.inText);
         <svg:g
-          class="cofactor-pill-group"
+          class="cofactor-pill-group cofactor-pill-item"
+          [class.is-active]="isCofactorActive(arc.inCofactor || arc.inText)"
           [attr.transform]="'translate(' + (arc.inX || 0) + ',' + (arc.inY || 0) + ')'"
           (click)="onCofactorClick(arc.inCofactor || arc.inText, $event)"
           role="button"
@@ -178,10 +182,20 @@ export interface ReactionArrowData {
           [attr.aria-label]="'Кофермент: ' + arc.inText"
         >
           <svg:title>Нажмите, чтобы открыть информацию о {{ arc.inCofactor || arc.inText }}</svg:title>
+          <svg:rect
+            [attr.x]="-chipW / 2"
+            y="-10"
+            [attr.width]="chipW"
+            height="20"
+            rx="5"
+            class="cofactor-chip-bg"
+            [class.cofactor-chip-bg--active]="isCofactorActive(arc.inCofactor || arc.inText)"
+          />
           <svg:text
             x="0"
             y="0"
-            [attr.text-anchor]="arc.inAnchor || 'middle'"
+            text-anchor="middle"
+            dominant-baseline="central"
             class="cofactor-pill-text cofactor-pill-text--in"
             [class.cofactor-pill-text--active]="isCofactorActive(arc.inCofactor || arc.inText)"
           >
@@ -198,6 +212,7 @@ export interface ReactionArrowData {
         >
           @for (item of arc.outItems; track item.name + item.text) {
             @let isItemSel = isCofactorActive(item.name);
+            @let chipW = getChipWidth(item.text);
             <svg:g
               class="cofactor-pill-item"
               [class.is-active]="isItemSel"
@@ -209,18 +224,19 @@ export interface ReactionArrowData {
             >
               <svg:title>Нажмите, чтобы открыть информацию о {{ item.name }}</svg:title>
               <svg:rect
-                x="-4"
-                y="-13"
-                [attr.width]="getChipWidth(item.text)"
-                height="17"
-                rx="4"
+                [attr.x]="-chipW / 2"
+                y="-10"
+                [attr.width]="chipW"
+                height="20"
+                rx="5"
                 class="cofactor-chip-bg"
                 [class.cofactor-chip-bg--active]="isItemSel"
               />
               <svg:text
                 x="0"
                 y="0"
-                [attr.text-anchor]="arc.outAnchor || 'start'"
+                text-anchor="middle"
+                dominant-baseline="central"
                 class="cofactor-pill-text cofactor-pill-text--out"
                 [class.cofactor-pill-text--energy]="item.isEnergy"
                 [class.cofactor-pill-text--gtp]="item.isGtp"
@@ -232,8 +248,10 @@ export interface ReactionArrowData {
           }
         </svg:g>
       } @else if (arc.outText) {
+        @let chipW = getChipWidth(arc.outText);
         <svg:g
-          class="cofactor-pill-group"
+          class="cofactor-pill-group cofactor-pill-item"
+          [class.is-active]="isCofactorActive(arc.outCofactor || arc.outText)"
           [attr.transform]="'translate(' + (arc.outX || 0) + ',' + (arc.outY || 0) + ')'"
           (click)="onCofactorClick(arc.outCofactor || arc.outText, $event)"
           role="button"
@@ -241,10 +259,20 @@ export interface ReactionArrowData {
           [attr.aria-label]="'Кофермент: ' + arc.outText"
         >
           <svg:title>Нажмите, чтобы открыть информацию о {{ arc.outCofactor || arc.outText }}</svg:title>
+          <svg:rect
+            [attr.x]="-chipW / 2"
+            y="-10"
+            [attr.width]="chipW"
+            height="20"
+            rx="5"
+            class="cofactor-chip-bg"
+            [class.cofactor-chip-bg--active]="isCofactorActive(arc.outCofactor || arc.outText)"
+          />
           <svg:text
             x="0"
             y="0"
-            [attr.text-anchor]="arc.outAnchor || 'middle'"
+            text-anchor="middle"
+            dominant-baseline="central"
             class="cofactor-pill-text cofactor-pill-text--out"
             [class.cofactor-pill-text--energy]="arc.isEnergy"
             [class.cofactor-pill-text--gtp]="arc.isGtp"

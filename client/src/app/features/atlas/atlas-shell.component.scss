@@ -282,6 +282,34 @@
     fill: var(--color-product-accent);
   }
 
+  .role-badge-bg--hub {
+    fill: rgba(16, 185, 129, 0.18);
+    stroke: #10B981;
+    stroke-width: 0.75px;
+  }
+
+  .role-badge-text--hub {
+    font-family: var(--font-sans);
+    font-size: 8px;
+    font-weight: 700;
+    fill: #10B981;
+  }
+
+  /* Hub node (Acetyl-CoA): Emerald Accent */
+  &.is-hub:not(.is-substrate):not(.is-product):not(.is-selected) {
+    .metabolite-tile__border {
+      stroke: rgba(16, 185, 129, 0.7);
+      stroke-width: 1.5px;
+    }
+  }
+
+  &.is-hub:hover:not(.is-dimmed) {
+    .metabolite-tile__border {
+      stroke: #10B981;
+      filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.5));
+    }
+  }
+
   /* Hover state */
   &:hover:not(.is-dimmed) {
     .metabolite-tile__border {

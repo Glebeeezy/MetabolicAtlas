@@ -23,6 +23,7 @@ import {
   PathwayParticipation,
 } from './atlas-data';
 import { ReactionArrowComponent } from './components/reaction-arrow/reaction-arrow.component';
+import { ChemicalStructureComponent } from './components/chemical-structure/chemical-structure.component';
 
 export type InspectorTab = 'reaction' | 'molecule';
 
@@ -45,7 +46,7 @@ export type {
 @Component({
   selector: 'ma-atlas-shell',
   standalone: true,
-  imports: [CommonModule, ReactionArrowComponent],
+  imports: [CommonModule, ReactionArrowComponent, ChemicalStructureComponent],
   templateUrl: './atlas-shell.component.html',
   styleUrl: './atlas-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
