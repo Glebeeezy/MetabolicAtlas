@@ -28,6 +28,8 @@ public class ReactionService : IReactionService
                     .ThenInclude(m => m.Names)
             .Include(r => r.Participants)
                 .ThenInclude(p => p.Compartment)
+            .Include(r => r.Enzymes)
+                .ThenInclude(re => re.Enzyme)
             .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
 
         if (reaction == null)
@@ -63,6 +65,16 @@ public class ReactionService : IReactionService
             })
             .ToList();
 
+        var enzymes = reaction.Enzymes
+            .Where(re => re.Enzyme != null)
+            .Select(re => new EnzymeDto(
+                re.Enzyme!.Id,
+                re.Enzyme.EcNumber,
+                re.Enzyme.Name,
+                re.Enzyme.UniprotId,
+                re.Enzyme.Description))
+            .ToList();
+
         return new ReactionDto(
             reaction.Id,
             reaction.Code,
@@ -70,6 +82,7 @@ public class ReactionService : IReactionService
             reaction.Direction.ToString(),
             reaction.IsReversible,
             reaction.Description,
-            participants);
+            participants,
+            enzymes);
     }
 }

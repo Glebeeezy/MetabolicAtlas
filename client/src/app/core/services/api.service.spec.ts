@@ -43,6 +43,16 @@ describe('ApiService', () => {
     req.flush(mockPathways);
   });
 
+  it('should fetch layout by code', () => {
+    service.getLayoutByCode('MAP_TCA_V1').subscribe((layout) => {
+      expect(layout.code).toBe('MAP_TCA_V1');
+    });
+
+    const req = httpTesting.expectOne('/api/v1/atlas/layouts/code/MAP_TCA_V1');
+    expect(req.request.method).toBe('GET');
+    req.flush({ code: 'MAP_TCA_V1', elements: [], edges: [] });
+  });
+
   it('should fetch health check', () => {
     service.getHealth().subscribe((res) => {
       expect(res.status).toBe('Healthy');

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://metabolic-atlas.org/schemas/layout.v1.json",
+  "code": "MAP_TCA_V1",
+  "name": "Human TCA Cycle — Mitochondrial Matrix Hub",
+  "version": "1.0.0",
+  "width": 1400,
+  "height": 1000,
+  "compartment": {
+    "name": "Mitochondrial matrix",
+    "bounds": { "x": 100, "y": 40, "width": 1200, "height": 920, "rx": 40 }
+  },
+  "nodes": [
+    { "id": "b0000001-0000-0000-0000-000000000003", "type": "Metabolite", "label": "Oxaloacetate\n(OAA)", "x": 700, "y": 80, "width": 140, "height": 50, "color": "#8B5CF6" },
+    { "id": "b0000001-0000-0000-0000-000000000004", "type": "Metabolite", "label": "Citrate", "x": 1060, "y": 200, "width": 130, "height": 45, "color": "#6366F1" },
+    { "id": "b0000001-0000-0000-0000-000000000005", "type": "Metabolite", "label": "Isocitrate", "x": 1160, "y": 490, "width": 130, "height": 45, "color": "#6366F1" },
+    { "id": "b0000001-0000-0000-0000-000000000006", "type": "Metabolite", "label": "α-Ketoglutarate", "x": 1000, "y": 760, "width": 140, "height": 45, "color": "#6366F1" },
+    { "id": "b0000001-0000-0000-0000-000000000007", "type": "Metabolite", "label": "Succinyl-CoA", "x": 640, "y": 870, "width": 130, "height": 45, "color": "#6366F1" },
+    { "id": "b0000001-0000-0000-0000-000000000008", "type": "Metabolite", "label": "Succinate", "x": 300, "y": 760, "width": 130, "height": 45, "color": "#6366F1" },
+    { "id": "b0000001-0000-0000-0000-000000000009", "type": "Metabolite", "label": "Fumarate", "x": 170, "y": 490, "width": 130, "height": 45, "color": "#6366F1" },
+    { "id": "b0000001-0000-0000-0000-000000000010", "type": "Metabolite", "label": "Malate", "x": 340, "y": 200, "width": 130, "height": 45, "color": "#6366F1" },
+    { "id": "b0000001-0000-0000-0000-000000000002", "type": "Metabolite", "label": "Acetyl-CoA", "x": 400, "y": 80, "width": 130, "height": 45, "color": "#10B981" },
+
+    { "id": "d0000001-0000-0000-0000-000000000001", "type": "Reaction", "label": "CS", "x": 880, "y": 120, "width": 44, "height": 44, "color": "#EC4899" },
+    { "id": "d0000001-0000-0000-0000-000000000002", "type": "Reaction", "label": "ACO2", "x": 1130, "y": 340, "width": 44, "height": 44, "color": "#EC4899" },
+    { "id": "d0000001-0000-0000-0000-000000000003", "type": "Reaction", "label": "IDH3", "x": 1110, "y": 630, "width": 44, "height": 44, "color": "#EC4899" },
+    { "id": "d0000001-0000-0000-0000-000000000004", "type": "Reaction", "label": "OGDH", "x": 840, "y": 830, "width": 44, "height": 44, "color": "#EC4899" },
+    { "id": "d0000001-0000-0000-0000-000000000005", "type": "Reaction", "label": "SUCLG2", "x": 480, "y": 870, "width": 44, "height": 44, "color": "#EC4899" },
+    { "id": "d0000001-0000-0000-0000-000000000006", "type": "Reaction", "label": "SDH", "x": 240, "y": 630, "width": 44, "height": 44, "color": "#EC4899" },
+    { "id": "d0000001-0000-0000-0000-000000000007", "type": "Reaction", "label": "FH", "x": 250, "y": 340, "width": 44, "height": 44, "color": "#EC4899" },
+    { "id": "d0000001-0000-0000-0000-000000000008", "type": "Reaction", "label": "MDH2", "x": 520, "y": 120, "width": 44, "height": 44, "color": "#EC4899" }
+  ],
+  "edges": [
+    { "source": "b0000001-0000-0000-0000-000000000002", "target": "d0000001-0000-0000-0000-000000000001", "type": "SubstrateToReaction" },
+    { "source": "b0000001-0000-0000-0000-000000000003", "target": "d0000001-0000-0000-0000-000000000001", "type": "SubstrateToReaction" },
+    { "source": "d0000001-0000-0000-0000-000000000001", "target": "b0000001-0000-0000-0000-000000000004", "type": "ReactionToProduct" },
+
+    { "source": "b0000001-0000-0000-0000-000000000004", "target": "d0000001-0000-0000-0000-000000000002", "type": "SubstrateToReaction" },
+    { "source": "d0000001-0000-0000-0000-000000000002", "target": "b0000001-0000-0000-0000-000000000005", "type": "ReactionToProduct" },
+
+    { "source": "b0000001-0000-0000-0000-000000000005", "target": "d0000001-0000-0000-0000-000000000003", "type": "SubstrateToReaction" },
+    { "source": "d0000001-0000-0000-0000-000000000003", "target": "b0000001-0000-0000-0000-000000000006", "type": "ReactionToProduct" },
+
+    { "source": "b0000001-0000-0000-0000-000000000006", "target": "d0000001-0000-0000-0000-000000000004", "type": "SubstrateToReaction" },
+    { "source": "d0000001-0000-0000-0000-000000000004", "target": "b0000001-0000-0000-0000-000000000007", "type": "ReactionToProduct" },
+
+    { "source": "b0000001-0000-0000-0000-000000000007", "target": "d0000001-0000-0000-0000-000000000005", "type": "SubstrateToReaction" },
+    { "source": "d0000001-0000-0000-0000-000000000005", "target": "b0000001-0000-0000-0000-000000000008", "type": "ReactionToProduct" },
+
+    { "source": "b0000001-0000-0000-0000-000000000008", "target": "d0000001-0000-0000-0000-000000000006", "type": "SubstrateToReaction" },
+    { "source": "d0000001-0000-0000-0000-000000000006", "target": "b0000001-0000-0000-0000-000000000009", "type": "ReactionToProduct" },
+
+    { "source": "b0000001-0000-0000-0000-000000000009", "target": "d0000001-0000-0000-0000-000000000007", "type": "SubstrateToReaction" },
+    { "source": "d0000001-0000-0000-0000-000000000007", "target": "b0000001-0000-0000-0000-000000000010", "type": "ReactionToProduct" },
+
+    { "source": "b0000001-0000-0000-0000-000000000010", "target": "d0000001-0000-0000-0000-000000000008", "type": "SubstrateToReaction" },
+    { "source": "d0000001-0000-0000-0000-000000000008", "target": "b0000001-0000-0000-0000-000000000003", "type": "ReactionToProduct" }
+  ]
+}

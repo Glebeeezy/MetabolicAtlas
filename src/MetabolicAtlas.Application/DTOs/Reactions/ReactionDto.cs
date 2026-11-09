@@ -10,6 +10,7 @@ public record ReactionDto(
     string Direction,
     bool IsReversible,
     string? Description,
-    IReadOnlyList<ReactionParticipantDto> Participants
+    IReadOnlyList<ReactionParticipantDto> Participants,
+    IReadOnlyList<EnzymeDto>? Enzymes = null
 );
 

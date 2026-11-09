@@ -1,65 +1,217 @@
-<section class="canvas-viewport" aria-label="Метаболическая карта">
-  <!-- Blueprint dot-grid background is rendered via CSS -->
-
+<section
+  class="canvas-viewport"
+  aria-label="Интерактивная карта метаболизма человека: Цикл трикарбоновых кислот"
+  (mousedown)="onMouseDown($event)"
+  (mousemove)="onMouseMove($event)"
+  (mouseup)="onMouseUp()"
+  (mouseleave)="onMouseUp()"
+>
   <!-- Top-left overlay: Active Map Context Pill -->
   <div class="canvas-overlay canvas-overlay--top-left">
     <div class="context-pill">
       <span class="context-pill__status" aria-hidden="true"></span>
       <span class="context-pill__label">
-        {{ localeService.locale() === 'ru' ? 'Карта метаболизма: Центральный хаб' : 'Metabolic Map: Central Hub' }}
+        {{ localeService.locale() === 'ru' ? 'Человек (Homo sapiens) • Цикл Кребса (ЦТК)' : 'Homo sapiens • TCA Cycle (Krebs)' }}
       </span>
-      <span class="context-pill__stats">0 / 72 Pathways</span>
+      <span class="context-pill__stats">
+        {{ localeService.locale() === 'ru' ? 'Матрикс митохондрий • 8 ферментов' : 'Mitochondrial Matrix • 8 Enzymes' }}
+      </span>
     </div>
   </div>
 
-  <!-- Center Stage: Metabolic Graph Placeholder & Blueprint -->
-  <div class="canvas-center">
-    <div class="canvas-hub">
-      <div class="canvas-hub__glow" aria-hidden="true"></div>
-
-      <!-- Illustrated SVG Metabolic Network Nodes -->
-      <svg class="canvas-hub__graph" viewBox="0 0 320 200" fill="none" aria-hidden="true">
-        <!-- Connecting pathways lines -->
-        <path d="M 60 100 Q 110 50 160 100 T 260 100" stroke="var(--bio-substrate)" stroke-width="2" stroke-dasharray="4 4" class="animated-path"></path>
-        <path d="M 160 100 L 160 40" stroke="var(--bio-energy)" stroke-width="2" stroke-dasharray="4 4" class="animated-path"></path>
-        <path d="M 160 100 L 220 160" stroke="var(--bio-product)" stroke-width="2" stroke-dasharray="4 4" class="animated-path"></path>
-        <path d="M 160 100 L 100 160" stroke="var(--bio-cofactor)" stroke-width="2" stroke-dasharray="4 4" class="animated-path"></path>
-
-        <!-- Peripheral Nodes -->
-        <circle cx="60" cy="100" r="14" fill="var(--color-bg-surface)" stroke="var(--bio-substrate)" stroke-width="2.5"></circle>
-        <text x="60" y="104" text-anchor="middle" font-size="9" font-weight="700" fill="var(--color-text-primary)">GLC</text>
-
-        <circle cx="160" cy="40" r="14" fill="var(--color-bg-surface)" stroke="var(--bio-energy)" stroke-width="2.5"></circle>
-        <text x="160" y="44" text-anchor="middle" font-size="9" font-weight="700" fill="var(--color-text-primary)">ATP</text>
-
-        <circle cx="260" cy="100" r="14" fill="var(--color-bg-surface)" stroke="var(--bio-product)" stroke-width="2.5"></circle>
-        <text x="260" y="104" text-anchor="middle" font-size="9" font-weight="700" fill="var(--color-text-primary)">LAC</text>
-
-        <circle cx="220" cy="160" r="14" fill="var(--color-bg-surface)" stroke="var(--bio-product)" stroke-width="2.5"></circle>
-        <text x="220" y="164" text-anchor="middle" font-size="9" font-weight="700" fill="var(--color-text-primary)">TCA</text>
-
-        <circle cx="100" cy="160" r="14" fill="var(--color-bg-surface)" stroke="var(--bio-cofactor)" stroke-width="2.5"></circle>
-        <text x="100" y="164" text-anchor="middle" font-size="9" font-weight="700" fill="var(--color-text-primary)">NADH</text>
-
-        <!-- Central Hub Node -->
-        <circle cx="160" cy="100" r="22" fill="var(--color-bg-surface)" stroke="var(--color-primary)" stroke-width="3" filter="drop-shadow(0 0 8px var(--color-primary-glow))"></circle>
-        <circle cx="160" cy="100" r="8" fill="var(--color-primary)"></circle>
-      </svg>
-
-      <div class="canvas-hub__content">
-        <h2 class="canvas-hub__title">
-          {{ localeService.locale() === 'ru' ? 'Интерактивная карта метаболизма' : 'Interactive Metabolic Atlas' }}
-        </h2>
-        <p class="canvas-hub__subtitle">
-          {{ localeService.locale() === 'ru'
-            ? 'Пространство готово для отрисовки биохимических графов, метаболитов и ферментативных реакций.'
-            : 'Workspace canvas prepared for biochemical graphs, metabolites, and enzymatic reactions.' }}
-        </p>
-      </div>
+  <!-- Top-right overlay: Biochemical Summary Stats -->
+  <div class="canvas-overlay canvas-overlay--top-right">
+    <div class="yield-badge">
+      <span class="yield-badge__title">
+        {{ localeService.locale() === 'ru' ? 'Выход на 1 оборот:' : 'Yield per turn:' }}
+      </span>
+      <span class="yield-tag yield-tag--nadh">3 NADH</span>
+      <span class="yield-tag yield-tag--fadh">1 FADH₂</span>
+      <span class="yield-tag yield-tag--gtp">1 GTP/ATP</span>
+      <span class="yield-tag yield-tag--co2">2 CO₂</span>
     </div>
   </div>
 
-  <!-- Bottom-right overlay: Floating Zoom & HUD Controls -->
+  <!-- Interactive SVG Metabolic Map Canvas -->
+  <div
+    class="canvas-stage"
+    [style.transform]="'translate(' + panX() + 'px, ' + panY() + 'px) scale(' + (zoom() / 100) + ')'"
+  >
+    <svg
+      class="canvas-svg"
+      viewBox="0 0 1400 1000"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <defs>
+        <!-- Standard Arrow Marker -->
+        <marker
+          id="arrowhead"
+          viewBox="0 0 10 10"
+          refX="8"
+          refY="5"
+          markerWidth="7"
+          markerHeight="7"
+          orient="auto-start-reverse"
+        >
+          <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--color-border-strong)" />
+        </marker>
+
+        <!-- Highlighted Arrow Marker -->
+        <marker
+          id="arrowhead-active"
+          viewBox="0 0 10 10"
+          refX="8"
+          refY="5"
+          markerWidth="8"
+          markerHeight="8"
+          orient="auto-start-reverse"
+        >
+          <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--color-primary)" />
+        </marker>
+
+        <!-- Subtle Gradient for Mitochondrial Matrix Hull -->
+        <radialGradient id="matrixGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="var(--color-primary)" stop-opacity="0.04" />
+          <stop offset="80%" stop-color="var(--color-primary)" stop-opacity="0.01" />
+          <stop offset="100%" stop-color="transparent" />
+        </radialGradient>
+      </defs>
+
+      <!-- 1. Mitochondrial Compartment Backdrop -->
+      <g class="compartment-layer">
+        <rect
+          x="100"
+          y="30"
+          width="1200"
+          height="920"
+          rx="32"
+          class="compartment-rect"
+          fill="url(#matrixGlow)"
+        />
+        <text x="130" y="65" class="compartment-title">
+          {{ localeService.locale() === 'ru' ? '🧬 МАТРИКС МИТОХОНДРИИ (HUMAN MITOCHONDRIAL MATRIX)' : '🧬 HUMAN MITOCHONDRIAL MATRIX' }}
+        </text>
+        <text x="130" y="85" class="compartment-subtitle">
+          {{ localeService.locale() === 'ru' ? 'Связь: Пируватдегидрогеназа (Цитозоль ➔ Матрикс) ➔ Комплекс II (Внутренняя мембрана)' : 'Pathway: Pyruvate Dehydrogenase ➔ TCA Cycle ➔ Complex II (Inner Membrane)' }}
+        </text>
+      </g>
+
+      <!-- 2. Connecting Flux Edges (Curved Lines) -->
+      <g class="edges-layer">
+        @for (item of renderedEdges(); track item.edge.id) {
+          @if (item.isValid) {
+            <path
+              [attr.d]="item.path"
+              class="map-edge"
+              [class.map-edge--hovered]="hoveredElementId() === item.sourceId || hoveredElementId() === item.targetId"
+              marker-end="url(#arrowhead)"
+            />
+          }
+        }
+      </g>
+
+      <!-- 3. Reaction Hubs (Enzymes) -->
+      <g class="reactions-layer">
+        @for (el of layout().elements; track el.id) {
+          @if (el.elementTypeName === 'Reaction') {
+            <g
+              class="reaction-node"
+              [class.is-selected]="selectedElement()?.id === el.id"
+              [attr.transform]="'translate(' + (el.x + el.width/2) + ',' + (el.y + el.height/2) + ')'"
+              (click)="onElementClick(el); $event.stopPropagation()"
+              (mouseenter)="hoveredElementId.set(el.id)"
+              (mouseleave)="hoveredElementId.set(null)"
+              role="button"
+              [attr.aria-label]="el.label"
+            >
+              <circle
+                r="22"
+                class="reaction-node__bg"
+              />
+              <circle
+                r="22"
+                class="reaction-node__border"
+              />
+              <text
+                dy="0.35em"
+                text-anchor="middle"
+                class="reaction-node__label"
+              >
+                {{ el.label }}
+              </text>
+            </g>
+          }
+        }
+      </g>
+
+      <!-- 4. Metabolite Nodes (Substrates & Products) -->
+      <g class="metabolites-layer">
+        @for (el of layout().elements; track el.id) {
+          @if (el.elementTypeName === 'Metabolite') {
+            <g
+              class="metabolite-node"
+              [class.is-selected]="selectedElement()?.id === el.id"
+              [class.is-acetyl]="el.label.includes('Acetyl')"
+              [attr.transform]="'translate(' + el.x + ',' + el.y + ')'"
+              (click)="onElementClick(el); $event.stopPropagation()"
+              (mouseenter)="hoveredElementId.set(el.id)"
+              (mouseleave)="hoveredElementId.set(null)"
+              role="button"
+              [attr.aria-label]="el.label"
+            >
+              <rect
+                [attr.width]="el.width"
+                [attr.height]="el.height"
+                rx="10"
+                class="metabolite-node__bg"
+              />
+              <rect
+                [attr.width]="el.width"
+                [attr.height]="el.height"
+                rx="10"
+                class="metabolite-node__border"
+                [attr.stroke]="el.colorHex || 'var(--color-primary)'"
+              />
+              <text
+                [attr.x]="el.width / 2"
+                [attr.y]="el.height / 2 + 4"
+                text-anchor="middle"
+                class="metabolite-node__label"
+              >
+                {{ el.label.replace('\n', ' ') }}
+              </text>
+            </g>
+          }
+        }
+      </g>
+
+      <!-- 5. Educational Cofactor Callouts -->
+      <g class="cofactors-layer" pointer-events="none">
+        <!-- R1: Acetyl-CoA + OAA -> Citrate (+ H2O -> CoA) -->
+        <text x="940" y="105" class="cofactor-text">+ H₂O ➔ CoA-SH</text>
+
+        <!-- R3: Isocitrate -> aKG (NAD+ -> NADH + CO2) -->
+        <text x="1170" y="635" class="cofactor-text cofactor-text--energy">NAD⁺ ➔ NADH + CO₂</text>
+
+        <!-- R4: aKG -> Succinyl-CoA (NAD+ + CoA -> NADH + CO2) -->
+        <text x="890" y="855" class="cofactor-text cofactor-text--energy">NAD⁺ + CoA ➔ NADH + CO₂</text>
+
+        <!-- R5: Succinyl-CoA -> Succinate (GDP -> GTP in liver, ADP -> ATP in brain) -->
+        <text x="440" y="930" class="cofactor-text cofactor-text--gtp">GDP + Pᵢ ➔ GTP (Печень) / ATP (Мозг)</text>
+
+        <!-- R6: Succinate -> Fumarate (FAD -> FADH2 in Complex II) -->
+        <text x="120" y="650" class="cofactor-text cofactor-text--energy">FAD ➔ FADH₂ (Комплекс II)</text>
+
+        <!-- R7: Fumarate -> Malate (+ H2O) -->
+        <text x="190" y="325" class="cofactor-text">+ H₂O</text>
+
+        <!-- R8: Malate -> OAA (NAD+ -> NADH) -->
+        <text x="470" y="95" class="cofactor-text cofactor-text--energy">NAD⁺ ➔ NADH + H⁺</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Bottom-right overlay: Floating Zoom & Canvas Controls -->
   <div class="canvas-overlay canvas-overlay--bottom-right">
     <div class="hud-panel" role="toolbar" aria-label="Управление масштабом карты">
       <button
@@ -79,7 +231,7 @@
         type="button"
         class="hud-zoom-value"
         (click)="resetZoom()"
-        title="Сбросить масштаб к 100%"
+        title="Сбросить масштаб и центрировать"
         aria-label="Сбросить масштаб"
       >
         {{ zoom() }}%
@@ -96,21 +248,167 @@
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
       </button>
-
-      <div class="hud-separator" aria-hidden="true"></div>
-
-      <button
-        type="button"
-        class="hud-btn"
-        (click)="resetZoom()"
-        title="По центру экрана"
-        aria-label="По центру экрана"
-      >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-          <path d="M3 3v5h5"></path>
-        </svg>
-      </button>
     </div>
   </div>
+
+  <!-- Side Inspector Drawer: Detailed Biochemical Entity View -->
+  @if (selectedElement(); as el) {
+    <aside
+      class="entity-inspector"
+      aria-label="Детальная информация о биохимической сущности"
+    >
+      <div class="inspector-header">
+        <div class="inspector-badge">
+          {{ el.elementTypeName === 'Metabolite' ? 'Метаболит человека' : 'Ферментативная реакция' }}
+        </div>
+        <button
+          type="button"
+          class="inspector-close-btn"
+          (click)="closeDetail()"
+          aria-label="Закрыть панель"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="inspector-content">
+        @if (isDetailLoading()) {
+          <div class="inspector-loading">
+            <span class="loading-spinner"></span>
+            <span>{{ localeService.locale() === 'ru' ? 'Загрузка биохимических данных...' : 'Loading biochemical data...' }}</span>
+          </div>
+        } @else if (selectedMetabolite(); as met) {
+          <!-- Metabolite Detailed Card -->
+          <h3 class="inspector-title">{{ met.primaryName }}</h3>
+          <div class="inspector-section">
+            <div class="info-row">
+              <span class="info-label">{{ localeService.locale() === 'ru' ? 'Формула:' : 'Formula:' }}</span>
+              <span class="info-value font-mono">{{ met.formula || '—' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">{{ localeService.locale() === 'ru' ? 'Заряд:' : 'Net charge:' }}</span>
+              <span class="info-value">{{ met.netCharge ?? '—' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">{{ localeService.locale() === 'ru' ? 'Молярная масса:' : 'Mass:' }}</span>
+              <span class="info-value">{{ met.monoisotopicMass ? (met.monoisotopicMass | number:'1.2-4') + ' Да' : '—' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">{{ localeService.locale() === 'ru' ? 'Компартмент:' : 'Localization:' }}</span>
+              <span class="info-value">Матрикс митохондрий (H. sapiens)</span>
+            </div>
+          </div>
+
+          @if (met.externalIdentifiers && (met.externalIdentifiers['CHEBI'] || met.externalIdentifiers['INCHIKEY'])) {
+            <div class="inspector-section">
+              <h4 class="section-title">{{ localeService.locale() === 'ru' ? 'Внешние базы данных' : 'External Cross-References' }}</h4>
+              @if (met.externalIdentifiers['CHEBI']; as chebi) {
+                <div class="db-chip">
+                  <span class="db-name">ChEBI</span>
+                  <a
+                    [href]="'https://www.ebi.ac.uk/chebi/searchId.do?chebiId=' + chebi"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="db-link"
+                  >
+                    {{ chebi }} ↗
+                  </a>
+                </div>
+              }
+              @if (met.externalIdentifiers['INCHIKEY']; as inchi) {
+                <div class="db-chip">
+                  <span class="db-name">InChIKey</span>
+                  <span class="font-mono text-xs">{{ inchi }}</span>
+                </div>
+              }
+            </div>
+          }
+
+          @if (met.synonyms && met.synonyms.length > 0) {
+            <div class="inspector-section">
+              <h4 class="section-title">{{ localeService.locale() === 'ru' ? 'Синонимы' : 'Synonyms' }}</h4>
+              <ul class="synonyms-list">
+                @for (syn of met.synonyms; track syn) {
+                  <li>{{ syn }}</li>
+                }
+              </ul>
+            </div>
+          }
+        } @else if (selectedReaction(); as rxn) {
+          <!-- Reaction Detailed Card -->
+          <h3 class="inspector-title">{{ rxn.name }}</h3>
+          <div class="reaction-code-pill">{{ rxn.code }} • {{ rxn.isReversible ? 'Обратимая' : 'Необратимая' }}</div>
+
+          @if (rxn.description) {
+            <p class="inspector-desc">{{ rxn.description }}</p>
+          }
+
+          <!-- Catalyzing Human Enzyme -->
+          @if (rxn.enzymes && rxn.enzymes.length > 0) {
+            <div class="inspector-section">
+              <h4 class="section-title">{{ localeService.locale() === 'ru' ? 'Катализирующий фермент человека' : 'Human Catalytic Enzyme' }}</h4>
+              @for (enz of rxn.enzymes; track enz.id) {
+                <div class="enzyme-card">
+                  <div class="enzyme-name">{{ enz.name }}</div>
+                  <div class="enzyme-meta">
+                    @if (enz.ecNumber) {
+                      <span class="ec-pill">EC {{ enz.ecNumber }}</span>
+                    }
+                    @if (enz.uniprotId) {
+                      <a
+                        [href]="'https://www.uniprot.org/uniprotkb/' + enz.uniprotId"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="uniprot-pill"
+                      >
+                        UniProt: {{ enz.uniprotId }} ↗
+                      </a>
+                    }
+                  </div>
+                  @if (enz.description) {
+                    <p class="enzyme-desc">{{ enz.description }}</p>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Stoichiometric equation -->
+          <div class="inspector-section">
+            <h4 class="section-title">{{ localeService.locale() === 'ru' ? 'Стехиометрия реакции' : 'Stoichiometry' }}</h4>
+            <div class="participants-list">
+              <div class="participants-group">
+                <span class="group-label">{{ localeService.locale() === 'ru' ? 'Субстраты:' : 'Substrates:' }}</span>
+                @for (p of rxn.participants; track p.metaboliteId) {
+                  @if (p.role === 'Substrate') {
+                    <div class="participant-item">
+                      <span class="part-coef">{{ p.stoichiometry }} ×</span>
+                      <span class="part-name">{{ p.metaboliteName }}</span>
+                    </div>
+                  }
+                }
+              </div>
+
+              <div class="reaction-arrow">➔</div>
+
+              <div class="participants-group">
+                <span class="group-label">{{ localeService.locale() === 'ru' ? 'Продукты:' : 'Products:' }}</span>
+                @for (p of rxn.participants; track p.metaboliteId) {
+                  @if (p.role === 'Product') {
+                    <div class="participant-item">
+                      <span class="part-coef">{{ p.stoichiometry }} ×</span>
+                      <span class="part-name">{{ p.metaboliteName }}</span>
+                    </div>
+                  }
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </aside>
+  }
 </section>

@@ -186,5 +186,66 @@ public class CoreEndpointTests : IClassFixture<TestWebApplicationFactory>
         Assert.Equal("1.1.1.37", enzyme.EcNumber);
         Assert.Equal("Malate dehydrogenase", enzyme.Name);
     }
+
+    [Fact]
+    public async Task GetMapLayoutByCode_ReturnsOk_WithETagAndCacheControl()
+    {
+        // Arrange
+        var layoutId = Guid.NewGuid();
+        var expected = new MapLayoutDetailDto(
+            layoutId,
+            "MAP_TCA_V1",
+            "Human TCA Cycle",
+            "1.0.0",
+            1400,
+            1000,
+            Guid.NewGuid(),
+            [],
+            []);
+
+        _factory.AtlasServiceMock
+            .Setup(s => s.GetLayoutByCodeAsync("MAP_TCA_V1", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(expected);
+
+        // Act
+        var response = await _client.GetAsync("/api/v1/atlas/layouts/code/MAP_TCA_V1");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.True(response.Headers.Contains("ETag"));
+        Assert.True(response.Headers.Contains("Cache-Control"));
+        var layout = await response.Content.ReadFromJsonAsync<MapLayoutDetailDto>();
+        Assert.NotNull(layout);
+        Assert.Equal("MAP_TCA_V1", layout.Code);
+    }
+
+    [Fact]
+    public async Task GetMapLayoutByCode_Returns304NotModified_WhenIfNoneMatchHeaderMatches()
+    {
+        // Arrange
+        var layoutId = Guid.NewGuid();
+        var expected = new MapLayoutDetailDto(
+            layoutId,
+            "MAP_TCA_V1",
+            "Human TCA Cycle",
+            "1.0.0",
+            1400,
+            1000,
+            Guid.NewGuid(),
+            [],
+            []);
+
+        _factory.AtlasServiceMock
+            .Setup(s => s.GetLayoutByCodeAsync("MAP_TCA_V1", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(expected);
+
+        // Act
+        using var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/atlas/layouts/code/MAP_TCA_V1");
+        request.Headers.TryAddWithoutValidation("If-None-Match", "\"MAP_TCA_V1-1.0.0\"");
+        var response = await _client.SendAsync(request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotModified, response.StatusCode);
+    }
 }
 

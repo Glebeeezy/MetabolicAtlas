@@ -1,4 +1,5 @@
 import { ReactionParticipant } from './reaction-participant.model';
+import { EnzymeDetail } from './enzyme-detail.model';
 
 /**
  * Data transfer object for a biochemical reaction with stoichiometry and participants.
@@ -11,5 +12,6 @@ export interface ReactionDetail {
   isReversible: boolean;
   description?: string | null;
   participants: ReactionParticipant[];
+  enzymes?: EnzymeDetail[];
 }
 

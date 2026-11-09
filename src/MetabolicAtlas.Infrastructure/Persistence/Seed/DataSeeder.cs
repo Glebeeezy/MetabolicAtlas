@@ -201,53 +201,62 @@ public static class DataSeeder
             coa, nadPlus, nadh, fad, fadh2, gdp, gtp, co2, water, phosphate, proton);
 
         // ─────────────────────────────────────────────────────────────────────
-        // ENZYMES
+        // ENZYMES — Human mitochondrial enzymes with UniProt IDs & gene mappings
         // ─────────────────────────────────────────────────────────────────────
 
         var pdh = new Enzyme(SeedIds.Enzyme.PyruvateDehydrogenase,
             name: "Pyruvate dehydrogenase complex",
             ecNumber: "1.2.4.1",
-            description: "Multi-enzyme complex that catalyzes the irreversible oxidative decarboxylation of pyruvate to acetyl-CoA. Links glycolysis to the TCA cycle.");
+            uniprotId: "P08559",
+            description: "Human mitochondrial PDC (PDHA1 component). Catalyzes the irreversible oxidative decarboxylation of pyruvate to acetyl-CoA, linking cytosolic glycolysis to the TCA cycle.");
 
         var citrateSynthase = new Enzyme(SeedIds.Enzyme.CitrateSynthase,
             name: "Citrate synthase",
             ecNumber: "2.3.3.1",
-            description: "Catalyzes the first step of the TCA cycle: condensation of acetyl-CoA with oxaloacetate to form citrate. The pace-setter enzyme of the cycle.");
+            uniprotId: "O75390",
+            description: "Human mitochondrial citrate synthase (gene CS). Catalyzes the first committed step of the TCA cycle: condensation of acetyl-CoA with oxaloacetate to form citrate. Pace-setter enzyme.");
 
         var aconitase = new Enzyme(SeedIds.Enzyme.Aconitase,
             name: "Aconitase",
             ecNumber: "4.2.1.3",
-            description: "Catalyzes the reversible isomerization of citrate to isocitrate via the intermediate cis-aconitate. Contains an iron-sulfur [4Fe-4S] cluster.");
+            uniprotId: "Q99798",
+            description: "Human mitochondrial aconitate hydratase (gene ACO2, distinct from cytosolic IRP1/ACO1). Catalyzes the reversible isomerization of citrate to isocitrate via cis-aconitate using a [4Fe-4S] cluster.");
 
         var isocitrateDehydrogenase = new Enzyme(SeedIds.Enzyme.IsocitrateDehydrogenase,
             name: "Isocitrate dehydrogenase",
             ecNumber: "1.1.1.41",
-            description: "Catalyzes the oxidative decarboxylation of isocitrate to α-ketoglutarate. Key regulatory step of the TCA cycle; allosterically activated by ADP.");
+            uniprotId: "P50213",
+            description: "Human mitochondrial NAD+-dependent IDH (gene IDH3A). Key rate-limiting regulatory enzyme; allosterically activated by ADP and Ca2+, inhibited by ATP and NADH.");
 
         var alphaKetoglutarateDehydrogenase = new Enzyme(SeedIds.Enzyme.AlphaKetoglutarateDehydrogenase,
             name: "Alpha-ketoglutarate dehydrogenase complex",
             ecNumber: "1.2.4.2",
-            description: "Multi-enzyme complex catalyzing the oxidative decarboxylation of α-ketoglutarate to succinyl-CoA. Structurally analogous to PDH complex.");
+            uniprotId: "Q02218",
+            description: "Human mitochondrial α-KGDH complex (gene OGDH). Catalyzes oxidative decarboxylation of α-ketoglutarate to succinyl-CoA requiring thiamine pyrophosphate (TPP, Vit B1).");
 
         var succinylCoASynthetase = new Enzyme(SeedIds.Enzyme.SuccinylCoASynthetase,
             name: "Succinyl-CoA synthetase",
             ecNumber: "6.2.1.4",
-            description: "Catalyzes the substrate-level phosphorylation: conversion of succinyl-CoA to succinate with coupled GTP synthesis from GDP and phosphate.");
+            uniprotId: "Q96I99",
+            description: "Human succinate-CoA ligase (gene SUCLG2). Substrate-level phosphorylation converting succinyl-CoA to succinate with coupled GTP generation in human liver/kidney (gluconeogenic tissues).");
 
         var succinateDehydrogenase = new Enzyme(SeedIds.Enzyme.SuccinateDehydrogenase,
             name: "Succinate dehydrogenase",
             ecNumber: "1.3.5.1",
-            description: "Complex II of the mitochondrial electron transport chain. Oxidizes succinate to fumarate, reducing FAD to FADH₂. Directly embedded in the inner mitochondrial membrane.");
+            uniprotId: "P31040",
+            description: "Complex II of human respiratory chain (gene SDHA). Directly embedded in the inner mitochondrial membrane; oxidizes succinate to fumarate while reducing FAD to FADH2 into the CoQ10 pool.");
 
         var fumarase = new Enzyme(SeedIds.Enzyme.Fumarase,
             name: "Fumarase",
             ecNumber: "4.2.1.2",
-            description: "Catalyzes the reversible hydration of fumarate to L-malate.");
+            uniprotId: "P07954",
+            description: "Human mitochondrial fumarate hydratase (gene FH). Stereospecific trans-addition of water across the double bond of fumarate to form L-malate. Tumor suppressor.");
 
         var malateDehydrogenase = new Enzyme(SeedIds.Enzyme.MalateDehydrogenase,
             name: "Malate dehydrogenase",
             ecNumber: "1.1.1.37",
-            description: "Catalyzes the final step of the TCA cycle: reversible oxidation of L-malate to oxaloacetate, regenerating the oxaloacetate acceptor for the next cycle turn.");
+            uniprotId: "P40926",
+            description: "Human mitochondrial malate dehydrogenase (gene MDH2). Reversible oxidation of L-malate to oxaloacetate, regenerating the cycle acceptor and powering the human malate-aspartate shuttle.");
 
         context.Enzymes.AddRange(
             pdh, citrateSynthase, aconitase, isocitrateDehydrogenase,

@@ -29,6 +29,14 @@ public sealed class TestWebApplicationFactory : WebApplicationFactory<Program>
             .Setup(s => s.GetLayoutByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new NotFoundException("MapLayout", Guid.Empty));
 
+        AtlasServiceMock
+            .Setup(s => s.GetLayoutByCodeAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new NotFoundException("MapLayout", "not-found"));
+
+        AtlasServiceMock
+            .Setup(s => s.GetLayoutByPathwayIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new NotFoundException("MapLayout", Guid.Empty));
+
         // Default Pathway mocks
         PathwayServiceMock
             .Setup(s => s.GetPathwaysAsync(It.IsAny<CancellationToken>()))

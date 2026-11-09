@@ -33,6 +33,14 @@ export class ApiService {
     return this.http.get<MapLayoutDetail>(`${this.baseUrl}/atlas/layouts/${id}`);
   }
 
+  getLayoutByCode(code: string): Observable<MapLayoutDetail> {
+    return this.http.get<MapLayoutDetail>(`${this.baseUrl}/atlas/layouts/code/${code}`);
+  }
+
+  getLayoutByPathway(pathwayId: string): Observable<MapLayoutDetail> {
+    return this.http.get<MapLayoutDetail>(`${this.baseUrl}/atlas/layouts/pathway/${pathwayId}`);
+  }
+
   getPathways(): Observable<PathwaySummary[]> {
     return this.http.get<PathwaySummary[]>(`${this.baseUrl}/pathways`);
   }

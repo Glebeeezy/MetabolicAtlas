@@ -47,6 +47,39 @@ public class AtlasService : IAtlasService
         if (layout == null)
             throw new NotFoundException(nameof(MapLayout), id);
 
+        return MapToDetailDto(layout);
+    }
+
+    public async Task<MapLayoutDetailDto> GetLayoutByCodeAsync(string code, CancellationToken cancellationToken = default)
+    {
+        var layout = await _context.MapLayouts
+            .AsNoTracking()
+            .Include(l => l.Elements)
+            .Include(l => l.Edges)
+            .FirstOrDefaultAsync(l => l.Code == code, cancellationToken);
+
+        if (layout == null)
+            throw new NotFoundException(nameof(MapLayout), code);
+
+        return MapToDetailDto(layout);
+    }
+
+    public async Task<MapLayoutDetailDto> GetLayoutByPathwayIdAsync(Guid pathwayId, CancellationToken cancellationToken = default)
+    {
+        var layout = await _context.MapLayouts
+            .AsNoTracking()
+            .Include(l => l.Elements)
+            .Include(l => l.Edges)
+            .FirstOrDefaultAsync(l => l.PathwayId == pathwayId && l.IsActive, cancellationToken);
+
+        if (layout == null)
+            throw new NotFoundException(nameof(MapLayout), pathwayId);
+
+        return MapToDetailDto(layout);
+    }
+
+    private static MapLayoutDetailDto MapToDetailDto(MapLayout layout)
+    {
         var elements = layout.Elements.Select(e => new MapElementDto(
             e.Id,
             (int)e.ElementType,

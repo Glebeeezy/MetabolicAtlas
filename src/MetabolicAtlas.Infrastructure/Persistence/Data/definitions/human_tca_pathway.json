@@ -1,0 +1,122 @@
+{
+  "$schema": "https://metabolic-atlas.org/schemas/pathway.v1.json",
+  "code": "PWY_TCA",
+  "name": "TCA cycle",
+  "nameRu": "Цикл трикарбоновых кислот (ЦТК / Цикл Кребса)",
+  "organism": "Homo sapiens",
+  "category": "Energy metabolism",
+  "cellularLocalization": "Mitochondrial matrix",
+  "description": "Центральный метаболический узел аэробного клеточного дыхания у человека. Протекает в матриксе митохондрий. За один оборот цикла: окисляется 1 молекула ацетил-КоА, высвобождаются 2 молекулы CO₂, генерируются 3 NADH, 1 FADH₂ и 1 GTP (или ATP в зависимости от изоформы сукцинат-КоА-лигазы в ткани).",
+  "netEquation": "Acetyl-CoA + 3 NAD⁺ + FAD + GDP + Pᵢ + 2 H₂O → 2 CO₂ + CoA + 3 NADH + 3 H⁺ + FADH₂ + GTP",
+  "reactions": [
+    {
+      "step": 1,
+      "reactionCode": "R_CS",
+      "name": "Конденсация оксалоацетата и ацетил-КоА (Цитратсинтаза)",
+      "enzyme": {
+        "gene": "CS",
+        "name": "Citrate synthase",
+        "ecNumber": "2.3.3.1",
+        "uniprot": "O75390"
+      },
+      "deltaG0": -31.5,
+      "isIrreversible": true
+    },
+    {
+      "step": 2,
+      "reactionCode": "R_ACO",
+      "name": "Изомеризация цитрата в изоцитрат (Аконитаза 2)",
+      "enzyme": {
+        "gene": "ACO2",
+        "name": "Aconitate hydratase, mitochondrial",
+        "ecNumber": "4.2.1.3",
+        "uniprot": "Q99798"
+      },
+      "deltaG0": 5.0,
+      "isIrreversible": false
+    },
+    {
+      "step": 3,
+      "reactionCode": "R_IDH",
+      "name": "Окислительное декарбоксилирование изоцитрата (Изоцитратдегидрогеназа 3)",
+      "enzyme": {
+        "gene": "IDH3A",
+        "name": "Isocitrate dehydrogenase (NAD+) subunit alpha",
+        "ecNumber": "1.1.1.41",
+        "uniprot": "P50213"
+      },
+      "deltaG0": -21.0,
+      "isIrreversible": true,
+      "regulation": "Аллостерическая активация АДФ и Ca²⁺; ингибирование АТФ и NADH"
+    },
+    {
+      "step": 4,
+      "reactionCode": "R_KGDH",
+      "name": "Окислительное декарбоксилирование α-кетоглутарата (α-Кетоглутаратдегидрогеназный комплекс)",
+      "enzyme": {
+        "gene": "OGDH",
+        "name": "Alpha-ketoglutarate dehydrogenase",
+        "ecNumber": "1.2.4.2",
+        "uniprot": "Q02218"
+      },
+      "deltaG0": -33.5,
+      "isIrreversible": true,
+      "cofactors": ["Тиаминдифосфат (B1)", "Липоевая кислота", "Кофермент A", "FAD", "NAD⁺"]
+    },
+    {
+      "step": 5,
+      "reactionCode": "R_SCS",
+      "name": "Субстратное фосфорилирование (Сукцинил-КоА-синтетаза)",
+      "enzyme": {
+        "gene": "SUCLG2 / SUCLA2",
+        "name": "Succinate-CoA ligase",
+        "ecNumber": "6.2.1.4",
+        "uniprot": "Q96I99"
+      },
+      "deltaG0": -2.9,
+      "isIrreversible": false,
+      "tissueSpecificity": "В печени и почках человека преобладает GTP-специфичная изоформа SUCLG2 (для глюконеогенеза); в мышцах и мозге — ATP-специфичная SUCLA2"
+    },
+    {
+      "step": 6,
+      "reactionCode": "R_SDH",
+      "name": "Окисление сукцината в фумарат (Сукцинатдегидрогеназа / Комплекс II)",
+      "enzyme": {
+        "gene": "SDHA",
+        "name": "Succinate dehydrogenase",
+        "ecNumber": "1.3.5.1",
+        "uniprot": "P31040"
+      },
+      "deltaG0": 0.0,
+      "isIrreversible": false,
+      "localization": "Встроена во внутреннюю мембрану митохондрий, напрямую передает электроны в пул коэнзима Q10"
+    },
+    {
+      "step": 7,
+      "reactionCode": "R_FUM",
+      "name": "Гидратация фумарата в L-малат (Фумараза)",
+      "enzyme": {
+        "gene": "FH",
+        "name": "Fumarate hydratase",
+        "ecNumber": "4.2.1.2",
+        "uniprot": "P07954"
+      },
+      "deltaG0": -3.8,
+      "isIrreversible": false
+    },
+    {
+      "step": 8,
+      "reactionCode": "R_MDH",
+      "name": "Окисление L-малата в оксалоацетат (Малатдегидрогеназа 2)",
+      "enzyme": {
+        "gene": "MDH2",
+        "name": "Malate dehydrogenase",
+        "ecNumber": "1.1.1.37",
+        "uniprot": "P40926"
+      },
+      "deltaG0": 29.7,
+      "isIrreversible": false,
+      "clinicalSignificance": "Участвует в малат-аспартатном челночном механизме переноса восстановительных эквивалентов в матрикс митохондрии"
+    }
+  ]
+}

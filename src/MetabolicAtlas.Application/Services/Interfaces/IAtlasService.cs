@@ -9,5 +9,7 @@ public interface IAtlasService
 {
     Task<IReadOnlyList<MapLayoutSummaryDto>> GetLayoutsAsync(CancellationToken cancellationToken = default);
     Task<MapLayoutDetailDto> GetLayoutByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<MapLayoutDetailDto> GetLayoutByCodeAsync(string code, CancellationToken cancellationToken = default);
+    Task<MapLayoutDetailDto> GetLayoutByPathwayIdAsync(Guid pathwayId, CancellationToken cancellationToken = default);
 }
 
