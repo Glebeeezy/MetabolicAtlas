@@ -1,6 +1,6 @@
 <section
   class="canvas-viewport"
-  aria-label="Интерактивная карта метаболизма: Цикл трикарбоновых кислот"
+  [attr.aria-label]="localeService.locale() === 'ru' ? 'Интерактивная карта метаболизма: Цикл трикарбоновых кислот' : 'Interactive Metabolic Atlas: Citric Acid Cycle'"
   (mousedown)="onViewportMouseDown($event)"
   (wheel)="onWheel($event)"
 >
@@ -148,7 +148,7 @@
               class="crossroad-badge-bg"
             />
             <text [attr.x]="cr.textX" [attr.y]="cr.textY" class="crossroad-text">
-              {{ cr.nameRu }}
+              {{ localeService.locale() === 'ru' ? cr.nameRu : cr.nameEn }}
             </text>
           </g>
         }
@@ -201,7 +201,7 @@
             (mouseleave)="hoveredMetabolite.set(null)"
             role="button"
             tabindex="0"
-            [attr.aria-label]="met.nameRu"
+            [attr.aria-label]="localeService.locale() === 'ru' ? met.nameRu : met.nameEn"
           >
             <!-- Invisible hitbox -->
             <rect
@@ -235,7 +235,7 @@
 
             <!-- Text Information -->
             <text x="64" y="32" class="metabolite-tile__title">
-              {{ met.nameRu }}
+              {{ localeService.locale() === 'ru' ? met.nameRu : met.nameEn }}
             </text>
 
             <text x="64" y="49" class="metabolite-tile__formula">
@@ -245,23 +245,23 @@
             <!-- Role Badge when reaction is selected (Вход / Выход) or Hub Badge -->
             @if (isSub) {
               <g [attr.transform]="'translate(10, ' + (met.height - 18) + ')'">
-                <rect width="96" height="15" rx="3" class="role-badge-bg role-badge-bg--sub" />
-                <text x="48" y="11" text-anchor="middle" class="role-badge-text role-badge-text--sub">
-                  Вход (Субстрат)
+                <rect width="102" height="15" rx="3" class="role-badge-bg role-badge-bg--sub" />
+                <text x="51" y="11" text-anchor="middle" class="role-badge-text role-badge-text--sub">
+                  {{ localeService.locale() === 'ru' ? 'Вход (Субстрат)' : 'Input (Substrate)' }}
                 </text>
               </g>
             } @else if (isProd) {
               <g [attr.transform]="'translate(10, ' + (met.height - 18) + ')'">
-                <rect width="90" height="15" rx="3" class="role-badge-bg role-badge-bg--prod" />
-                <text x="45" y="11" text-anchor="middle" class="role-badge-text role-badge-text--prod">
-                  Выход (Продукт)
+                <rect width="102" height="15" rx="3" class="role-badge-bg role-badge-bg--prod" />
+                <text x="51" y="11" text-anchor="middle" class="role-badge-text role-badge-text--prod">
+                  {{ localeService.locale() === 'ru' ? 'Выход (Продукт)' : 'Output (Product)' }}
                 </text>
               </g>
             } @else if (met.isHub) {
               <g [attr.transform]="'translate(10, ' + (met.height - 18) + ')'">
-                <rect width="112" height="15" rx="3" class="role-badge-bg role-badge-bg--hub" />
-                <text x="56" y="11" text-anchor="middle" class="role-badge-text role-badge-text--hub">
-                  ⚡ ХАБ МЕТАБОЛИЗМА
+                <rect width="124" height="15" rx="3" class="role-badge-bg role-badge-bg--hub" />
+                <text x="62" y="11" text-anchor="middle" class="role-badge-text role-badge-text--hub">
+                  {{ localeService.locale() === 'ru' ? '⚡ ХАБ МЕТАБОЛИЗМА' : '⚡ METABOLIC HUB' }}
                 </text>
               </g>
             }
@@ -273,14 +273,14 @@
 
   <!-- Bottom-right overlay: Floating Zoom, Flux & Canvas Controls -->
   <div class="canvas-overlay canvas-overlay--bottom-right" data-interactive="true">
-    <div class="hud-panel" role="toolbar" aria-label="Управление масштабом карты и потоком">
+    <div class="hud-panel" role="toolbar" [attr.aria-label]="localeService.locale() === 'ru' ? 'Управление масштабом карты и потоком' : 'Map zoom and flux controls'">
       <button
         type="button"
         class="hud-btn"
         [class.is-active]="isFluxAnimated()"
         (click)="toggleFluxAnimation()"
-        [title]="isFluxAnimated() ? 'Отключить анимацию потока' : 'Включить анимацию метаболического потока'"
-        aria-label="Анимация потока"
+        [title]="localeService.locale() === 'ru' ? (isFluxAnimated() ? 'Отключить анимацию потока' : 'Включить анимацию метаболического потока') : (isFluxAnimated() ? 'Disable flux animation' : 'Enable metabolic flux animation')"
+        [attr.aria-label]="localeService.locale() === 'ru' ? 'Анимация потока' : 'Flux animation'"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="5 3 19 12 5 21 5 3"></polygon>
@@ -291,8 +291,8 @@
         type="button"
         class="hud-btn"
         (click)="zoomIn()"
-        title="Увеличить масштаб (+)"
-        aria-label="Увеличить масштаб"
+        [title]="localeService.locale() === 'ru' ? 'Увеличить масштаб (+)' : 'Zoom in (+)'"
+        [attr.aria-label]="localeService.locale() === 'ru' ? 'Увеличить масштаб' : 'Zoom in'"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -304,8 +304,8 @@
         type="button"
         class="hud-zoom-value"
         (click)="resetZoom()"
-        title="Сбросить масштаб и центрировать"
-        aria-label="Сбросить масштаб"
+        [title]="localeService.locale() === 'ru' ? 'Сбросить масштаб и центрировать' : 'Reset zoom and center'"
+        [attr.aria-label]="localeService.locale() === 'ru' ? 'Сбросить масштаб' : 'Reset zoom'"
       >
         {{ zoom() }}%
       </button>
@@ -314,8 +314,8 @@
         type="button"
         class="hud-btn"
         (click)="zoomOut()"
-        title="Уменьшить масштаб (-)"
-        aria-label="Уменьшить масштаб"
+        [title]="localeService.locale() === 'ru' ? 'Уменьшить масштаб (-)' : 'Zoom out (-)'"
+        [attr.aria-label]="localeService.locale() === 'ru' ? 'Уменьшить масштаб' : 'Zoom out'"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -329,7 +329,7 @@
     <aside
       class="context-inspector"
       data-interactive="true"
-      aria-label="Контекстная панель биохимической информации"
+      [attr.aria-label]="localeService.locale() === 'ru' ? 'Контекстная панель биохимической информации' : 'Biochemical context inspector'"
       (wheel)="$event.stopPropagation()"
     >
       <!-- Single-Context Inspector Header (No tabs: shows exactly what is clicked) -->
@@ -337,10 +337,14 @@
         <div class="inspector-header__type">
           @if (selectedReaction(); as rx) {
             <span class="live-dot live-dot--rx" aria-hidden="true"></span>
-            <span class="type-text">Реакция • Стадия {{ rx.stepNumber }} из 8</span>
+            <span class="type-text">
+              {{ localeService.locale() === 'ru' ? ('Реакция • Стадия ' + rx.stepNumber + ' из 8') : ('Reaction • Step ' + rx.stepNumber + ' of 8') }}
+            </span>
           } @else if (selectedMetabolite(); as met) {
             <span class="live-dot live-dot--met" aria-hidden="true"></span>
-            <span class="type-text">{{ met.isCofactor ? 'Кофермент / Кофактор' : 'Химическое вещество • Метаболит' }}</span>
+            <span class="type-text">
+              {{ met.isCofactor ? (localeService.locale() === 'ru' ? 'Кофермент / Кофактор' : 'Coenzyme / Cofactor') : (localeService.locale() === 'ru' ? 'Химическое вещество • Метаболит' : 'Chemical Entity • Metabolite') }}
+            </span>
           }
         </div>
 
@@ -348,8 +352,8 @@
           type="button"
           class="inspector-close-btn"
           (click)="closeInspector()"
-          aria-label="Закрыть панель"
-          title="Закрыть панель"
+          [attr.aria-label]="localeService.locale() === 'ru' ? 'Закрыть панель' : 'Close inspector'"
+          [title]="localeService.locale() === 'ru' ? 'Закрыть панель' : 'Close inspector'"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -370,12 +374,14 @@
         <div class="inspector-content">
           <!-- Step Title -->
           <div class="rx-header">
-            <span class="step-badge">Стадия {{ rx.stepNumber }} из 8</span>
-            <h2 class="rx-title">{{ rx.nameRu }}</h2>
+            <span class="step-badge">
+              {{ localeService.locale() === 'ru' ? ('Стадия ' + rx.stepNumber + ' из 8') : ('Step ' + rx.stepNumber + ' of 8') }}
+            </span>
+            <h2 class="rx-title">{{ localeService.locale() === 'ru' ? rx.nameRu : rx.nameEn }}</h2>
             <div class="rx-meta-pill">
               <span class="code-font">{{ rx.code }}</span>
               <span>•</span>
-              <span>{{ rx.isReversible ? 'Обратимая' : 'Необратимая' }}</span>
+              <span>{{ rx.isReversible ? (localeService.locale() === 'ru' ? 'Обратимая' : 'Reversible') : (localeService.locale() === 'ru' ? 'Необратимая' : 'Irreversible') }}</span>
               <span>•</span>
               <span class="energy-font">ΔG°' = {{ rx.deltaG0 }}</span>
             </div>
@@ -384,15 +390,15 @@
           <!-- Section: Substrate ➔ Product Comparison Cards with Clickable Metabolite & Cofactor Links -->
           <div class="inspector-section">
             <div class="section-title-row">
-              <h3 class="section-title">Субстрат ➔ Продукт</h3>
-              <span class="section-hint">нажмите для перехода ↗</span>
+              <h3 class="section-title">{{ localeService.locale() === 'ru' ? 'Субстрат ➔ Продукт' : 'Substrate ➔ Product' }}</h3>
+              <span class="section-hint">{{ localeService.locale() === 'ru' ? 'нажмите для перехода ↗' : 'click to inspect ↗' }}</span>
             </div>
 
             <div class="flux-cards-container">
               <!-- Left: Substrate Card (Cyan outline) -->
               <div class="flux-card flux-card--substrate">
                 <div class="flux-card__header">
-                  <span class="flux-card__tag">Вход (Субстраты)</span>
+                  <span class="flux-card__tag">{{ localeService.locale() === 'ru' ? 'Вход (Субстраты)' : 'Input (Substrates)' }}</span>
                 </div>
                 <div class="flux-card__list">
                   @for (sub of rx.substrates; track sub.name) {
@@ -404,10 +410,10 @@
                       (click)="linkedMet && onMetaboliteClick(linkedMet)"
                       [attr.role]="linkedMet ? 'button' : null"
                       [attr.tabindex]="linkedMet ? 0 : null"
-                      [attr.title]="linkedMet ? ('Перейти к: ' + linkedMet.nameRu) : null"
+                      [attr.title]="linkedMet ? (localeService.locale() === 'ru' ? ('Перейти к: ' + linkedMet.nameRu) : ('Navigate to: ' + linkedMet.nameEn)) : null"
                     >
                       <div class="participant-name-group">
-                        <span class="participant-name">{{ sub.name }}</span>
+                        <span class="participant-name">{{ localeService.locale() === 'ru' ? sub.name : (sub.nameEn || sub.name) }}</span>
                         @if (linkedMet) {
                           <span class="participant-nav-icon" aria-hidden="true">↗</span>
                         }
@@ -423,7 +429,7 @@
               <!-- Right: Product Card (Coral outline) -->
               <div class="flux-card flux-card--product">
                 <div class="flux-card__header">
-                  <span class="flux-card__tag">Выход (Продукты)</span>
+                  <span class="flux-card__tag">{{ localeService.locale() === 'ru' ? 'Выход (Продукты)' : 'Output (Products)' }}</span>
                 </div>
                 <div class="flux-card__list">
                   @for (prod of rx.products; track prod.name) {
@@ -435,10 +441,10 @@
                       (click)="linkedMet && onMetaboliteClick(linkedMet)"
                       [attr.role]="linkedMet ? 'button' : null"
                       [attr.tabindex]="linkedMet ? 0 : null"
-                      [attr.title]="linkedMet ? ('Перейти к: ' + linkedMet.nameRu) : null"
+                      [attr.title]="linkedMet ? (localeService.locale() === 'ru' ? ('Перейти к: ' + linkedMet.nameRu) : ('Navigate to: ' + linkedMet.nameEn)) : null"
                     >
                       <div class="participant-name-group">
-                        <span class="participant-name">{{ prod.name }}</span>
+                        <span class="participant-name">{{ localeService.locale() === 'ru' ? prod.name : (prod.nameEn || prod.name) }}</span>
                         @if (linkedMet) {
                           <span class="participant-nav-icon" aria-hidden="true">↗</span>
                         }
@@ -453,15 +459,15 @@
 
           <!-- Section: Catalytic Enzyme -->
           <div class="inspector-section">
-            <h3 class="section-title">Катализирующий фермент</h3>
+            <h3 class="section-title">{{ localeService.locale() === 'ru' ? 'Катализирующий фермент' : 'Catalytic Enzyme' }}</h3>
             <div class="enzyme-details-card">
               <div class="enzyme-details-card__title">
-                <span>{{ rx.enzymeRu }}</span>
-                <span class="gene-pill">ген: {{ rx.gene }}</span>
+                <span>{{ localeService.locale() === 'ru' ? rx.enzymeRu : rx.enzymeEn }}</span>
+                <span class="gene-pill">{{ localeService.locale() === 'ru' ? 'ген: ' : 'gene: ' }}{{ rx.gene }}</span>
               </div>
 
               <div class="enzyme-meta-row">
-                <span class="ec-badge font-mono">Шифр КФ / EC: {{ rx.ecNumber }}</span>
+                <span class="ec-badge font-mono">{{ localeService.locale() === 'ru' ? 'Шифр КФ / EC: ' : 'Enzyme Comm. / EC: ' }}{{ rx.ecNumber }}</span>
                 <a
                   [href]="'https://www.uniprot.org/uniprotkb/' + rx.uniprotId"
                   target="_blank"
@@ -473,13 +479,15 @@
               </div>
 
               <p class="enzyme-mechanism-desc">
-                {{ rx.mechanismRu }}
+                {{ localeService.locale() === 'ru' ? rx.mechanismRu : (rx.mechanismEn || rx.mechanismRu) }}
               </p>
 
               @if (rx.clinicalNoteRu) {
                 <div class="clinical-note-box">
                   <span class="clinical-note-icon">💡</span>
-                  <span class="clinical-note-text">{{ rx.clinicalNoteRu }}</span>
+                  <span class="clinical-note-text">
+                    {{ localeService.locale() === 'ru' ? rx.clinicalNoteRu : (rx.clinicalNoteEn || rx.clinicalNoteRu) }}
+                  </span>
                 </div>
               }
             </div>
@@ -488,18 +496,18 @@
           <!-- Section: Allosteric Regulation -->
           @if (rx.activatorsRu || rx.inhibitorsRu) {
             <div class="inspector-section">
-              <h3 class="section-title">Аллостерическая регуляция</h3>
+              <h3 class="section-title">{{ localeService.locale() === 'ru' ? 'Аллостерическая регуляция' : 'Allosteric Regulation' }}</h3>
               <div class="regulation-grid">
                 @if (rx.activatorsRu; as acts) {
                   <div class="reg-box reg-box--pos">
-                    <span class="reg-title">+ Активаторы:</span>
-                    <span class="reg-tags">{{ acts.join(', ') }}</span>
+                    <span class="reg-title">{{ localeService.locale() === 'ru' ? '+ Активаторы:' : '+ Activators:' }}</span>
+                    <span class="reg-tags">{{ (localeService.locale() === 'ru' ? acts : (rx.activatorsEn || acts)).join(', ') }}</span>
                   </div>
                 }
                 @if (rx.inhibitorsRu; as inhs) {
                   <div class="reg-box reg-box--neg">
-                    <span class="reg-title">− Ингибиторы:</span>
-                    <span class="reg-tags">{{ inhs.join(', ') }}</span>
+                    <span class="reg-title">{{ localeService.locale() === 'ru' ? '− Ингибиторы:' : '− Inhibitors:' }}</span>
+                    <span class="reg-tags">{{ (localeService.locale() === 'ru' ? inhs : (rx.inhibitorsEn || inhs)).join(', ') }}</span>
                   </div>
                 }
               </div>
@@ -514,10 +522,12 @@
           <!-- Molecule / Cofactor Title -->
           <div class="molecule-header">
             <div class="title-carbon-row">
-              <h2 class="molecule-title">{{ met.nameRu }}</h2>
-              <span class="carbon-pill">{{ met.carbons }}</span>
+              <h2 class="molecule-title">{{ localeService.locale() === 'ru' ? met.nameRu : met.nameEn }}</h2>
+              <span class="carbon-pill">{{ localeService.locale() === 'ru' ? met.carbons : (met.carbonsEn || met.carbons) }}</span>
             </div>
-            <div class="molecule-en-name">{{ met.nameEn }} ({{ met.abbrevRu }})</div>
+            <div class="molecule-en-name">
+              {{ localeService.locale() === 'ru' ? (met.nameEn + ' (' + met.abbrevRu + ')') : (met.nameRu + ' (' + met.abbrevEn + ')') }}
+            </div>
           </div>
 
           <!-- Big Formula & 2D Structure Card with Quick Copy -->
@@ -529,34 +539,34 @@
               <button
                 type="button"
                 class="quick-copy-btn"
-                (click)="copyText(met.formula, 'Формула')"
-                title="Скопировать формулу"
-                aria-label="Скопировать химическую формулу"
+                (click)="copyText(met.formula, localeService.locale() === 'ru' ? 'Формула' : 'Formula')"
+                [title]="localeService.locale() === 'ru' ? 'Скопировать формулу' : 'Copy formula'"
+                [attr.aria-label]="localeService.locale() === 'ru' ? 'Скопировать химическую формулу' : 'Copy chemical formula'"
               >
-                Копировать 📋
+                {{ localeService.locale() === 'ru' ? 'Копировать 📋' : 'Copy 📋' }}
               </button>
             </div>
 
             <div class="structure-visual-card__drawing">
               <ma-chemical-structure
                 [svgContent]="met.structureSvg || met.skeletalSvg"
-                [altText]="'2D-структура: ' + met.nameRu"
+                [altText]="(localeService.locale() === 'ru' ? '2D-структура: ' : '2D Structure: ') + (localeService.locale() === 'ru' ? met.nameRu : met.nameEn)"
               />
             </div>
             <div class="structure-visual-card__note">
-              {{ met.isCofactor ? 'Структурная схема кофермента / кофактора' : 'Скелетная 2D-структура промежуточного метаболита' }}
+              {{ met.isCofactor ? (localeService.locale() === 'ru' ? 'Структурная схема кофермента / кофактора' : 'Structural scheme of coenzyme / cofactor') : (localeService.locale() === 'ru' ? 'Скелетная 2D-структура промежуточного метаболита' : 'Skeletal 2D structure of intermediate metabolite') }}
             </div>
           </div>
 
           <!-- Description -->
           <p class="molecule-desc">
-            {{ met.descriptionRu }}
+            {{ localeService.locale() === 'ru' ? met.descriptionRu : (met.descriptionEn || met.descriptionRu) }}
           </p>
 
           <!-- MULTI-PATHWAY / MULTI-CYCLE PARTICIPATION SECTION -->
           <div class="inspector-section">
             <div class="section-title-row">
-              <h3 class="section-title">Участие в метаболических путях и циклах</h3>
+              <h3 class="section-title">{{ localeService.locale() === 'ru' ? 'Участие в метаболических путях и циклах' : 'Metabolic Pathway Participation' }}</h3>
               <span class="section-count">({{ met.pathwaysRu?.length || 1 }})</span>
             </div>
 
@@ -566,8 +576,12 @@
                 <div class="pathway-group pathway-group--current">
                   <div class="pathway-group__header">
                     <span class="live-dot live-dot--current"></span>
-                    <span class="pathway-group__title">Текущий цикл • Цикл Кребса (ЦТК)</span>
-                    <span class="pathway-priority-tag">Активный путь</span>
+                    <span class="pathway-group__title">
+                      {{ localeService.locale() === 'ru' ? 'Текущий цикл • Цикл Кребса (ЦТК)' : 'Current Cycle • Krebs Cycle (TCA)' }}
+                    </span>
+                    <span class="pathway-priority-tag">
+                      {{ localeService.locale() === 'ru' ? 'Активный путь' : 'Active Pathway' }}
+                    </span>
                   </div>
 
                   <div class="pathway-items-list">
@@ -578,11 +592,13 @@
                         (click)="item.reactionCode && selectReactionByCode(item.reactionCode)"
                         role="button"
                         [attr.tabindex]="item.reactionCode ? 0 : null"
-                        [attr.title]="item.reactionCode ? 'Нажмите для перехода к реакции ' + item.reactionCode : null"
+                        [attr.title]="item.reactionCode ? (localeService.locale() === 'ru' ? ('Нажмите для перехода к реакции ' + item.reactionCode) : ('Click to view reaction ' + item.reactionCode)) : null"
                       >
                         <div class="pathway-item-top">
                           @if (item.stepNumber) {
-                            <span class="step-pill">Стадия {{ item.stepNumber }}</span>
+                            <span class="step-pill">
+                              {{ localeService.locale() === 'ru' ? ('Стадия ' + item.stepNumber) : ('Step ' + item.stepNumber) }}
+                            </span>
                           }
                           <span
                             class="role-pill"
@@ -590,13 +606,15 @@
                             [class.role-pill--prod]="item.role === 'product'"
                             [class.role-pill--co]="item.role === 'cofactor'"
                           >
-                            {{ getRoleNameRu(item.role) }}
+                            {{ getRoleName(item.role) }}
                           </span>
                           @if (item.reactionCode) {
-                            <span class="jump-arrow">перейти ↗</span>
+                            <span class="jump-arrow">{{ localeService.locale() === 'ru' ? 'перейти ↗' : 'view ↗' }}</span>
                           }
                         </div>
-                        <p class="pathway-item-desc">{{ item.detailsRu }}</p>
+                        <p class="pathway-item-desc">
+                          {{ localeService.locale() === 'ru' ? item.detailsRu : (item.detailsEn || item.detailsRu) }}
+                        </p>
                       </div>
                     }
                   </div>
@@ -607,19 +625,25 @@
               @if (sorted.others.length > 0) {
                 <div class="pathway-group pathway-group--others">
                   <div class="pathway-group__header">
-                    <span class="pathway-group__title">Другие метаболические пути</span>
+                    <span class="pathway-group__title">
+                      {{ localeService.locale() === 'ru' ? 'Другие метаболические пути' : 'Other Metabolic Pathways' }}
+                    </span>
                   </div>
 
                   <div class="pathway-items-list">
                     @for (item of sorted.others; track item.pathwayCode + item.pathwayNameRu) {
                       <div class="pathway-item-card pathway-item-card--other">
                         <div class="pathway-item-top">
-                          <span class="other-pathway-badge">{{ item.pathwayNameRu }}</span>
+                          <span class="other-pathway-badge">
+                            {{ localeService.locale() === 'ru' ? item.pathwayNameRu : (item.pathwayNameEn || item.pathwayNameRu) }}
+                          </span>
                           <span class="role-pill role-pill--subtle">
-                            {{ getRoleNameRu(item.role) }}
+                            {{ getRoleName(item.role) }}
                           </span>
                         </div>
-                        <p class="pathway-item-desc">{{ item.detailsRu }}</p>
+                        <p class="pathway-item-desc">
+                          {{ localeService.locale() === 'ru' ? item.detailsRu : (item.detailsEn || item.detailsRu) }}
+                        </p>
                       </div>
                     }
                   </div>
@@ -632,7 +656,9 @@
           @if (getReactionsForMetabolite(met.id); as relatedRxs) {
             @if (relatedRxs.length > 0) {
               <div class="inspector-section">
-                <h3 class="section-title">Стадии на карте ЦТК</h3>
+                <h3 class="section-title">
+                  {{ localeService.locale() === 'ru' ? 'Стадии на карте ЦТК' : 'TCA Cycle Steps' }}
+                </h3>
                 <div class="related-reactions-list">
                   @for (rel of relatedRxs; track rel.rx.id) {
                     <div
@@ -640,20 +666,22 @@
                       (click)="onReactionClick(rel.rx)"
                       role="button"
                       tabindex="0"
-                      [attr.title]="'Открыть реакцию: ' + rel.rx.nameRu"
+                      [attr.title]="(localeService.locale() === 'ru' ? 'Открыть реакцию: ' : 'Open reaction: ') + (localeService.locale() === 'ru' ? rel.rx.nameRu : rel.rx.nameEn)"
                     >
                       <div class="related-rx-header">
-                        <span class="step-pill">Стадия {{ rel.rx.stepNumber }}</span>
+                        <span class="step-pill">
+                          {{ localeService.locale() === 'ru' ? ('Стадия ' + rel.rx.stepNumber) : ('Step ' + rel.rx.stepNumber) }}
+                        </span>
                         <span
                           class="role-pill"
                           [class.role-pill--sub]="rel.role === 'substrate'"
                           [class.role-pill--prod]="rel.role === 'product'"
                         >
-                          {{ rel.role === 'substrate' ? 'Вход (Субстрат)' : 'Выход (Продукт)' }}
+                          {{ rel.role === 'substrate' ? (localeService.locale() === 'ru' ? 'Вход (Субстрат)' : 'Input (Substrate)') : (localeService.locale() === 'ru' ? 'Выход (Продукт)' : 'Output (Product)') }}
                         </span>
                       </div>
                       <div class="related-rx-name">
-                        <span>{{ rel.rx.nameRu }}</span>
+                        <span>{{ localeService.locale() === 'ru' ? rel.rx.nameRu : rel.rx.nameEn }}</span>
                         <span class="related-rx-arrow">↗</span>
                       </div>
                     </div>
@@ -665,7 +693,9 @@
 
           <!-- Chemical properties -->
           <div class="inspector-section">
-            <h3 class="section-title">Биохимические свойства</h3>
+            <h3 class="section-title">
+              {{ localeService.locale() === 'ru' ? 'Биохимические свойства' : 'Biochemical Properties' }}
+            </h3>
             @if (met.smiles) {
               <div class="info-row">
                 <span class="info-label">SMILES-код:</span>
@@ -673,25 +703,25 @@
                   type="button"
                   class="code-copy-btn font-mono text-xs"
                   (click)="copyText(met.smiles, 'SMILES')"
-                  title="Нажмите, чтобы скопировать SMILES"
+                  [title]="localeService.locale() === 'ru' ? 'Нажмите, чтобы скопировать SMILES' : 'Click to copy SMILES'"
                 >
                   {{ met.smiles.length > 28 ? (met.smiles | slice:0:28) + '...' : met.smiles }} 📋
                 </button>
               </div>
             }
             <div class="info-row">
-              <span class="info-label">Компартмент:</span>
-              <span class="info-value">Матрикс митохондрий (H. sapiens)</span>
+              <span class="info-label">{{ localeService.locale() === 'ru' ? 'Компартмент:' : 'Compartment:' }}</span>
+              <span class="info-value">{{ localeService.locale() === 'ru' ? 'Матрикс митохондрий (H. sapiens)' : 'Mitochondrial Matrix (H. sapiens)' }}</span>
             </div>
             <div class="info-row">
-              <span class="info-label">Углеродный остов:</span>
-              <span class="info-value font-mono font-bold">{{ met.carbons }}</span>
+              <span class="info-label">{{ localeService.locale() === 'ru' ? 'Углеродный остов:' : 'Carbon Backbone:' }}</span>
+              <span class="info-value font-mono font-bold">{{ localeService.locale() === 'ru' ? met.carbons : (met.carbonsEn || met.carbons) }}</span>
             </div>
           </div>
 
           <!-- External Cross-References (PubChem / ChEBI / InChIKey) -->
           <div class="inspector-section">
-            <h3 class="section-title">Внешние базы данных</h3>
+            <h3 class="section-title">{{ localeService.locale() === 'ru' ? 'Внешние базы данных' : 'External Databases' }}</h3>
 
             @if (met.chebi) {
               <div class="db-card">
@@ -717,7 +747,7 @@
                     type="button"
                     class="code-copy-btn font-mono text-xs"
                     (click)="copyText(met.inchiKey, 'InChIKey')"
-                    title="Нажмите, чтобы скопировать InChIKey"
+                    [title]="localeService.locale() === 'ru' ? 'Нажмите, чтобы скопировать InChIKey' : 'Click to copy InChIKey'"
                   >
                     {{ met.inchiKey }} 📋
                   </button>
@@ -734,7 +764,7 @@
                   rel="noopener noreferrer"
                   class="db-ext-link"
                 >
-                  Открыть в PubChem ↗
+                  {{ localeService.locale() === 'ru' ? 'Открыть в PubChem ↗' : 'Open in PubChem ↗' }}
                 </a>
               </div>
             </div>
@@ -743,9 +773,9 @@
           <!-- Synonyms -->
           @if (met.synonymsRu && met.synonymsRu.length > 0) {
             <div class="inspector-section">
-              <h3 class="section-title">Синонимы и тривиальные названия</h3>
+              <h3 class="section-title">{{ localeService.locale() === 'ru' ? 'Синонимы и тривиальные названия' : 'Synonyms & Trivial Names' }}</h3>
               <div class="synonyms-tags">
-                @for (syn of met.synonymsRu; track syn) {
+                @for (syn of (localeService.locale() === 'ru' ? met.synonymsRu : (met.synonymsEn || met.synonymsRu)); track syn) {
                   <span class="syn-tag">{{ syn }}</span>
                 }
               </div>

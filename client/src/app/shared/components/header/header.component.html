@@ -6,8 +6,8 @@
         type="button"
         class="header__sidebar-toggle"
         (click)="sidebarService.toggle()"
-        [attr.aria-label]="sidebarService.isOpen() ? 'Скрыть панель' : 'Открыть панель'"
-        [title]="sidebarService.isOpen() ? 'Скрыть панель' : 'Открыть панель'"
+        [attr.aria-label]="sidebarService.isOpen() ? (localeService.locale() === 'ru' ? 'Скрыть панель' : 'Collapse sidebar') : (localeService.locale() === 'ru' ? 'Открыть панель' : 'Open sidebar')"
+        [title]="sidebarService.isOpen() ? (localeService.locale() === 'ru' ? 'Скрыть панель' : 'Collapse sidebar') : (localeService.locale() === 'ru' ? 'Открыть панель' : 'Open sidebar')"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect width="18" height="18" x="3" y="3" rx="2"></rect>
@@ -23,20 +23,20 @@
       <div class="header__title-badge">
         <span class="live-dot" aria-hidden="true"></span>
         <span class="title-text">Metabolic Atlas</span>
-        <span class="version-tag">Человек</span>
+        <span class="version-tag">{{ localeService.locale() === 'ru' ? 'Человек' : 'Human' }}</span>
       </div>
     </div>
 
     <!-- Center: Quick Pathway Switcher with Scroll Controls -->
-    <nav class="nav" aria-label="Выбор метаболического пути">
+    <nav class="nav" [attr.aria-label]="localeService.locale() === 'ru' ? 'Выбор метаболического пути' : 'Metabolic pathway selection'">
       <button
         type="button"
         class="nav__scroll-btn nav__scroll-btn--prev"
         [class.is-hidden]="!canScrollLeft()"
         [disabled]="!canScrollLeft()"
         (click)="scrollLeft()"
-        aria-label="Прокрутить список путей влево"
-        title="Прокрутить влево"
+        [attr.aria-label]="localeService.locale() === 'ru' ? 'Прокрутить список путей влево' : 'Scroll pathways left'"
+        [title]="localeService.locale() === 'ru' ? 'Прокрутить влево' : 'Scroll left'"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="15 18 9 12 15 6"></polyline>
@@ -73,8 +73,8 @@
         [class.is-hidden]="!canScrollRight()"
         [disabled]="!canScrollRight()"
         (click)="scrollRight()"
-        aria-label="Прокрутить список путей вправо"
-        title="Прокрутить вправо"
+        [attr.aria-label]="localeService.locale() === 'ru' ? 'Прокрутить список путей вправо' : 'Scroll pathways right'"
+        [title]="localeService.locale() === 'ru' ? 'Прокрутить вправо' : 'Scroll right'"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="9 18 15 12 9 6"></polyline>

@@ -1,16 +1,21 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  inject,
   input,
   output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LocaleService } from '../../../../core/services/locale.service';
 
 export type CofactorPreset = 'tangent-swoop' | 'lateral-loop' | 'perpendicular-dip' | 'through-cross';
 
 export interface CofactorParticipant {
   name: string;
+  nameEn?: string;
   text: string;
+  textRu?: string;
+  textEn?: string;
   dx?: number;
   dy?: number;
   isEnergy?: boolean;
@@ -21,12 +26,18 @@ export interface ReactionCofactorArc {
   preset?: CofactorPreset;
   path: string;
   inCofactor?: string;
+  inCofactorEn?: string;
   inText?: string;
+  inTextRu?: string;
+  inTextEn?: string;
   inX?: number;
   inY?: number;
   inAnchor?: 'start' | 'middle' | 'end';
   outCofactor?: string;
+  outCofactorEn?: string;
   outText?: string;
+  outTextRu?: string;
+  outTextEn?: string;
   outX?: number;
   outY?: number;
   outAnchor?: 'start' | 'middle' | 'end';
@@ -57,13 +68,17 @@ export interface ReactionArrowData {
   uniprotId: string;
   isReversible: boolean;
   deltaG0: string;
-  substrates: { name: string; formula: string; isCo?: boolean }[];
-  products: { name: string; formula: string; isCo?: boolean }[];
+  substrates: { name: string; nameEn?: string; formula: string; isCo?: boolean }[];
+  products: { name: string; nameEn?: string; formula: string; isCo?: boolean }[];
   cofactorArc?: ReactionCofactorArc;
   activatorsRu?: string[];
+  activatorsEn?: string[];
   inhibitorsRu?: string[];
+  inhibitorsEn?: string[];
   mechanismRu: string;
+  mechanismEn?: string;
   clinicalNoteRu?: string;
+  clinicalNoteEn?: string;
 }
 
 @Component({
@@ -135,9 +150,11 @@ export interface ReactionArrowData {
           class="cofactor-pill-group"
           [attr.transform]="'translate(' + (arc.inX || 0) + ',' + (arc.inY || 0) + ')'"
         >
-          @for (item of arc.inItems; track item.name + item.text) {
-            @let isItemSel = isCofactorActive(item.name);
-            @let chipW = getChipWidth(item.text);
+          @for (item of arc.inItems; track item.name + (item.textEn || item.text)) {
+            @let isItemSel = isCofactorActive(item.name, item.nameEn);
+            @let activeText = getItemText(item);
+            @let activeName = getItemName(item);
+            @let chipW = getChipWidth(activeText);
             <svg:g
               class="cofactor-pill-item"
               [class.is-active]="isItemSel"
@@ -145,9 +162,9 @@ export interface ReactionArrowData {
               (click)="onCofactorClick(item.name, $event)"
               role="button"
               tabindex="0"
-              [attr.aria-label]="'Кофермент: ' + item.text"
+              [attr.aria-label]="localeService.locale() === 'ru' ? ('Кофермент: ' + activeText) : ('Coenzyme: ' + activeText)"
             >
-              <svg:title>Нажмите, чтобы открыть информацию о {{ item.name }}</svg:title>
+              <svg:title>{{ localeService.locale() === 'ru' ? ('Нажмите, чтобы открыть информацию о ' + activeName) : ('Click to open details for ' + activeName) }}</svg:title>
               <svg:rect
                 [attr.x]="-chipW / 2"
                 y="-10"
@@ -165,23 +182,25 @@ export interface ReactionArrowData {
                 class="cofactor-pill-text cofactor-pill-text--in"
                 [class.cofactor-pill-text--active]="isItemSel"
               >
-                {{ item.text }}
+                {{ activeText }}
               </svg:text>
             </svg:g>
           }
         </svg:g>
       } @else if (arc.inText) {
-        @let chipW = getChipWidth(arc.inText);
+        @let activeText = getArcInText(arc);
+        @let activeName = getArcInName(arc);
+        @let chipW = getChipWidth(activeText);
         <svg:g
           class="cofactor-pill-group cofactor-pill-item"
-          [class.is-active]="isCofactorActive(arc.inCofactor || arc.inText)"
+          [class.is-active]="isCofactorActive(arc.inCofactor || arc.inText, arc.inCofactorEn)"
           [attr.transform]="'translate(' + (arc.inX || 0) + ',' + (arc.inY || 0) + ')'"
           (click)="onCofactorClick(arc.inCofactor || arc.inText, $event)"
           role="button"
           tabindex="0"
-          [attr.aria-label]="'Кофермент: ' + arc.inText"
+          [attr.aria-label]="localeService.locale() === 'ru' ? ('Кофермент: ' + activeText) : ('Coenzyme: ' + activeText)"
         >
-          <svg:title>Нажмите, чтобы открыть информацию о {{ arc.inCofactor || arc.inText }}</svg:title>
+          <svg:title>{{ localeService.locale() === 'ru' ? ('Нажмите, чтобы открыть информацию о ' + activeName) : ('Click to open details for ' + activeName) }}</svg:title>
           <svg:rect
             [attr.x]="-chipW / 2"
             y="-10"
@@ -189,7 +208,7 @@ export interface ReactionArrowData {
             height="20"
             rx="5"
             class="cofactor-chip-bg"
-            [class.cofactor-chip-bg--active]="isCofactorActive(arc.inCofactor || arc.inText)"
+            [class.cofactor-chip-bg--active]="isCofactorActive(arc.inCofactor || arc.inText, arc.inCofactorEn)"
           />
           <svg:text
             x="0"
@@ -197,9 +216,9 @@ export interface ReactionArrowData {
             text-anchor="middle"
             dominant-baseline="central"
             class="cofactor-pill-text cofactor-pill-text--in"
-            [class.cofactor-pill-text--active]="isCofactorActive(arc.inCofactor || arc.inText)"
+            [class.cofactor-pill-text--active]="isCofactorActive(arc.inCofactor || arc.inText, arc.inCofactorEn)"
           >
-            {{ arc.inText }}
+            {{ activeText }}
           </svg:text>
         </svg:g>
       }
@@ -210,9 +229,11 @@ export interface ReactionArrowData {
           class="cofactor-pill-group"
           [attr.transform]="'translate(' + (arc.outX || 0) + ',' + (arc.outY || 0) + ')'"
         >
-          @for (item of arc.outItems; track item.name + item.text) {
-            @let isItemSel = isCofactorActive(item.name);
-            @let chipW = getChipWidth(item.text);
+          @for (item of arc.outItems; track item.name + (item.textEn || item.text)) {
+            @let isItemSel = isCofactorActive(item.name, item.nameEn);
+            @let activeText = getItemText(item);
+            @let activeName = getItemName(item);
+            @let chipW = getChipWidth(activeText);
             <svg:g
               class="cofactor-pill-item"
               [class.is-active]="isItemSel"
@@ -220,9 +241,9 @@ export interface ReactionArrowData {
               (click)="onCofactorClick(item.name, $event)"
               role="button"
               tabindex="0"
-              [attr.aria-label]="'Кофермент: ' + item.text"
+              [attr.aria-label]="localeService.locale() === 'ru' ? ('Кофермент: ' + activeText) : ('Coenzyme: ' + activeText)"
             >
-              <svg:title>Нажмите, чтобы открыть информацию о {{ item.name }}</svg:title>
+              <svg:title>{{ localeService.locale() === 'ru' ? ('Нажмите, чтобы открыть информацию о ' + activeName) : ('Click to open details for ' + activeName) }}</svg:title>
               <svg:rect
                 [attr.x]="-chipW / 2"
                 y="-10"
@@ -242,23 +263,25 @@ export interface ReactionArrowData {
                 [class.cofactor-pill-text--gtp]="item.isGtp"
                 [class.cofactor-pill-text--active]="isItemSel"
               >
-                {{ item.text }}
+                {{ activeText }}
               </svg:text>
             </svg:g>
           }
         </svg:g>
       } @else if (arc.outText) {
-        @let chipW = getChipWidth(arc.outText);
+        @let activeText = getArcOutText(arc);
+        @let activeName = getArcOutName(arc);
+        @let chipW = getChipWidth(activeText);
         <svg:g
           class="cofactor-pill-group cofactor-pill-item"
-          [class.is-active]="isCofactorActive(arc.outCofactor || arc.outText)"
+          [class.is-active]="isCofactorActive(arc.outCofactor || arc.outText, arc.outCofactorEn)"
           [attr.transform]="'translate(' + (arc.outX || 0) + ',' + (arc.outY || 0) + ')'"
           (click)="onCofactorClick(arc.outCofactor || arc.outText, $event)"
           role="button"
           tabindex="0"
-          [attr.aria-label]="'Кофермент: ' + arc.outText"
+          [attr.aria-label]="localeService.locale() === 'ru' ? ('Кофермент: ' + activeText) : ('Coenzyme: ' + activeText)"
         >
-          <svg:title>Нажмите, чтобы открыть информацию о {{ arc.outCofactor || arc.outText }}</svg:title>
+          <svg:title>{{ localeService.locale() === 'ru' ? ('Нажмите, чтобы открыть информацию о ' + activeName) : ('Click to open details for ' + activeName) }}</svg:title>
           <svg:rect
             [attr.x]="-chipW / 2"
             y="-10"
@@ -266,7 +289,7 @@ export interface ReactionArrowData {
             height="20"
             rx="5"
             class="cofactor-chip-bg"
-            [class.cofactor-chip-bg--active]="isCofactorActive(arc.outCofactor || arc.outText)"
+            [class.cofactor-chip-bg--active]="isCofactorActive(arc.outCofactor || arc.outText, arc.outCofactorEn)"
           />
           <svg:text
             x="0"
@@ -276,9 +299,9 @@ export interface ReactionArrowData {
             class="cofactor-pill-text cofactor-pill-text--out"
             [class.cofactor-pill-text--energy]="arc.isEnergy"
             [class.cofactor-pill-text--gtp]="arc.isGtp"
-            [class.cofactor-pill-text--active]="isCofactorActive(arc.outCofactor || arc.outText)"
+            [class.cofactor-pill-text--active]="isCofactorActive(arc.outCofactor || arc.outText, arc.outCofactorEn)"
           >
-            {{ arc.outText }}
+            {{ activeText }}
           </svg:text>
         </svg:g>
       }
@@ -290,9 +313,9 @@ export interface ReactionArrowData {
         [attr.transform]="'translate(' + reaction().tooltipX + ',' + reaction().tooltipY + ')'"
         class="reaction-tooltip"
       >
-        <svg:rect x="-85" y="-22" width="170" height="24" rx="5" class="tooltip-bg" />
+        <svg:rect x="-95" y="-22" width="190" height="24" rx="5" class="tooltip-bg" />
         <svg:text x="0" y="-6" text-anchor="middle" class="tooltip-text">
-          {{ reaction().enzymeShort }} • {{ reaction().enzymeRu }}
+          {{ reaction().enzymeShort }} • {{ localeService.locale() === 'ru' ? reaction().enzymeRu : reaction().enzymeEn }}
         </svg:text>
       </svg:g>
     }
@@ -494,6 +517,8 @@ export interface ReactionArrowData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReactionArrowComponent {
+  protected readonly localeService = inject(LocaleService);
+
   readonly reaction = input.required<ReactionArrowData>();
   readonly isSelected = input<boolean>(false);
   readonly isHovered = input<boolean>(false);
@@ -510,12 +535,58 @@ export class ReactionArrowComponent {
     return Math.max(28, text.length * 8.2 + 8);
   }
 
-  isCofactorActive(name: string): boolean {
+  getItemText(item: CofactorParticipant): string {
+    if (this.localeService.locale() === 'en' && item.textEn) {
+      return item.textEn;
+    }
+    return item.textRu || item.text;
+  }
+
+  getItemName(item: CofactorParticipant): string {
+    if (this.localeService.locale() === 'en' && item.nameEn) {
+      return item.nameEn;
+    }
+    return item.name;
+  }
+
+  getArcInText(arc: ReactionCofactorArc): string {
+    if (this.localeService.locale() === 'en' && arc.inTextEn) {
+      return arc.inTextEn;
+    }
+    return arc.inTextRu || arc.inText || '';
+  }
+
+  getArcInName(arc: ReactionCofactorArc): string {
+    if (this.localeService.locale() === 'en' && arc.inCofactorEn) {
+      return arc.inCofactorEn;
+    }
+    return arc.inCofactor || arc.inText || '';
+  }
+
+  getArcOutText(arc: ReactionCofactorArc): string {
+    if (this.localeService.locale() === 'en' && arc.outTextEn) {
+      return arc.outTextEn;
+    }
+    return arc.outTextRu || arc.outText || '';
+  }
+
+  getArcOutName(arc: ReactionCofactorArc): string {
+    if (this.localeService.locale() === 'en' && arc.outCofactorEn) {
+      return arc.outCofactorEn;
+    }
+    return arc.outCofactor || arc.outText || '';
+  }
+
+  isCofactorActive(name: string, nameEn?: string): boolean {
     const sel = this.selectedCofactorName();
-    if (!sel || !name) return false;
+    if (!sel || (!name && !nameEn)) return false;
     const a = sel.trim().toLowerCase();
-    const b = name.trim().toLowerCase();
-    return a === b || a.includes(b) || b.includes(a);
+    const b = name ? name.trim().toLowerCase() : '';
+    const c = nameEn ? nameEn.trim().toLowerCase() : '';
+    return (
+      (b !== '' && (a === b || a.includes(b) || b.includes(a))) ||
+      (c !== '' && (a === c || a.includes(c) || c.includes(a)))
+    );
   }
 
   isArcHighlighted(): boolean {
@@ -523,10 +594,10 @@ export class ReactionArrowComponent {
     if (!sel) return false;
     const arc = this.reaction().cofactorArc;
     if (!arc) return false;
-    if (arc.inItems?.some((i) => this.isCofactorActive(i.name))) return true;
-    if (arc.outItems?.some((i) => this.isCofactorActive(i.name))) return true;
-    if (arc.inCofactor && this.isCofactorActive(arc.inCofactor)) return true;
-    if (arc.outCofactor && this.isCofactorActive(arc.outCofactor)) return true;
+    if (arc.inItems?.some((i) => this.isCofactorActive(i.name, i.nameEn))) return true;
+    if (arc.outItems?.some((i) => this.isCofactorActive(i.name, i.nameEn))) return true;
+    if (arc.inCofactor && this.isCofactorActive(arc.inCofactor, arc.inCofactorEn)) return true;
+    if (arc.outCofactor && this.isCofactorActive(arc.outCofactor, arc.outCofactorEn)) return true;
     return false;
   }
 

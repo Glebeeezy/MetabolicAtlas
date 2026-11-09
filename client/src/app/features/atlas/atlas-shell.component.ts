@@ -184,23 +184,32 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
       if (!candidate) return false;
       const c = candidate.toLowerCase();
       const ru = met.nameRu.toLowerCase();
-      const abbrev = met.abbrevRu.toLowerCase();
-      if (c.includes(ru) || c.includes(abbrev) || ru.includes(c) || abbrev.includes(c)) return true;
-      return met.synonymsRu.some((syn) => {
+      const en = met.nameEn.toLowerCase();
+      const abbrevRu = met.abbrevRu.toLowerCase();
+      const abbrevEn = met.abbrevEn.toLowerCase();
+      if (c.includes(ru) || c.includes(en) || c.includes(abbrevRu) || c.includes(abbrevEn) || ru.includes(c) || en.includes(c) || abbrevRu.includes(c) || abbrevEn.includes(c)) return true;
+      if (met.synonymsRu.some((syn) => {
         const s = syn.toLowerCase();
         return c.includes(s) || s.includes(c);
-      });
+      })) return true;
+      if (met.synonymsEn && met.synonymsEn.some((syn) => {
+        const s = syn.toLowerCase();
+        return c.includes(s) || s.includes(c);
+      })) return true;
+      return false;
     };
 
-    if (rx.substrates.some((s) => matches(s.name))) return true;
-    if (rx.products.some((p) => matches(p.name))) return true;
+    if (rx.substrates.some((s) => matches(s.name) || (s.nameEn && matches(s.nameEn)))) return true;
+    if (rx.products.some((p) => matches(p.name) || (p.nameEn && matches(p.nameEn)))) return true;
 
     if (rx.cofactorArc) {
       const arc = rx.cofactorArc;
       if (arc.inCofactor && matches(arc.inCofactor)) return true;
+      if (arc.inCofactorEn && matches(arc.inCofactorEn)) return true;
       if (arc.outCofactor && matches(arc.outCofactor)) return true;
-      if (arc.inItems?.some((i) => matches(i.name) || matches(i.text))) return true;
-      if (arc.outItems?.some((i) => matches(i.name) || matches(i.text))) return true;
+      if (arc.outCofactorEn && matches(arc.outCofactorEn)) return true;
+      if (arc.inItems?.some((i) => matches(i.name) || (i.nameEn && matches(i.nameEn)) || matches(i.text) || (i.textEn && matches(i.textEn)))) return true;
+      if (arc.outItems?.some((i) => matches(i.name) || (i.nameEn && matches(i.nameEn)) || matches(i.text) || (i.textEn && matches(i.textEn)))) return true;
     }
     return false;
   }
@@ -392,11 +401,16 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
       const abbrevRu = m.abbrevRu.toLowerCase();
       const abbrevEn = m.abbrevEn.toLowerCase();
       if (ru === clean || en === clean || abbrevRu === clean || abbrevEn === clean) return true;
-      if (clean.startsWith(ru) || clean.startsWith(en) || clean.startsWith(abbrevRu)) return true;
-      return m.synonymsRu.some((s) => {
+      if (clean.startsWith(ru) || clean.startsWith(en) || clean.startsWith(abbrevRu) || clean.startsWith(abbrevEn)) return true;
+      if (m.synonymsRu.some((s) => {
         const sClean = s.toLowerCase();
         return sClean === clean || clean.startsWith(sClean) || sClean.startsWith(clean);
-      });
+      })) return true;
+      if (m.synonymsEn && m.synonymsEn.some((s) => {
+        const sClean = s.toLowerCase();
+        return sClean === clean || clean.startsWith(sClean) || sClean.startsWith(clean);
+      })) return true;
+      return false;
     });
   }
 
@@ -414,23 +428,32 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
           if (!candidate) return false;
           const c = candidate.toLowerCase();
           const ru = targetMet.nameRu.toLowerCase();
-          const abbrev = targetMet.abbrevRu.toLowerCase();
-          if (c.includes(ru) || c.includes(abbrev) || ru.includes(c) || abbrev.includes(c)) return true;
-          return targetMet.synonymsRu.some((syn) => {
+          const en = targetMet.nameEn.toLowerCase();
+          const abbrevRu = targetMet.abbrevRu.toLowerCase();
+          const abbrevEn = targetMet.abbrevEn.toLowerCase();
+          if (c.includes(ru) || c.includes(en) || c.includes(abbrevRu) || c.includes(abbrevEn) || ru.includes(c) || en.includes(c) || abbrevRu.includes(c) || abbrevEn.includes(c)) return true;
+          if (targetMet.synonymsRu.some((syn) => {
             const s = syn.toLowerCase();
             return c.includes(s) || s.includes(c);
-          });
+          })) return true;
+          if (targetMet.synonymsEn && targetMet.synonymsEn.some((syn) => {
+            const s = syn.toLowerCase();
+            return c.includes(s) || s.includes(c);
+          })) return true;
+          return false;
         };
 
         const isSub =
-          r.substrates.some((s) => matches(s.name)) ||
-          r.cofactorArc?.inItems?.some((i) => matches(i.name) || matches(i.text)) ||
-          (r.cofactorArc?.inCofactor && matches(r.cofactorArc.inCofactor));
+          r.substrates.some((s) => matches(s.name) || (s.nameEn && matches(s.nameEn))) ||
+          r.cofactorArc?.inItems?.some((i) => matches(i.name) || (i.nameEn && matches(i.nameEn)) || matches(i.text) || (i.textEn && matches(i.textEn))) ||
+          (r.cofactorArc?.inCofactor && matches(r.cofactorArc.inCofactor)) ||
+          (r.cofactorArc?.inCofactorEn && matches(r.cofactorArc.inCofactorEn));
 
         const isProd =
-          r.products.some((p) => matches(p.name)) ||
-          r.cofactorArc?.outItems?.some((i) => matches(i.name) || matches(i.text)) ||
-          (r.cofactorArc?.outCofactor && matches(r.cofactorArc.outCofactor));
+          r.products.some((p) => matches(p.name) || (p.nameEn && matches(p.nameEn))) ||
+          r.cofactorArc?.outItems?.some((i) => matches(i.name) || (i.nameEn && matches(i.nameEn)) || matches(i.text) || (i.textEn && matches(i.textEn))) ||
+          (r.cofactorArc?.outCofactor && matches(r.cofactorArc.outCofactor)) ||
+          (r.cofactorArc?.outCofactorEn && matches(r.cofactorArc.outCofactorEn));
 
         if (isProd) {
           list.push({ rx: r, role: 'product' });
@@ -457,25 +480,31 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     return { current, others };
   }
 
-  getRoleNameRu(role: string): string {
+  getRoleName(role: string): string {
+    const isEn = this.localeService.locale() === 'en';
     switch (role) {
       case 'substrate':
-        return 'Субстрат (Вход)';
+        return isEn ? 'Substrate (Input)' : 'Субстрат (Вход)';
       case 'product':
-        return 'Продукт (Выход)';
+        return isEn ? 'Product (Output)' : 'Продукт (Выход)';
       case 'cofactor':
-        return 'Кофермент / Кофактор';
+        return isEn ? 'Coenzyme / Cofactor' : 'Кофермент / Кофактор';
       case 'intermediate':
-        return 'Интермедиат';
+        return isEn ? 'Intermediate' : 'Интермедиат';
       default:
-        return 'Участник';
+        return isEn ? 'Participant' : 'Участник';
     }
+  }
+
+  getRoleNameRu(role: string): string {
+    return this.getRoleName(role);
   }
 
   copyText(text: string, label: string): void {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(text).then(() => {
-        this.copyFeedback.set(`${label} скопирован в буфер!`);
+        const isEn = this.localeService.locale() === 'en';
+        this.copyFeedback.set(isEn ? `${label} copied to clipboard!` : `${label} скопирован в буфер!`);
         if (this.copyTimeoutId) clearTimeout(this.copyTimeoutId);
         this.copyTimeoutId = setTimeout(() => this.copyFeedback.set(null), 2400);
       });

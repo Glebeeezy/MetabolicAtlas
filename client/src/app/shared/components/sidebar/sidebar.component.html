@@ -1,7 +1,7 @@
 <aside
   class="sidebar"
   [class.is-collapsed]="!sidebarService.isOpen()"
-  aria-label="Боковая панель навигации"
+  [attr.aria-label]="localeService.locale() === 'ru' ? 'Боковая панель навигации' : 'Navigation sidebar'"
 >
   <div class="sidebar__inner">
     <!-- Sidebar Top Header (branding only; collapse toggle is in header) -->
