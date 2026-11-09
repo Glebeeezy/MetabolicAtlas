@@ -1,6 +1,6 @@
 <section
   class="canvas-viewport"
-  aria-label="Интерактивная карта метаболизма человека: Цикл трикарбоновых кислот"
+  aria-label="Интерактивная карта метаболизма: Цикл трикарбоновых кислот"
   (mousedown)="onViewportMouseDown($event)"
   (wheel)="onWheel($event)"
 >
@@ -9,7 +9,7 @@
     <div class="context-pill">
       <span class="context-pill__status" aria-hidden="true"></span>
       <span class="context-pill__label">
-        Человек (Homo sapiens) • Цикл Кребса (ЦТК)
+        Цикл трикарбоновых кислот (ЦТК / Цикл Кребса)
       </span>
       <span class="context-pill__stats">
         Матрикс митохондрий • 8 ферментов
@@ -141,23 +141,17 @@
       <!-- 1. Mitochondrial Compartment Backdrop -->
       <g class="compartment-layer" pointer-events="none">
         <rect
-          x="100"
-          y="35"
-          width="1220"
-          height="950"
-          rx="40"
+          x="70"
+          y="15"
+          width="1260"
+          height="990"
+          rx="36"
           class="compartment-rect"
           fill="url(#matrixGlow)"
         />
-        <text x="140" y="70" class="compartment-title">
-          🧬 МАТРИКС МИТОХОНДРИИ ЧЕЛОВЕКА (HUMAN MITOCHONDRIAL MATRIX)
-        </text>
-        <text x="140" y="90" class="compartment-subtitle">
-          Связь: Пируват ➔ Ацетил-КоА ➔ Цикл Кребса ➔ Комплекс II (Внутренняя мембрана) ➔ Дыхательная цепь
-        </text>
       </g>
 
-      <!-- 2. Human Metabolic Crossroads (Outbound & Inbound Pathways) -->
+      <!-- 2. Metabolic Crossroads (Outbound & Inbound Pathways) -->
       <g class="crossroads-layer" pointer-events="none">
         @for (cr of crossroads; track cr.id) {
           <g class="crossroad-item">
@@ -200,6 +194,7 @@
             [isHovered]="isHov"
             [isDimmed]="isDim"
             [isFluxAnimated]="isFluxAnimated()"
+            [selectedCofactorName]="selectedCofactorName()"
             (reactionClick)="onReactionClick($event)"
             (reactionHover)="hoveredReaction.set($event)"
             (reactionLeave)="hoveredReaction.set(null)"
@@ -472,9 +467,9 @@
             </div>
           </div>
 
-          <!-- Section: Catalytic Enzyme (Human) -->
+          <!-- Section: Catalytic Enzyme -->
           <div class="inspector-section">
-            <h3 class="section-title">Катализирующий фермент человека</h3>
+            <h3 class="section-title">Катализирующий фермент</h3>
             <div class="enzyme-details-card">
               <div class="enzyme-details-card__title">
                 <span>{{ rx.enzymeRu }}</span>
@@ -558,7 +553,7 @@
               </button>
             </div>
 
-            <div class="structure-visual-card__drawing" [innerHTML]="getSafeSvg(met.skeletalSvg)"></div>
+            <div class="structure-visual-card__drawing" [innerHTML]="getSafeSvg(met.structureSvg || met.skeletalSvg)"></div>
             <div class="structure-visual-card__note">
               {{ met.isCofactor ? 'Структурная схема кофермента / кофактора' : 'Скелетная 2D-структура промежуточного метаболита' }}
             </div>
@@ -623,7 +618,7 @@
               @if (sorted.others.length > 0) {
                 <div class="pathway-group pathway-group--others">
                   <div class="pathway-group__header">
-                    <span class="pathway-group__title">Другие метаболические пути человека</span>
+                    <span class="pathway-group__title">Другие метаболические пути</span>
                   </div>
 
                   <div class="pathway-items-list">

@@ -29,11 +29,21 @@ export interface HumanMetaboliteNode {
   descriptionRu: string;
   synonymsRu: string[];
   skeletalSvg: string;
+  structureSvg?: string;
   isCofactor?: boolean;
   pathwaysRu: PathwayParticipation[];
 }
 
 export type CofactorPreset = 'tangent-swoop' | 'lateral-loop' | 'perpendicular-dip' | 'through-cross';
+
+export interface CofactorParticipant {
+  name: string;
+  text: string;
+  dx?: number;
+  dy?: number;
+  isEnergy?: boolean;
+  isGtp?: boolean;
+}
 
 export interface ReactionCofactorArc {
   preset?: CofactorPreset;
@@ -50,6 +60,8 @@ export interface ReactionCofactorArc {
   outAnchor?: 'start' | 'middle' | 'end';
   isEnergy?: boolean;
   isGtp?: boolean;
+  inItems?: CofactorParticipant[];
+  outItems?: CofactorParticipant[];
 }
 
 export interface HumanReactionArrow {
@@ -61,6 +73,7 @@ export interface HumanReactionArrow {
   sourceMetaboliteId: string;
   targetMetaboliteId: string;
   secondarySourceId?: string;
+  secondaryPathData?: string;
   pathData: string;
   tooltipX: number;
   tooltipY: number;
@@ -114,6 +127,25 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Четырехуглеродный акцептор ацетильной группы в первой реакции цикла. Регенерируется на последней стадии. Служит субстратом для глюконеогенеза и малат-аспартатного челнока.',
     synonymsRu: ['Оксалоацетат', 'ОАО', 'Щавелевоуксусная кислота', '2-оксобутандиоат'],
     skeletalSvg: '<path d="M 12 18 L 22 24 L 32 18 L 42 24" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="12" cy="18" r="3" fill="#EF4444"/><circle cx="42" cy="24" r="3" fill="#EF4444"/><circle cx="22" cy="12" r="2.5" fill="#EF4444"/><line x1="22" y1="24" x2="22" y2="12" stroke="currentColor" stroke-width="1.6"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <text x="28" y="34" class="atom-o">O⁻</text>
+  <line x1="38" y1="38" x2="65" y2="52" class="chem-bond"/>
+  <line x1="62" y1="52" x2="62" y2="78" class="chem-bond-double-1"/>
+  <line x1="68" y1="52" x2="68" y2="78" class="chem-bond-double-2"/>
+  <text x="65" y="88" class="atom-o">O</text>
+  <line x1="65" y1="52" x2="105" y2="52" class="chem-bond"/>
+  <line x1="102" y1="52" x2="102" y2="24" class="chem-bond-double-1"/>
+  <line x1="108" y1="52" x2="108" y2="24" class="chem-bond-double-2"/>
+  <text x="105" y="16" class="atom-o">O</text>
+  <line x1="105" y1="52" x2="140" y2="66" class="chem-bond"/>
+  <text x="148" y="68" class="atom-c">CH₂</text>
+  <line x1="162" y1="64" x2="185" y2="52" class="chem-bond"/>
+  <line x1="182" y1="52" x2="182" y2="24" class="chem-bond-double-1"/>
+  <line x1="188" y1="52" x2="188" y2="24" class="chem-bond-double-2"/>
+  <text x="185" y="16" class="atom-o">O</text>
+  <line x1="185" y1="52" x2="208" y2="64" class="chem-bond"/>
+  <text x="218" y="70" class="atom-o">O⁻</text>
+</svg>`,
     pathwaysRu: [
       {
         pathwayCode: 'PWY_TCA',
@@ -168,6 +200,20 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Шестиуглеродная трикарбоновая кислота, первый промежуточный продукт цикла. Может транспортироваться в цитозоль для синтеза жирных кислот и холестерина.',
     synonymsRu: ['Цитрат', 'ЦИТ', 'Лимонная кислота', '2-гидроксипропан-1,2,3-трикарбоксилат'],
     skeletalSvg: '<path d="M 10 20 L 22 26 L 34 20 L 46 26" stroke="currentColor" stroke-width="1.6" fill="none"/><line x1="22" y1="26" x2="22" y2="10" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="20" r="3" fill="#EF4444"/><circle cx="46" cy="26" r="3" fill="#EF4444"/><circle cx="22" cy="10" r="3" fill="#EF4444"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <text x="24" y="52" class="atom-o">⁻OOC</text>
+  <line x1="48" y1="52" x2="74" y2="52" class="chem-bond"/>
+  <text x="84" y="52" class="atom-c">CH₂</text>
+  <line x1="96" y1="52" x2="120" y2="52" class="chem-bond"/>
+  <line x1="120" y1="52" x2="120" y2="28" class="chem-bond"/>
+  <text x="120" y="18" class="atom-o">OH</text>
+  <line x1="120" y1="52" x2="120" y2="76" class="chem-bond"/>
+  <text x="120" y="86" class="atom-o">COO⁻</text>
+  <line x1="120" y1="52" x2="144" y2="52" class="chem-bond"/>
+  <text x="154" y="52" class="atom-c">CH₂</text>
+  <line x1="166" y1="52" x2="192" y2="52" class="chem-bond"/>
+  <text x="214" y="52" class="atom-o">COO⁻</text>
+</svg>`,
     pathwaysRu: [
       {
         pathwayCode: 'PWY_TCA',
@@ -215,6 +261,21 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Изомер цитрата с вторичной гидроксильной группой, подготовленный для окислительного декарбоксилирования.',
     synonymsRu: ['Изоцитрат', 'ИЗО', 'Изолимонная кислота', '1-гидроксипропан-1,2,3-трикарбоксилат'],
     skeletalSvg: '<path d="M 10 24 L 22 18 L 34 24 L 46 18" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="24" r="3" fill="#EF4444"/><circle cx="46" cy="18" r="3" fill="#EF4444"/><circle cx="34" cy="32" r="3" fill="#EF4444"/><line x1="34" y1="24" x2="34" y2="32" stroke="currentColor" stroke-width="1.6"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <text x="22" y="52" class="atom-o">⁻OOC</text>
+  <line x1="46" y1="52" x2="68" y2="52" class="chem-bond"/>
+  <line x1="72" y1="46" x2="72" y2="26" class="chem-bond"/>
+  <text x="72" y="16" class="atom-o">OH</text>
+  <text x="72" y="54" class="atom-c">CH</text>
+  <line x1="82" y1="52" x2="114" y2="52" class="chem-bond"/>
+  <line x1="120" y1="58" x2="120" y2="76" class="chem-bond"/>
+  <text x="120" y="86" class="atom-o">COO⁻</text>
+  <text x="120" y="54" class="atom-c">CH</text>
+  <line x1="130" y1="52" x2="158" y2="52" class="chem-bond"/>
+  <text x="166" y="54" class="atom-c">CH₂</text>
+  <line x1="178" y1="52" x2="198" y2="52" class="chem-bond"/>
+  <text x="218" y="52" class="atom-o">COO⁻</text>
+</svg>`,
     pathwaysRu: [
       {
         pathwayCode: 'PWY_TCA',
@@ -255,6 +316,19 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Пятиуглеродный интермедиат. Ключевой перекресток обмена аминокислот (глутамат, глутамин), обезвреживания аммиака и эпигенетической регуляции.',
     synonymsRu: ['α-Кетоглутарат', '2-оксоглутарат', 'α-КГ', '2-оксопентандиоат'],
     skeletalSvg: '<path d="M 10 20 L 22 26 L 34 18 L 46 24" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="20" r="3" fill="#EF4444"/><circle cx="46" cy="24" r="3" fill="#EF4444"/><circle cx="34" cy="10" r="2.5" fill="#EF4444"/><line x1="34" y1="18" x2="34" y2="10" stroke="currentColor" stroke-width="1.6"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <text x="24" y="52" class="atom-o">⁻OOC</text>
+  <line x1="50" y1="52" x2="78" y2="52" class="chem-bond"/>
+  <line x1="75" y1="52" x2="75" y2="26" class="chem-bond-double-1"/>
+  <line x1="81" y1="52" x2="81" y2="26" class="chem-bond-double-2"/>
+  <text x="78" y="16" class="atom-o">O</text>
+  <line x1="78" y1="52" x2="114" y2="52" class="chem-bond"/>
+  <text x="124" y="52" class="atom-c">CH₂</text>
+  <line x1="136" y1="52" x2="164" y2="52" class="chem-bond"/>
+  <text x="174" y="52" class="atom-c">CH₂</text>
+  <line x1="186" y1="52" x2="208" y2="52" class="chem-bond"/>
+  <text x="224" y="52" class="atom-o">COO⁻</text>
+</svg>`,
     pathwaysRu: [
       {
         pathwayCode: 'PWY_TCA',
@@ -309,6 +383,22 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Макроэргический тиоэфир сукцината и кофермента A. Используется для синтеза порфиринов (гемоглобина) и утилизации кетоновых тел в головном мозге.',
     synonymsRu: ['Сукцинил-КоА', 'Сукцинил-коэнзим А', 'Сук-КоА'],
     skeletalSvg: '<path d="M 10 24 L 20 18 L 30 24 L 40 18" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="24" r="3" fill="#EF4444"/><circle cx="40" cy="18" r="3" fill="#10B981"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <text x="22" y="52" class="atom-o">⁻OOC</text>
+  <line x1="48" y1="52" x2="74" y2="52" class="chem-bond"/>
+  <text x="82" y="52" class="atom-c">CH₂</text>
+  <line x1="94" y1="52" x2="118" y2="52" class="chem-bond"/>
+  <text x="126" y="52" class="atom-c">CH₂</text>
+  <line x1="138" y1="52" x2="162" y2="52" class="chem-bond"/>
+  <line x1="159" y1="52" x2="159" y2="26" class="chem-bond-double-1"/>
+  <line x1="165" y1="52" x2="165" y2="26" class="chem-bond-double-2"/>
+  <text x="162" y="16" class="atom-o">O</text>
+  <line x1="162" y1="52" x2="188" y2="52" class="chem-bond"/>
+  <text x="194" y="52" class="atom-s">S</text>
+  <line x1="200" y1="52" x2="212" y2="52" class="chem-bond"/>
+  <rect x="212" y="40" width="26" height="22" rx="4" class="coa-badge-bg"/>
+  <text x="225" y="52" class="coa-badge-text">CoA</text>
+</svg>`,
     pathwaysRu: [
       {
         pathwayCode: 'PWY_TCA',
@@ -363,6 +453,15 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Четырехуглеродная дикарбоновая кислота. Окисляется Комплексом II внутренней мембраны митохондрий, напрямую передавая электроны в пул убихинона.',
     synonymsRu: ['Сукцинат', 'СУК', 'Янтарная кислота', 'Бутандиоат'],
     skeletalSvg: '<path d="M 10 20 L 22 26 L 34 18 L 46 24" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="20" r="3" fill="#EF4444"/><circle cx="46" cy="24" r="3" fill="#EF4444"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <text x="26" y="52" class="atom-o">⁻OOC</text>
+  <line x1="52" y1="52" x2="86" y2="52" class="chem-bond"/>
+  <text x="96" y="52" class="atom-c">CH₂</text>
+  <line x1="110" y1="52" x2="144" y2="52" class="chem-bond"/>
+  <text x="154" y="52" class="atom-c">CH₂</text>
+  <line x1="168" y1="52" x2="202" y2="52" class="chem-bond"/>
+  <text x="218" y="52" class="atom-o">COO⁻</text>
+</svg>`,
     pathwaysRu: [
       {
         pathwayCode: 'PWY_TCA',
@@ -410,6 +509,16 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Транс-ненасыщенная дикарбоновая кислота. Продукт действия сукцинатдегидрогеназы. Связывает ЦТК с циклом мочевины и пуриновым нуклеотидным циклом.',
     synonymsRu: ['Фумарат', 'ФУМ', 'Фумаровая кислота', 'транс-бутендиоат'],
     skeletalSvg: '<path d="M 10 24 L 20 18 L 32 24 L 44 18" stroke="currentColor" stroke-width="1.6" fill="none"/><line x1="20" y1="21" x2="32" y2="27" stroke="currentColor" stroke-width="1.2"/><circle cx="10" cy="24" r="3" fill="#EF4444"/><circle cx="44" cy="18" r="3" fill="#EF4444"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <text x="24" y="28" class="atom-o">⁻OOC</text>
+  <line x1="48" y1="34" x2="82" y2="52" class="chem-bond"/>
+  <text x="88" y="54" class="atom-c">CH</text>
+  <line x1="102" y1="49" x2="136" y2="49" class="chem-bond-double-1"/>
+  <line x1="102" y1="55" x2="136" y2="55" class="chem-bond-double-2"/>
+  <text x="146" y="54" class="atom-c">CH</text>
+  <line x1="156" y1="56" x2="188" y2="74" class="chem-bond"/>
+  <text x="212" y="78" class="atom-o">COO⁻</text>
+</svg>`,
     pathwaysRu: [
       {
         pathwayCode: 'PWY_TCA',
@@ -457,6 +566,17 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Гидроксидикарбоновая кислота. Участвует в малат-аспартатном челночном механизме переноса электронов в митохондрию и глюконеогенезе.',
     synonymsRu: ['L-Малат', 'МАЛ', 'Яблочная кислота', '(2S)-2-гидроксибутандиоат'],
     skeletalSvg: '<path d="M 10 24 L 22 18 L 34 24 L 46 18" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="24" r="3" fill="#EF4444"/><circle cx="46" cy="18" r="3" fill="#EF4444"/><circle cx="22" cy="10" r="2.5" fill="#EF4444"/><line x1="22" y1="18" x2="22" y2="10" stroke="currentColor" stroke-width="1.6"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <text x="24" y="52" class="atom-o">⁻OOC</text>
+  <line x1="50" y1="52" x2="84" y2="52" class="chem-bond"/>
+  <text x="94" y="52" class="atom-c">CH₂</text>
+  <line x1="108" y1="52" x2="142" y2="52" class="chem-bond"/>
+  <line x1="148" y1="44" x2="148" y2="24" class="chem-bond"/>
+  <text x="148" y="16" class="atom-o">OH</text>
+  <text x="148" y="52" class="atom-c">CH</text>
+  <line x1="158" y1="52" x2="198" y2="52" class="chem-bond"/>
+  <text x="218" y="52" class="atom-o">COO⁻</text>
+</svg>`,
     pathwaysRu: [
       {
         pathwayCode: 'PWY_TCA',
@@ -493,8 +613,8 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     abbrevEn: 'Ac-CoA',
     formula: 'C₂₃H₃₄N₇O₁₇P₃S⁴⁻',
     carbons: '2C',
-    x: 430,
-    y: 80,
+    x: 870,
+    y: 35,
     width: 140,
     height: 72,
     color: '#10B981',
@@ -504,6 +624,18 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Центральный метаболит организма человека. Образуется из углеводов (через ПДХ), липидов (β-окисление) и аминокислот. Поставщик двухуглеродного ацетильного остатка для сгорания в цикле Кребса.',
     synonymsRu: ['Ацетил-КоА', 'Ацетил-коэнзим А', 'Ац-КоА'],
     skeletalSvg: '<path d="M 12 18 L 24 24 L 36 18" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="12" cy="18" r="3" fill="#10B981"/><circle cx="36" cy="18" r="3" fill="#EF4444"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <text x="36" y="52" class="atom-c">H₃C</text>
+  <line x1="54" y1="52" x2="95" y2="52" class="chem-bond"/>
+  <line x1="92" y1="52" x2="92" y2="25" class="chem-bond-double-1"/>
+  <line x1="98" y1="52" x2="98" y2="25" class="chem-bond-double-2"/>
+  <text x="95" y="16" class="atom-o">O</text>
+  <line x1="95" y1="52" x2="140" y2="52" class="chem-bond"/>
+  <text x="148" y="52" class="atom-s">S</text>
+  <line x1="156" y1="52" x2="175" y2="52" class="chem-bond"/>
+  <rect x="175" y="38" width="48" height="28" rx="6" class="coa-badge-bg"/>
+  <text x="199" y="53" class="coa-badge-text">CoA</text>
+</svg>`,
     pathwaysRu: [
       {
         pathwayCode: 'PWY_TCA',
@@ -568,6 +700,19 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Главный окислительный кофермент дегидрогеназ человека. Образуется из витамина B₃ (ниацина). В цикле Кребса акцептирует электроны в реакциях 3, 4 и 8, восстанавливаясь до НАДН.',
     synonymsRu: ['НАД⁺', 'Окисленный никотинамидадениндинуклеотид', 'NAD⁺', 'Кофермент дегидрогеназ'],
     skeletalSvg: '<path d="M 10 20 L 22 28 L 34 20 L 46 28 L 54 20" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="20" r="3" fill="#38BDF8"/><circle cx="54" cy="20" r="3" fill="#EF4444"/><circle cx="34" cy="20" r="2.5" fill="#F59E0B"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <polygon points="40,22 60,33 60,57 40,68 20,57 20,33" fill="rgba(56, 189, 248, 0.15)" stroke="#38BDF8" stroke-width="1.8"/>
+  <text x="40" y="24" class="atom-n">N⁺</text>
+  <line x1="60" y1="33" x2="80" y2="22" class="chem-bond"/>
+  <text x="96" y="20" class="atom-c">CONH₂</text>
+  <line x1="40" y1="68" x2="40" y2="82" class="chem-bond"/>
+  <text x="40" y="90" class="atom-c">Рибоза</text>
+  <line x1="68" y1="88" x2="105" y2="88" class="chem-bond"/>
+  <text x="122" y="88" class="atom-p">P-O-P</text>
+  <line x1="142" y1="88" x2="175" y2="65" class="chem-bond"/>
+  <rect x="175" y="42" width="56" height="30" rx="6" fill="rgba(99, 102, 241, 0.18)" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="203" y="58" class="atom-c">Аденин</text>
+</svg>`,
     isCofactor: true,
     pathwaysRu: [
       {
@@ -620,6 +765,20 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Главный энергоемкий восстановительный эквивалент клеточного дыхания. В цикле Кребса генерируются 3 молекулы НАДН на 1 ацетил-КоА, обеспечивающие синтез ~7.5 молекул АТФ в дыхательной цепи.',
     synonymsRu: ['НАДН', 'NADH', 'Восстановленный никотинамидадениндинуклеотид', 'DPNH'],
     skeletalSvg: '<path d="M 10 24 L 22 18 L 34 24 L 46 18 L 54 24" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="24" r="3.2" fill="#F59E0B"/><circle cx="46" cy="18" r="3" fill="#EF4444"/><circle cx="54" cy="24" r="2.5" fill="#38BDF8"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <polygon points="40,22 60,33 60,57 40,68 20,57 20,33" fill="rgba(245, 158, 11, 0.15)" stroke="#F59E0B" stroke-width="1.8"/>
+  <text x="40" y="24" class="atom-n">N</text>
+  <text x="40" y="66" class="atom-c">2H</text>
+  <line x1="60" y1="33" x2="80" y2="22" class="chem-bond"/>
+  <text x="96" y="20" class="atom-c">CONH₂</text>
+  <line x1="40" y1="68" x2="40" y2="82" class="chem-bond"/>
+  <text x="40" y="90" class="atom-c">Рибоза</text>
+  <line x1="68" y1="88" x2="105" y2="88" class="chem-bond"/>
+  <text x="122" y="88" class="atom-p">P-O-P</text>
+  <line x1="142" y1="88" x2="175" y2="65" class="chem-bond"/>
+  <rect x="175" y="42" width="56" height="30" rx="6" fill="rgba(99, 102, 241, 0.18)" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="203" y="58" class="atom-c">Аденин</text>
+</svg>`,
     isCofactor: true,
     pathwaysRu: [
       {
@@ -665,6 +824,15 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Ковалентно связанная простетическая группа сукцинатдегидрогеназы (Комплекс II). Ковалентно соединен с остатком гистидина His-B44 субъединицы SDHA.',
     synonymsRu: ['ФАД', 'Флавинадениндинуклеотид', 'FAD', 'Витамин B2 кофермент'],
     skeletalSvg: '<path d="M 12 20 L 24 26 L 36 20 L 48 26" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="12" cy="20" r="3" fill="#10B981"/><circle cx="48" cy="26" r="3" fill="#EF4444"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <rect x="15" y="32" width="75" height="38" rx="4" fill="rgba(16, 185, 129, 0.15)" stroke="#10B981" stroke-width="1.8"/>
+  <text x="52" y="52" class="atom-n">Изоаллоксазин</text>
+  <line x1="90" y1="52" x2="118" y2="52" class="chem-bond"/>
+  <text x="136" y="52" class="atom-c">Рибитол</text>
+  <line x1="156" y1="52" x2="175" y2="52" class="chem-bond"/>
+  <rect x="175" y="36" width="55" height="32" rx="6" fill="rgba(99, 102, 241, 0.18)" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="202" y="53" class="atom-c">АДФ</text>
+</svg>`,
     isCofactor: true,
     pathwaysRu: [
       {
@@ -703,6 +871,16 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Восстановленная форма флавинадениндинуклеотида Комплекса II. Передает электроны через железосерные кластеры напрямую в мембранный пул убихинона (Q₁₀).',
     synonymsRu: ['ФАДН₂', 'FADH₂', 'Восстановленный флавинадениндинуклеотид'],
     skeletalSvg: '<path d="M 12 24 L 24 18 L 36 24 L 48 18" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="12" cy="24" r="3" fill="#F59E0B"/><circle cx="48" cy="18" r="3" fill="#10B981"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <rect x="15" y="32" width="80" height="38" rx="4" fill="rgba(245, 158, 11, 0.18)" stroke="#F59E0B" stroke-width="1.8"/>
+  <text x="55" y="46" class="atom-n">1,5-Дигидро</text>
+  <text x="55" y="60" class="atom-c">флавин (2H)</text>
+  <line x1="95" y1="52" x2="118" y2="52" class="chem-bond"/>
+  <text x="136" y="52" class="atom-c">Рибитол</text>
+  <line x1="156" y1="52" x2="175" y2="52" class="chem-bond"/>
+  <rect x="175" y="36" width="55" height="32" rx="6" fill="rgba(99, 102, 241, 0.18)" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="202" y="53" class="atom-c">АДФ</text>
+</svg>`,
     isCofactor: true,
     pathwaysRu: [
       {
@@ -741,6 +919,16 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Пуриновый рибонуклеозиддифосфат. Акцептор неорганического фосфата в реакции субстратного фосфорилирования сукцинил-КоА-синтетазой.',
     synonymsRu: ['ГДФ', 'Гуанозин-5′-дифосфат', 'GDP'],
     skeletalSvg: '<path d="M 12 20 L 24 26 L 36 20" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="12" cy="20" r="3" fill="#10B981"/><circle cx="36" cy="20" r="3" fill="#38BDF8"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <rect x="15" y="35" width="70" height="34" rx="6" fill="rgba(16, 185, 129, 0.15)" stroke="#10B981" stroke-width="1.5"/>
+  <text x="50" y="52" class="atom-c">Гуанозин</text>
+  <line x1="85" y1="52" x2="115" y2="52" class="chem-bond"/>
+  <circle cx="130" cy="52" r="13" fill="rgba(192, 132, 252, 0.2)" stroke="#C084FC" stroke-width="1.5"/>
+  <text x="130" y="53" class="atom-p">Pα</text>
+  <line x1="143" y1="52" x2="167" y2="52" class="chem-bond"/>
+  <circle cx="180" cy="52" r="13" fill="rgba(192, 132, 252, 0.2)" stroke="#C084FC" stroke-width="1.5"/>
+  <text x="180" y="53" class="atom-p">Pβ</text>
+</svg>`,
     isCofactor: true,
     pathwaysRu: [
       {
@@ -772,6 +960,19 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Высокоэнергетический нуклеотидтрифосфат. Единственный продукт цикла Кребса, образующийся путем субстратного фосфорилирования без прямого участия дыхательной цепи.',
     synonymsRu: ['ГТФ', 'Гуанозин-5′-трифосфат', 'GTP'],
     skeletalSvg: '<path d="M 10 22 L 22 16 L 34 22 L 46 16" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="22" r="3" fill="#10B981"/><circle cx="46" cy="16" r="3" fill="#F59E0B"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <rect x="12" y="35" width="65" height="34" rx="6" fill="rgba(16, 185, 129, 0.2)" stroke="#10B981" stroke-width="1.5"/>
+  <text x="44" y="52" class="atom-c">Гуанозин</text>
+  <line x1="77" y1="52" x2="98" y2="52" class="chem-bond"/>
+  <circle cx="110" cy="52" r="12" fill="rgba(192, 132, 252, 0.2)" stroke="#C084FC" stroke-width="1.5"/>
+  <text x="110" y="53" class="atom-p">Pα</text>
+  <line x1="122" y1="52" x2="142" y2="52" class="chem-bond"/>
+  <circle cx="154" cy="52" r="12" fill="rgba(192, 132, 252, 0.2)" stroke="#C084FC" stroke-width="1.5"/>
+  <text x="154" y="53" class="atom-p">Pβ</text>
+  <line x1="166" y1="52" x2="186" y2="52" class="chem-bond"/>
+  <circle cx="198" cy="52" r="12" fill="rgba(52, 211, 153, 0.25)" stroke="#34D399" stroke-width="1.8"/>
+  <text x="198" y="53" class="atom-p" fill="#34D399">Pγ~</text>
+</svg>`,
     isCofactor: true,
     pathwaysRu: [
       {
@@ -817,6 +1018,16 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Универсальный клеточный переносчик ацильных и ацетильных остатков. Включает пантотеновую кислоту (витамин B₅) и концевую тиольную (-SH) группу.',
     synonymsRu: ['Коэнзим А', 'КоА', 'КоА-SH', 'CoA', 'CoA-SH'],
     skeletalSvg: '<path d="M 10 24 L 20 18 L 30 24 L 40 18" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="24" r="3" fill="#10B981"/><circle cx="40" cy="18" r="3" fill="#38BDF8"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <text x="24" y="52" class="atom-s">H-S</text>
+  <line x1="42" y1="52" x2="68" y2="52" class="chem-bond"/>
+  <text x="96" y="52" class="atom-c">Цистеамин</text>
+  <line x1="124" y1="52" x2="144" y2="52" class="chem-bond"/>
+  <text x="170" y="52" class="atom-c">Пантотенат</text>
+  <line x1="196" y1="52" x2="210" y2="52" class="chem-bond"/>
+  <rect x="210" y="38" width="28" height="26" rx="4" class="coa-badge-bg"/>
+  <text x="224" y="52" class="coa-badge-text">ADP</text>
+</svg>`,
     isCofactor: true,
     pathwaysRu: [
       {
@@ -862,6 +1073,19 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Неорганический ортофосфат-анион. Транспортируется в матрикс фосфатным переносчиком (PiC / SLC25A3) симпортом с H⁺.',
     synonymsRu: ['Фосфат неорганический', 'Фᵢ', 'Pᵢ', 'Ортофосфат'],
     skeletalSvg: '<path d="M 20 20 L 30 30" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="20" cy="20" r="4" fill="#94A3B8"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <circle cx="120" cy="52" r="18" fill="rgba(192, 132, 252, 0.2)" stroke="#C084FC" stroke-width="2"/>
+  <text x="120" y="54" class="atom-p">P</text>
+  <line x1="117" y1="34" x2="117" y2="18" class="chem-bond-double-1"/>
+  <line x1="123" y1="34" x2="123" y2="18" class="chem-bond-double-2"/>
+  <text x="120" y="10" class="atom-o">O</text>
+  <line x1="102" y1="52" x2="80" y2="52" class="chem-bond"/>
+  <text x="70" y="52" class="atom-o">⁻O</text>
+  <line x1="138" y1="52" x2="160" y2="52" class="chem-bond"/>
+  <text x="170" y="52" class="atom-o">O⁻</text>
+  <line x1="120" y1="70" x2="120" y2="86" class="chem-bond"/>
+  <text x="120" y="94" class="atom-o">OH</text>
+</svg>`,
     isCofactor: true,
     pathwaysRu: [
       {
@@ -900,6 +1124,15 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Конечный продукт декарбоксилирования. В ЦТК выделяются 2 молекулы CO₂ (стадии 3 и 4), что соответствует полному сгоранию 2 углеродов ацетильной группы.',
     synonymsRu: ['Диоксид углерода', 'Углекислый газ', 'CO₂'],
     skeletalSvg: '<line x1="10" y1="20" x2="40" y2="20" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="20" r="3" fill="#EF4444"/><circle cx="40" cy="20" r="3" fill="#EF4444"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <text x="50" y="52" class="atom-o">O</text>
+  <line x1="62" y1="48" x2="108" y2="48" class="chem-bond-double-1"/>
+  <line x1="62" y1="56" x2="108" y2="56" class="chem-bond-double-2"/>
+  <text x="120" y="52" class="atom-c">C</text>
+  <line x1="132" y1="48" x2="178" y2="48" class="chem-bond-double-1"/>
+  <line x1="132" y1="56" x2="178" y2="56" class="chem-bond-double-2"/>
+  <text x="190" y="52" class="atom-o">O</text>
+</svg>`,
     isCofactor: true,
     pathwaysRu: [
       {
@@ -945,6 +1178,16 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Жирорастворимый подвижный переносчик электронов в липидном бислое внутренней мембраны митохондрий. Принимает электроны от Комплекса I и Комплекса II (СДГ).',
     synonymsRu: ['Убихинон', 'Коэнзим Q10', 'CoQ10', 'Q10'],
     skeletalSvg: '<path d="M 12 18 L 24 24 L 36 18" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="12" cy="18" r="3" fill="#EC4899"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <rect x="50" y="28" width="60" height="46" rx="6" fill="rgba(236, 72, 153, 0.15)" stroke="#EC4899" stroke-width="1.8"/>
+  <text x="80" y="52" class="atom-n" fill="#EC4899">Хинон</text>
+  <line x1="80" y1="28" x2="80" y2="12" class="chem-bond"/>
+  <text x="80" y="6" class="atom-o">=O</text>
+  <line x1="80" y1="74" x2="80" y2="90" class="chem-bond"/>
+  <text x="80" y="96" class="atom-o">=O</text>
+  <line x1="110" y1="52" x2="145" y2="52" class="chem-bond"/>
+  <text x="180" y="52" class="atom-c">-(CH₂-CH=C(CH₃)-CH₂)₁₀-H</text>
+</svg>`,
     isCofactor: true,
     pathwaysRu: [
       {
@@ -983,6 +1226,15 @@ export const COFACTOR_METABOLITES: HumanMetaboliteNode[] = [
     descriptionRu: 'Полярный клеточный растворитель и субстрат гидролитических и гидратационных реакций клеточного метаболизма.',
     synonymsRu: ['Вода', 'H2O', 'Оксид водорода'],
     skeletalSvg: '<circle cx="20" cy="20" r="3.5" fill="#38BDF8"/>',
+    structureSvg: `<svg viewBox="0 0 240 100" class="molecule-structure-svg" preserveAspectRatio="xMidYMid meet">
+  <circle cx="120" cy="42" r="16" fill="rgba(56, 189, 248, 0.2)" stroke="#38BDF8" stroke-width="2"/>
+  <text x="120" y="44" class="atom-o">O</text>
+  <line x1="108" y1="52" x2="82" y2="76" class="chem-bond"/>
+  <text x="74" y="82" class="atom-c">H</text>
+  <line x1="132" y1="52" x2="158" y2="76" class="chem-bond"/>
+  <text x="166" y="82" class="atom-c">H</text>
+  <text x="120" y="74" class="atom-c" font-size="10px">104.5°</text>
+</svg>`,
     isCofactor: true,
     pathwaysRu: [
       {
@@ -1010,6 +1262,7 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     nameEn: 'Citrate synthase condensation',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000003', // OAA
     secondarySourceId: 'b0000001-0000-0000-0000-000000000002', // Acetyl-CoA
+    secondaryPathData: 'M 940 107 L 940 133',
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000004', // Citrate
     pathData: 'M 790 125 C 890 125, 980 160, 1040 205',
     tooltipX: 915,
@@ -1045,6 +1298,8 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
       outX: 975,
       outY: 75,
       outAnchor: 'start',
+      inItems: [{ name: 'Вода (H₂O)', text: '+ H₂O' }],
+      outItems: [{ name: 'Кофермент A (КоА-SH)', text: 'КоА-SH' }],
     },
     inhibitorsRu: ['АТФ', 'НАДН', 'Сукцинил-КоА', 'Цитрат'],
     mechanismRu: 'Конденсация метильной группы ацетил-КоА с карбонильным углеродом оксалоацетата с образованием цитрил-КоА, гидролиз которого высвобождает энергию тиоэфирной связи.',
@@ -1088,6 +1343,8 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
       outX: 1215,
       outY: 445,
       outAnchor: 'start',
+      inItems: [{ name: 'Вода (H₂O)', text: '− H₂O' }],
+      outItems: [{ name: 'Вода (H₂O)', text: '+ H₂O' }],
     },
     mechanismRu: 'Стереоспецифическая дегидратация цитрата до промежуточного цис-аконитата, за которой следует гидратация с образованием изоцитрата при участии железосерного кластера [4Fe-4S].',
     clinicalNoteRu: 'Ингибируется фторацетатом (образующим фторцитрат — токсический яд).',
@@ -1135,6 +1392,11 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
       outY: 735,
       outAnchor: 'start',
       isEnergy: true,
+      inItems: [{ name: 'НАД⁺', text: 'НАД⁺' }],
+      outItems: [
+        { name: 'НАДН', text: 'НАДН', dx: 0, isEnergy: true },
+        { name: 'Углекислый газ (CO₂)', text: 'CO₂ ↑', dx: 52 },
+      ],
     },
     activatorsRu: ['АДФ', 'Ca²⁺'],
     inhibitorsRu: ['АТФ', 'НАДН'],
@@ -1181,10 +1443,18 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
       inAnchor: 'start',
       outCofactor: 'НАДН',
       outText: 'НАДН + CO₂ ↑',
-      outX: 830,
+      outX: 740,
       outY: 965,
-      outAnchor: 'end',
+      outAnchor: 'start',
       isEnergy: true,
+      inItems: [
+        { name: 'НАД⁺', text: 'НАД⁺', dx: 0 },
+        { name: 'Кофермент A (КоА-SH)', text: 'КоА', dx: 46 },
+      ],
+      outItems: [
+        { name: 'НАДН', text: 'НАДН', dx: 0, isEnergy: true },
+        { name: 'Углекислый газ (CO₂)', text: 'CO₂ ↑', dx: 50 },
+      ],
     },
     activatorsRu: ['Ca²⁺'],
     inhibitorsRu: ['Сукцинил-КоА', 'НАДН', 'АТФ'],
@@ -1234,6 +1504,14 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
       outY: 975,
       outAnchor: 'middle',
       isGtp: true,
+      inItems: [
+        { name: 'ГДФ', text: 'ГДФ', dx: -30, isGtp: true },
+        { name: 'Неорганический фосфат (Фᵢ)', text: 'Фᵢ', dx: 18 },
+      ],
+      outItems: [
+        { name: 'ГТФ', text: 'ГТФ', dx: -30, isGtp: true },
+        { name: 'Кофермент A (КоА-SH)', text: 'КоА', dx: 18 },
+      ],
     },
     mechanismRu: 'Разрыв богатой энергией тиоэфирной связи сукцинил-КоА сопряжен с фосфорилированием гуанозиндифосфата (ГДФ) до ГТФ через фосфогистидиновый интермедиат фермента.',
     clinicalNoteRu: 'Тканевая специфичность человека: в печени и почках преобладает ГТФ-специфичная изоформа (ген SUCLG2, необходима для глюконеогенеза), в сердце и мозге — АТФ-специфичная (ген SUCLA2).',
@@ -1279,6 +1557,11 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
       outY: 595,
       outAnchor: 'end',
       isEnergy: true,
+      inItems: [{ name: 'ФАД', text: 'ФАД' }],
+      outItems: [
+        { name: 'ФАДН₂', text: 'ФАДН₂', dx: -54, isEnergy: true },
+        { name: 'Кофермент Q₁₀ (Убихинон)', text: '➔ Q₁₀', dx: 0 },
+      ],
     },
     inhibitorsRu: ['Малонат (конкурентный)', 'Оксалоацетат'],
     mechanismRu: 'Стереоспецифическое транс-дегидрирование сукцината. Единственный фермент цикла, встроенный во внутреннюю мембрану митохондрий и напрямую передающий электроны в убихинон (Кофермент Q₁₀).',
@@ -1319,6 +1602,7 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
       inY: 374,
       inAnchor: 'end',
       isEnergy: false,
+      inItems: [{ name: 'Вода (H₂O)', text: '+ H₂O' }],
     },
     mechanismRu: 'Стереоспецифическое транс-присоединение молекулы воды по двойной углерод-углеродной связи фумарата с образованием исключительно L-изомера яблочной кислоты.',
     clinicalNoteRu: 'Классический опухолевый супрессор человека. Герминальные мутации гена FH вызывают наследственный лейомиоматоз и почечно-клеточный рак (синдром HLRCC).',
@@ -1365,6 +1649,11 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
       outY: 70,
       outAnchor: 'middle',
       isEnergy: true,
+      inItems: [{ name: 'НАД⁺', text: 'НАД⁺' }],
+      outItems: [
+        { name: 'НАДН', text: 'НАДН', dx: -24, isEnergy: true },
+        { name: 'Протон (H⁺)', text: '+ H⁺', dx: 26 },
+      ],
     },
     inhibitorsRu: ['Высокие концентрации оксалоацетата'],
     mechanismRu: 'Окисление вторичной спиртовой группы малата до кетогруппы с регенерацией оксалоацетата и образованием третьей молекулы НАДН цикла.',
@@ -1377,12 +1666,12 @@ export const HUMAN_CROSSROADS: MetabolicCrossroad[] = [
     id: 'cr-pdh-in',
     nameRu: 'Гликолиз ➔ Пируват ➔ ПДХ (3C ➔ 2C)',
     direction: 'in',
-    startX: 200,
-    startY: 116,
-    endX: 420,
-    endY: 116,
-    textX: 205,
-    textY: 100,
+    startX: 700,
+    startY: 42,
+    endX: 860,
+    endY: 42,
+    textX: 660,
+    textY: 28,
   },
   {
     id: 'cr-cit-out',
@@ -1421,11 +1710,12 @@ export const HUMAN_CROSSROADS: MetabolicCrossroad[] = [
     id: 'cr-gng-out',
     nameRu: 'Выход: ОАО ➔ Глюконеогенез (PEPCK-M)',
     direction: 'out',
-    startX: 790,
-    startY: 85,
-    endX: 870,
-    endY: 35,
-    textX: 795,
+    startX: 640,
+    startY: 95,
+    endX: 530,
+    endY: 55,
+    textX: 430,
     textY: 45,
   },
 ];
+

@@ -83,4 +83,35 @@ describe('ReactionArrowComponent', () => {
     cofactorPills[0].dispatchEvent(new MouseEvent('click'));
     expect(host.clickedCofactor).toBe('НАД⁺');
   });
+
+  it('should render independent chips when inItems and outItems are present', () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    const host = fixture.componentInstance;
+    host.testReaction = {
+      ...host.testReaction,
+      cofactorArc: {
+        preset: 'tangent-swoop',
+        path: 'M 30 20 Q 50 50 70 20',
+        inItems: [
+          { name: 'НАД⁺', text: 'НАД⁺', dx: 0 },
+          { name: 'Кофермент A (КоА-SH)', text: 'КоА', dx: 40 },
+        ],
+        outItems: [
+          { name: 'НАДН', text: 'НАДН', dx: 0, isEnergy: true },
+          { name: 'Углекислый газ (CO₂)', text: 'CO₂ ↑', dx: 45 },
+        ],
+      },
+    };
+    fixture.detectChanges();
+
+    const chips = fixture.nativeElement.querySelectorAll('.cofactor-pill-item');
+    expect(chips.length).toBe(4);
+
+    chips[1].dispatchEvent(new MouseEvent('click'));
+    expect(host.clickedCofactor).toBe('Кофермент A (КоА-SH)');
+
+    chips[3].dispatchEvent(new MouseEvent('click'));
+    expect(host.clickedCofactor).toBe('Углекислый газ (CO₂)');
+  });
 });
+

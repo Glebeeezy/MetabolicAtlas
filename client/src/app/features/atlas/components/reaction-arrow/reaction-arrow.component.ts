@@ -8,6 +8,15 @@ import { CommonModule } from '@angular/common';
 
 export type CofactorPreset = 'tangent-swoop' | 'lateral-loop' | 'perpendicular-dip' | 'through-cross';
 
+export interface CofactorParticipant {
+  name: string;
+  text: string;
+  dx?: number;
+  dy?: number;
+  isEnergy?: boolean;
+  isGtp?: boolean;
+}
+
 export interface ReactionCofactorArc {
   preset?: CofactorPreset;
   path: string;
@@ -23,6 +32,8 @@ export interface ReactionCofactorArc {
   outAnchor?: 'start' | 'middle' | 'end';
   isEnergy?: boolean;
   isGtp?: boolean;
+  inItems?: CofactorParticipant[];
+  outItems?: CofactorParticipant[];
 }
 
 export interface ReactionArrowData {
@@ -34,6 +45,7 @@ export interface ReactionArrowData {
   sourceMetaboliteId: string;
   targetMetaboliteId: string;
   secondarySourceId?: string;
+  secondaryPathData?: string;
   pathData: string;
   tooltipX: number;
   tooltipY: number;
@@ -92,6 +104,18 @@ export interface ReactionArrowData {
       />
     }
 
+    <!-- Secondary Source Feeder (e.g. Acetyl-CoA feeding down into Citrate Synthase) -->
+    @if (reaction().secondaryPathData) {
+      <svg:path
+        [attr.d]="reaction().secondaryPathData"
+        class="reaction-secondary-line"
+        [class.reaction-secondary-line--active]="isSelected()"
+        [class.reaction-secondary-line--hover]="isHovered()"
+        fill="none"
+        [attr.marker-end]="isSelected() ? 'url(#rx-arrowhead-active)' : (isHovered() ? 'url(#rx-arrowhead-hover)' : 'url(#rx-arrowhead)')"
+      />
+    }
+
     <!-- Cofactor Swoop Arc & Clickable Cofactor Pills -->
     @if (reaction().cofactorArc; as arc) {
       <!-- Arc trajectory touching reaction line smoothly -->
@@ -99,13 +123,52 @@ export interface ReactionArrowData {
         [attr.d]="arc.path"
         class="cofactor-arc"
         [class.cofactor-arc--active]="isSelected()"
+        [class.cofactor-arc--highlighted]="isArcHighlighted()"
         [class.cofactor-arc--hover]="isHovered()"
         fill="none"
-        [attr.marker-end]="isSelected() ? 'url(#cofactor-arrowhead-active)' : 'url(#cofactor-arrowhead)'"
+        [attr.marker-end]="(isSelected() || isArcHighlighted()) ? 'url(#cofactor-arrowhead-active)' : 'url(#cofactor-arrowhead)'"
       />
 
-      <!-- Input Cofactor (Entering Reaction) -->
-      @if (arc.inText) {
+      <!-- Input Cofactors (Entering Reaction) -->
+      @if (arc.inItems && arc.inItems.length > 0) {
+        <svg:g
+          class="cofactor-pill-group"
+          [attr.transform]="'translate(' + (arc.inX || 0) + ',' + (arc.inY || 0) + ')'"
+        >
+          @for (item of arc.inItems; track item.name + item.text) {
+            @let isItemSel = isCofactorActive(item.name);
+            <svg:g
+              class="cofactor-pill-item"
+              [class.is-active]="isItemSel"
+              [attr.transform]="'translate(' + (item.dx || 0) + ',' + (item.dy || 0) + ')'"
+              (click)="onCofactorClick(item.name, $event)"
+              role="button"
+              tabindex="0"
+              [attr.aria-label]="'Кофермент: ' + item.text"
+            >
+              <svg:title>Нажмите, чтобы открыть информацию о {{ item.name }}</svg:title>
+              <svg:rect
+                x="-4"
+                y="-13"
+                [attr.width]="getChipWidth(item.text)"
+                height="17"
+                rx="4"
+                class="cofactor-chip-bg"
+                [class.cofactor-chip-bg--active]="isItemSel"
+              />
+              <svg:text
+                x="0"
+                y="0"
+                [attr.text-anchor]="arc.inAnchor || 'start'"
+                class="cofactor-pill-text cofactor-pill-text--in"
+                [class.cofactor-pill-text--active]="isItemSel"
+              >
+                {{ item.text }}
+              </svg:text>
+            </svg:g>
+          }
+        </svg:g>
+      } @else if (arc.inText) {
         <svg:g
           class="cofactor-pill-group"
           [attr.transform]="'translate(' + (arc.inX || 0) + ',' + (arc.inY || 0) + ')'"
@@ -120,14 +183,55 @@ export interface ReactionArrowData {
             y="0"
             [attr.text-anchor]="arc.inAnchor || 'middle'"
             class="cofactor-pill-text cofactor-pill-text--in"
+            [class.cofactor-pill-text--active]="isCofactorActive(arc.inCofactor || arc.inText)"
           >
             {{ arc.inText }}
           </svg:text>
         </svg:g>
       }
 
-      <!-- Output Cofactor (Leaving Reaction / Product) -->
-      @if (arc.outText) {
+      <!-- Output Cofactors (Leaving Reaction / Product) -->
+      @if (arc.outItems && arc.outItems.length > 0) {
+        <svg:g
+          class="cofactor-pill-group"
+          [attr.transform]="'translate(' + (arc.outX || 0) + ',' + (arc.outY || 0) + ')'"
+        >
+          @for (item of arc.outItems; track item.name + item.text) {
+            @let isItemSel = isCofactorActive(item.name);
+            <svg:g
+              class="cofactor-pill-item"
+              [class.is-active]="isItemSel"
+              [attr.transform]="'translate(' + (item.dx || 0) + ',' + (item.dy || 0) + ')'"
+              (click)="onCofactorClick(item.name, $event)"
+              role="button"
+              tabindex="0"
+              [attr.aria-label]="'Кофермент: ' + item.text"
+            >
+              <svg:title>Нажмите, чтобы открыть информацию о {{ item.name }}</svg:title>
+              <svg:rect
+                x="-4"
+                y="-13"
+                [attr.width]="getChipWidth(item.text)"
+                height="17"
+                rx="4"
+                class="cofactor-chip-bg"
+                [class.cofactor-chip-bg--active]="isItemSel"
+              />
+              <svg:text
+                x="0"
+                y="0"
+                [attr.text-anchor]="arc.outAnchor || 'start'"
+                class="cofactor-pill-text cofactor-pill-text--out"
+                [class.cofactor-pill-text--energy]="item.isEnergy"
+                [class.cofactor-pill-text--gtp]="item.isGtp"
+                [class.cofactor-pill-text--active]="isItemSel"
+              >
+                {{ item.text }}
+              </svg:text>
+            </svg:g>
+          }
+        </svg:g>
+      } @else if (arc.outText) {
         <svg:g
           class="cofactor-pill-group"
           [attr.transform]="'translate(' + (arc.outX || 0) + ',' + (arc.outY || 0) + ')'"
@@ -144,6 +248,7 @@ export interface ReactionArrowData {
             class="cofactor-pill-text cofactor-pill-text--out"
             [class.cofactor-pill-text--energy]="arc.isEnergy"
             [class.cofactor-pill-text--gtp]="arc.isGtp"
+            [class.cofactor-pill-text--active]="isCofactorActive(arc.outCofactor || arc.outText)"
           >
             {{ arc.outText }}
           </svg:text>
@@ -202,6 +307,25 @@ export interface ReactionArrowData {
       }
     }
 
+    .reaction-secondary-line {
+      stroke: var(--color-reaction-line, #334155);
+      stroke-width: 2.2px;
+      stroke-dasharray: 4 3;
+      stroke-linecap: round;
+      pointer-events: none;
+      transition: stroke 0.18s ease, stroke-width 0.18s ease;
+
+      &--active {
+        stroke: #fb7185;
+        stroke-width: 2.6px;
+        stroke-dasharray: none;
+      }
+
+      &--hover {
+        stroke: #38bdf8;
+      }
+    }
+
     .cofactor-arc {
       stroke: #64748b;
       stroke-width: 1.8px;
@@ -216,6 +340,13 @@ export interface ReactionArrowData {
         stroke-dasharray: none;
       }
 
+      &--highlighted {
+        stroke: #38bdf8;
+        stroke-width: 2.4px;
+        stroke-dasharray: none;
+        filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.7));
+      }
+
       &--hover {
         stroke: #38bdf8;
       }
@@ -225,8 +356,19 @@ export interface ReactionArrowData {
       cursor: pointer;
       pointer-events: all;
       transition: transform 0.15s ease;
+    }
+
+    .cofactor-pill-item {
+      cursor: pointer;
+      pointer-events: all;
+      transition: transform 0.15s ease;
 
       &:hover {
+        .cofactor-chip-bg {
+          fill: rgba(56, 189, 248, 0.25);
+          stroke: #38bdf8;
+        }
+
         .cofactor-pill-text {
           fill: #38bdf8;
           font-weight: 800;
@@ -242,6 +384,20 @@ export interface ReactionArrowData {
           fill: #34d399;
           filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.8));
         }
+      }
+    }
+
+    .cofactor-chip-bg {
+      fill: rgba(15, 23, 42, 0.75);
+      stroke: rgba(255, 255, 255, 0.1);
+      stroke-width: 0.8px;
+      transition: fill 0.15s ease, stroke 0.15s ease;
+
+      &--active {
+        fill: rgba(56, 189, 248, 0.25);
+        stroke: #38bdf8;
+        stroke-width: 1.5px;
+        filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.7));
       }
     }
 
@@ -268,6 +424,12 @@ export interface ReactionArrowData {
       &--gtp {
         fill: #10b981;
         font-weight: 800;
+      }
+
+      &--active {
+        fill: #ffffff !important;
+        font-weight: 800 !important;
+        filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
       }
     }
 
@@ -309,14 +471,40 @@ export class ReactionArrowComponent {
   readonly isHovered = input<boolean>(false);
   readonly isDimmed = input<boolean>(false);
   readonly isFluxAnimated = input<boolean>(false);
+  readonly selectedCofactorName = input<string | null>(null);
 
   readonly reactionClick = output<ReactionArrowData>();
   readonly reactionHover = output<ReactionArrowData>();
   readonly reactionLeave = output<void>();
   readonly cofactorClick = output<string>();
 
+  getChipWidth(text: string): number {
+    return Math.max(28, text.length * 8.2 + 8);
+  }
+
+  isCofactorActive(name: string): boolean {
+    const sel = this.selectedCofactorName();
+    if (!sel || !name) return false;
+    const a = sel.trim().toLowerCase();
+    const b = name.trim().toLowerCase();
+    return a === b || a.includes(b) || b.includes(a);
+  }
+
+  isArcHighlighted(): boolean {
+    const sel = this.selectedCofactorName();
+    if (!sel) return false;
+    const arc = this.reaction().cofactorArc;
+    if (!arc) return false;
+    if (arc.inItems?.some((i) => this.isCofactorActive(i.name))) return true;
+    if (arc.outItems?.some((i) => this.isCofactorActive(i.name))) return true;
+    if (arc.inCofactor && this.isCofactorActive(arc.inCofactor)) return true;
+    if (arc.outCofactor && this.isCofactorActive(arc.outCofactor)) return true;
+    return false;
+  }
+
   onCofactorClick(cofactorName: string, event: MouseEvent): void {
     event.stopPropagation();
     this.cofactorClick.emit(cofactorName);
   }
 }
+

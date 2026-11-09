@@ -199,4 +199,66 @@ describe('AtlasShellComponent', () => {
     expect(component.selectedReaction()).toBeNull();
     expect(component.selectedMetabolite()).toBeNull();
   });
+
+  it('should provide authentic 2D chemical structure SVGs for all metabolites and cofactors', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+
+    for (const met of component.allMetabolites) {
+      expect(met.structureSvg).toBeTruthy();
+      expect(met.structureSvg).toContain('<svg');
+      expect(met.structureSvg).toContain('molecule-structure-svg');
+    }
+  });
+
+  it('should reposition Acetyl-CoA above Reaction 1 without colliding with Reaction 8', () => {
+    const acetyl = HUMAN_METABOLITES.find((m) => m.code === 'MET_ACETYL_COA')!;
+    expect(acetyl.x).toBe(870);
+    expect(acetyl.y).toBe(35);
+
+    // Reaction 8 path connects Malate (x: 290..430) to OAA (x: 640), totally free from x: 870
+    const mdh = HUMAN_REACTIONS.find((r) => r.code === 'R_MDH')!;
+    expect(mdh.pathData).toContain('M 390 190');
+  });
+
+  it('should perform global cross-highlighting when a cofactor is selected', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    // Click on NADH cofactor
+    component.onCofactorClick('НАДН');
+    expect(component.selectedCofactorName()).toBe('НАДН');
+
+    // Reactions 3, 4, 8 produce NADH -> must NOT be dimmed
+    const rx3 = HUMAN_REACTIONS.find((r) => r.stepNumber === 3)!;
+    const rx4 = HUMAN_REACTIONS.find((r) => r.stepNumber === 4)!;
+    const rx8 = HUMAN_REACTIONS.find((r) => r.stepNumber === 8)!;
+    expect(component.isReactionDimmed(rx3.id)).toBe(false);
+    expect(component.isReactionDimmed(rx4.id)).toBe(false);
+    expect(component.isReactionDimmed(rx8.id)).toBe(false);
+
+    // Unrelated reactions (e.g. Step 1 CS, Step 2 ACO, Step 6 SDH) MUST be dimmed
+    const rx1 = HUMAN_REACTIONS.find((r) => r.stepNumber === 1)!;
+    const rx2 = HUMAN_REACTIONS.find((r) => r.stepNumber === 2)!;
+    const rx6 = HUMAN_REACTIONS.find((r) => r.stepNumber === 6)!;
+    expect(component.isReactionDimmed(rx1.id)).toBe(true);
+    expect(component.isReactionDimmed(rx2.id)).toBe(true);
+    expect(component.isReactionDimmed(rx6.id)).toBe(true);
+  });
+
+  it('should link cofactors to their participating TCA cycle reactions in inspector', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+
+    const nadh = component.findMetaboliteByName('НАДН')!;
+    const nadhRxs = component.getReactionsForMetabolite(nadh.id);
+    expect(nadhRxs.length).toBe(3);
+    expect(nadhRxs.every((item) => item.role === 'product')).toBe(true);
+
+    const nad = component.findMetaboliteByName('НАД⁺')!;
+    const nadRxs = component.getReactionsForMetabolite(nad.id);
+    expect(nadRxs.length).toBe(3);
+    expect(nadRxs.every((item) => item.role === 'substrate')).toBe(true);
+  });
 });

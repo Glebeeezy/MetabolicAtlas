@@ -92,6 +92,14 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   readonly copyFeedback = signal<string | null>(null);
   private copyTimeoutId?: ReturnType<typeof setTimeout>;
 
+  readonly selectedCofactorName = computed(() => {
+    const met = this.selectedMetabolite();
+    if (met && met.isCofactor) {
+      return met.nameRu;
+    }
+    return null;
+  });
+
   // Global pan handlers
   private onWindowMouseMoveHandler?: (e: MouseEvent) => void;
   private onWindowMouseUpHandler?: (e: MouseEvent) => void;
@@ -126,6 +134,38 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     return r.targetMetaboliteId === nodeId;
   }
 
+  doesReactionInvolveMetabolite(rx: HumanReactionArrow, met: HumanMetaboliteNode): boolean {
+    if (rx.sourceMetaboliteId === met.id || rx.secondarySourceId === met.id || rx.targetMetaboliteId === met.id) {
+      return true;
+    }
+    if (!met.isCofactor) {
+      return false;
+    }
+    const matches = (candidate: string) => {
+      if (!candidate) return false;
+      const c = candidate.toLowerCase();
+      const ru = met.nameRu.toLowerCase();
+      const abbrev = met.abbrevRu.toLowerCase();
+      if (c.includes(ru) || c.includes(abbrev) || ru.includes(c) || abbrev.includes(c)) return true;
+      return met.synonymsRu.some((syn) => {
+        const s = syn.toLowerCase();
+        return c.includes(s) || s.includes(c);
+      });
+    };
+
+    if (rx.substrates.some((s) => matches(s.name))) return true;
+    if (rx.products.some((p) => matches(p.name))) return true;
+
+    if (rx.cofactorArc) {
+      const arc = rx.cofactorArc;
+      if (arc.inCofactor && matches(arc.inCofactor)) return true;
+      if (arc.outCofactor && matches(arc.outCofactor)) return true;
+      if (arc.inItems?.some((i) => matches(i.name) || matches(i.text))) return true;
+      if (arc.outItems?.some((i) => matches(i.name) || matches(i.text))) return true;
+    }
+    return false;
+  }
+
   isNodeDimmed(nodeId: string): boolean {
     const filter = this.activeCarrierFilter();
     if (filter) {
@@ -143,6 +183,14 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     }
     const selM = this.selectedMetabolite();
     if (selM) {
+      if (selM.isCofactor) {
+        // Keep bright if this node participates in any reaction involving this cofactor
+        const activeRxs = this.reactions.filter((r) => this.doesReactionInvolveMetabolite(r, selM));
+        const isInvolved = activeRxs.some(
+          (r) => r.sourceMetaboliteId === nodeId || r.secondarySourceId === nodeId || r.targetMetaboliteId === nodeId
+        );
+        return !isInvolved;
+      }
       return selM.id !== nodeId;
     }
     return false;
@@ -165,7 +213,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     if (selM) {
       const r = this.reactionMap().get(reactionId);
       if (!r) return true;
-      return r.sourceMetaboliteId !== selM.id && r.targetMetaboliteId !== selM.id && r.secondarySourceId !== selM.id;
+      return !this.doesReactionInvolveMetabolite(r, selM);
     }
     return false;
   }
@@ -288,11 +336,41 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
 
   getReactionsForMetabolite(metId: string): { rx: HumanReactionArrow; role: 'substrate' | 'product' }[] {
     const list: { rx: HumanReactionArrow; role: 'substrate' | 'product' }[] = [];
+    const targetMet = this.allMetabolites.find((m) => m.id === metId);
+
     for (const r of this.reactions) {
       if (r.sourceMetaboliteId === metId || r.secondarySourceId === metId) {
         list.push({ rx: r, role: 'substrate' });
       } else if (r.targetMetaboliteId === metId) {
         list.push({ rx: r, role: 'product' });
+      } else if (targetMet && targetMet.isCofactor) {
+        const matches = (candidate: string) => {
+          if (!candidate) return false;
+          const c = candidate.toLowerCase();
+          const ru = targetMet.nameRu.toLowerCase();
+          const abbrev = targetMet.abbrevRu.toLowerCase();
+          if (c.includes(ru) || c.includes(abbrev) || ru.includes(c) || abbrev.includes(c)) return true;
+          return targetMet.synonymsRu.some((syn) => {
+            const s = syn.toLowerCase();
+            return c.includes(s) || s.includes(c);
+          });
+        };
+
+        const isSub =
+          r.substrates.some((s) => matches(s.name)) ||
+          r.cofactorArc?.inItems?.some((i) => matches(i.name) || matches(i.text)) ||
+          (r.cofactorArc?.inCofactor && matches(r.cofactorArc.inCofactor));
+
+        const isProd =
+          r.products.some((p) => matches(p.name)) ||
+          r.cofactorArc?.outItems?.some((i) => matches(i.name) || matches(i.text)) ||
+          (r.cofactorArc?.outCofactor && matches(r.cofactorArc.outCofactor));
+
+        if (isProd) {
+          list.push({ rx: r, role: 'product' });
+        } else if (isSub) {
+          list.push({ rx: r, role: 'substrate' });
+        }
       }
     }
     return list;

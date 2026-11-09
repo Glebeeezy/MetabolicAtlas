@@ -61,22 +61,8 @@
    1. Mitochondrial Compartment Backdrop
    ========================================================================== */
 .compartment-rect {
-  stroke: var(--color-border-subtle);
+  stroke: rgba(255, 255, 255, 0.07);
   stroke-width: 1.5px;
-  stroke-dasharray: 8 6;
-}
-
-.compartment-title {
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  fill: var(--color-text-secondary);
-}
-
-.compartment-subtitle {
-  font-size: 10.5px;
-  font-weight: 500;
-  fill: var(--color-text-muted);
 }
 
 /* ==========================================================================
@@ -1034,20 +1020,100 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80px;
-    height: 50px;
+    width: 100%;
+    min-height: 110px;
     margin-bottom: 0.6rem;
+    padding: 0.5rem 0.25rem;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-sm);
     color: var(--color-text-secondary);
-
-    svg, path {
-      transform: scale(1.4);
-    }
   }
 
   &__note {
     font-size: 0.725rem;
     color: var(--color-text-muted);
     font-style: italic;
+  }
+}
+
+.molecule-structure-svg {
+  width: 100%;
+  max-width: 250px;
+  height: 95px;
+  overflow: visible;
+
+  .chem-bond {
+    stroke: #94a3b8;
+    stroke-width: 2.2px;
+    stroke-linecap: round;
+  }
+
+  .chem-bond-double-1,
+  .chem-bond-double-2 {
+    stroke: #94a3b8;
+    stroke-width: 1.8px;
+    stroke-linecap: round;
+  }
+
+  .atom-o {
+    fill: #ef4444;
+    font-family: var(--font-mono, monospace);
+    font-size: 13px;
+    font-weight: 700;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .atom-n {
+    fill: #38bdf8;
+    font-family: var(--font-mono, monospace);
+    font-size: 13px;
+    font-weight: 700;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .atom-s {
+    fill: #f59e0b;
+    font-family: var(--font-mono, monospace);
+    font-size: 13px;
+    font-weight: 700;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .atom-p {
+    fill: #c084fc;
+    font-family: var(--font-mono, monospace);
+    font-size: 13px;
+    font-weight: 700;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .atom-c {
+    fill: #cbd5e1;
+    font-family: var(--font-mono, monospace);
+    font-size: 12px;
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .coa-badge-bg {
+    fill: rgba(16, 185, 129, 0.2);
+    stroke: #10b981;
+    stroke-width: 1.2px;
+  }
+
+  .coa-badge-text {
+    fill: #34d399;
+    font-family: var(--font-mono, monospace);
+    font-size: 10px;
+    font-weight: 800;
+    text-anchor: middle;
+    dominant-baseline: central;
   }
 }
 
