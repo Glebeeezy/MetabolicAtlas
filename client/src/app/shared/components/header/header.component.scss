@@ -1,0 +1,111 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-bg-surface);
+  border-bottom: 1px solid var(--color-border-subtle);
+  backdrop-filter: blur(8px);
+  transition: background var(--transition-normal), border-color var(--transition-normal);
+
+  &__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+}
+
+.branding {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-text-primary);
+  text-decoration: none;
+
+  &__logo {
+    font-size: 1.75rem;
+    color: var(--color-primary);
+    line-height: 1;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  &__subtitle {
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.875rem;
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background var(--transition-fast), color var(--transition-fast);
+
+    &:hover {
+      background: var(--color-bg-elevated);
+      color: var(--color-text-primary);
+    }
+
+    &.active {
+      background: var(--color-primary-soft);
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+  }
+
+  &__icon {
+    font-size: 1rem;
+    line-height: 1;
+  }
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+@media (max-width: 768px) {
+  .header__inner {
+    flex-wrap: wrap;
+    padding: 0.5rem 1rem;
+  }
+
+  .branding__subtitle {
+    display: none;
+  }
+
+  .nav {
+    order: 3;
+    width: 100%;
+    justify-content: space-around;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+}

@@ -187,3 +187,4 @@ public class CoreEndpointTests : IClassFixture<TestWebApplicationFactory>
         Assert.Equal("Malate dehydrogenase", enzyme.Name);
     }
 }
+

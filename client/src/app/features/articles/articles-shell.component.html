@@ -1,0 +1,19 @@
+<section class="shell-container">
+  <div class="shell-card">
+    <div class="shell-badge">Educational Resources</div>
+    <h1 class="shell-title">Biochemical Articles</h1>
+    <p class="shell-description">
+      Curated educational articles covering human metabolism, clinical correlates,
+      vitamin cofactors, and regulation.
+    </p>
+    @if (slug()) {
+      <div class="article-param">
+        <span class="param-key">Article:</span> <code>{{ slug() }}</code>
+      </div>
+    }
+    <div class="shell-status">
+      <span class="status-indicator"></span>
+      <span>Foundation ready — article reader scheduled for implementation.</span>
+    </div>
+  </div>
+</section>

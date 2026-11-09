@@ -1,0 +1,20 @@
+<section class="shell-container">
+  <div class="shell-card">
+    <div class="shell-badge">Biochemical Entity</div>
+    <h1 class="shell-title">Entity Detail Sheet</h1>
+    <p class="shell-description">
+      Dedicated sheet for scientific properties, formula, identifiers (ChEBI, HMDB, Rhea),
+      stoichiometry, and cross-references.
+    </p>
+    @if (type() && id()) {
+      <div class="entity-params">
+        <span class="param-key">Type:</span> <code>{{ type() }}</code>
+        <span class="param-key">Identifier:</span> <code>{{ id() }}</code>
+      </div>
+    }
+    <div class="shell-status">
+      <span class="status-indicator"></span>
+      <span>Foundation ready — entity detail sheets scheduled for implementation.</span>
+    </div>
+  </div>
+</section>

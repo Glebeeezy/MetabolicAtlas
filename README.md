@@ -2,6 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4.svg)](https://dotnet.microsoft.com/)
+[![Angular](https://img.shields.io/badge/Angular-22-DD0031.svg)](https://angular.dev/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791.svg)](https://www.postgresql.org/)
 [![API Docs](https://img.shields.io/badge/API_Docs-Scalar-black.svg)](#api-endpoints-prefix-apiv1)
 
@@ -88,6 +89,10 @@ PostgreSQL Database
 
 ```text
 metabolic-atlas/
+├── client/                            # Angular SPA frontend
+│   ├── src/app/core/                  # Core services (API, Theme, Locale) & typed DTO models
+│   ├── src/app/features/              # Feature shells (Atlas, Pathways, Entities, Search, Articles)
+│   └── src/app/shared/                # Reusable UI components (Header, Footer, Theme/Locale switchers)
 ├── src/
 │   ├── MetabolicAtlas.Domain/         # Pure domain model, aggregates, entities, enums
 │   ├── MetabolicAtlas.Application/    # Use cases, DTOs, service abstractions, logic
@@ -150,6 +155,7 @@ metabolic-atlas/
 
 ### Prerequisites
 - [.NET 10 SDK](https://dotnet.microsoft.com/)
+- [Node.js 22+](https://nodejs.org/) & npm
 - [Docker & Docker Compose](https://www.docker.com/)
 
 ### 1. Start PostgreSQL
@@ -170,12 +176,24 @@ dotnet ef database update --project src/MetabolicAtlas.Infrastructure --startup-
 ```powershell
 dotnet run --project src/MetabolicAtlas.Api
 ```
-The API will be available at `https://localhost:7001` (or configured port).
+The API will be available at `http://localhost:5029` (HTTP) and `https://localhost:7037` (HTTPS).
 Access interactive Scalar documentation at `/scalar/v1`.
 
-### 4. Run Tests
+### 4. Run the Frontend SPA
 ```powershell
+cd client
+npm start
+```
+The Angular application starts at `http://localhost:4200` with automatic API reverse-proxy to the backend.
+
+### 5. Run Tests
+```powershell
+# Backend tests (Domain, Import, Integration)
 dotnet test
+
+# Frontend unit tests
+cd client
+npm run test:ci
 ```
 
 ---

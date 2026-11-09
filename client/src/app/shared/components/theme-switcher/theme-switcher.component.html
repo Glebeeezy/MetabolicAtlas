@@ -1,0 +1,15 @@
+<button
+  type="button"
+  class="theme-btn"
+  (click)="toggle()"
+  [attr.aria-label]="'Switch theme, currently ' + themeService.theme()"
+  [title]="themeService.theme() === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'"
+>
+  @if (themeService.theme() === 'dark') {
+    <span class="icon" aria-hidden="true">☀️</span>
+    <span class="label">Light</span>
+  } @else {
+    <span class="icon" aria-hidden="true">🌙</span>
+    <span class="label">Dark</span>
+  }
+</button>

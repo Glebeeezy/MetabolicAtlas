@@ -1,0 +1,35 @@
+<header class="header">
+  <div class="header__inner">
+    <a routerLink="/" class="branding">
+      <span class="branding__logo" aria-hidden="true">⚛</span>
+      <span class="branding__text">
+        <span class="branding__title">Metabolic Atlas</span>
+        <span class="branding__subtitle">Human Metabolism Explorer</span>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Main Navigation">
+      <a routerLink="/atlas" routerLinkActive="active" class="nav__link">
+        <span class="nav__icon" aria-hidden="true">🗺️</span>
+        <span>Atlas</span>
+      </a>
+      <a routerLink="/pathways" routerLinkActive="active" class="nav__link">
+        <span class="nav__icon" aria-hidden="true">🔄</span>
+        <span>Pathways</span>
+      </a>
+      <a routerLink="/search" routerLinkActive="active" class="nav__link">
+        <span class="nav__icon" aria-hidden="true">🔍</span>
+        <span>Search</span>
+      </a>
+      <a routerLink="/articles" routerLinkActive="active" class="nav__link">
+        <span class="nav__icon" aria-hidden="true">📚</span>
+        <span>Articles</span>
+      </a>
+    </nav>
+
+    <div class="controls">
+      <ma-locale-switcher />
+      <ma-theme-switcher />
+    </div>
+  </div>
+</header>

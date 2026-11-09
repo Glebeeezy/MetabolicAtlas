@@ -10,3 +10,4 @@ public interface IEnzymeService
     Task<IReadOnlyList<EnzymeDto>> GetEnzymesAsync(CancellationToken cancellationToken = default);
     Task<EnzymeDto> GetEnzymeByIdAsync(Guid id, CancellationToken cancellationToken = default);
 }
+

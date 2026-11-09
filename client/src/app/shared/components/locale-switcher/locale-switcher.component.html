@@ -1,0 +1,10 @@
+<button
+  type="button"
+  class="locale-btn"
+  (click)="toggle()"
+  [attr.aria-label]="'Switch language, currently ' + localeService.locale().toUpperCase()"
+  [title]="localeService.locale() === 'ru' ? 'Switch to English' : 'Переключить на русский'"
+>
+  <span class="flag" aria-hidden="true">🌐</span>
+  <span class="code">{{ localeService.locale().toUpperCase() }}</span>
+</button>

@@ -1,0 +1,61 @@
+.shell-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.shell-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.shell-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-sm);
+  background: rgba(147, 51, 234, 0.12);
+  color: var(--bio-enzyme);
+}
+
+.shell-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.shell-description {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  max-width: 65ch;
+}
+
+.shell-status {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+
+  .status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-success);
+    display: inline-block;
+  }
+}
