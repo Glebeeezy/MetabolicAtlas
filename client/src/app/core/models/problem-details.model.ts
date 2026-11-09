@@ -10,3 +10,4 @@ export interface ProblemDetails {
   errors?: Record<string, string[]>;
   [key: string]: unknown;
 }
+

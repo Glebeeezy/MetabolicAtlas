@@ -1,27 +1,248 @@
-.theme-btn {
+:host {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-subtle);
-  background: var(--color-bg-elevated);
-  color: var(--color-text-primary);
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 58px;
+  height: 30px;
+  padding: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: transform var(--transition-fast);
 
   &:hover {
-    background: var(--color-border-subtle);
-    border-color: var(--color-border-strong);
+    transform: scale(1.04);
   }
 
   &:active {
-    transform: scale(0.97);
+    transform: scale(0.96);
   }
 
-  .icon {
-    font-size: 1rem;
-    line-height: 1;
+  &:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 3px;
+  }
+}
+
+.theme-toggle__track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--color-border-strong);
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), var(--shadow-xs);
+  transition: background 400ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 400ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   Day Clouds (Light Mode)
+   ========================================================================== */
+.theme-toggle__clouds {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 350ms ease, transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+  transform: translateY(0);
+
+  .cloud {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: var(--radius-full);
+
+    &--1 {
+      bottom: 2px;
+      right: 6px;
+      width: 22px;
+      height: 7px;
+    }
+
+    &--2 {
+      bottom: 6px;
+      right: 12px;
+      width: 12px;
+      height: 8px;
+    }
+
+    &--3 {
+      bottom: 3px;
+      right: 20px;
+      width: 10px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.6);
+    }
+  }
+}
+
+/* ==========================================================================
+   Night Stars (Dark Mode)
+   ========================================================================== */
+.theme-toggle__stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 350ms ease, transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  .star {
+    position: absolute;
+    background: #ffffff;
+    border-radius: 50%;
+    transition: transform 300ms ease;
+
+    &--1 {
+      top: 6px;
+      left: 10px;
+      width: 2.5px;
+      height: 2.5px;
+      box-shadow: 0 0 3px #ffffff;
+      animation: pulse-star 2s infinite ease-in-out;
+    }
+
+    &--2 {
+      top: 17px;
+      left: 16px;
+      width: 2px;
+      height: 2px;
+      opacity: 0.85;
+      animation: pulse-star 2.4s infinite ease-in-out 0.4s;
+    }
+
+    &--3 {
+      top: 9px;
+      left: 24px;
+      width: 3px;
+      height: 3px;
+      box-shadow: 0 0 3px #ffffff;
+      animation: pulse-star 1.8s infinite ease-in-out 0.8s;
+    }
+
+    &--4 {
+      top: 19px;
+      left: 28px;
+      width: 1.5px;
+      height: 1.5px;
+      opacity: 0.7;
+      animation: pulse-star 2.2s infinite ease-in-out 0.2s;
+    }
+  }
+}
+
+@keyframes pulse-star {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Thumb: Sun (Light) & Moon (Dark)
+   ========================================================================== */
+.theme-toggle__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 420ms cubic-bezier(0.68, -0.2, 0.265, 1.25);
+  transform: translateX(0);
+}
+
+.celestial-body {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #fbbf24;
+  box-shadow: 0 0 8px 2px rgba(251, 191, 36, 0.65), inset -1px -1px 2px rgba(180, 83, 9, 0.4);
+  transition: background 400ms ease, box-shadow 400ms ease, transform 400ms ease;
+
+  /* Moon craters initially invisible in light mode */
+  .crater {
+    position: absolute;
+    background: #94a3b8;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 300ms ease, transform 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    &--1 {
+      top: 4px;
+      left: 7px;
+      width: 5px;
+      height: 5px;
+      box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.2);
+    }
+
+    &--2 {
+      top: 11px;
+      left: 4px;
+      width: 4px;
+      height: 4px;
+      box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.2);
+    }
+
+    &--3 {
+      top: 11px;
+      left: 12px;
+      width: 3.5px;
+      height: 3.5px;
+      box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+/* ==========================================================================
+   Dark Mode Active State
+   ========================================================================== */
+.theme-toggle--dark {
+  .theme-toggle__track {
+    background: linear-gradient(135deg, #090d16 0%, #1e1b4b 100%);
+    border-color: #334155;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 0 8px rgba(56, 189, 248, 0.15);
+  }
+
+  .theme-toggle__clouds {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .theme-toggle__stars {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .theme-toggle__thumb {
+    transform: translateX(28px);
+  }
+
+  .celestial-body {
+    background: #e2e8f0;
+    box-shadow: 0 0 10px 1px rgba(226, 232, 240, 0.5), inset -1px -1px 2px rgba(100, 116, 139, 0.6);
+    transform: rotate(20deg);
+
+    .crater {
+      opacity: 0.9;
+      transform: scale(1);
+    }
   }
 }

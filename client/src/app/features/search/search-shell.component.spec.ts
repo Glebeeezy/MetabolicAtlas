@@ -13,3 +13,4 @@ describe('SearchShellComponent', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 });
+

@@ -8,3 +8,4 @@ export interface EnzymeDetail {
   uniprotId?: string | null;
   description?: string | null;
 }
+

@@ -21,3 +21,4 @@ describe('FooterComponent', () => {
     expect(text).toContain('MIT License');
   });
 });
+

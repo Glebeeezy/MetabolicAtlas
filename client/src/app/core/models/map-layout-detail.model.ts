@@ -15,3 +15,4 @@ export interface MapLayoutDetail {
   elements: MapElement[];
   edges: MapEdge[];
 }
+

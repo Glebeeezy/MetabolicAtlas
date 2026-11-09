@@ -12,3 +12,4 @@ export * from './pathway-reaction.model';
 export * from './pathway-detail.model';
 export * from './article.model';
 export * from './search-result.model';
+

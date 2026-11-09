@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { LocaleService } from '../../core/services/locale.service';
 
 /**
- * Shell placeholder component for the interactive metabolic atlas canvas.
+ * Shell viewport component for the interactive metabolic atlas canvas.
  */
 @Component({
   selector: 'ma-atlas-shell',
@@ -9,4 +10,20 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './atlas-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AtlasShellComponent {}
+export class AtlasShellComponent {
+  protected readonly localeService = inject(LocaleService);
+
+  readonly zoom = signal<number>(100);
+
+  zoomIn(): void {
+    this.zoom.update((z) => Math.min(z + 15, 250));
+  }
+
+  zoomOut(): void {
+    this.zoom.update((z) => Math.max(z - 15, 30));
+  }
+
+  resetZoom(): void {
+    this.zoom.set(100);
+  }
+}

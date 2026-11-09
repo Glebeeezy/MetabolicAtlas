@@ -1,7 +1,10 @@
 <div class="app-layout">
-  <ma-header />
-  <main class="app-main" id="main-content">
-    <router-outlet />
-  </main>
-  <ma-footer />
+  <ma-sidebar />
+  <div class="app-viewport">
+    <ma-header />
+    <main class="app-main" id="main-content">
+      <router-outlet />
+    </main>
+    <ma-footer />
+  </div>
 </div>

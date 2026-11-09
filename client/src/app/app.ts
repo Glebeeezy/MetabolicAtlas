@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
+import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 import { ThemeService } from './core/services/theme.service';
 import { LocaleService } from './core/services/locale.service';
 
@@ -10,7 +11,7 @@ import { LocaleService } from './core/services/locale.service';
  */
 @Component({
   selector: 'ma-root',
-  imports: [RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, SidebarComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

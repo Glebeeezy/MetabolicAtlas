@@ -14,3 +14,4 @@ export interface MapElement {
   colorHex?: string | null;
   stylePropsJson?: string | null;
 }
+

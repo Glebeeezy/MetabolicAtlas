@@ -12,3 +12,4 @@ export interface ReactionDetail {
   description?: string | null;
   participants: ReactionParticipant[];
 }
+

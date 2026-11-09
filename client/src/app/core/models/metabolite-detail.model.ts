@@ -10,3 +10,4 @@ export interface MetaboliteDetail {
   synonyms: string[];
   externalIdentifiers: Record<string, string>;
 }
+

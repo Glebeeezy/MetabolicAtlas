@@ -13,3 +13,4 @@ export class EntitiesShellComponent {
   readonly type = input<string>('entity');
   readonly id = input<string>('');
 }
+

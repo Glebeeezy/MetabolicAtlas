@@ -27,3 +27,4 @@ describe('ThemeSwitcherComponent', () => {
     expect(themeService.theme()).not.toBe(initialTheme);
   });
 });
+

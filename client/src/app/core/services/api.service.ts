@@ -65,3 +65,4 @@ export class ApiService {
     return this.http.get<EnzymeDetail>(`${this.baseUrl}/enzymes/${id}`);
   }
 }
+

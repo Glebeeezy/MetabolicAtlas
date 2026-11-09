@@ -10,3 +10,4 @@ export interface MapEdge {
   pathData?: string | null;
   arrowhead?: string | null;
 }
+

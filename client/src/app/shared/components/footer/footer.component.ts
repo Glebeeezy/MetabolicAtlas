@@ -12,3 +12,4 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 export class FooterComponent {
   protected readonly currentYear = new Date().getFullYear();
 }
+

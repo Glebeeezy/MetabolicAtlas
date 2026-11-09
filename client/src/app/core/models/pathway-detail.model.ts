@@ -11,3 +11,4 @@ export interface PathwayDetail {
   category?: string | null;
   reactions: PathwayReaction[];
 }
+

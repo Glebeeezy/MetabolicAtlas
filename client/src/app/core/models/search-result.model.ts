@@ -8,3 +8,4 @@ export interface SearchResult {
   subtitle?: string | null;
   matchContext?: string | null;
 }
+

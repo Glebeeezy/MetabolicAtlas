@@ -7,3 +7,4 @@ export interface PathwayReaction {
   reactionName: string;
   ordinal?: number | null;
 }
+

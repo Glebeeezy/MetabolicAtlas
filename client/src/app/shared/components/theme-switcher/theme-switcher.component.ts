@@ -17,3 +17,4 @@ export class ThemeSwitcherComponent {
     this.themeService.toggleTheme();
   }
 }
+

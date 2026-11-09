@@ -13,3 +13,4 @@ describe('AtlasShellComponent', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 });
+

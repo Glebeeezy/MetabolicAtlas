@@ -27,3 +27,4 @@ describe('LocaleSwitcherComponent', () => {
     expect(localeService.locale()).not.toBe(initialLocale);
   });
 });
+

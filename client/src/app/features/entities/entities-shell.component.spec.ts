@@ -13,3 +13,4 @@ describe('EntitiesShellComponent', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 });
+

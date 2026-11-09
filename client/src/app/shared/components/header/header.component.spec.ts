@@ -22,3 +22,4 @@ describe('HeaderComponent', () => {
     expect(links.length).toBe(4);
   });
 });
+

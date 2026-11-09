@@ -10,3 +10,4 @@ export interface Article {
   version: number;
   publishedAtUtc: string;
 }
+

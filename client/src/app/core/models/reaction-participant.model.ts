@@ -8,3 +8,4 @@ export interface ReactionParticipant {
   stoichiometry: number;
   compartmentName?: string | null;
 }
+

@@ -12,3 +12,4 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 export class ArticlesShellComponent {
   readonly slug = input<string>('');
 }
+

@@ -1,10 +1,21 @@
 <button
   type="button"
-  class="locale-btn"
+  class="locale-pill"
+  [class.locale-pill--en]="localeService.locale() === 'en'"
   (click)="toggle()"
-  [attr.aria-label]="'Switch language, currently ' + localeService.locale().toUpperCase()"
+  [attr.aria-label]="localeService.locale() === 'ru' ? 'Сменить язык на English' : 'Switch language to Russian'"
   [title]="localeService.locale() === 'ru' ? 'Switch to English' : 'Переключить на русский'"
 >
-  <span class="flag" aria-hidden="true">🌐</span>
-  <span class="code">{{ localeService.locale().toUpperCase() }}</span>
+  <span class="locale-pill__icon" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="2" y1="12" x2="22" y2="12"></line>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+    </svg>
+  </span>
+  <span class="locale-pill__options">
+    <span class="locale-option" [class.is-active]="localeService.locale() === 'ru'">RU</span>
+    <span class="locale-divider" aria-hidden="true">/</span>
+    <span class="locale-option" [class.is-active]="localeService.locale() === 'en'">EN</span>
+  </span>
 </button>

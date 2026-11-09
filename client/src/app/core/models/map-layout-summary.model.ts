@@ -10,3 +10,4 @@ export interface MapLayoutSummary {
   height: number;
   pathwayId?: string | null;
 }
+
