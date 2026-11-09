@@ -126,20 +126,31 @@
     transition: stroke 0.18s ease;
   }
 
-  .cofactor-arc-label {
+  .cofactor-in-label {
     font-size: 10px;
     font-weight: 700;
     font-family: var(--font-mono);
     fill: #94a3b8;
     user-select: none;
     transition: fill 0.18s ease;
+  }
+
+  .cofactor-out-label {
+    font-size: 10px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    fill: #cbd5e1;
+    user-select: none;
+    transition: fill 0.18s ease;
 
     &--energy {
       fill: #fbbf24;
+      font-weight: 800;
     }
 
     &--gtp {
       fill: #34d399;
+      font-weight: 800;
     }
   }
 
@@ -165,13 +176,13 @@
     }
 
     .cofactor-arc {
-      stroke: #cbd5e1;
-      stroke-width: 2px;
+      stroke: #e2e8f0;
+      stroke-width: 2.2px;
     }
 
-    .cofactor-arc-label {
+    .cofactor-in-label,
+    .cofactor-out-label {
       fill: #f8fafc;
-      font-weight: 800;
     }
   }
 
@@ -256,20 +267,6 @@
     font-family: var(--font-mono);
     fill: var(--color-text-muted);
     pointer-events: none;
-  }
-
-  /* Carbon count tag in top right */
-  .carbon-tag-bg {
-    fill: rgba(56, 189, 248, 0.1);
-    stroke: rgba(56, 189, 248, 0.3);
-    stroke-width: 0.75px;
-  }
-
-  .carbon-tag-text {
-    font-family: var(--font-mono);
-    font-size: 9px;
-    font-weight: 800;
-    fill: var(--color-substrate-accent);
   }
 
   /* Dynamic Role Badges */
@@ -527,35 +524,41 @@
   }
 }
 
-.inspector-tabs-header {
+.inspector-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 1rem 0;
+  padding: 0.85rem 1.25rem;
   border-bottom: 1px solid var(--color-border-subtle);
   background: var(--color-bg-surface);
-}
 
-.tabs-nav {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.tab-btn {
-  padding: 0.65rem 0.85rem;
-  font-size: 0.825rem;
-  font-weight: 700;
-  color: var(--color-text-secondary);
-  border-bottom: 2px solid transparent;
-  transition: all var(--transition-fast);
-
-  &:hover {
-    color: var(--color-text-primary);
+  &__type {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  &.is-active {
-    color: var(--color-substrate-accent);
-    border-bottom-color: var(--color-substrate-accent);
+  .type-text {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--color-text-secondary);
+  }
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+
+  &--rx {
+    background: var(--color-product-accent);
+    box-shadow: 0 0 8px rgba(251, 113, 133, 0.8);
+  }
+
+  &--met {
+    background: var(--color-substrate-accent);
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
   }
 }
 
@@ -651,6 +654,23 @@
   margin-bottom: 0.75rem;
 }
 
+.section-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+
+  .section-title {
+    margin-bottom: 0;
+  }
+
+  .section-hint {
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+}
+
 /* Substrate ➔ Product Comparative Flux Cards */
 .flux-cards-container {
   display: grid;
@@ -709,12 +729,31 @@
 .participant-row {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.15rem;
+  padding: 0.3rem 0.4rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+
+  .participant-name-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem;
+  }
 
   .participant-name {
     font-size: 0.775rem;
     font-weight: 600;
     color: var(--color-text-primary);
+    transition: color var(--transition-fast);
+  }
+
+  .participant-nav-icon {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-substrate-accent);
+    opacity: 0.6;
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
   }
 
   .participant-formula {
@@ -727,6 +766,23 @@
 
     .participant-name {
       color: var(--color-text-secondary);
+    }
+  }
+
+  &.is-clickable {
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.07);
+
+      .participant-name {
+        color: var(--color-substrate-accent);
+      }
+
+      .participant-nav-icon {
+        opacity: 1;
+        transform: translate(2px, -2px);
+      }
     }
   }
 }
@@ -939,6 +995,82 @@
   line-height: 1.5;
   color: var(--color-text-secondary);
   margin-bottom: 1rem;
+}
+
+/* Related Reactions for Selected Metabolite */
+.related-reactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.related-rx-item {
+  padding: 0.55rem 0.75rem;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+
+  &:hover {
+    border-color: var(--color-substrate-accent);
+    background: rgba(56, 189, 248, 0.06);
+
+    .related-rx-arrow {
+      transform: translate(2px, -2px);
+      opacity: 1;
+    }
+  }
+
+  .related-rx-header {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .step-pill {
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--color-substrate-accent);
+    background: rgba(56, 189, 248, 0.12);
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .role-pill {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--radius-sm);
+
+    &--sub {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    &--prod {
+      color: #fb7185;
+      background: rgba(251, 113, 133, 0.12);
+    }
+  }
+
+  .related-rx-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .related-rx-arrow {
+    color: var(--color-substrate-accent);
+    opacity: 0.7;
+    font-weight: 700;
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
+  }
 }
 
 /* General properties row */

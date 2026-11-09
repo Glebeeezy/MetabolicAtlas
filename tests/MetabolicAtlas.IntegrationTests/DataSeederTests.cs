@@ -64,8 +64,8 @@ public class DataSeederTests
         // Enzymes
         var enzymes = await context.Enzymes.ToListAsync();
         Assert.Equal(9, enzymes.Count);
-        Assert.Contains(enzymes, e => e.EcNumber == "2.3.3.1" && e.Name == "Citrate synthase");
-        Assert.Contains(enzymes, e => e.EcNumber == "1.3.5.1" && e.Name == "Succinate dehydrogenase");
+        Assert.Contains(enzymes, e => e.EcNumber == "2.3.3.1" && e.Name == "Цитратсинтаза");
+        Assert.Contains(enzymes, e => e.EcNumber == "1.3.5.1" && e.Name == "Сукцинатдегидрогеназа / Комплекс II");
 
         // Reactions
         var reactions = await context.Reactions

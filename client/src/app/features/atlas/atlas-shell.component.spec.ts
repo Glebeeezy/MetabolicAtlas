@@ -29,7 +29,7 @@ describe('AtlasShellComponent', () => {
     expect(component.activeTab()).toBe('reaction');
   });
 
-  it('should switch to molecule tab and select metabolite on metabolite click', () => {
+  it('should switch to molecule mode and clear reaction on metabolite click', () => {
     const fixture = TestBed.createComponent(AtlasShellComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
@@ -38,7 +38,55 @@ describe('AtlasShellComponent', () => {
     component.onMetaboliteClick(citrate);
 
     expect(component.selectedMetabolite()?.code).toBe('MET_CITRATE');
+    expect(component.selectedReaction()).toBeNull();
     expect(component.activeTab()).toBe('molecule');
+  });
+
+  it('should switch to reaction mode and clear metabolite on reaction click', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const citrate = HUMAN_METABOLITES.find((m) => m.code === 'MET_CITRATE')!;
+    component.onMetaboliteClick(citrate);
+    expect(component.selectedMetabolite()?.code).toBe('MET_CITRATE');
+
+    const sdh = HUMAN_REACTIONS.find((r) => r.code === 'R_SDH')!;
+    component.onReactionClick(sdh);
+
+    expect(component.selectedReaction()?.code).toBe('R_SDH');
+    expect(component.selectedMetabolite()).toBeNull();
+    expect(component.activeTab()).toBe('reaction');
+  });
+
+  it('should correctly lookup metabolites by name for reaction card linking', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+
+    const oaa = component.findMetaboliteByName('Оксалоацетат');
+    expect(oaa).toBeTruthy();
+    expect(oaa?.code).toBe('MET_OAA');
+
+    const succinyl = component.findMetaboliteByName('Сукцинил-КоА');
+    expect(succinyl).toBeTruthy();
+    expect(succinyl?.code).toBe('MET_SUCCINYL_COA');
+
+    const water = component.findMetaboliteByName('Вода (H₂O)');
+    expect(water).toBeUndefined();
+  });
+
+  it('should find related reactions for a metabolite with their roles', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+
+    const citrate = HUMAN_METABOLITES.find((m) => m.code === 'MET_CITRATE')!;
+    const related = component.getReactionsForMetabolite(citrate.id);
+
+    expect(related.length).toBeGreaterThanOrEqual(2);
+    const cs = related.find((r) => r.rx.code === 'R_CS');
+    expect(cs?.role).toBe('product');
+    const aco = related.find((r) => r.rx.code === 'R_ACO');
+    expect(aco?.role).toBe('substrate');
   });
 
   it('should correctly identify substrates and products of selected reaction', () => {

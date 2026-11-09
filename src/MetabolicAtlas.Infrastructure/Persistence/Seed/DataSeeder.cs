@@ -23,6 +23,9 @@ public static class DataSeeder
         var context = scope.ServiceProvider.GetRequiredService<MetabolicAtlasDbContext>();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<MetabolicAtlasDbContext>>();
 
+        // Ensure database tables and extensions exist
+        await context.Database.EnsureCreatedAsync();
+
         // Guard: skip if already seeded
         if (await context.Metabolites.AnyAsync())
         {
@@ -39,14 +42,14 @@ public static class DataSeeder
         var mitochondrialMatrix = new Compartment(
             SeedIds.Compartment.MitochondrialMatrix,
             code: "MITO",
-            name: "Mitochondrial matrix",
-            description: "Innermost aqueous compartment of the mitochondrion where the TCA cycle and pyruvate oxidation take place.");
+            name: "Матрикс митохондрий",
+            description: "Внутреннее водное пространство митохондрии, где протекают цикл Кребса и окислительное декарбоксилирование пирувата.");
 
         var cytosol = new Compartment(
             SeedIds.Compartment.Cytosol,
             code: "CYTO",
-            name: "Cytosol",
-            description: "Liquid component of the cytoplasm surrounding organelles.");
+            name: "Цитозоль",
+            description: "Жидкая фаза цитоплазмы клетки, окружающая органеллы.");
 
         context.Compartments.AddRange(mitochondrialMatrix, cytosol);
 
@@ -205,58 +208,58 @@ public static class DataSeeder
         // ─────────────────────────────────────────────────────────────────────
 
         var pdh = new Enzyme(SeedIds.Enzyme.PyruvateDehydrogenase,
-            name: "Pyruvate dehydrogenase complex",
+            name: "Пируватдегидрогеназный комплекс",
             ecNumber: "1.2.4.1",
             uniprotId: "P08559",
-            description: "Human mitochondrial PDC (PDHA1 component). Catalyzes the irreversible oxidative decarboxylation of pyruvate to acetyl-CoA, linking cytosolic glycolysis to the TCA cycle.");
+            description: "Митохондриальный ПДХ человека (субъединица PDHA1). Катализирует необратимое окислительное декарбоксилирование пирувата до ацетил-КоА, соединяя цитозольный гликолиз с циклом Кребса.");
 
         var citrateSynthase = new Enzyme(SeedIds.Enzyme.CitrateSynthase,
-            name: "Citrate synthase",
+            name: "Цитратсинтаза",
             ecNumber: "2.3.3.1",
             uniprotId: "O75390",
-            description: "Human mitochondrial citrate synthase (gene CS). Catalyzes the first committed step of the TCA cycle: condensation of acetyl-CoA with oxaloacetate to form citrate. Pace-setter enzyme.");
+            description: "Митохондриальная цитратсинтаза человека (ген CS). Катализирует начальную стадию ЦТК: конденсацию ацетил-КоА с оксалоацетатом с образованием цитрата.");
 
         var aconitase = new Enzyme(SeedIds.Enzyme.Aconitase,
-            name: "Aconitase",
+            name: "Аконитаза 2",
             ecNumber: "4.2.1.3",
             uniprotId: "Q99798",
-            description: "Human mitochondrial aconitate hydratase (gene ACO2, distinct from cytosolic IRP1/ACO1). Catalyzes the reversible isomerization of citrate to isocitrate via cis-aconitate using a [4Fe-4S] cluster.");
+            description: "Митохондриальная аконитатгидратаза человека (ген ACO2). Катализирует обратимую изомеризацию цитрата в изоцитрат через цис-аконитат с участием кластера [4Fe-4S].");
 
         var isocitrateDehydrogenase = new Enzyme(SeedIds.Enzyme.IsocitrateDehydrogenase,
-            name: "Isocitrate dehydrogenase",
+            name: "Изоцитратдегидрогеназа 3",
             ecNumber: "1.1.1.41",
             uniprotId: "P50213",
-            description: "Human mitochondrial NAD+-dependent IDH (gene IDH3A). Key rate-limiting regulatory enzyme; allosterically activated by ADP and Ca2+, inhibited by ATP and NADH.");
+            description: "Митохондриальная NAD⁺-зависимая ИДГ человека (ген IDH3A). Ключевой регуляторный фермент; активируется АДФ и Ca²⁺, ингибируется АТФ и NADH.");
 
         var alphaKetoglutarateDehydrogenase = new Enzyme(SeedIds.Enzyme.AlphaKetoglutarateDehydrogenase,
-            name: "Alpha-ketoglutarate dehydrogenase complex",
+            name: "α-Кетоглутаратдегидрогеназный комплекс",
             ecNumber: "1.2.4.2",
             uniprotId: "Q02218",
-            description: "Human mitochondrial α-KGDH complex (gene OGDH). Catalyzes oxidative decarboxylation of α-ketoglutarate to succinyl-CoA requiring thiamine pyrophosphate (TPP, Vit B1).");
+            description: "Митохондриальный α-КГДГ комплекс человека (ген OGDH). Катализирует окислительное декарбоксилирование α-кетоглутарата до сукцинил-КоА с коферментом тиаминпирофосфатом (витамин B₁).");
 
         var succinylCoASynthetase = new Enzyme(SeedIds.Enzyme.SuccinylCoASynthetase,
-            name: "Succinyl-CoA synthetase",
+            name: "Сукцинил-КоА-синтетаза",
             ecNumber: "6.2.1.4",
             uniprotId: "Q96I99",
-            description: "Human succinate-CoA ligase (gene SUCLG2). Substrate-level phosphorylation converting succinyl-CoA to succinate with coupled GTP generation in human liver/kidney (gluconeogenic tissues).");
+            description: "Сукцинат-КоА-лигаза человека (ген SUCLG2). Субстратное фосфорилирование, превращающее сукцинил-КоА в сукцинат с сопряжённым синтезом GTP/АТФ.");
 
         var succinateDehydrogenase = new Enzyme(SeedIds.Enzyme.SuccinateDehydrogenase,
-            name: "Succinate dehydrogenase",
+            name: "Сукцинатдегидрогеназа / Комплекс II",
             ecNumber: "1.3.5.1",
             uniprotId: "P31040",
-            description: "Complex II of human respiratory chain (gene SDHA). Directly embedded in the inner mitochondrial membrane; oxidizes succinate to fumarate while reducing FAD to FADH2 into the CoQ10 pool.");
+            description: "Комплекс II дыхательной цепи человека (ген SDHA). Встроен во внутреннюю мембрану митохондрий; окисляет сукцинат до фумарата с восстановлением FAD в FADH₂ и передачей в пул CoQ₁₀.");
 
         var fumarase = new Enzyme(SeedIds.Enzyme.Fumarase,
-            name: "Fumarase",
+            name: "Фумараза",
             ecNumber: "4.2.1.2",
             uniprotId: "P07954",
-            description: "Human mitochondrial fumarate hydratase (gene FH). Stereospecific trans-addition of water across the double bond of fumarate to form L-malate. Tumor suppressor.");
+            description: "Митохондриальная фумаратгидратаза человека (ген FH). Стереоспецифическое транс-присоединение воды по двойной связи фумарата с образованием L-малата. Онкосупрессор.");
 
         var malateDehydrogenase = new Enzyme(SeedIds.Enzyme.MalateDehydrogenase,
-            name: "Malate dehydrogenase",
+            name: "Малатдегидрогеназа 2",
             ecNumber: "1.1.1.37",
             uniprotId: "P40926",
-            description: "Human mitochondrial malate dehydrogenase (gene MDH2). Reversible oxidation of L-malate to oxaloacetate, regenerating the cycle acceptor and powering the human malate-aspartate shuttle.");
+            description: "Митохондриальная малатдегидрогеназа человека (ген MDH2). Обратимое окисление L-малата в оксалоацетат, регенерирующее акцептор цикла.");
 
         context.Enzymes.AddRange(
             pdh, citrateSynthase, aconitase, isocitrateDehydrogenase,
@@ -271,9 +274,9 @@ public static class DataSeeder
         var r0 = new Reaction(
             SeedIds.Rxn.PyruvateOxidation,
             code: "R_PDH",
-            name: "Pyruvate oxidative decarboxylation",
+            name: "Окислительное декарбоксилирование пирувата (ПДХ)",
             direction: ReactionDirection.ForwardOnly,
-            description: "Irreversible bridge between glycolysis and the TCA cycle. Pyruvate is oxidatively decarboxylated to acetyl-CoA by the pyruvate dehydrogenase complex.");
+            description: "Необратимый мост между гликолизом и циклом Кребса. Пируват окислительно декарбоксилируется до ацетил-КоА пируватдегидрогеназным комплексом.");
         r0.AddParticipant(SeedIds.Met.Pyruvate, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r0.AddParticipant(SeedIds.Met.NadPlus, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r0.AddParticipant(SeedIds.Met.CoA, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
@@ -287,9 +290,9 @@ public static class DataSeeder
         var r1 = new Reaction(
             SeedIds.Rxn.CitrateSynthase,
             code: "R_CS",
-            name: "Citrate synthase reaction",
+            name: "Конденсация оксалоацетата и ацетил-КоА (Цитратсинтаза)",
             direction: ReactionDirection.ForwardOnly,
-            description: "Step 1 of TCA. Acetyl-CoA condenses with oxaloacetate to form citrate. Strongly exergonic (ΔG°' = −31.5 kJ/mol), making it essentially irreversible.");
+            description: "Стадия 1 ЦТК. Ацетил-КоА конденсируется с оксалоацетатом с образованием цитрата. Сильно экзергоническая реакция (ΔG°' = −31.5 кДж/моль), делающая процесс необратимым.");
         r1.AddParticipant(SeedIds.Met.AcetylCoA, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r1.AddParticipant(SeedIds.Met.Oxaloacetate, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r1.AddParticipant(SeedIds.Met.Water, ParticipantRole.Substrate, 1m);
@@ -302,9 +305,9 @@ public static class DataSeeder
         var r2 = new Reaction(
             SeedIds.Rxn.Aconitase,
             code: "R_ACO",
-            name: "Citrate isomerization to isocitrate",
+            name: "Изомеризация цитрата в изоцитрат (Аконитаза 2)",
             direction: ReactionDirection.Reversible,
-            description: "Step 2 of TCA. Aconitase catalyzes the stereospecific isomerization of citrate to isocitrate via the intermediate cis-aconitate. The reaction involves dehydration then rehydration.");
+            description: "Стадия 2 ЦТК. Аконитаза катализирует стереоспецифическую изомеризацию цитрата в изоцитрат через цис-аконитат с участием кластера [4Fe-4S].");
         r2.AddParticipant(SeedIds.Met.Citrate, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r2.AddParticipant(SeedIds.Met.Isocitrate, ParticipantRole.Product, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r2.AddParticipant(SeedIds.Met.Water, ParticipantRole.Cofactor, 1m);
@@ -314,9 +317,9 @@ public static class DataSeeder
         var r3 = new Reaction(
             SeedIds.Rxn.IsocitrateDehydrogenase,
             code: "R_IDH",
-            name: "Isocitrate oxidative decarboxylation",
+            name: "Окислительное декарбоксилирование изоцитрата (Изоцитратдегидрогеназа 3)",
             direction: ReactionDirection.ForwardOnly,
-            description: "Step 3 of TCA. First CO₂-releasing step and first NADH-producing step. Key regulatory point: IDH is allosterically activated by ADP and inhibited by ATP and NADH.");
+            description: "Стадия 3 ЦТК. Первое выделение CO₂ и образование NADH. Ключевой регуляторный пункт дыхания: активируется АДФ, ингибируется АТФ и NADH.");
         r3.AddParticipant(SeedIds.Met.Isocitrate, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r3.AddParticipant(SeedIds.Met.NadPlus, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r3.AddParticipant(SeedIds.Met.AlphaKetoglutarate, ParticipantRole.Product, 1m, SeedIds.Compartment.MitochondrialMatrix);
@@ -329,9 +332,9 @@ public static class DataSeeder
         var r4 = new Reaction(
             SeedIds.Rxn.AlphaKgDehydrogenase,
             code: "R_KGDH",
-            name: "Alpha-ketoglutarate oxidative decarboxylation",
+            name: "Окислительное декарбоксилирование α-кетоглутарата (α-КГДГ)",
             direction: ReactionDirection.ForwardOnly,
-            description: "Step 4 of TCA. Second CO₂-releasing step and second NADH-producing step. The α-ketoglutarate dehydrogenase complex is the rate-limiting step in many tissues.");
+            description: "Стадия 4 ЦТК. Второе выделение CO₂ и образование NADH. Комплекс требует кофермент тиаминпирофосфат (витамин B₁).");
         r4.AddParticipant(SeedIds.Met.AlphaKetoglutarate, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r4.AddParticipant(SeedIds.Met.NadPlus, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r4.AddParticipant(SeedIds.Met.CoA, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
@@ -345,9 +348,9 @@ public static class DataSeeder
         var r5 = new Reaction(
             SeedIds.Rxn.SuccinylCoaSynthetase,
             code: "R_SCS",
-            name: "Succinyl-CoA substrate-level phosphorylation",
+            name: "Субстратное фосфорилирование (Сукцинил-КоА-синтетаза)",
             direction: ReactionDirection.Reversible,
-            description: "Step 5 of TCA. Sole substrate-level phosphorylation step in the TCA cycle. Energy of the thioester bond in succinyl-CoA drives GTP synthesis.");
+            description: "Стадия 5 ЦТК. Единственное субстратное фосфорилирование в цикле. Энергия тиоэфирной связи сукцинил-КоА обеспечивает синтез GTP/АТФ.");
         r5.AddParticipant(SeedIds.Met.SuccinylCoA, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r5.AddParticipant(SeedIds.Met.Gdp, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r5.AddParticipant(SeedIds.Met.Phosphate, ParticipantRole.Substrate, 1m);
@@ -360,9 +363,9 @@ public static class DataSeeder
         var r6 = new Reaction(
             SeedIds.Rxn.SuccinateDehydrogenase,
             code: "R_SDH",
-            name: "Succinate oxidation to fumarate",
+            name: "Окисление сукцината в фумарат (Сукцинатдегидрогеназа / Комплекс II)",
             direction: ReactionDirection.ForwardOnly,
-            description: "Step 6 of TCA. Succinate dehydrogenase (Complex II) oxidizes succinate to fumarate and reduces FAD to FADH₂. This enzyme is the only TCA enzyme embedded in the inner mitochondrial membrane.");
+            description: "Стадия 6 ЦТК. Сукцинатдегидрогеназа окисляет сукцинат до фумарата с восстановлением FAD в FADH₂. Встроена во внутреннюю мембрану митохондрий.");
         r6.AddParticipant(SeedIds.Met.Succinate, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r6.AddParticipant(SeedIds.Met.Fad, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r6.AddParticipant(SeedIds.Met.Fumarate, ParticipantRole.Product, 1m, SeedIds.Compartment.MitochondrialMatrix);
@@ -373,9 +376,9 @@ public static class DataSeeder
         var r7 = new Reaction(
             SeedIds.Rxn.Fumarase,
             code: "R_FUM",
-            name: "Fumarate hydration to L-malate",
+            name: "Гидратация фумарата в L-малат (Фумараза)",
             direction: ReactionDirection.Reversible,
-            description: "Step 7 of TCA. Fumarase (fumarate hydratase) catalyzes the stereospecific addition of water across the double bond of fumarate, producing exclusively L-malate.");
+            description: "Стадия 7 ЦТК. Фумараза катализирует стереоспецифическое транс-присоединение воды по двойной связи фумарата, образуя исключительно L-малат.");
         r7.AddParticipant(SeedIds.Met.Fumarate, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r7.AddParticipant(SeedIds.Met.Water, ParticipantRole.Substrate, 1m);
         r7.AddParticipant(SeedIds.Met.Malate, ParticipantRole.Product, 1m, SeedIds.Compartment.MitochondrialMatrix);
@@ -385,9 +388,9 @@ public static class DataSeeder
         var r8 = new Reaction(
             SeedIds.Rxn.MalateDehydrogenase,
             code: "R_MDH",
-            name: "L-Malate oxidation to oxaloacetate",
+            name: "Окисление L-малата в оксалоацетат (Малатдегидрогеназа 2)",
             direction: ReactionDirection.Reversible,
-            description: "Step 8 of TCA. Malate dehydrogenase regenerates oxaloacetate for the next cycle turn, producing NADH. The reaction is thermodynamically unfavorable (ΔG°' = +29.7 kJ/mol) but driven forward by rapid consumption of oxaloacetate by citrate synthase.");
+            description: "Стадия 8 ЦТК. Малатдегидрогеназа регенерирует оксалоацетат для следующего оборота цикла, образуя третью молекулу NADH.");
         r8.AddParticipant(SeedIds.Met.Malate, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r8.AddParticipant(SeedIds.Met.NadPlus, ParticipantRole.Substrate, 1m, SeedIds.Compartment.MitochondrialMatrix);
         r8.AddParticipant(SeedIds.Met.Oxaloacetate, ParticipantRole.Product, 1m, SeedIds.Compartment.MitochondrialMatrix);
@@ -405,18 +408,18 @@ public static class DataSeeder
         var pyruvateOxidationPathway = new Pathway(
             SeedIds.Pathway.PyruvateOxidation,
             code: "PWY_PDH",
-            name: "Pyruvate oxidation",
-            description: "The pyruvate dehydrogenase complex (PDC) converts pyruvate — the end product of glycolysis — into acetyl-CoA, providing the substrate for the TCA cycle and fatty acid synthesis. It links carbohydrate catabolism to oxidative phosphorylation.",
-            category: "Energy metabolism");
+            name: "Окислительное декарбоксилирование пирувата (ПДХ)",
+            description: "Пируватдегидрогеназный комплекс (ПДХ) превращает пируват — конечный продукт гликолиза — в ацетил-КоА, связывая распад углеводов с циклом Кребса и синтезом жирных кислот в организме человека.",
+            category: "Энергетический метаболизм");
         pyruvateOxidationPathway.AddReaction(SeedIds.Rxn.PyruvateOxidation, ordinal: 1);
 
         // Pathway 2: TCA Cycle (Krebs cycle / citric acid cycle)
         var tcaPathway = new Pathway(
             SeedIds.Pathway.TcaCycle,
             code: "PWY_TCA",
-            name: "TCA cycle",
-            description: "The tricarboxylic acid cycle (Krebs cycle, citric acid cycle) is the central hub of aerobic cellular respiration. Per turn: 2 CO₂ released, 3 NADH + 1 FADH₂ + 1 GTP produced. Occurs in the mitochondrial matrix.",
-            category: "Energy metabolism");
+            name: "Цикл трикарбоновых кислот (ЦТК / Цикл Кребса)",
+            description: "Центральный метаболический узел аэробного клеточного дыхания у человека. Протекает в матриксе митохондрий. За один оборот цикла: окисляется 1 молекула ацетил-КоА, высвобождаются 2 молекулы CO₂, генерируются 3 NADH, 1 FADH₂ и 1 GTP (или АТФ в зависимости от ткани).",
+            category: "Энергетический метаболизм");
         tcaPathway.AddReaction(SeedIds.Rxn.CitrateSynthase, ordinal: 1);
         tcaPathway.AddReaction(SeedIds.Rxn.Aconitase, ordinal: 2);
         tcaPathway.AddReaction(SeedIds.Rxn.IsocitrateDehydrogenase, ordinal: 3);
@@ -435,7 +438,7 @@ public static class DataSeeder
         var tcaLayout = new MapLayout(
             SeedIds.Layout.TcaLayout,
             code: "MAP_TCA_V1",
-            name: "TCA Cycle — Interactive Map",
+            name: "Цикл Кребса — Интерактивная карта метаболизма человека",
             width: 1400,
             height: 1000,
             pathwayId: SeedIds.Pathway.TcaCycle,

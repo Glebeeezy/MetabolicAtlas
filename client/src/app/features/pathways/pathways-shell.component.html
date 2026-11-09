@@ -3,16 +3,14 @@
     <!-- Header Hero Card -->
     <div class="shell-card">
       <div class="pathway-badge-row">
-        <span class="shell-badge">{{ selectedPathway().category || 'Energy metabolism' }}</span>
+        <span class="shell-badge">{{ getLocalizedCategory(selectedPathway().category) }}</span>
         <span class="organism-badge">🧬 Homo sapiens • Матрикс митохондрий</span>
       </div>
 
       <div class="title-action-row">
         <div>
           <h1 class="shell-title">
-            {{ selectedPathway().code === 'PWY_TCA' && localeService.locale() === 'ru'
-              ? 'Цикл трикарбоновых кислот (ЦТК / Цикл Кребса)'
-              : selectedPathway().name }}
+            {{ getLocalizedTitle(selectedPathway()) }}
           </h1>
           <span class="pathway-code">{{ selectedPathway().code }}</span>
         </div>
@@ -28,17 +26,17 @@
       </div>
 
       <p class="shell-description">
-        {{ selectedPathway().description }}
+        {{ getLocalizedDescription(selectedPathway()) }}
       </p>
 
       <!-- Biochemical Yield Bar -->
       <div class="yield-bar">
         <span class="yield-bar__label">{{ localeService.locale() === 'ru' ? 'Энергетический баланс (на 1 ацетил-КоА):' : 'Yield per 1 Acetyl-CoA:' }}</span>
         <div class="yield-bar__tags">
-          <span class="tag-badge tag-nadh">3 NADH (➔ ~7.5 ATP в ДЦ)</span>
-          <span class="tag-badge tag-fadh">1 FADH₂ (➔ ~1.5 ATP в Комплексе II)</span>
-          <span class="tag-badge tag-gtp">1 GTP / ATP (Субстратное)</span>
-          <span class="tag-badge tag-co2">2 CO₂ (Полное окисление)</span>
+          <span class="tag-badge tag-nadh">{{ localeService.locale() === 'ru' ? '3 НАДН (➔ ~7.5 АТФ в ДЦ)' : '3 NADH (➔ ~7.5 ATP in ETC)' }}</span>
+          <span class="tag-badge tag-fadh">{{ localeService.locale() === 'ru' ? '1 ФАДН₂ (➔ ~1.5 АТФ в Комплексе II)' : '1 FADH₂ (➔ ~1.5 ATP in Complex II)' }}</span>
+          <span class="tag-badge tag-gtp">{{ localeService.locale() === 'ru' ? '1 ГТФ / АТФ (Субстратное)' : '1 GTP / ATP (Substrate-level)' }}</span>
+          <span class="tag-badge tag-co2">{{ localeService.locale() === 'ru' ? '2 CO₂ (Полное окисление)' : '2 CO₂ (Complete oxidation)' }}</span>
         </div>
       </div>
     </div>
@@ -47,7 +45,7 @@
     <div class="reactions-container">
       <h2 class="section-heading">
         {{ localeService.locale() === 'ru' ? 'Последовательность ферментативных стадий' : 'Sequential Enzymatic Steps' }}
-        <span class="step-count">({{ selectedPathway().reactions.length }} {{ localeService.locale() === 'ru' ? 'шагов' : 'steps' }})</span>
+        <span class="step-count">({{ selectedPathway().reactions.length }} {{ localeService.locale() === 'ru' ? 'стадий' : 'steps' }})</span>
       </h2>
 
       <div class="reactions-grid">
@@ -56,8 +54,8 @@
             <div class="step-ordinal">{{ rx.ordinal }}</div>
             <div class="step-body">
               <div class="step-header">
-                <span class="step-name">{{ rx.reactionName }}</span>
-                <span class="step-code">{{ rx.reactionCode }}</span>
+                <span class="step-name">{{ getLocalizedReactionName(rx) }}</span>
+                <span class="step-code font-mono">{{ rx.reactionCode }}</span>
               </div>
             </div>
           </div>

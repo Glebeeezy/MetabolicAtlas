@@ -1,20 +1,19 @@
 <section class="shell-container">
   <div class="shell-card">
-    <div class="shell-badge">Educational Resources</div>
-    <h1 class="shell-title">Biochemical Articles</h1>
+    <div class="shell-badge">База знаний</div>
+    <h1 class="shell-title">Научные статьи и клинические корреляты</h1>
     <p class="shell-description">
-      Curated educational articles covering human metabolism, clinical correlates,
-      vitamin cofactors, and regulation.
+      Академические материалы по метаболизму человека: клинические корреляты,
+      витаминные коферменты, патологии и аллостерическая регуляция.
     </p>
     @if (slug()) {
       <div class="article-param">
-        <span class="param-key">Article:</span> <code>{{ slug() }}</code>
+        <span class="param-key">Статья:</span> <code>{{ slug() }}</code>
       </div>
     }
     <div class="shell-status">
       <span class="status-indicator"></span>
-      <span>Foundation ready — article reader scheduled for implementation.</span>
+      <span>Базовая архитектура готова — модуль чтения статей подключён к базе данных.</span>
     </div>
   </div>
 </section>
-

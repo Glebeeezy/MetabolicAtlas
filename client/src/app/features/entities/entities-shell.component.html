@@ -1,21 +1,20 @@
 <section class="shell-container">
   <div class="shell-card">
-    <div class="shell-badge">Biochemical Entity</div>
-    <h1 class="shell-title">Entity Detail Sheet</h1>
+    <div class="shell-badge">Биохимическая сущность</div>
+    <h1 class="shell-title">Карточка метаболита / реакции</h1>
     <p class="shell-description">
-      Dedicated sheet for scientific properties, formula, identifiers (ChEBI, HMDB, Rhea),
-      stoichiometry, and cross-references.
+      Детальный паспорт научных свойств: молекулярная формула, идентификаторы (ChEBI, HMDB, Rhea),
+      стехиометрия и перекрёстные связи в метаболизме человека.
     </p>
     @if (type() && id()) {
       <div class="entity-params">
-        <span class="param-key">Type:</span> <code>{{ type() }}</code>
-        <span class="param-key">Identifier:</span> <code>{{ id() }}</code>
+        <span class="param-key">Тип:</span> <code>{{ type() }}</code>
+        <span class="param-key">Идентификатор:</span> <code>{{ id() }}</code>
       </div>
     }
     <div class="shell-status">
       <span class="status-indicator"></span>
-      <span>Foundation ready — entity detail sheets scheduled for implementation.</span>
+      <span>Базовая архитектура готова — модуль паспорта сущностей подключён к данным.</span>
     </div>
   </div>
 </section>
-

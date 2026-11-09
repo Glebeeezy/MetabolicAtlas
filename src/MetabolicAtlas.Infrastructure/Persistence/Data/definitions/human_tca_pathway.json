@@ -1,11 +1,11 @@
 {
   "$schema": "https://metabolic-atlas.org/schemas/pathway.v1.json",
   "code": "PWY_TCA",
-  "name": "TCA cycle",
+  "name": "Цикл трикарбоновых кислот (ЦТК / Цикл Кребса)",
   "nameRu": "Цикл трикарбоновых кислот (ЦТК / Цикл Кребса)",
   "organism": "Homo sapiens",
-  "category": "Energy metabolism",
-  "cellularLocalization": "Mitochondrial matrix",
+  "category": "Энергетический метаболизм",
+  "cellularLocalization": "Матрикс митохондрий",
   "description": "Центральный метаболический узел аэробного клеточного дыхания у человека. Протекает в матриксе митохондрий. За один оборот цикла: окисляется 1 молекула ацетил-КоА, высвобождаются 2 молекулы CO₂, генерируются 3 NADH, 1 FADH₂ и 1 GTP (или ATP в зависимости от изоформы сукцинат-КоА-лигазы в ткани).",
   "netEquation": "Acetyl-CoA + 3 NAD⁺ + FAD + GDP + Pᵢ + 2 H₂O → 2 CO₂ + CoA + 3 NADH + 3 H⁺ + FADH₂ + GTP",
   "reactions": [

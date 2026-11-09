@@ -1,12 +1,12 @@
 {
   "$schema": "https://metabolic-atlas.org/schemas/layout.v1.json",
   "code": "MAP_TCA_V1",
-  "name": "Human TCA Cycle — Mitochondrial Matrix Hub",
+  "name": "Цикл Кребса — Интерактивная карта метаболизма человека",
   "version": "1.0.0",
   "width": 1400,
   "height": 1000,
   "compartment": {
-    "name": "Mitochondrial matrix",
+    "name": "Матрикс митохондрий",
     "bounds": { "x": 100, "y": 40, "width": 1200, "height": 920, "rx": 40 }
   },
   "nodes": [

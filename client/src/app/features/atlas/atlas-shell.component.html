@@ -23,9 +23,9 @@
       <span class="yield-badge__title">
         Выход на 1 Ацетил-КоА:
       </span>
-      <span class="yield-tag yield-tag--nadh">3 NADH (➔ ~7.5 АТФ)</span>
-      <span class="yield-tag yield-tag--fadh">1 FADH₂ (➔ ~1.5 АТФ)</span>
-      <span class="yield-tag yield-tag--gtp">1 GTP/ATP</span>
+      <span class="yield-tag yield-tag--nadh">3 НАДН (➔ ~7.5 АТФ)</span>
+      <span class="yield-tag yield-tag--fadh">1 ФАДН₂ (➔ ~1.5 АТФ)</span>
+      <span class="yield-tag yield-tag--gtp">1 ГТФ / АТФ</span>
       <span class="yield-tag yield-tag--co2">2 CO₂</span>
     </div>
   </div>
@@ -84,13 +84,26 @@
         <marker
           id="cofactor-arrowhead"
           viewBox="0 0 8 8"
-          refX="7"
+          refX="6"
           refY="4"
-          markerWidth="6"
-          markerHeight="6"
-          orient="auto-start-reverse"
+          markerWidth="7"
+          markerHeight="7"
+          orient="auto"
         >
-          <path d="M 1 1.5 L 7 4 L 1 6.5 z" fill="var(--color-cofactor-line)" />
+          <path d="M 1 1.5 L 7 4 L 1 6.5 z" fill="#94A3B8" />
+        </marker>
+
+        <!-- Active/Selected Cofactor Arrowhead -->
+        <marker
+          id="cofactor-arrowhead-active"
+          viewBox="0 0 8 8"
+          refX="6"
+          refY="4"
+          markerWidth="7"
+          markerHeight="7"
+          orient="auto"
+        >
+          <path d="M 1 1.5 L 7 4 L 1 6.5 z" fill="#E2E8F0" />
         </marker>
 
         <!-- Subtle Matrix Hull Glow -->
@@ -184,22 +197,39 @@
               [attr.marker-end]="isSel ? 'url(#rx-arrowhead-active)' : (isHov ? 'url(#rx-arrowhead-hover)' : 'url(#rx-arrowhead)')"
             />
 
-            <!-- Swooping Cofactor Arc entering/leaving the reaction arrow -->
-            <path
-              [attr.d]="rx.cofactorArc.path"
-              class="cofactor-arc"
-              fill="none"
-              marker-end="url(#cofactor-arrowhead)"
-            />
-            <text
-              [attr.x]="rx.cofactorArc.textX"
-              [attr.y]="rx.cofactorArc.textY"
-              class="cofactor-arc-label"
-              [class.cofactor-arc-label--energy]="rx.cofactorArc.isEnergy"
-              [class.cofactor-arc-label--gtp]="rx.cofactorArc.isGtp"
-            >
-              {{ rx.cofactorArc.labelRu }}
-            </text>
+            <!-- Swooping Cofactor Arc with input & output labels -->
+            @if (rx.cofactorArc; as arc) {
+              <path
+                [attr.d]="arc.path"
+                class="cofactor-arc"
+                fill="none"
+                [attr.marker-end]="isSel ? 'url(#cofactor-arrowhead-active)' : 'url(#cofactor-arrowhead)'"
+              />
+
+              @if (arc.inText) {
+                <text
+                  [attr.x]="arc.inX"
+                  [attr.y]="arc.inY"
+                  [attr.text-anchor]="arc.inAnchor || 'middle'"
+                  class="cofactor-in-label"
+                >
+                  {{ arc.inText }}
+                </text>
+              }
+
+              @if (arc.outText) {
+                <text
+                  [attr.x]="arc.outX"
+                  [attr.y]="arc.outY"
+                  [attr.text-anchor]="arc.outAnchor || 'middle'"
+                  class="cofactor-out-label"
+                  [class.cofactor-out-label--energy]="arc.isEnergy"
+                  [class.cofactor-out-label--gtp]="arc.isGtp"
+                >
+                  {{ arc.outText }}
+                </text>
+              }
+            }
 
             <!-- Enzyme tooltip upon hover -->
             @if (isHov && !isSel) {
@@ -268,21 +298,13 @@
             <g class="metabolite-tile__structure" transform="translate(10, 8)" [innerHTML]="getSafeSvg(met.skeletalSvg)"></g>
 
             <!-- Text Information -->
-            <text x="68" y="28" class="metabolite-tile__title">
+            <text x="64" y="32" class="metabolite-tile__title">
               {{ met.nameRu }}
             </text>
 
-            <text x="68" y="46" class="metabolite-tile__formula">
+            <text x="64" y="49" class="metabolite-tile__formula">
               {{ met.formula }}
             </text>
-
-            <!-- Carbon count tag (e.g., 4C, 6C, 2C) -->
-            <g [attr.transform]="'translate(' + (met.width - 32) + ', 10)'">
-              <rect width="24" height="18" rx="4" class="carbon-tag-bg" />
-              <text x="12" y="13" text-anchor="middle" class="carbon-tag-text">
-                {{ met.carbons }}
-              </text>
-            </g>
 
             <!-- Role Badge when reaction is selected (Вход / Выход) -->
             @if (isSub) {
@@ -346,36 +368,23 @@
     </div>
   </div>
 
-  <!-- Right Side Inspector: Molecule / Reaction Detail View (Matches Reference) -->
+  <!-- Right Side Inspector: Molecule / Reaction Detail View (Single-Context, Mutex) -->
   @if (selectedReaction() || selectedMetabolite()) {
     <aside
       class="context-inspector"
       data-interactive="true"
       aria-label="Контекстная панель биохимической информации"
     >
-      <!-- Top Tabs: Molecule (Node) | Reaction (Arrow) -->
-      <div class="inspector-tabs-header">
-        <div class="tabs-nav" role="tablist">
-          <button
-            type="button"
-            role="tab"
-            class="tab-btn"
-            [class.is-active]="activeTab() === 'molecule'"
-            (click)="setActiveTab('molecule')"
-            [attr.aria-selected]="activeTab() === 'molecule'"
-          >
-            Вещество (Узел)
-          </button>
-          <button
-            type="button"
-            role="tab"
-            class="tab-btn"
-            [class.is-active]="activeTab() === 'reaction'"
-            (click)="setActiveTab('reaction')"
-            [attr.aria-selected]="activeTab() === 'reaction'"
-          >
-            Реакция (Стрелка)
-          </button>
+      <!-- Single-Context Inspector Header (No tabs: shows exactly what is clicked) -->
+      <div class="inspector-header">
+        <div class="inspector-header__type">
+          @if (selectedReaction(); as rx) {
+            <span class="live-dot live-dot--rx" aria-hidden="true"></span>
+            <span class="type-text">Реакция • Стадия {{ rx.stepNumber }} из 8</span>
+          } @else if (selectedMetabolite(); as met) {
+            <span class="live-dot live-dot--met" aria-hidden="true"></span>
+            <span class="type-text">Химическое вещество • Метаболит</span>
+          }
         </div>
 
         <button
@@ -392,8 +401,8 @@
         </button>
       </div>
 
-      <!-- Tab Content 1: Reaction View (Matches Reference 3) -->
-      @if (activeTab() === 'reaction' && selectedReaction(); as rx) {
+      <!-- Reaction View (When a Reaction Arrow is clicked) -->
+      @if (selectedReaction(); as rx) {
         <div class="inspector-content">
           <!-- Step Title -->
           <div class="rx-header">
@@ -408,9 +417,12 @@
             </div>
           </div>
 
-          <!-- Section: Substrate ➔ Product Comparison Cards (Exact layout from Reference 3) -->
+          <!-- Section: Substrate ➔ Product Comparison Cards with Clickable Metabolite Links -->
           <div class="inspector-section">
-            <h3 class="section-title">Субстрат ➔ Продукт</h3>
+            <div class="section-title-row">
+              <h3 class="section-title">Субстрат ➔ Продукт</h3>
+              <span class="section-hint">нажмите на вещество для перехода ↗</span>
+            </div>
 
             <div class="flux-cards-container">
               <!-- Left: Substrate Card (Cyan outline) -->
@@ -420,8 +432,22 @@
                 </div>
                 <div class="flux-card__list">
                   @for (sub of rx.substrates; track sub.name) {
-                    <div class="participant-row" [class.is-co]="sub.isCo">
-                      <span class="participant-name">{{ sub.name }}</span>
+                    @let linkedMet = findMetaboliteByName(sub.name);
+                    <div
+                      class="participant-row"
+                      [class.is-co]="sub.isCo"
+                      [class.is-clickable]="!!linkedMet"
+                      (click)="linkedMet && onMetaboliteClick(linkedMet)"
+                      [attr.role]="linkedMet ? 'button' : null"
+                      [attr.tabindex]="linkedMet ? 0 : null"
+                      [attr.title]="linkedMet ? ('Перейти к метаболиту: ' + linkedMet.nameRu) : null"
+                    >
+                      <div class="participant-name-group">
+                        <span class="participant-name">{{ sub.name }}</span>
+                        @if (linkedMet) {
+                          <span class="participant-nav-icon" aria-hidden="true">↗</span>
+                        }
+                      </div>
                       <span class="participant-formula font-mono">{{ sub.formula }}</span>
                     </div>
                   }
@@ -437,8 +463,22 @@
                 </div>
                 <div class="flux-card__list">
                   @for (prod of rx.products; track prod.name) {
-                    <div class="participant-row" [class.is-co]="prod.isCo">
-                      <span class="participant-name">{{ prod.name }}</span>
+                    @let linkedMet = findMetaboliteByName(prod.name);
+                    <div
+                      class="participant-row"
+                      [class.is-co]="prod.isCo"
+                      [class.is-clickable]="!!linkedMet"
+                      (click)="linkedMet && onMetaboliteClick(linkedMet)"
+                      [attr.role]="linkedMet ? 'button' : null"
+                      [attr.tabindex]="linkedMet ? 0 : null"
+                      [attr.title]="linkedMet ? ('Перейти к метаболиту: ' + linkedMet.nameRu) : null"
+                    >
+                      <div class="participant-name-group">
+                        <span class="participant-name">{{ prod.name }}</span>
+                        @if (linkedMet) {
+                          <span class="participant-nav-icon" aria-hidden="true">↗</span>
+                        }
+                      </div>
                       <span class="participant-formula font-mono">{{ prod.formula }}</span>
                     </div>
                   }
@@ -504,8 +544,8 @@
         </div>
       }
 
-      <!-- Tab Content 2: Molecule View (Matches Reference 2) -->
-      @if (activeTab() === 'molecule' && selectedMetabolite(); as met) {
+      <!-- Molecule View (When a Metabolite Node is clicked) -->
+      @if (selectedMetabolite(); as met) {
         <div class="inspector-content">
           <!-- Molecule Title -->
           <div class="molecule-header">
@@ -531,6 +571,41 @@
           <p class="molecule-desc">
             {{ met.descriptionRu }}
           </p>
+
+          <!-- Connected Reactions in TCA Cycle (Two-way link to reaction passport!) -->
+          @if (getReactionsForMetabolite(met.id); as relatedRxs) {
+            @if (relatedRxs.length > 0) {
+              <div class="inspector-section">
+                <h3 class="section-title">Участие в стадиях цикла Кребса</h3>
+                <div class="related-reactions-list">
+                  @for (rel of relatedRxs; track rel.rx.id) {
+                    <div
+                      class="related-rx-item"
+                      (click)="onReactionClick(rel.rx)"
+                      role="button"
+                      tabindex="0"
+                      [attr.title]="'Открыть реакцию: ' + rel.rx.nameRu"
+                    >
+                      <div class="related-rx-header">
+                        <span class="step-pill">Стадия {{ rel.rx.stepNumber }}</span>
+                        <span
+                          class="role-pill"
+                          [class.role-pill--sub]="rel.role === 'substrate'"
+                          [class.role-pill--prod]="rel.role === 'product'"
+                        >
+                          {{ rel.role === 'substrate' ? 'Вход (Субстрат)' : 'Выход (Продукт)' }}
+                        </span>
+                      </div>
+                      <div class="related-rx-name">
+                        <span>{{ rel.rx.nameRu }}</span>
+                        <span class="related-rx-arrow">↗</span>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          }
 
           <!-- Chemical properties -->
           <div class="inspector-section">

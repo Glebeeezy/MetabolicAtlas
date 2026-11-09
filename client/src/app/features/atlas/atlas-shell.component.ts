@@ -68,11 +68,16 @@ export interface HumanReactionArrow {
   // Participants breakdown for "Субстрат -> Продукт" cards
   substrates: { name: string; formula: string; isCo?: boolean }[];
   products: { name: string; formula: string; isCo?: boolean }[];
-  cofactorArc: {
-    labelRu: string;
+  cofactorArc?: {
     path: string;
-    textX: number;
-    textY: number;
+    inText?: string;
+    inX?: number;
+    inY?: number;
+    inAnchor?: 'start' | 'middle' | 'end';
+    outText?: string;
+    outX?: number;
+    outY?: number;
+    outAnchor?: 'start' | 'middle' | 'end';
     isEnergy?: boolean;
     isGtp?: boolean;
   };
@@ -302,16 +307,21 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     ],
     products: [
       { name: 'Цитрат', formula: 'C₆H₅O₇³⁻' },
-      { name: 'Кофермент A (CoA-SH)', formula: 'C₂₁H₃₆N₇O₁₆P₃S', isCo: true },
+      { name: 'Кофермент A (КоА-SH)', formula: 'C₂₁H₃₆N₇O₁₆P₃S', isCo: true },
       { name: 'Протон (H⁺)', formula: 'H⁺', isCo: true },
     ],
     cofactorArc: {
-      labelRu: '+ H₂O ➔ CoA-SH',
-      path: 'M 880 110 Q 920 85 960 115',
-      textX: 920,
-      textY: 82,
+      inText: '+ H₂O',
+      inX: 885,
+      inY: 76,
+      inAnchor: 'middle',
+      path: 'M 885 84 C 890 145, 940 150, 955 98',
+      outText: 'КоА-SH',
+      outX: 965,
+      outY: 88,
+      outAnchor: 'start',
     },
-    inhibitorsRu: ['АТФ', 'NADH', 'Сукцинил-КоА', 'Цитрат'],
+    inhibitorsRu: ['АТФ', 'НАДН', 'Сукцинил-КоА', 'Цитрат'],
     mechanismRu: 'Конденсация метильной группы ацетил-КоА с карбонильным углеродом оксалоацетата с образованием цитрил-КоА, гидролиз которого высвобождает энергию тиоэфирной связи.',
     clinicalNoteRu: 'Начальная стадия цикла; сильно экзергоническая реакция, делающая процесс необратимым in vivo.',
   },
@@ -341,10 +351,15 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
       { name: 'Изоцитрат', formula: 'C₆H₅O₇³⁻' },
     ],
     cofactorArc: {
-      labelRu: 'цис-Аконитат [4Fe-4S]',
-      path: 'M 1150 330 Q 1200 370 1170 410',
-      textX: 1210,
-      textY: 370,
+      inText: '− H₂O',
+      inX: 1195,
+      inY: 340,
+      inAnchor: 'start',
+      path: 'M 1190 350 C 1140 370, 1140 400, 1185 415',
+      outText: '+ H₂O',
+      outX: 1195,
+      outY: 428,
+      outAnchor: 'start',
     },
     mechanismRu: 'Стереоспецифическая дегидратация цитрата до промежуточного цис-аконитата, за которой следует гидратация с образованием изоцитрата при участии железосерного кластера [4Fe-4S].',
     clinicalNoteRu: 'Ингибируется фторацетатом (образующим фторцитрат — токсический яд).',
@@ -360,7 +375,7 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     pathData: 'M 1180 552 C 1160 640, 1120 710, 1080 770',
     tooltipX: 1145,
     tooltipY: 660,
-    enzymeRu: 'Изоцитратдегидрогеназа 3 (NAD⁺)',
+    enzymeRu: 'Изоцитратдегидрогеназа 3 (НАД⁺)',
     enzymeEn: 'Isocitrate dehydrogenase 3',
     enzymeShort: 'IDH3',
     ecNumber: '1.1.1.41',
@@ -370,23 +385,28 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     deltaG0: '-21.0 кДж/моль',
     substrates: [
       { name: 'Изоцитрат', formula: 'C₆H₅O₇³⁻' },
-      { name: 'NAD⁺', formula: 'C₂₁H₂₇N₇O₁₄P₂', isCo: true },
+      { name: 'НАД⁺', formula: 'C₂₁H₂₇N₇O₁₄P₂', isCo: true },
     ],
     products: [
       { name: 'α-Кетоглутарат', formula: 'C₅H₄O₅²⁻' },
-      { name: 'NADH', formula: 'C₂₁H₂₉N₇O₁₄P₂', isCo: true },
+      { name: 'НАДН', formula: 'C₂₁H₂₉N₇O₁₄P₂', isCo: true },
       { name: 'Углекислый газ (CO₂ ↑)', formula: 'CO₂', isCo: true },
       { name: 'Протон (H⁺)', formula: 'H⁺', isCo: true },
     ],
     cofactorArc: {
-      labelRu: 'NAD⁺ ➔ NADH + CO₂ ↑',
-      path: 'M 1190 600 Q 1240 640 1170 680',
-      textX: 1220,
-      textY: 640,
+      inText: 'НАД⁺',
+      inX: 1215,
+      inY: 615,
+      inAnchor: 'start',
+      path: 'M 1210 625 C 1140 645, 1140 685, 1205 700',
+      outText: 'НАДН + CO₂ ↑',
+      outX: 1215,
+      outY: 712,
+      outAnchor: 'start',
       isEnergy: true,
     },
     activatorsRu: ['АДФ', 'Ca²⁺'],
-    inhibitorsRu: ['АТФ', 'NADH'],
+    inhibitorsRu: ['АТФ', 'НАДН'],
     mechanismRu: 'Окисление гидроксильной группы изоцитрата до кетогруппы (оксалосукцинат), за которым следует необратимое декарбоксилирование с выделением первой молекулы CO₂.',
     clinicalNoteRu: 'Главный регуляторный переключатель скорости клеточного дыхания у человека. Активируется при энергодефиците (высокий АДФ).',
   },
@@ -411,32 +431,37 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     deltaG0: '-33.5 кДж/моль',
     substrates: [
       { name: 'α-Кетоглутарат', formula: 'C₅H₄O₅²⁻' },
-      { name: 'NAD⁺', formula: 'C₂₁H₂₇N₇O₁₄P₂', isCo: true },
-      { name: 'Кофермент A (CoA-SH)', formula: 'C₂₁H₃₆N₇O₁₆P₃S', isCo: true },
+      { name: 'НАД⁺', formula: 'C₂₁H₂₇N₇O₁₄P₂', isCo: true },
+      { name: 'Кофермент A (КоА-SH)', formula: 'C₂₁H₃₆N₇O₁₆P₃S', isCo: true },
     ],
     products: [
       { name: 'Сукцинил-КоА', formula: 'C₂₅H₃₆N₇O₁₉P₃S⁵⁻' },
-      { name: 'NADH', formula: 'C₂₁H₂₉N₇O₁₄P₂', isCo: true },
+      { name: 'НАДН', formula: 'C₂₁H₂₉N₇O₁₄P₂', isCo: true },
       { name: 'Углекислый газ (CO₂ ↑)', formula: 'CO₂', isCo: true },
       { name: 'Протон (H⁺)', formula: 'H⁺', isCo: true },
     ],
     cofactorArc: {
-      labelRu: 'NAD⁺ + CoA ➔ NADH + CO₂ ↑',
-      path: 'M 940 850 Q 920 920 860 900',
-      textX: 930,
-      textY: 935,
+      inText: 'НАД⁺ + КоА',
+      inX: 955,
+      inY: 895,
+      inAnchor: 'start',
+      path: 'M 945 905 C 910 855, 870 870, 850 935',
+      outText: 'НАДН + CO₂ ↑',
+      outX: 840,
+      outY: 955,
+      outAnchor: 'end',
       isEnergy: true,
     },
     activatorsRu: ['Ca²⁺'],
-    inhibitorsRu: ['Сукцинил-КоА', 'NADH', 'АТФ'],
-    mechanismRu: 'Мультиферментный комплекс (E1, E2, E3), аналогичный пируватдегидрогеназному. Требует 5 коферментов: тиаминпирофосфат (B₁), липоат, CoA (B₅), FAD (B₂), NAD⁺ (B₃).',
+    inhibitorsRu: ['Сукцинил-КоА', 'НАДН', 'АТФ'],
+    mechanismRu: 'Мультиферментный комплекс (E1, E2, E3), аналогичный пируватдегидрогеназному. Требует 5 коферментов: тиаминпирофосфат (B₁), липоат, КоА (B₅), ФАД (B₂), НАД⁺ (B₃).',
     clinicalNoteRu: 'Дефицит витамина B₁ (тиамина) при алкоголизме (синдром Вернике-Корсакова) или бери-бери блокирует эту реакцию, вызывая энергетический коллапс ЦНС.',
   },
   {
     id: 'd0000001-0000-0000-0000-000000000005',
     stepNumber: 5,
     code: 'R_SCS',
-    nameRu: 'Субстратное фосфорилирование (Синтез GTP/ATP)',
+    nameRu: 'Субстратное фосфорилирование (Синтез ГТФ / АТФ)',
     nameEn: 'Succinate-CoA ligase (substrate-level phosphorylation)',
     sourceMetaboliteId: 'b0000001-0000-0000-0000-000000000007', // Succinyl-CoA
     targetMetaboliteId: 'b0000001-0000-0000-0000-000000000008', // Succinate
@@ -453,23 +478,28 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     deltaG0: '-2.9 кДж/моль',
     substrates: [
       { name: 'Сукцинил-КоА', formula: 'C₂₅H₃₆N₇O₁₉P₃S⁵⁻' },
-      { name: 'GDP (или ADP)', formula: 'C₁₀H₁₅N₅O₁₁P₂', isCo: true },
-      { name: 'Неорганический фосфат (Pᵢ)', formula: 'HPO₄²⁻', isCo: true },
+      { name: 'ГДФ (или АДФ)', formula: 'C₁₀H₁₅N₅O₁₁P₂', isCo: true },
+      { name: 'Неорганический фосфат (Фᵢ)', formula: 'HPO₄²⁻', isCo: true },
     ],
     products: [
       { name: 'Сукцинат', formula: 'C₄H₄O₄²⁻' },
-      { name: 'GTP (или ATP)', formula: 'C₁₀H₁₆N₅O₁₄P₃', isCo: true },
-      { name: 'Кофермент A (CoA-SH)', formula: 'C₂₁H₃₆N₇O₁₆P₃S', isCo: true },
+      { name: 'ГТФ (или АТФ)', formula: 'C₁₀H₁₆N₅O₁₄P₃', isCo: true },
+      { name: 'Кофермент A (КоА-SH)', formula: 'C₂₁H₃₆N₇O₁₆P₃S', isCo: true },
     ],
     cofactorArc: {
-      labelRu: 'GDP + Pᵢ ➔ GTP + CoA',
-      path: 'M 570 910 Q 520 970 460 910',
-      textX: 515,
-      textY: 965,
+      inText: 'ГДФ + Фᵢ',
+      inX: 585,
+      inY: 968,
+      inAnchor: 'middle',
+      path: 'M 575 948 C 555 912, 485 912, 465 948',
+      outText: 'ГТФ + КоА',
+      outX: 435,
+      outY: 968,
+      outAnchor: 'middle',
       isGtp: true,
     },
-    mechanismRu: 'Разрыв богатой энергией тиоэфирной связи сукцинил-КоА сопряжен с фосфорилированием гуанозиндифосфата (GDP) до GTP через фосфогистидиновый интермедиат фермента.',
-    clinicalNoteRu: 'Тканевая специфичность человека: в печени и почках преобладает GTP-специфичная изоформа (ген SUCLG2, необходима для глюконеогенеза), в сердце и мозге — ATP-специфичная (ген SUCLA2).',
+    mechanismRu: 'Разрыв богатой энергией тиоэфирной связи сукцинил-КоА сопряжен с фосфорилированием гуанозиндифосфата (ГДФ) до ГТФ через фосфогистидиновый интермедиат фермента.',
+    clinicalNoteRu: 'Тканевая специфичность человека: в печени и почках преобладает ГТФ-специфичная изоформа (ген SUCLG2, необходима для глюконеогенеза), в сердце и мозге — АТФ-специфичная (ген SUCLA2).',
   },
   {
     id: 'd0000001-0000-0000-0000-000000000006',
@@ -492,21 +522,26 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     deltaG0: '0.0 кДж/моль',
     substrates: [
       { name: 'Сукцинат', formula: 'C₄H₄O₄²⁻' },
-      { name: 'FAD (связанный)', formula: 'C₂₇H₃₃N₉O₁₅P₂', isCo: true },
+      { name: 'ФАД (связанный)', formula: 'C₂₇H₃₃N₉O₁₅P₂', isCo: true },
     ],
     products: [
       { name: 'Фумарат', formula: 'C₄H₂O₄²⁻' },
-      { name: 'FADH₂ (в пул CoQ₁₀)', formula: 'C₂₇H₃₅N₉O₁₅P₂', isCo: true },
+      { name: 'ФАДН₂ (в пул Кофермента Q₁₀)', formula: 'C₂₇H₃₅N₉O₁₅P₂', isCo: true },
     ],
     cofactorArc: {
-      labelRu: 'FAD ➔ FADH₂ ➔ CoQ₁₀',
-      path: 'M 250 720 Q 180 670 230 620',
-      textX: 140,
-      textY: 670,
+      inText: 'ФАД',
+      inX: 180,
+      inY: 695,
+      inAnchor: 'end',
+      path: 'M 185 685 C 255 665, 255 635, 195 620',
+      outText: 'ФАДН₂ ➔ Q₁₀',
+      outX: 180,
+      outY: 610,
+      outAnchor: 'end',
       isEnergy: true,
     },
     inhibitorsRu: ['Малонат (конкурентный)', 'Оксалоацетат'],
-    mechanismRu: 'Стереоспецифическое транс-дегидрирование сукцината. Единственный фермент цикла, встроенный во внутреннюю мембрану митохондрий и напрямую передающий электроны в убихинон (CoQ₁₀).',
+    mechanismRu: 'Стереоспецифическое транс-дегидрирование сукцината. Единственный фермент цикла, встроенный во внутреннюю мембрану митохондрий и напрямую передающий электроны в убихинон (Кофермент Q₁₀).',
     clinicalNoteRu: 'Генетические мутации в субъединицах SDH человека приводят к параганглиомам и феохромоцитомам (накопление сукцината стабилизирует онкогенный фактор HIF-1α).',
   },
   {
@@ -536,10 +571,12 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
       { name: 'L-Малат', formula: 'C₄H₄O₅²⁻' },
     ],
     cofactorArc: {
-      labelRu: '+ H₂O',
-      path: 'M 220 420 Q 180 370 230 330',
-      textX: 175,
-      textY: 375,
+      inText: '+ H₂O',
+      inX: 175,
+      inY: 375,
+      inAnchor: 'end',
+      path: 'M 185 372 Q 225 372 255 372',
+      isEnergy: false,
     },
     mechanismRu: 'Стереоспецифическое транс-присоединение молекулы воды по двойной углерод-углеродной связи фумарата с образованием исключительно L-изомера яблочной кислоты.',
     clinicalNoteRu: 'Классический опухолевый супрессор человека. Герминальные мутации гена FH вызывают наследственный лейомиоматоз и почечно-клеточный рак (синдром HLRCC).',
@@ -565,22 +602,27 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     deltaG0: '+29.7 кДж/моль',
     substrates: [
       { name: 'L-Малат', formula: 'C₄H₄O₅²⁻' },
-      { name: 'NAD⁺', formula: 'C₂₁H₂₇N₇O₁₄P₂', isCo: true },
+      { name: 'НАД⁺', formula: 'C₂₁H₂₇N₇O₁₄P₂', isCo: true },
     ],
     products: [
       { name: 'Оксалоацетат', formula: 'C₄H₂O₅²⁻' },
-      { name: 'NADH', formula: 'C₂₁H₂₉N₇O₁₄P₂', isCo: true },
+      { name: 'НАДН', formula: 'C₂₁H₂₉N₇O₁₄P₂', isCo: true },
       { name: 'Протон (H⁺)', formula: 'H⁺', isCo: true },
     ],
     cofactorArc: {
-      labelRu: 'NAD⁺ ➔ NADH + H⁺',
-      path: 'M 460 165 Q 520 100 580 135',
-      textX: 520,
-      textY: 95,
+      inText: 'НАД⁺',
+      inX: 475,
+      inY: 85,
+      inAnchor: 'middle',
+      path: 'M 480 94 C 495 145, 555 145, 570 94',
+      outText: 'НАДН + H⁺',
+      outX: 580,
+      outY: 85,
+      outAnchor: 'middle',
       isEnergy: true,
     },
     inhibitorsRu: ['Высокие концентрации оксалоацетата'],
-    mechanismRu: 'Окисление вторичной спиртовой группы малата до кетогруппы с регенерацией оксалоацетата и образованием третьей молекулы NADH цикла.',
+    mechanismRu: 'Окисление вторичной спиртовой группы малата до кетогруппы с регенерацией оксалоацетата и образованием третьей молекулы НАДН цикла.',
     clinicalNoteRu: 'Термодинамически неблагоприятная реакция (ΔG°\' = +29.7 кДж/моль), сдвигаемая вправо постоянным и быстрым расходом оксалоацетата цитратсинтазой.',
   },
 ];
@@ -800,24 +842,38 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
 
   onReactionClick(reaction: HumanReactionArrow): void {
     this.selectedReaction.set(reaction);
-    // Find primary substrate for molecule tab fallback
-    const sub = this.metaboliteMap().get(reaction.sourceMetaboliteId);
-    if (sub) {
-      this.selectedMetabolite.set(sub);
-    }
+    this.selectedMetabolite.set(null);
     this.activeTab.set('reaction');
   }
 
   onMetaboliteClick(metabolite: HumanMetaboliteNode): void {
     this.selectedMetabolite.set(metabolite);
-    // Find first reaction using this metabolite
-    const rx = this.reactions.find(
-      (r) => r.sourceMetaboliteId === metabolite.id || r.targetMetaboliteId === metabolite.id
-    );
-    if (rx) {
-      this.selectedReaction.set(rx);
-    }
+    this.selectedReaction.set(null);
     this.activeTab.set('molecule');
+  }
+
+  findMetaboliteByName(name: string): HumanMetaboliteNode | undefined {
+    if (!name) return undefined;
+    const clean = name.trim().toLowerCase();
+    return this.metabolites.find((m) => {
+      const ru = m.nameRu.toLowerCase();
+      const en = m.nameEn.toLowerCase();
+      if (ru === clean || en === clean) return true;
+      if (clean.startsWith(ru) || clean.startsWith(en)) return true;
+      return m.synonymsRu.some((s) => s.toLowerCase() === clean || clean.startsWith(s.toLowerCase()));
+    });
+  }
+
+  getReactionsForMetabolite(metId: string): { rx: HumanReactionArrow; role: 'substrate' | 'product' }[] {
+    const list: { rx: HumanReactionArrow; role: 'substrate' | 'product' }[] = [];
+    for (const r of this.reactions) {
+      if (r.sourceMetaboliteId === metId || r.secondarySourceId === metId) {
+        list.push({ rx: r, role: 'substrate' });
+      } else if (r.targetMetaboliteId === metId) {
+        list.push({ rx: r, role: 'product' });
+      }
+    }
+    return list;
   }
 
   closeInspector(): void {
