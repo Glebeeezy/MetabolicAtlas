@@ -157,6 +157,24 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
         return;
       }
 
+      if (focus.pathwayId === 'PW-GALACTOSE') {
+        this.zoom.set(80);
+        this.panX.set(Math.round((1600 - 1100) * 0.8));
+        this.panY.set(Math.round((1600 - -160) * 0.8));
+        const galk1 = this.reactions.find((r) => r.code === 'R_GALK1');
+        if (galk1) this.onReactionClick(galk1);
+        return;
+      }
+
+      if (focus.pathwayId === 'PW-FRUCTOSE') {
+        this.zoom.set(80);
+        this.panX.set(Math.round((1600 - 1990) * 0.8));
+        this.panY.set(Math.round((1600 - 260) * 0.8));
+        const khk = this.reactions.find((r) => r.code === 'R_KHK');
+        if (khk) this.onReactionClick(khk);
+        return;
+      }
+
       const sector = this.sectorConfigs.find((s) => s.targetPathwayId === focus.pathwayId);
       if (sector) {
         this.focusOnSector(sector);
@@ -201,6 +219,10 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
 
   getPolyPoints(poly: { x: number; y: number }[]): string {
     return poly.map((p) => `${p.x},${p.y}`).join(' ');
+  }
+
+  getCrossroadBadgeWidth(text: string): number {
+    return Math.max(180, Math.round(text.length * 5.8 + 18));
   }
 
   onSectorClick(sector: SectorLayoutConfig): void {
@@ -252,7 +274,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   isProductOfSelected(nodeId: string): boolean {
     const r = this.selectedReaction();
     if (!r) return false;
-    return r.targetMetaboliteId === nodeId;
+    return r.targetMetaboliteId === nodeId || r.secondaryTargetId === nodeId;
   }
 
   doesReactionInvolveMetabolite(rx: HumanReactionArrow, met: HumanMetaboliteNode): boolean {
@@ -320,7 +342,11 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
       // Keep nodes participating in filtered reactions bright
       const rxMatches = this.reactions.filter((r) => this.isReactionMatchesFilter(r, filter));
       const hasNode = rxMatches.some(
-        (r) => r.sourceMetaboliteId === nodeId || r.secondarySourceId === nodeId || r.targetMetaboliteId === nodeId
+        (r) =>
+          r.sourceMetaboliteId === nodeId ||
+          r.secondarySourceId === nodeId ||
+          r.targetMetaboliteId === nodeId ||
+          r.secondaryTargetId === nodeId
       );
       if (!hasNode) return true;
     }
@@ -369,6 +395,9 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   }
 
   private isReactionMatchesFilter(rx: HumanReactionArrow, filter: 'NADH' | 'FADH2' | 'GTP'): boolean {
+    if (rx.pathwayCode === 'PW-GALACTOSE' || rx.pathwayCode === 'PW-FRUCTOSE') {
+      return false;
+    }
     if (filter === 'NADH') {
       return rx.stepNumber === 3 || rx.stepNumber === 4 || rx.stepNumber === 8;
     }
@@ -594,6 +623,8 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     for (const p of list) {
       const matchesActive =
         (activePathwayId === 'PW-GLYCOLISIS' && p.pathwayCode === 'PW-GLYCOLISIS') ||
+        (activePathwayId === 'PW-GALACTOSE' && (p.pathwayCode === 'PW-GALACTOSE' || p.pathwayCode === 'PWY_LELOIR')) ||
+        (activePathwayId === 'PW-FRUCTOSE' && (p.pathwayCode === 'PW-FRUCTOSE' || p.pathwayCode === 'PWY_FRUCTOLYSIS')) ||
         (activePathwayId === 'PW-PDH' && (p.pathwayCode === 'PW-PDH' || p.pathwayCode === 'PW-MPC')) ||
         (activePathwayId === 'PW-TCA-CYCLE' && (p.pathwayCode === 'PW-TCA-CYCLE' || p.pathwayCode === 'PWY_TCA'));
 

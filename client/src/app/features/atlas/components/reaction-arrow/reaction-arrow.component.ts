@@ -113,6 +113,7 @@ export interface ReactionArrowData {
       [attr.d]="reaction().pathData"
       class="reaction-line"
       fill="none"
+      [attr.marker-start]="reaction().isReversible ? (isSelected() ? 'url(#rx-arrowhead-active)' : (isHovered() ? 'url(#rx-arrowhead-hover)' : 'url(#rx-arrowhead)')) : null"
       [attr.marker-end]="isSelected() ? 'url(#rx-arrowhead-active)' : (isHovered() ? 'url(#rx-arrowhead-hover)' : 'url(#rx-arrowhead)')"
       [class.reaction-line--animated]="isFluxAnimated()"
       (click)="reactionClick.emit(reaction()); $event.stopPropagation()"

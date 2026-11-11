@@ -270,5 +270,26 @@ describe('ReactionArrowComponent', () => {
       }
     });
   });
+
+  it('should render double-headed marker-start only when reaction is reversible', () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    const lineEl = (fixture.nativeElement as HTMLElement).querySelector('path.reaction-line')!;
+    expect(lineEl.getAttribute('marker-start')).toBeNull();
+    expect(lineEl.getAttribute('marker-end')).toBe('url(#rx-arrowhead)');
+
+    const revFixture = TestBed.createComponent(TestHostComponent);
+    revFixture.componentInstance.testReaction = {
+      ...revFixture.componentInstance.testReaction,
+      id: 'test-rx-rev',
+      isReversible: true,
+    };
+    revFixture.detectChanges();
+
+    const revLineEl = (revFixture.nativeElement as HTMLElement).querySelector('path.reaction-line')!;
+    expect(revLineEl.getAttribute('marker-start')).toBe('url(#rx-arrowhead)');
+    expect(revLineEl.getAttribute('marker-end')).toBe('url(#rx-arrowhead)');
+  });
 });
 

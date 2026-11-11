@@ -535,25 +535,55 @@ describe('AtlasShellComponent', () => {
     const component = fixture.componentInstance;
 
     // Galactose Leloir pathway integration
+    const galCodes = ['MET_GALACTOSE', 'MET_GAL1P', 'MET_G1P', 'MET_UDP_GAL', 'MET_UDP_GLC'];
+    for (const code of galCodes) {
+      expect(component.allMetabolites.some((m) => m.code === code), `Missing metabolite ${code}`).toBe(true);
+    }
+    const galRxCodes = ['R_GALK1', 'R_GALT', 'R_GALE', 'R_PGM1'];
+    for (const code of galRxCodes) {
+      const rx = component.reactions.find((r) => r.code === code);
+      expect(rx?.pathwayCode, `Expected PW-GALACTOSE for ${code}`).toBe('PW-GALACTOSE');
+    }
+
     const glucose = component.allMetabolites.find((m) => m.code === 'MET_GLUCOSE')!;
-    expect(glucose.pathwaysRu.some((p) => p.pathwayCode === 'PWY_LELOIR')).toBe(true);
+    expect(glucose.pathwaysRu.some((p) => p.pathwayCode === 'PW-GALACTOSE')).toBe(true);
+    expect(glucose.pathwaysRu.some((p) => p.pathwayCode === 'PW-FRUCTOSE')).toBe(true);
 
     const g6p = component.allMetabolites.find((m) => m.code === 'MET_G6P')!;
-    expect(g6p.pathwaysRu.some((p) => p.pathwayCode === 'PWY_LELOIR')).toBe(true);
+    expect(g6p.pathwaysRu.some((p) => p.pathwayCode === 'PW-GALACTOSE' && p.reactionCode === 'R_PGM1')).toBe(true);
 
-    // Fructose integration
+    // Bidirectional connections on secondarySourceId / secondaryTargetId
+    const udpGlc = component.allMetabolites.find((m) => m.code === 'MET_UDP_GLC')!;
+    const udpGlcRxs = component.getReactionsForMetabolite(udpGlc.id);
+    expect(udpGlcRxs.some((r) => r.rx.code === 'R_GALT' && r.role === 'substrate')).toBe(true);
+    expect(udpGlcRxs.some((r) => r.rx.code === 'R_GALE' && r.role === 'product')).toBe(true);
+
+    // Fructose integration (hepatic + extrahepatic)
+    const fruCodes = ['MET_FRUCTOSE', 'MET_F1P', 'MET_GLYCERALDEHYDE'];
+    for (const code of fruCodes) {
+      expect(component.allMetabolites.some((m) => m.code === code), `Missing metabolite ${code}`).toBe(true);
+    }
+    const fruRxCodes = ['R_KHK', 'R_ALDOB', 'R_TKFC', 'R_HK_FRU'];
+    for (const code of fruRxCodes) {
+      const rx = component.reactions.find((r) => r.code === code);
+      expect(rx?.pathwayCode, `Expected PW-FRUCTOSE for ${code}`).toBe('PW-FRUCTOSE');
+    }
+
     const f6p = component.allMetabolites.find((m) => m.code === 'MET_F6P')!;
-    expect(f6p.pathwaysRu.some((p) => p.pathwayCode === 'PWY_FRUCTOLYSIS')).toBe(true);
+    expect(f6p.pathwaysRu.some((p) => p.pathwayCode === 'PW-FRUCTOSE' && p.reactionCode === 'R_HK_FRU')).toBe(true);
 
     const dhap = component.allMetabolites.find((m) => m.code === 'MET_DHAP')!;
-    expect(dhap.pathwaysRu.some((p) => p.pathwayCode === 'PWY_FRUCTOLYSIS')).toBe(true);
+    expect(dhap.pathwaysRu.some((p) => p.pathwayCode === 'PW-FRUCTOSE' && p.reactionCode === 'R_ALDOB')).toBe(true);
+    expect(component.getReactionsForMetabolite(dhap.id).some((r) => r.rx.code === 'R_ALDOB' && r.role === 'product')).toBe(true);
 
     const g3p = component.allMetabolites.find((m) => m.code === 'MET_G3P')!;
-    expect(g3p.pathwaysRu.some((p) => p.pathwayCode === 'PWY_FRUCTOLYSIS')).toBe(true);
+    expect(g3p.pathwaysRu.some((p) => p.pathwayCode === 'PW-FRUCTOSE' && p.reactionCode === 'R_TKFC')).toBe(true);
 
     // Canvas crossroads
-    expect(component.crossroads.some((cr) => cr.id === 'cr-galactose-leloir')).toBe(true);
-    expect(component.crossroads.some((cr) => cr.id === 'cr-fructose-entry')).toBe(true);
+    expect(component.crossroads.some((cr) => cr.id === 'cr-galactose-in')).toBe(true);
+    expect(component.crossroads.some((cr) => cr.id === 'cr-glycogen-out')).toBe(true);
+    expect(component.crossroads.some((cr) => cr.id === 'cr-fructose-in')).toBe(true);
+    expect(component.crossroads.some((cr) => cr.id === 'cr-g6pc-out')).toBe(true);
   });
 
   it('should enforce distinct pathway taxonomy and compartments across Glycolysis, MPC, PDH, and TCA', () => {
@@ -715,5 +745,54 @@ describe('AtlasShellComponent', () => {
     component.focusOnTca();
     expect(component.panX()).toBe(0);
     expect(component.panY()).toBe(Math.round((1600 - 2190) * 0.85));
+  });
+
+  it('should resolve RU and EN names for Galactose and Fructose intermediates without prefix collisions', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+
+    expect(component.findMetaboliteByName('D-Галактоза')?.code).toBe('MET_GALACTOSE');
+    expect(component.findMetaboliteByName('Галактозо-1-фосфат')?.code).toBe('MET_GAL1P');
+    expect(component.findMetaboliteByName('Глюкозо-1-фосфат')?.code).toBe('MET_G1P');
+    expect(component.findMetaboliteByName('УДФ-галактоза')?.code).toBe('MET_UDP_GAL');
+    expect(component.findMetaboliteByName('УДФ-глюкоза')?.code).toBe('MET_UDP_GLC');
+    expect(component.findMetaboliteByName('D-Глюкоза')?.code).toBe('MET_GLUCOSE');
+    expect(component.findMetaboliteByName('D-Фруктоза')?.code).toBe('MET_FRUCTOSE');
+    expect(component.findMetaboliteByName('Фруктозо-1-фосфат')?.code).toBe('MET_F1P');
+    expect(component.findMetaboliteByName('D-Глицеральдегид')?.code).toBe('MET_GLYCERALDEHYDE');
+    expect(component.findMetaboliteByName('Глицеральдегид-3-фосфат')?.code).toBe('MET_G3P');
+
+    expect(component.findMetaboliteByName('UDP-glucose')?.code).toBe('MET_UDP_GLC');
+    expect(component.findMetaboliteByName('D-Glyceraldehyde')?.code).toBe('MET_GLYCERALDEHYDE');
+    expect(component.findMetaboliteByName('Glyceraldehyde 3-phosphate')?.code).toBe('MET_G3P');
+  });
+
+  it('should focus camera, render sub-clusters, and match ALL catalog counts when selecting PW-GALACTOSE and PW-FRUCTOSE', () => {
+    const atlasState = TestBed.inject(AtlasStateService);
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('.leloir-cluster-boundary')).toBeTruthy();
+    expect(el.querySelector('.fructose-cluster-boundary')).toBeTruthy();
+
+    const allCatalog = atlasState.pathways().find((p) => p.id === 'ALL')!;
+    expect(allCatalog.reactionCount).toBe(HUMAN_REACTIONS.length);
+    expect(allCatalog.metaboliteCount).toBe(HUMAN_METABOLITES.length);
+
+    atlasState.selectPathway('PW-GALACTOSE');
+    fixture.detectChanges();
+    expect(component.selectedReaction()?.code).toBe('R_GALK1');
+    expect(component.zoom()).toBe(80);
+    expect(component.panX()).toBe(Math.round((1600 - 1100) * 0.8));
+    expect(component.panY()).toBe(Math.round((1600 - -160) * 0.8));
+
+    atlasState.selectPathway('PW-FRUCTOSE');
+    fixture.detectChanges();
+    expect(component.selectedReaction()?.code).toBe('R_KHK');
+    expect(component.zoom()).toBe(80);
+    expect(component.panX()).toBe(Math.round((1600 - 1990) * 0.8));
+    expect(component.panY()).toBe(Math.round((1600 - 260) * 0.8));
   });
 });

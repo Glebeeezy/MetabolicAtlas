@@ -240,13 +240,26 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
         "reactionNameEn": "Hexokinase phosphorylation of glucose"
       },
       {
-        "pathwayCode": "PWY_LELOIR",
-        "pathwayNameRu": "Путь Лелуара (Метаболизм галактозы)",
-        "pathwayNameEn": "Leloir Pathway (Galactose Metabolism)",
+        "pathwayCode": "PW-GALACTOSE",
+        "pathwayNameRu": "Путь Лелуара (Галактоза ➔ Г6Ф ➔ Глюкоза)",
+        "pathwayNameEn": "Leloir Pathway (Galactose ➔ G6P ➔ Glucose)",
         "isCurrentPathway": false,
         "role": "product",
-        "detailsRu": "Конечный продукт превращения галактозы в печени: Галактоза ➔ Gal-1-P ➔ УДФ-глюкоза ➔ G1P ➔ G6P ➔ Свободная D-глюкоза (через глюкозо-6-фосфатазу G6PC) для нормогликемии.",
-        "detailsEn": "Terminal hepatic product from galactose: Galactose ➔ Gal-1-P ➔ UDP-Glc ➔ G1P ➔ G6P ➔ Free D-glucose (via G6PC) for systemic blood glucose control."
+        "detailsRu": "Синтез глюкозы из галактозы в печени: Галактоза ➔ Gal-1-P ➔ UDP-Gal ➔ UDP-Glc ➔ G1P ➔ G6P (PGM1), затем глюкозо-6-фосфатаза (G6PC1) отщепляет фосфат, выпуская свободную D-глюкозу в кровь.",
+        "detailsEn": "Hepatic glucose synthesis from galactose: Galactose ➔ Gal-1-P ➔ UDP-Gal ➔ UDP-Glc ➔ G1P ➔ G6P (PGM1), then hepatic glucose-6-phosphatase (G6PC1) releases free D-glucose into blood.",
+        "stepNumber": 4,
+        "reactionCode": "R_PGM1"
+      },
+      {
+        "pathwayCode": "PW-FRUCTOSE",
+        "pathwayNameRu": "Фруктолиз / Печёночный синтез глюкозы",
+        "pathwayNameEn": "Fructolysis / Hepatic Glucose Synthesis",
+        "isCurrentPathway": false,
+        "role": "product",
+        "detailsRu": "Синтез глюкозы из фруктозы в печени: Фруктоза ➔ F1P ➔ ДАФ + ГА (альдолаза B) ➔ ГАФ (ТКФК) ➔ конденсация в F1,6BP ➔ F6P (FBP1) ➔ G6P ➔ свободная D-глюкоза через глюкозо-6-фосфатазу (G6PC1).",
+        "detailsEn": "Hepatic glucose synthesis from fructose: Fructose ➔ F1P ➔ DHAP + GA (ALDOB) ➔ G3P (TKFC) ➔ reverse aldolase to F1,6BP ➔ F6P (FBP1) ➔ G6P ➔ free D-glucose via G6PC1.",
+        "stepNumber": 2,
+        "reactionCode": "R_ALDOB"
       },
       {
         "pathwayCode": "PWY_PPP",
@@ -317,13 +330,15 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
         "reactionCode": "R_GPI"
       },
       {
-        "pathwayCode": "PWY_LELOIR",
+        "pathwayCode": "PW-GALACTOSE",
         "pathwayNameRu": "Путь Лелуара (Метаболизм галактозы)",
         "pathwayNameEn": "Leloir Pathway (Galactose Metabolism)",
         "isCurrentPathway": false,
         "role": "product",
-        "detailsRu": "Узел слияния галактозы: фосфоглюкомутаза 1 (PGM1) обратимо превращает глюкозо-1-фосфат (G1P) из пути Лелуара в G6P, направляя углеводы молока в гликолиз.",
-        "detailsEn": "Galactose junction point: phosphoglucomutase 1 (PGM1) converts G1P from Leloir pathway into G6P, funneling milk carbohydrate into glycolysis."
+        "detailsRu": "Узел слияния галактозы: фосфоглюкомутаза 1 (PGM1) обратимо превращает глюкозо-1-фосфат (G1P) из пути Лелуара в G6P. В печени глюкозо-6-фосфатаза (G6PC1) отщепляет фосфат с выходом свободной D-глюкозы в кровь.",
+        "detailsEn": "Galactose junction: PGM1 reversibly converts G1P from Leloir pathway into G6P. In liver, G6PC1 dephosphorylates G6P to release free D-glucose into blood.",
+        "stepNumber": 4,
+        "reactionCode": "R_PGM1"
       },
       {
         "pathwayCode": "PWY_PPP",
@@ -403,13 +418,15 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
         "reactionCode": "R_PFK1"
       },
       {
-        "pathwayCode": "PWY_FRUCTOLYSIS",
+        "pathwayCode": "PW-FRUCTOSE",
         "pathwayNameRu": "Фруктолиз (Мышцы / Адипоциты)",
         "pathwayNameEn": "Fructolysis (Muscle / Adipose)",
         "isCurrentPathway": false,
         "role": "product",
-        "detailsRu": "Внепеченочный вход фруктозы: неспецифическая гексокиназа (HK) способна прямо фосфорилировать фруктозу в F6P, вводя ее на стадию 3 гликолиза.",
-        "detailsEn": "Extrahepatic fructose entry: non-specific hexokinase directly phosphorylates fructose to F6P, entering glycolysis at step 3."
+        "detailsRu": "Внепеченочный путь (мышцы, жировая ткань): гексокиназа (HK) напрямую фосфорилирует D-фруктозу за счёт 1 АТФ в Ф6Ф (F6P), который далее идёт либо в гликолиз (PFK-1), либо в печени изомеризуется в Г6Ф ➔ D-глюкозу (G6PC1).",
+        "detailsEn": "Extrahepatic path (muscle, adipose): hexokinase (HK) directly phosphorylates D-fructose with 1 ATP into F6P, entering glycolysis (PFK-1) or isomerizing to G6P ➔ glucose.",
+        "stepNumber": 4,
+        "reactionCode": "R_HK_FRU"
       }
     ]
   },
@@ -473,7 +490,7 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
     "formula": "C₃H₅O₆P²⁻",
     "carbons": "3C",
     "carbonsEn": "3C",
-    "x": 1160,
+    "x": 1885,
     "y": 366,
     "width": 155,
     "height": 74,
@@ -519,13 +536,15 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
         "reactionCode": "R_TPI"
       },
       {
-        "pathwayCode": "PWY_FRUCTOLYSIS",
-        "pathwayNameRu": "Печеночный фруктолиз",
-        "pathwayNameEn": "Hepatic Fructolysis",
+        "pathwayCode": "PW-FRUCTOSE",
+        "pathwayNameRu": "Печёночный фруктолиз (обход PFK-1)",
+        "pathwayNameEn": "Hepatic Fructolysis (PFK-1 Bypass)",
         "isCurrentPathway": false,
         "role": "product",
-        "detailsRu": "Вход фруктозы в печени: фруктокиназа KHK дает F1P, который альдолазой B (ALDOB) расщепляется прямо на ДАФ и глицеральдегид в обход главного регулятора PFK-1.",
-        "detailsEn": "Hepatic fructose entry: fructokinase KHK forms F1P, cleaved by aldolase B (ALDOB) directly into DHAP and glyceraldehyde bypassing PFK-1."
+        "detailsRu": "Фруктоза в печени: KHK (-1 АТФ) даёт F1P, который альдолаза B (ALDOB) расщепляет прямо на ДАФ и глицеральдегид, обходя главный тормоз гликолиза PFK-1. ДАФ + ГАФ могут идти вниз в пируват (+2 АТФ нетто) или вверх через альдолазу + FBP1 + G6PC1 в свободную глюкозу.",
+        "detailsEn": "Hepatic fructose entry: KHK (-1 ATP) forms F1P cleaved by aldolase B (ALDOB) straight into DHAP and glyceraldehyde, bypassing the PFK-1 checkpoint. DHAP + G3P fuel glycolysis (+2 net ATP) or condense upward (FBP1 ➔ G6PC1) into glucose.",
+        "stepNumber": 2,
+        "reactionCode": "R_ALDOB"
       },
       {
         "pathwayCode": "PWY_LIPID_SYN",
@@ -596,13 +615,15 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
         "reactionCode": "R_GAPDH"
       },
       {
-        "pathwayCode": "PWY_FRUCTOLYSIS",
-        "pathwayNameRu": "Печеночный фруктолиз",
-        "pathwayNameEn": "Hepatic Fructolysis",
+        "pathwayCode": "PW-FRUCTOSE",
+        "pathwayNameRu": "Печёночный фруктолиз (Слияние в ГАФ)",
+        "pathwayNameEn": "Hepatic Fructolysis (G3P Convergence)",
         "isCurrentPathway": false,
         "role": "product",
-        "detailsRu": "Второй осколок альдолазы B (глицеральдегид) фосфорилируется триозокиназой (TK) в ГАФ, завершая слияние фруктозы с гликолизом.",
-        "detailsEn": "Second fragment of aldolase B (glyceraldehyde) is phosphorylated by triokinase (TK) into GAP, completing fructose integration into glycolysis."
+        "detailsRu": "Триокиназа (TKFC, -1 АТФ) фосфорилирует D-глицеральдегид в ГАФ. В печени пул ГАФ + ДАФ либо сгорает в гликолизе до пирувата (+2 АТФ нетто), либо конденсируется альдолазой в F1,6BP ➔ F6P ➔ G6P ➔ глюкоза.",
+        "detailsEn": "Triokinase (TKFC, -1 ATP) phosphorylates D-glyceraldehyde into G3P. In liver, G3P + DHAP either descend glycolysis to pyruvate (+2 net ATP) or condense upward into F1,6BP ➔ F6P ➔ G6P ➔ glucose.",
+        "stepNumber": 3,
+        "reactionCode": "R_TKFC"
       }
     ]
   },
@@ -929,6 +950,465 @@ export const HUMAN_METABOLITES: HumanMetaboliteNode[] = [
         "detailsEn": "Step 1 (PDH Complex E1-E2-E3): oxidatively decarboxylated into central Acetyl-CoA with CO₂ release and NADH yield.",
         "stepNumber": 1,
         "reactionCode": "R_PDH"
+      }
+    ]
+  },
+  {
+    "id": "b0000003-0000-0000-0000-000000000001",
+    "code": "MET_GALACTOSE",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "D-Галактоза",
+    "nameEn": "D-Galactose",
+    "abbrevRu": "Гал",
+    "abbrevEn": "Gal",
+    "formula": "C₆H₁₂O₆",
+    "carbons": "6C",
+    "carbonsEn": "6C",
+    "x": 700,
+    "y": -274,
+    "width": 160,
+    "height": 74,
+    "color": "#A855F7",
+    "smiles": "C([C@@H]1[C@@H]([C@@H]([C@H]([C@H](O1)O)O)O)O)O",
+    "chebi": "CHEBI:28260",
+    "inchiKey": "WQZGKKKJIJFFOK-PHYPRBDBSA-N",
+    "descriptionRu": "C4-эпимер D-глюкозы, поступающий с молочным сахаром (лактозой = глюкоза + галактоза). Через 4 фермента пути Лелуара (GALK1 ➔ GALT/GALE ➔ PGM1) полностью превращается в Г6Ф, давая либо энергию в гликолизе (+2 АТФ нетто, -1 АТФ на вход как в глюкозе), либо свободную D-глюкозу крови в печени через G6PC1.",
+    "descriptionEn": "C4 epimer of D-glucose derived from dietary lactose hydrolysis. Converted through the 4-step Leloir pathway (GALK1 ➔ GALT/GALE ➔ PGM1) into G6P for glycolysis (+2 net ATP) or hepatic glucose export (G6PC1).",
+    "synonymsRu": [
+      "D-Галактоза",
+      "Галактоза",
+      "Молочный сахар"
+    ],
+    "synonymsEn": [
+      "D-Galactose",
+      "Galactose",
+      "Gal"
+    ],
+    "skeletalSvg": "<polygon points=\"24,12 36,18 36,30 24,36 12,30 12,18\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"12\" cy=\"18\" r=\"3\" fill=\"#A855F7\"/><circle cx=\"24\" cy=\"12\" r=\"3\" fill=\"#EF4444\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <polygon points=\"120,24 156,42 156,74 120,92 84,74 84,42\" class=\"chem-ring\" stroke=\"#94A3B8\" stroke-width=\"2.2\" fill=\"none\"/>\n  <circle cx=\"156\" cy=\"42\" r=\"4\" fill=\"#EF4444\"/>\n  <line x1=\"84\" y1=\"42\" x2=\"64\" y2=\"28\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <text x=\"46\" y=\"25\" fill=\"#A855F7\" font-size=\"10\" font-weight=\"700\" text-anchor=\"middle\">HO(C4)</text>\n  <line x1=\"156\" y1=\"74\" x2=\"178\" y2=\"84\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <text x=\"196\" y=\"88\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">OH</text>\n  <line x1=\"84\" y1=\"74\" x2=\"64\" y2=\"84\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <text x=\"44\" y=\"88\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">CH₂OH</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GALACTOSE",
+        "pathwayNameRu": "Путь Лелуара (Метаболизм галактозы)",
+        "pathwayNameEn": "Leloir Pathway (Galactose Metabolism)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 1 (Галактокиназа GALK1, -1 АТФ): необратимое фосфорилирование в положение C1 с образованием галактозо-1-фосфата.",
+        "detailsEn": "Step 1 (Galactokinase GALK1, -1 ATP): irreversible C1 phosphorylation yielding galactose 1-phosphate.",
+        "stepNumber": 1,
+        "reactionCode": "R_GALK1"
+      }
+    ]
+  },
+  {
+    "id": "b0000003-0000-0000-0000-000000000002",
+    "code": "MET_GAL1P",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Галактозо-1-фосфат",
+    "nameEn": "Galactose 1-phosphate",
+    "abbrevRu": "Гал-1-Ф",
+    "abbrevEn": "Gal-1-P",
+    "formula": "C₆H₁₁O₉P²⁻",
+    "carbons": "6C",
+    "carbonsEn": "6C",
+    "x": 700,
+    "y": -114,
+    "width": 160,
+    "height": 74,
+    "color": "#A855F7",
+    "smiles": "C([C@@H]1[C@@H]([C@@H]([C@H]([C@H](O1)OP(=O)([O-])[O-])O)O)O)O",
+    "chebi": "CHEBI:17973",
+    "inchiKey": "HXXFSFRBOHSGBM-ARQDHWQXSA-L",
+    "descriptionRu": "Активированный фосфат галактозы при C1 («ловушка галактозы в клетке»). При классической галактоземии (дефицит GALT) токсически накапливается в печени, почках, хрусталике и мозге.",
+    "descriptionEn": "C1-phosphorylated galactose intermediate trapping galactose inside the cell. Toxic accumulation in classical galactosemia (GALT deficiency) injures liver, kidneys, lens, and brain.",
+    "synonymsRu": [
+      "Галактозо-1-фосфат",
+      "Гал-1-Ф",
+      "α-D-галактозо-1-фосфат"
+    ],
+    "synonymsEn": [
+      "Galactose 1-phosphate",
+      "Gal-1-P",
+      "alpha-D-galactose 1-phosphate"
+    ],
+    "skeletalSvg": "<polygon points=\"22,12 34,18 34,30 22,36 10,30 10,18\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"34\" cy=\"24\" r=\"3\" fill=\"#A855F7\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <polygon points=\"95,26 128,44 128,74 95,90 62,74 62,44\" class=\"chem-ring\" stroke=\"#94A3B8\" stroke-width=\"2.2\" fill=\"none\"/>\n  <circle cx=\"128\" cy=\"44\" r=\"4\" fill=\"#EF4444\"/>\n  <line x1=\"128\" y1=\"60\" x2=\"155\" y2=\"60\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <rect x=\"158\" y=\"48\" width=\"72\" height=\"24\" rx=\"4\" fill=\"rgba(168,85,247,0.18)\" stroke=\"#A855F7\" stroke-width=\"1.2\"/>\n  <text x=\"194\" y=\"60\" fill=\"#A855F7\" font-weight=\"700\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"central\">C1-O-PO₃²⁻</text>\n  <text x=\"42\" y=\"36\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">HO(C4)</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GALACTOSE",
+        "pathwayNameRu": "Путь Лелуара (Метаболизм галактозы)",
+        "pathwayNameEn": "Leloir Pathway (Galactose Metabolism)",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Стадия 1 (GALK1): образуется из D-галактозы за счёт 1 АТФ.",
+        "detailsEn": "Step 1 (GALK1): product of D-galactose phosphorylation consuming 1 ATP.",
+        "stepNumber": 1,
+        "reactionCode": "R_GALK1"
+      },
+      {
+        "pathwayCode": "PW-GALACTOSE",
+        "pathwayNameRu": "Путь Лелуара (Метаболизм галактозы)",
+        "pathwayNameEn": "Leloir Pathway (Galactose Metabolism)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 2 (GALT): обменивается уридиловой меткой с УДФ-глюкозой с выходом Г1Ф и УДФ-галактозы.",
+        "detailsEn": "Step 2 (GALT): swaps UMP moiety with UDP-glucose to produce G1P and UDP-galactose.",
+        "stepNumber": 2,
+        "reactionCode": "R_GALT"
+      }
+    ]
+  },
+  {
+    "id": "b0000003-0000-0000-0000-000000000003",
+    "code": "MET_G1P",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Глюкозо-1-фосфат",
+    "nameEn": "Glucose 1-phosphate",
+    "abbrevRu": "Г1Ф",
+    "abbrevEn": "G1P",
+    "formula": "C₆H₁₁O₉P²⁻",
+    "carbons": "6C",
+    "carbonsEn": "6C",
+    "x": 1175,
+    "y": -114,
+    "width": 155,
+    "height": 74,
+    "color": "#A855F7",
+    "smiles": "C([C@@H]1[C@H]([C@@H]([C@H]([C@H](O1)OP(=O)([O-])[O-])O)O)O)O",
+    "chebi": "CHEBI:16077",
+    "inchiKey": "HXXFSFRBOHSGBM-VFUOTHLCSA-L",
+    "descriptionRu": "Аномерный фосфат глюкозы — точка сопряжения пути Лелуара, гликогенолиза (фосфорилаза) и гликолиза. Фосфоглюкомутаза 1 (PGM1) переводит его в Г6Ф без затраты АТФ.",
+    "descriptionEn": "Anomeric glucose phosphate linking the Leloir pathway, glycogenolysis, and glycolysis. Phosphoglucomutase 1 (PGM1) converts G1P directly into G6P at zero ATP cost.",
+    "synonymsRu": [
+      "Глюкозо-1-фосфат",
+      "Г1Ф",
+      "Эфир Кори"
+    ],
+    "synonymsEn": [
+      "Glucose 1-phosphate",
+      "G1P",
+      "Cori ester"
+    ],
+    "skeletalSvg": "<polygon points=\"22,12 34,18 34,30 22,36 10,30 10,18\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"34\" cy=\"24\" r=\"3\" fill=\"#F59E0B\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <polygon points=\"95,26 128,44 128,74 95,90 62,74 62,44\" class=\"chem-ring\" stroke=\"#94A3B8\" stroke-width=\"2.2\" fill=\"none\"/>\n  <circle cx=\"128\" cy=\"44\" r=\"4\" fill=\"#EF4444\"/>\n  <line x1=\"128\" y1=\"60\" x2=\"155\" y2=\"60\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <rect x=\"158\" y=\"48\" width=\"72\" height=\"24\" rx=\"4\" fill=\"rgba(245,158,11,0.18)\" stroke=\"#F59E0B\" stroke-width=\"1.2\"/>\n  <text x=\"194\" y=\"60\" fill=\"#F59E0B\" font-weight=\"700\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"central\">C1-O-PO₃²⁻</text>\n  <text x=\"42\" y=\"36\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">Glc(C4-OH)</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GALACTOSE",
+        "pathwayNameRu": "Путь Лелуара (Метаболизм галактозы)",
+        "pathwayNameEn": "Leloir Pathway (Galactose Metabolism)",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Стадия 2 (GALT): высвобождается в реакции обмена с УДФ-глюкозой.",
+        "detailsEn": "Step 2 (GALT): released via uridylyl transfer from UDP-glucose.",
+        "stepNumber": 2,
+        "reactionCode": "R_GALT"
+      },
+      {
+        "pathwayCode": "PW-GALACTOSE",
+        "pathwayNameRu": "Путь Лелуара (Метаболизм галактозы)",
+        "pathwayNameEn": "Leloir Pathway (Galactose Metabolism)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 4 (PGM1): обратимо изомеризуется в Г6Ф — прямой вход либо в гликолиз (+2 АТФ нетто), либо в свободную D-глюкозу через G6PC1 в печени.",
+        "detailsEn": "Step 4 (PGM1): reversibly isomerized into G6P for glycolysis (+2 net ATP) or hepatic blood glucose export via G6PC1.",
+        "stepNumber": 4,
+        "reactionCode": "R_PGM1"
+      }
+    ]
+  },
+  {
+    "id": "b0000003-0000-0000-0000-000000000004",
+    "code": "MET_UDP_GAL",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "УДФ-галактоза",
+    "nameEn": "UDP-galactose",
+    "abbrevRu": "УДФ-Гал",
+    "abbrevEn": "UDP-Gal",
+    "formula": "C₁₅H₂₂N₂O₁₇P₂²⁻",
+    "carbons": "6C+УДФ",
+    "carbonsEn": "6C+UDP",
+    "x": 930,
+    "y": -274,
+    "width": 155,
+    "height": 74,
+    "color": "#A855F7",
+    "smiles": "O=c1ccn([C@@H]2O[C@H](COP(=O)([O-])OP(=O)([O-])O[C@H]3O[C@H](CO)[C@H](O)[C@H](O)[C@H]3O)[C@@H](O)[C@H]2O)c(=O)[nH]1",
+    "chebi": "CHEBI:18307",
+    "inchiKey": "HSCJVCJGDFQFHN-MLCQQTEZSA-L",
+    "descriptionRu": "Активированный нуклеотид-сахар галактозы. Образуется в реакции GALT и служит донором галактозильных остатков для синтеза гликопротеинов, цереброзидов и лактозы (в лактирующей железе), либо эпимеризуется GALE обратно в УДФ-глюкозу.",
+    "descriptionEn": "Activated galactose nucleotide sugar generated by GALT. Serves as galactosyl donor for glycoproteins and glycolipids, or epimerizes via GALE back into UDP-glucose.",
+    "synonymsRu": [
+      "УДФ-галактоза",
+      "УДФ-Гал",
+      "Уридиндифосфатгалактоза"
+    ],
+    "synonymsEn": [
+      "UDP-galactose",
+      "UDP-Gal",
+      "Uridine diphosphate galactose"
+    ],
+    "skeletalSvg": "<polygon points=\"28,14 38,20 38,30 28,36 18,30 18,20\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"12\" cy=\"24\" r=\"4\" fill=\"#A855F7\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <polygon points=\"150,24 182,42 182,72 150,88 118,72 118,42\" class=\"chem-ring\" stroke=\"#94A3B8\" stroke-width=\"2.2\" fill=\"none\"/>\n  <line x1=\"118\" y1=\"56\" x2=\"86\" y2=\"56\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <rect x=\"18\" y=\"42\" width=\"68\" height=\"28\" rx=\"5\" fill=\"rgba(168,85,247,0.18)\" stroke=\"#A855F7\" stroke-width=\"1.2\"/>\n  <text x=\"52\" y=\"56\" fill=\"#A855F7\" font-weight=\"700\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"central\">UDP-P₂-O</text>\n  <text x=\"205\" y=\"42\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">Gal(C4)</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GALACTOSE",
+        "pathwayNameRu": "Путь Лелуара (Метаболизм галактозы)",
+        "pathwayNameEn": "Leloir Pathway (Galactose Metabolism)",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Стадия 2 (GALT): продукт переноса УМФ с УДФ-глюкозы на галактозо-1-фосфат.",
+        "detailsEn": "Step 2 (GALT): product of UMP transfer onto galactose 1-phosphate.",
+        "stepNumber": 2,
+        "reactionCode": "R_GALT"
+      },
+      {
+        "pathwayCode": "PW-GALACTOSE",
+        "pathwayNameRu": "Путь Лелуара (Метаболизм галактозы)",
+        "pathwayNameEn": "Leloir Pathway (Galactose Metabolism)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 3 (GALE): эпимеризация гидроксила при C4 замыкает цикл кофактора УДФ-глюкозы.",
+        "detailsEn": "Step 3 (GALE): C4-OH epimerization regenerates the catalytic UDP-glucose carrier.",
+        "stepNumber": 3,
+        "reactionCode": "R_GALE"
+      }
+    ]
+  },
+  {
+    "id": "b0000003-0000-0000-0000-000000000005",
+    "code": "MET_UDP_GLC",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "УДФ-глюкоза",
+    "nameEn": "UDP-glucose",
+    "abbrevRu": "УДФ-Глю",
+    "abbrevEn": "UDP-Glc",
+    "formula": "C₁₅H₂₂N₂O₁₇P₂²⁻",
+    "carbons": "6C+УДФ",
+    "carbonsEn": "6C+UDP",
+    "x": 1175,
+    "y": -274,
+    "width": 155,
+    "height": 74,
+    "color": "#A855F7",
+    "smiles": "O=c1ccn([C@@H]2O[C@H](COP(=O)([O-])OP(=O)([O-])O[C@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3O)[C@@H](O)[C@H]2O)c(=O)[nH]1",
+    "chebi": "CHEBI:18066",
+    "inchiKey": "HSCJVCJGDFQFHN-LILDFLRNNA-L",
+    "descriptionRu": "Активированный глюкозильный донор и регенерируемый носитель УДФ в пути Лелуара. Замыкает внутренний цикл (УДФ-Глю ⇄ УДФ-Гал), а также служит прямым субстратом гликогенсинтазы (GYS1/GYS2) для запасания гликогена в печени и мышцах.",
+    "descriptionEn": "Activated glucosyl donor and catalytic UDP carrier in the Leloir pathway. Cycles between UDP-Gal and UDP-Glc via GALE and feeds glycogen synthase (GYS1/GYS2) for glycogen storage.",
+    "synonymsRu": [
+      "УДФ-глюкоза",
+      "УДФ-Глю",
+      "Уридиндифосфатглюкоза"
+    ],
+    "synonymsEn": [
+      "UDP-glucose",
+      "UDP-Glc",
+      "UDPG"
+    ],
+    "skeletalSvg": "<polygon points=\"28,14 38,20 38,30 28,36 18,30 18,20\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"12\" cy=\"24\" r=\"4\" fill=\"#10B981\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <polygon points=\"150,24 182,42 182,72 150,88 118,72 118,42\" class=\"chem-ring\" stroke=\"#94A3B8\" stroke-width=\"2.2\" fill=\"none\"/>\n  <line x1=\"118\" y1=\"56\" x2=\"86\" y2=\"56\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <rect x=\"18\" y=\"42\" width=\"68\" height=\"28\" rx=\"5\" fill=\"rgba(16,185,129,0.18)\" stroke=\"#10B981\" stroke-width=\"1.2\"/>\n  <text x=\"52\" y=\"56\" fill=\"#10B981\" font-weight=\"700\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"central\">UDP-P₂-O</text>\n  <text x=\"205\" y=\"42\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">Glc(C4)</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-GALACTOSE",
+        "pathwayNameRu": "Путь Лелуара (Метаболизм галактозы)",
+        "pathwayNameEn": "Leloir Pathway (Galactose Metabolism)",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Стадия 3 (GALE): регенерируется из УДФ-галактозы, поддерживая каталитический цикл переработки галактозы.",
+        "detailsEn": "Step 3 (GALE): regenerated from UDP-galactose to sustain the catalytic Leloir loop.",
+        "stepNumber": 3,
+        "reactionCode": "R_GALE"
+      },
+      {
+        "pathwayCode": "PW-GALACTOSE",
+        "pathwayNameRu": "Путь Лелуара (Метаболизм галактозы)",
+        "pathwayNameEn": "Leloir Pathway (Galactose Metabolism)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 2 (GALT): переносит УМФ на галактозо-1-фосфат, высвобождая глюкозо-1-фосфат в гликолиз и глюконеогенез.",
+        "detailsEn": "Step 2 (GALT): donates UMP to galactose 1-phosphate, releasing G1P toward glycolysis and glucose synthesis.",
+        "stepNumber": 2,
+        "reactionCode": "R_GALT"
+      }
+    ]
+  },
+  {
+    "id": "b0000004-0000-0000-0000-000000000001",
+    "code": "MET_FRUCTOSE",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "D-Фруктоза",
+    "nameEn": "D-Fructose",
+    "abbrevRu": "Фру",
+    "abbrevEn": "Fru",
+    "formula": "C₆H₁₂O₆",
+    "carbons": "6C",
+    "carbonsEn": "6C",
+    "x": 2160,
+    "y": 46,
+    "width": 160,
+    "height": 74,
+    "color": "#F97316",
+    "smiles": "C([C@H]([C@H]([C@@H](C(=O)CO)O)O)O)O",
+    "chebi": "CHEBI:15824",
+    "inchiKey": "BJHIKXHVCYFVJR-KVTDHHQDSA-N",
+    "descriptionRu": "Кетогексоза пищевых фруктов и сахарозы (транспорт через GLUT5). Имеет два пути: в печени кетогексокиназа KHK расщепляет её в обход регулятора PFK-1 с высоким липогенным эффектом (или синтезом глюкозы через ГАФ + ДАФ ➔ G6PC1), а в мышцах/жировой ткани гексокиназа (HK) медленно фосфорилирует её сразу в Ф6Ф.",
+    "descriptionEn": "Dietary ketohexose imported via GLUT5. Catabolized primarily in liver by KHK bypassing PFK-1 (driving glycolysis, lipogenesis, or gluconeogenesis to glucose) and in muscle/adipose directly to F6P via hexokinase.",
+    "synonymsRu": [
+      "D-Фруктоза",
+      "Фруктоза",
+      "Левулёза"
+    ],
+    "synonymsEn": [
+      "D-Fructose",
+      "Fructose",
+      "Levulose"
+    ],
+    "skeletalSvg": "<polygon points=\"24,14 34,22 30,34 18,34 14,22\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"24\" cy=\"14\" r=\"3\" fill=\"#F97316\"/><circle cx=\"34\" cy=\"22\" r=\"2.5\" fill=\"#EF4444\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <polygon points=\"120,26 156,46 142,80 98,80 84,46\" class=\"chem-ring\" stroke=\"#94A3B8\" stroke-width=\"2.2\" fill=\"none\"/>\n  <circle cx=\"120\" cy=\"26\" r=\"4\" fill=\"#F97316\"/>\n  <line x1=\"156\" y1=\"46\" x2=\"182\" y2=\"34\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <text x=\"202\" y=\"32\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">CH₂OH</text>\n  <line x1=\"84\" y1=\"46\" x2=\"58\" y2=\"34\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <text x=\"38\" y=\"32\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">CH₂OH</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-FRUCTOSE",
+        "pathwayNameRu": "Печёночный фруктолиз (KHK / ALDOB)",
+        "pathwayNameEn": "Hepatic Fructolysis (KHK / ALDOB)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 1 (Кетогексокиназа KHK, -1 АТФ): быстрый перенос фосфата на C1 с образованием F1P — минует торможение АТФ/цитратом на PFK-1.",
+        "detailsEn": "Step 1 (Ketohexokinase KHK, -1 ATP): rapid C1 phosphorylation to F1P bypassing allosteric PFK-1 regulation.",
+        "stepNumber": 1,
+        "reactionCode": "R_KHK"
+      },
+      {
+        "pathwayCode": "PW-FRUCTOSE",
+        "pathwayNameRu": "Фруктолиз (Мышцы / Адипоциты)",
+        "pathwayNameEn": "Fructolysis (Muscle / Adipose)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Внепечёночный шунт (Гексокиназа HK, -1 АТФ): прямое фосфорилирование в Ф6Ф (Km высокое, протекает медленнее печёночного пути).",
+        "detailsEn": "Extrahepatic shunt (Hexokinase HK, -1 ATP): directly yields F6P at lower affinity than hepatic KHK.",
+        "stepNumber": 4,
+        "reactionCode": "R_HK_FRU"
+      }
+    ]
+  },
+  {
+    "id": "b0000004-0000-0000-0000-000000000002",
+    "code": "MET_F1P",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Фруктозо-1-фосфат",
+    "nameEn": "Fructose 1-phosphate",
+    "abbrevRu": "Ф1Ф",
+    "abbrevEn": "F1P",
+    "formula": "C₆H₁₁O₉P²⁻",
+    "carbons": "6C",
+    "carbonsEn": "6C",
+    "x": 2160,
+    "y": 206,
+    "width": 160,
+    "height": 74,
+    "color": "#F97316",
+    "smiles": "C([C@H]([C@H]([C@@H](C(=O)COP(=O)([O-])[O-])O)O)O)O",
+    "chebi": "CHEBI:18105",
+    "inchiKey": "RHXHGRAANNJILG-VFUOTHLCSA-L",
+    "descriptionRu": "Специфический интермедиат печёночного фруктолиза, позволяющий обойти лимитирующую стадию PFK-1. Быстрое накопление Ф1Ф при нагрузке фруктозой истощает неорганический фосфат (Pi) и АТФ, а при дефиците альдолазы B (ALDOB) вызывает наследственную непереносимость фруктозы.",
+    "descriptionEn": "Hepatic fructolysis intermediate bypassing PFK-1. Rapid F1P trapping depletes hepatic Pi and ATP; ALDOB deficiency causes severe hereditary fructose intolerance (HFI).",
+    "synonymsRu": [
+      "Фруктозо-1-фосфат",
+      "Ф1Ф"
+    ],
+    "synonymsEn": [
+      "Fructose 1-phosphate",
+      "F1P"
+    ],
+    "skeletalSvg": "<polygon points=\"22,14 32,22 28,34 16,34 12,22\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"34\" cy=\"22\" r=\"3\" fill=\"#F97316\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <polygon points=\"95,28 128,46 116,78 74,78 62,46\" class=\"chem-ring\" stroke=\"#94A3B8\" stroke-width=\"2.2\" fill=\"none\"/>\n  <circle cx=\"95\" cy=\"28\" r=\"4\" fill=\"#EF4444\"/>\n  <line x1=\"128\" y1=\"46\" x2=\"156\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <rect x=\"158\" y=\"34\" width=\"72\" height=\"24\" rx=\"4\" fill=\"rgba(249,115,22,0.18)\" stroke=\"#F97316\" stroke-width=\"1.2\"/>\n  <text x=\"194\" y=\"46\" fill=\"#F97316\" font-weight=\"700\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"central\">C1-O-PO₃²⁻</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-FRUCTOSE",
+        "pathwayNameRu": "Печёночный фруктолиз",
+        "pathwayNameEn": "Hepatic Fructolysis",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Стадия 1 (KHK, -1 АТФ): продукт быстрого фосфорилирования фруктозы без аллостерического торможения.",
+        "detailsEn": "Step 1 (KHK, -1 ATP): rapid phosphorylation product unconstrained by energy charge feedback.",
+        "stepNumber": 1,
+        "reactionCode": "R_KHK"
+      },
+      {
+        "pathwayCode": "PW-FRUCTOSE",
+        "pathwayNameRu": "Печёночный фруктолиз",
+        "pathwayNameEn": "Hepatic Fructolysis",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 2 (Альдолаза B, ALDOB): обратимо расщепляется на ДАФ (готовый к гликолизу) и свободный D-глицеральдегид.",
+        "detailsEn": "Step 2 (Aldolase B, ALDOB): reversibly cleaves into glycolytic DHAP and free D-glyceraldehyde.",
+        "stepNumber": 2,
+        "reactionCode": "R_ALDOB"
+      }
+    ]
+  },
+  {
+    "id": "b0000004-0000-0000-0000-000000000003",
+    "code": "MET_GLYCERALDEHYDE",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "D-Глицеральдегид",
+    "nameEn": "D-Glyceraldehyde",
+    "abbrevRu": "ГА",
+    "abbrevEn": "GA",
+    "formula": "C₃H₆O₃",
+    "carbons": "3C",
+    "carbonsEn": "3C",
+    "x": 2160,
+    "y": 366,
+    "width": 165,
+    "height": 74,
+    "color": "#F97316",
+    "smiles": "C([C@H](C=O)O)O",
+    "chebi": "CHEBI:17378",
+    "inchiKey": "MNQZXJOMPOIZRP-BYPYZUCNSA-N",
+    "descriptionRu": "Нефосфорилированная альдотриоза — второй продукт расщепления фруктозо-1-фосфата альдолазой B. Для слияния с основным стволом гликолиза требует затраты второй АТФ триокиназой (TKFC) с образованием ГАФ.",
+    "descriptionEn": "Unphosphorylated aldotriose generated alongside DHAP by aldolase B. Phosphorylated by triokinase (TKFC) consuming the second ATP to enter payoff glycolysis as G3P.",
+    "synonymsRu": [
+      "D-Глицеральдегид",
+      "Глицеральдегид",
+      "ГА"
+    ],
+    "synonymsEn": [
+      "D-Glyceraldehyde",
+      "Glyceraldehyde",
+      "GA"
+    ],
+    "skeletalSvg": "<path d=\"M 12 18 L 24 24 L 36 18\" stroke=\"currentColor\" stroke-width=\"1.6\" fill=\"none\"/><circle cx=\"12\" cy=\"18\" r=\"3\" fill=\"#EF4444\"/><circle cx=\"36\" cy=\"18\" r=\"2.5\" fill=\"#F97316\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"42\" y=\"34\" fill=\"#EF4444\" font-weight=\"700\" font-size=\"12\" text-anchor=\"middle\">O=CH</text>\n  <line x1=\"62\" y1=\"36\" x2=\"100\" y2=\"54\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <text x=\"120\" y=\"58\" fill=\"#CBD5E1\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">CH(OH)</text>\n  <line x1=\"146\" y1=\"54\" x2=\"182\" y2=\"54\" stroke=\"#94A3B8\" stroke-width=\"2.2\" stroke-linecap=\"round\"/>\n  <text x=\"204\" y=\"58\" fill=\"#F97316\" font-size=\"11\" font-weight=\"700\" text-anchor=\"middle\">CH₂OH</text>\n</svg>",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-FRUCTOSE",
+        "pathwayNameRu": "Печёночный фруктолиз",
+        "pathwayNameEn": "Hepatic Fructolysis",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Стадия 2 (ALDOB): освобождается при расщеплении F1P вместе с ДАФ.",
+        "detailsEn": "Step 2 (ALDOB): released alongside DHAP from F1P cleavage.",
+        "stepNumber": 2,
+        "reactionCode": "R_ALDOB"
+      },
+      {
+        "pathwayCode": "PW-FRUCTOSE",
+        "pathwayNameRu": "Печёночный фруктолиз",
+        "pathwayNameEn": "Hepatic Fructolysis",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Стадия 3 (Триокиназа TKFC, -1 АТФ): фосфорилирование в ГАФ — суммарный расход как в гликолизе (-2 АТФ), суммарный чистый выход пирувата также +2 АТФ нетто.",
+        "detailsEn": "Step 3 (Triokinase TKFC, -1 ATP): phosphorylated into G3P, matching total glucose ATP investment (-2 ATP) for +2 net ATP yield.",
+        "stepNumber": 3,
+        "reactionCode": "R_TKFC"
       }
     ]
   },
@@ -2722,7 +3202,7 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000004",
     "targetMetaboliteId": "b0000002-0000-0000-0000-000000000006",
     "secondaryTargetId": "b0000002-0000-0000-0000-000000000005",
-    "secondaryPathData": "M 1600 280 C 1450 296, 1280 315, 1237 366",
+    "secondaryPathData": "M 1600 280 C 1745 296, 1895 315, 1935 366",
     "pathData": "M 1600 280 L 1600 366",
     "tooltipX": 1600,
     "tooltipY": 323,
@@ -2774,8 +3254,8 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     "nameEn": "Triosephosphate isomerase conversion of DHAP to GAP",
     "sourceMetaboliteId": "b0000002-0000-0000-0000-000000000005",
     "targetMetaboliteId": "b0000002-0000-0000-0000-000000000006",
-    "pathData": "M 1315 403 L 1520 403",
-    "tooltipX": 1417,
+    "pathData": "M 1885 403 L 1680 403",
+    "tooltipX": 1782,
     "tooltipY": 388,
     "enzymeRu": "Триозофосфатизомераза",
     "enzymeEn": "Triosephosphate isomerase",
@@ -3464,6 +3944,718 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
     "netAtpYieldEn": "Respiratory potential: +5 ATP via ETC (per 2 pyruvates)"
   },
   {
+    "id": "d0000003-0000-0000-0000-000000000001",
+    "stepNumber": 1,
+    "code": "R_GALK1",
+    "pathwayCode": "PW-GALACTOSE",
+    "pathwayNameRu": "Путь Лелуара (Галактоза)",
+    "pathwayNameEn": "Leloir Pathway (Galactose)",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Фосфорилирование D-галактозы галактокиназой",
+    "nameEn": "Galactokinase C1 phosphorylation of D-galactose",
+    "sourceMetaboliteId": "b0000003-0000-0000-0000-000000000001",
+    "targetMetaboliteId": "b0000003-0000-0000-0000-000000000002",
+    "pathData": "M 780 -200 L 780 -114",
+    "tooltipX": 780,
+    "tooltipY": -157,
+    "enzymeRu": "Галактокиназа 1",
+    "enzymeEn": "Galactokinase 1",
+    "enzymeShort": "GALK1",
+    "ecNumber": "2.7.1.6",
+    "gene": "GALK1",
+    "uniprotId": "P51570",
+    "isReversible": false,
+    "deltaG0": "-18.0 кДж/моль",
+    "substrates": [
+      {
+        "name": "D-Галактоза",
+        "nameEn": "D-Galactose",
+        "formula": "C₆H₁₂O₆"
+      },
+      {
+        "name": "Аденозинтрифосфат",
+        "nameEn": "ATP",
+        "formula": "C₁₀H₁₂N₅O₁₃P₃⁴⁻",
+        "isCo": true
+      }
+    ],
+    "products": [
+      {
+        "name": "Галактозо-1-фосфат",
+        "nameEn": "Galactose 1-phosphate",
+        "formula": "C₆H₁₁O₉P²⁻"
+      },
+      {
+        "name": "Аденозиндифосфат",
+        "nameEn": "ADP",
+        "formula": "C₁₀H₁₂N₅O₁₀P₂³⁻",
+        "isCo": true
+      },
+      {
+        "name": "Протон (H⁺)",
+        "nameEn": "Proton (H⁺)",
+        "formula": "H⁺",
+        "isCo": true
+      }
+    ],
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 675 -178 C 732 -172, 766 -160, 780 -157 C 766 -154, 732 -142, 675 -136",
+      "inCofactor": "Аденозинтрифосфат",
+      "inCofactorEn": "ATP",
+      "inText": "+ АТФ",
+      "inTextRu": "+ АТФ",
+      "inTextEn": "+ ATP",
+      "inX": 640,
+      "inY": -178,
+      "outCofactor": "Аденозиндифосфат",
+      "outCofactorEn": "ADP",
+      "outText": "АДФ + H⁺",
+      "outTextRu": "АДФ + H⁺",
+      "outTextEn": "ADP + H⁺",
+      "outX": 632,
+      "outY": -136,
+      "inItems": [
+        {
+          "name": "Аденозинтрифосфат",
+          "nameEn": "ATP",
+          "text": "+ АТФ",
+          "textRu": "+ АТФ",
+          "textEn": "+ ATP",
+          "isEnergy": true
+        }
+      ],
+      "outItems": [
+        {
+          "name": "Аденозиндифосфат",
+          "nameEn": "ADP",
+          "text": "АДФ",
+          "textRu": "АДФ",
+          "textEn": "ADP"
+        }
+      ]
+    },
+    "activatorsRu": [
+      "Ионы Mg²⁺"
+    ],
+    "activatorsEn": [
+      "Mg²⁺ ions"
+    ],
+    "inhibitorsRu": [
+      "Высокая концентрация Гал-1-Ф",
+      "Продуктовое ингибирование АДФ"
+    ],
+    "inhibitorsEn": [
+      "Excess Gal-1-P",
+      "Product inhibition by ADP"
+    ],
+    "mechanismRu": "Необратимый Mg²⁺-зависимый перенос γ-фосфата с АТФ на полуацетальный гидроксил C1 α-D-галактозы. Единственный этап пути Лелуара с затратой АТФ — эквивалент реакции гексокиназы в гликолизе.",
+    "mechanismEn": "Irreversible Mg2+-dependent transfer of ATP gamma-phosphate onto C1-OH of alpha-D-galactose. Single ATP investment step in Leloir conversion to G6P.",
+    "clinicalNoteRu": "Дефицит GALK1 вызывает галактоземию II типа: ранняя двусторонняя катаракта у младенцев из-за восстановления избытка галактозы альдозоредуктазой хрусталика в осмотически активный галактитол (дулцитол), без тяжёлого поражения печени.",
+    "energyBalanceRu": "Расход: -1 АТФ",
+    "energyBalanceEn": "Investment: -1 ATP",
+    "netAtpYieldRu": "Итог входа в гликолиз: +2 АТФ нетто (как от глюкозы)",
+    "netAtpYieldEn": "Glycolytic net total: +2 net ATP (equivalent to glucose)"
+  },
+  {
+    "id": "d0000003-0000-0000-0000-000000000002",
+    "stepNumber": 2,
+    "code": "R_GALT",
+    "pathwayCode": "PW-GALACTOSE",
+    "pathwayNameRu": "Путь Лелуара (Галактоза)",
+    "pathwayNameEn": "Leloir Pathway (Galactose)",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Уридилилтрансферазный обмен (Гал-1-Ф + УДФ-Глю ⇄ УДФ-Гал + Г1Ф)",
+    "nameEn": "Uridylyltransferase exchange (Gal-1-P + UDP-Glc ⇄ UDP-Gal + G1P)",
+    "sourceMetaboliteId": "b0000003-0000-0000-0000-000000000002",
+    "targetMetaboliteId": "b0000003-0000-0000-0000-000000000003",
+    "secondarySourceId": "b0000003-0000-0000-0000-000000000005",
+    "secondaryTargetId": "b0000003-0000-0000-0000-000000000004",
+    "pathData": "M 860 -77 L 1175 -77",
+    "secondaryPathData": "M 1175 -218 C 1135 -145, 1055 -110, 1018 -77 C 990 -115, 995 -150, 1007 -200",
+    "tooltipX": 1018,
+    "tooltipY": -56,
+    "enzymeRu": "Галактозо-1-фосфатуридилтрансфераза",
+    "enzymeEn": "Galactose-1-phosphate uridylyltransferase",
+    "enzymeShort": "GALT",
+    "ecNumber": "2.7.7.12",
+    "gene": "GALT",
+    "uniprotId": "P07902",
+    "isReversible": true,
+    "deltaG0": "0.0 кДж/моль",
+    "substrates": [
+      {
+        "name": "Галактозо-1-фосфат",
+        "nameEn": "Galactose 1-phosphate",
+        "formula": "C₆H₁₁O₉P²⁻"
+      },
+      {
+        "name": "УДФ-глюкоза",
+        "nameEn": "UDP-glucose",
+        "formula": "C₁₅H₂₂N₂O₁₇P₂²⁻"
+      }
+    ],
+    "products": [
+      {
+        "name": "Глюкозо-1-фосфат",
+        "nameEn": "Glucose 1-phosphate",
+        "formula": "C₆H₁₁O₉P²⁻"
+      },
+      {
+        "name": "УДФ-галактоза",
+        "nameEn": "UDP-galactose",
+        "formula": "C₁₅H₂₂N₂O₁₇P₂²⁻"
+      }
+    ],
+    "activatorsRu": [
+      "Структурные ионы Zn²⁺ / Fe²⁺"
+    ],
+    "activatorsEn": [
+      "Structural Zn²⁺ / Fe²⁺ cofactors"
+    ],
+    "inhibitorsRu": [
+      "Высокое соотношение Г1Ф / Гал-1-Ф (обратная реакция)"
+    ],
+    "inhibitorsEn": [
+      "High G1P / Gal-1-P ratio"
+    ],
+    "mechanismRu": "Двухэтапный пинг-понг катализ через ковалентный интермедиат уридил-гистидина (His166): УДФ-глюкоза переносит УМФ-группу на фермент, освобождая глюкозо-1-фосфат, после чего галактозо-1-фосфат акцептирует УМФ с образованием УДФ-галактозы.",
+    "mechanismEn": "Ping-pong bi-bi catalysis via covalent His166-UMP enzyme intermediate swapping nucleotide activation from glucose to galactose.",
+    "clinicalNoteRu": "Мутации GALT вызывают классическую галактоземию I типа — тяжелейшее неонатальное состояние с желтухой, гепатомегалией, сепсисом E. coli, катарактой и энцефалопатией при накоплении Гал-1-Ф и галактитола.",
+    "energyBalanceRu": "Обмен УМФ без затраты АТФ (ΔG° ≈ 0)",
+    "energyBalanceEn": "ATP-neutral UMP group exchange (ΔG° ≈ 0)",
+    "netAtpYieldRu": "Освобождает C6 скелет в виде Г1Ф без расхода УТФ",
+    "netAtpYieldEn": "Releases G1P without net UTP consumption"
+  },
+  {
+    "id": "d0000003-0000-0000-0000-000000000003",
+    "stepNumber": 3,
+    "code": "R_GALE",
+    "pathwayCode": "PW-GALACTOSE",
+    "pathwayNameRu": "Путь Лелуара (Галактоза)",
+    "pathwayNameEn": "Leloir Pathway (Galactose)",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "C4-эпимеризация УДФ-галактозы в УДФ-глюкозу",
+    "nameEn": "UDP-galactose 4-epimerase isomerization to UDP-glucose",
+    "sourceMetaboliteId": "b0000003-0000-0000-0000-000000000004",
+    "targetMetaboliteId": "b0000003-0000-0000-0000-000000000005",
+    "pathData": "M 1085 -237 L 1175 -237",
+    "tooltipX": 1130,
+    "tooltipY": -254,
+    "enzymeRu": "УДФ-глюкоза-4-эпимераза",
+    "enzymeEn": "UDP-glucose 4-epimerase",
+    "enzymeShort": "GALE",
+    "ecNumber": "5.1.3.2",
+    "gene": "GALE",
+    "uniprotId": "Q14376",
+    "isReversible": true,
+    "deltaG0": "-2.9 кДж/моль",
+    "substrates": [
+      {
+        "name": "УДФ-галактоза",
+        "nameEn": "UDP-galactose",
+        "formula": "C₁₅H₂₂N₂O₁₇P₂²⁻"
+      }
+    ],
+    "products": [
+      {
+        "name": "УДФ-глюкоза",
+        "nameEn": "UDP-glucose",
+        "formula": "C₁₅H₂₂N₂O₁₇P₂²⁻"
+      }
+    ],
+    "activatorsRu": [
+      "Прочно связанный простетический кофактор НАД⁺ в активном центре"
+    ],
+    "activatorsEn": [
+      "Tightly enzyme-bound catalytic NAD⁺ cofactor"
+    ],
+    "inhibitorsRu": [
+      "УДФ / УМФ (конкурентное ингибирование)"
+    ],
+    "inhibitorsEn": [
+      "UDP / UMP competitive feedback"
+    ],
+    "mechanismRu": "Катализатор содержит прочно связанный в активном центре НАД⁺: сначала атом C4-OH галактозы окисляется до симметричного 4-кетопиранозного интермедиата (НАДН остаётся внутри фермента), сахар поворачивается в кармане на 180° и восстанавливается обратно в противоположной конфигурации глюкозы.",
+    "mechanismEn": "Uses an internally recycled bound NAD+ cofactor: oxidizes C4-OH to a 4-keto intermediate, rotates the hexose ring inside the pocket, and stereospecifically reduces it to UDP-glucose.",
+    "clinicalNoteRu": "Дефицит GALE (галактоземия III типа) нарушает регенерацию УДФ-глюкозы и биосинтез гликопротеинов/гликолипидов. Обратимость реакции позволяет клеткам без поступления галактозы с пищей синтезировать УДФ-галактозу из глюкозы для мембран мозга.",
+    "energyBalanceRu": "Внутреннее замыкание цикла УДФ-сахаров (0 АТФ)",
+    "energyBalanceEn": "Internal UDP-sugar regeneration (0 ATP)",
+    "netAtpYieldRu": "Возвращает УДФ-глюкозу для следующего цикла GALT",
+    "netAtpYieldEn": "Replenishes UDP-glucose for continuous GALT turnover"
+  },
+  {
+    "id": "d0000003-0000-0000-0000-000000000004",
+    "stepNumber": 4,
+    "code": "R_PGM1",
+    "pathwayCode": "PW-GALACTOSE",
+    "pathwayNameRu": "Путь Лелуара (Галактоза)",
+    "pathwayNameEn": "Leloir Pathway (Galactose)",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Взаимопревращение глюкозо-1-фосфата и Г6Ф (вход в гликолиз и синтез глюкозы)",
+    "nameEn": "Phosphoglucomutase isomerization of G1P to G6P",
+    "sourceMetaboliteId": "b0000003-0000-0000-0000-000000000003",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000002",
+    "pathData": "M 1330 -77 L 1520 -77",
+    "tooltipX": 1425,
+    "tooltipY": -92,
+    "enzymeRu": "Фосфоглюкомутаза 1",
+    "enzymeEn": "Phosphoglucomutase 1",
+    "enzymeShort": "PGM1",
+    "ecNumber": "5.4.2.2",
+    "gene": "PGM1",
+    "uniprotId": "P36871",
+    "isReversible": true,
+    "deltaG0": "-7.3 кДж/моль",
+    "substrates": [
+      {
+        "name": "Глюкозо-1-фосфат",
+        "nameEn": "Glucose 1-phosphate",
+        "formula": "C₆H₁₁O₉P²⁻"
+      }
+    ],
+    "products": [
+      {
+        "name": "Глюкозо-6-фосфат",
+        "nameEn": "Glucose 6-phosphate",
+        "formula": "C₆H₁₁O₉P²⁻"
+      }
+    ],
+    "activatorsRu": [
+      "Ионы Mg²⁺",
+      "Глюкозо-1,6-бисфосфат (активатор-кофактор)"
+    ],
+    "activatorsEn": [
+      "Mg²⁺ ions",
+      "Glucose 1,6-bisphosphate primer"
+    ],
+    "inhibitorsRu": [
+      "Избыток неорганического фосфата"
+    ],
+    "inhibitorsEn": [
+      "High inorganic phosphate"
+    ],
+    "mechanismRu": "Фосфорилированный серин (Ser117-P) активного центра отдаёт фосфат в положение C6 субстрата Г1Ф с образованием интермедиата глюкозо-1,6-бисфосфата, затем забирает фосфат с C1, высвобождая готовый Г6Ф — общую точку входа в гликолиз (минус вторая АТФ на PFK-1 ➔ +2 АТФ нетто в цитозоле или ~30–32 АТФ с митохондриями) и печёночный синтез D-глюкозы (Г6Ф ➔ глюкоза через G6PC1).",
+    "mechanismEn": "Phospho-Ser117 donates phosphate to C6 forming a glucose-1,6-bisphosphate intermediate and retrieves the C1 phosphate to release G6P, feeding glycolysis (+2 net ATP cytosolic) or hepatic glucose export (G6PC1).",
+    "clinicalNoteRu": "Дефицит PGM1 относится к врождённым нарушениям гликозилирования (PGM1-CDG) и гликогенозу XIV типа с гепатопатией, миопатией и гипогликемией. Ключевой узел превращения галактозы молока в свободную глюкозу крови в печени (совместно с G6PC1).",
+    "energyBalanceRu": "Изомеризация без АТФ; обход гексокиназы (экономит 1 АТФ от Г1Ф)",
+    "energyBalanceEn": "ATP-free isomerization; merges directly at G6P",
+    "netAtpYieldRu": "От Галактозы до Пирувата: +2 АТФ нетто (аэробно до ~32 АТФ); либо ➔ Глюкоза (G6PC1)",
+    "netAtpYieldEn": "Galactose ➔ Pyruvate yields +2 net ATP (~32 ATP aerobic); or ➔ Blood Glucose (G6PC1)"
+  },
+  {
+    "id": "d0000004-0000-0000-0000-000000000001",
+    "stepNumber": 1,
+    "code": "R_KHK",
+    "pathwayCode": "PW-FRUCTOSE",
+    "pathwayNameRu": "Фруктолиз (Печень)",
+    "pathwayNameEn": "Fructolysis (Liver)",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Быстрое фосфорилирование D-фруктозы кетогексокиназой",
+    "nameEn": "Ketohexokinase phosphorylation of D-fructose",
+    "sourceMetaboliteId": "b0000004-0000-0000-0000-000000000001",
+    "targetMetaboliteId": "b0000004-0000-0000-0000-000000000002",
+    "pathData": "M 2240 120 L 2240 206",
+    "tooltipX": 2240,
+    "tooltipY": 163,
+    "enzymeRu": "Кетогексокиназа (Фруктокиназа)",
+    "enzymeEn": "Ketohexokinase (Fructokinase)",
+    "enzymeShort": "KHK",
+    "ecNumber": "2.7.1.3",
+    "gene": "KHK",
+    "uniprotId": "P50053",
+    "isReversible": false,
+    "deltaG0": "-18.4 кДж/моль",
+    "substrates": [
+      {
+        "name": "D-Фруктоза",
+        "nameEn": "D-Fructose",
+        "formula": "C₆H₁₂O₆"
+      },
+      {
+        "name": "Аденозинтрифосфат",
+        "nameEn": "ATP",
+        "formula": "C₁₀H₁₂N₅O₁₃P₃⁴⁻",
+        "isCo": true
+      }
+    ],
+    "products": [
+      {
+        "name": "Фруктозо-1-фосфат",
+        "nameEn": "Fructose 1-phosphate",
+        "formula": "C₆H₁₁O₉P²⁻"
+      },
+      {
+        "name": "Аденозиндифосфат",
+        "nameEn": "ADP",
+        "formula": "C₁₀H₁₂N₅O₁₀P₂³⁻",
+        "isCo": true
+      },
+      {
+        "name": "Протон (H⁺)",
+        "nameEn": "Proton (H⁺)",
+        "formula": "H⁺",
+        "isCo": true
+      }
+    ],
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 2345 142 C 2288 148, 2254 160, 2240 163 C 2254 166, 2288 178, 2345 184",
+      "inCofactor": "Аденозинтрифосфат",
+      "inCofactorEn": "ATP",
+      "inText": "+ АТФ",
+      "inTextRu": "+ АТФ",
+      "inTextEn": "+ ATP",
+      "inX": 2385,
+      "inY": 142,
+      "outCofactor": "Аденозиндифосфат",
+      "outCofactorEn": "ADP",
+      "outText": "АДФ + H⁺",
+      "outTextRu": "АДФ + H⁺",
+      "outTextEn": "ADP + H⁺",
+      "outX": 2392,
+      "outY": 184,
+      "inItems": [
+        {
+          "name": "Аденозинтрифосфат",
+          "nameEn": "ATP",
+          "text": "+ АТФ",
+          "textRu": "+ АТФ",
+          "textEn": "+ ATP",
+          "isEnergy": true
+        }
+      ],
+      "outItems": [
+        {
+          "name": "Аденозиндифосфат",
+          "nameEn": "ADP",
+          "text": "АДФ",
+          "textRu": "АДФ",
+          "textEn": "ADP"
+        }
+      ]
+    },
+    "activatorsRu": [
+      "Ионы Mg²⁺ / K⁺",
+      "Высокая активность изоформы KHK-C в печени"
+    ],
+    "activatorsEn": [
+      "Mg²⁺ / K⁺ ions",
+      "High Vmax hepatic KHK-C isoform"
+    ],
+    "inhibitorsRu": [
+      "Практически лишена аллостерического торможения (истощает АТФ при болюсе фруктозы)"
+    ],
+    "inhibitorsEn": [
+      "No allosteric ATP/citrate feedback (rapidly depletes hepatic ATP on fructose bolus)"
+    ],
+    "mechanismRu": "Высокоактивная печёночная изоформа KHK-C мгновенно переносит γ-фосфат АТФ на C1 D-фруктозы (вместо C6). Поскольку продукт F1P сразу уходит на расщепление альдолазой B, поток полностью обходит главный тормоз гликолиза — PFK-1.",
+    "mechanismEn": "Hepatic KHK-C phosphorylates C1 of D-fructose at high Vmax without allosteric braking, funneling fructose carbons below PFK-1.",
+    "clinicalNoteRu": "Доброкачественный дефицит KHK (эссенциальная фруктозурия) протекает бессимптомно с экскрецией фруктозы с мочой. Напротив, избыточная активация KHK-C вызывает резкое падение АТФ/Pi в гепатоцитах, распад АМФ до мочевой кислоты (гиперурикемия) и de novo липогенез.",
+    "energyBalanceRu": "Расход: -1 АТФ (обход PFK-1)",
+    "energyBalanceEn": "Investment: -1 ATP (bypasses PFK-1)",
+    "netAtpYieldRu": "Перед лимитирующим расщеплением ALDOB: -1 АТФ",
+    "netAtpYieldEn": "Pre-cleavage balance: -1 ATP"
+  },
+  {
+    "id": "d0000004-0000-0000-0000-000000000002",
+    "stepNumber": 2,
+    "code": "R_ALDOB",
+    "pathwayCode": "PW-FRUCTOSE",
+    "pathwayNameRu": "Фруктолиз (Печень)",
+    "pathwayNameEn": "Fructolysis (Liver)",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Расщепление Ф1Ф альдолазой B на ДАФ и D-глицеральдегид",
+    "nameEn": "Aldolase B cleavage of F1P into DHAP and D-glyceraldehyde",
+    "sourceMetaboliteId": "b0000004-0000-0000-0000-000000000002",
+    "targetMetaboliteId": "b0000004-0000-0000-0000-000000000003",
+    "secondaryTargetId": "b0000002-0000-0000-0000-000000000005",
+    "pathData": "M 2240 280 L 2240 366",
+    "secondaryPathData": "M 2240 280 C 2135 296, 2020 315, 1990 366",
+    "tooltipX": 2240,
+    "tooltipY": 323,
+    "enzymeRu": "Альдолаза B (Печёночная)",
+    "enzymeEn": "Aldolase B (Hepatic)",
+    "enzymeShort": "ALDOB",
+    "ecNumber": "4.1.2.13",
+    "gene": "ALDOB",
+    "uniprotId": "P05062",
+    "isReversible": true,
+    "deltaG0": "+15.0 кДж/моль",
+    "substrates": [
+      {
+        "name": "Фруктозо-1-фосфат",
+        "nameEn": "Fructose 1-phosphate",
+        "formula": "C₆H₁₁O₉P²⁻"
+      }
+    ],
+    "products": [
+      {
+        "name": "D-Глицеральдегид",
+        "nameEn": "D-Glyceraldehyde",
+        "formula": "C₃H₆O₃"
+      },
+      {
+        "name": "Дигидроксиацетонфосфат",
+        "nameEn": "Dihydroxyacetone phosphate",
+        "formula": "C₃H₅O₆P²⁻"
+      }
+    ],
+    "activatorsRu": [
+      "Отток триоз (ДАФ в гликолиз/липогенез, ГА в TKFC)"
+    ],
+    "activatorsEn": [
+      "Triose pull toward glycolysis, GNG, and TKFC"
+    ],
+    "inhibitorsRu": [
+      "Фруктозо-1,6-бисфосфат (конкурентный субстрат ALDOB)"
+    ],
+    "inhibitorsEn": [
+      "Fructose 1,6-bisphosphate (competing substrate)"
+    ],
+    "mechanismRu": "Печёночная альдолаза B расщепляет фруктозо-1-фосфат через ковалентное основание Шиффа с лизином на фосфорилированный ДАФ (сразу в ствол гликолиза или вверх в синтез глюкозы!) и нефосфорилированный D-глицеральдегид. В отличие от KHK, активность ALDOB ниже, делая этот шаг узким местом фруктолиза.",
+    "mechanismEn": "Class I Schiff-base aldol cleavage of F1P yielding glycolytic DHAP (already phosphorylated) plus free D-glyceraldehyde. Serves as the rate-limiting step of hepatic fructolysis.",
+    "clinicalNoteRu": "Наследственная непереносимость фруктозы (HFI, аутосомно-рецессивный дефицит ALDOB): при приёме фруктозы или сахарозы Ф1Ф необратимо запирает неорганический фосфат (Pi), тормозит гликогенолиз (фосфорилазу) и глюконеогенез, вызывая тяжёлую гипогликемию, лактатацидоз и печёночную недостаточность.",
+    "energyBalanceRu": "Расщепление в обход PFK-1: 1 триоза с фосфатом (ДАФ) + 1 без (ГА)",
+    "energyBalanceEn": "PFK-1 bypass cleavage: phosphorylated DHAP + free GA",
+    "netAtpYieldRu": "Удвоение потока C₃: далее ГА (через TKFC) и ДАФ дают +4 АТФ (итого +2 АТФ нетто)",
+    "netAtpYieldEn": "Trioses feed payoff phase (+4 ATP gross, +2 ATP net total)"
+  },
+  {
+    "id": "d0000004-0000-0000-0000-000000000003",
+    "stepNumber": 3,
+    "code": "R_TKFC",
+    "pathwayCode": "PW-FRUCTOSE",
+    "pathwayNameRu": "Фруктолиз (Печень)",
+    "pathwayNameEn": "Fructolysis (Liver)",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Фосфорилирование D-глицеральдегида триокиназой в ГАФ",
+    "nameEn": "Triokinase phosphorylation of D-glyceraldehyde into G3P",
+    "sourceMetaboliteId": "b0000004-0000-0000-0000-000000000003",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000006",
+    "pathData": "M 2240 440 C 2240 520, 1860 520, 1680 425",
+    "tooltipX": 2028,
+    "tooltipY": 482,
+    "enzymeRu": "Триокиназа (TKFC)",
+    "enzymeEn": "Triokinase / FMN cyclase",
+    "enzymeShort": "TKFC",
+    "ecNumber": "2.7.1.28",
+    "gene": "TKFC",
+    "uniprotId": "Q3LXA3",
+    "isReversible": false,
+    "deltaG0": "-19.2 кДж/моль",
+    "substrates": [
+      {
+        "name": "D-Глицеральдегид",
+        "nameEn": "D-Glyceraldehyde",
+        "formula": "C₃H₆O₃"
+      },
+      {
+        "name": "Аденозинтрифосфат",
+        "nameEn": "ATP",
+        "formula": "C₁₀H₁₂N₅O₁₃P₃⁴⁻",
+        "isCo": true
+      }
+    ],
+    "products": [
+      {
+        "name": "Глицеральдегид-3-фосфат",
+        "nameEn": "Glyceraldehyde 3-phosphate",
+        "formula": "C₃H₅O₆P²⁻"
+      },
+      {
+        "name": "Аденозиндифосфат",
+        "nameEn": "ADP",
+        "formula": "C₁₀H₁₂N₅O₁₀P₂³⁻",
+        "isCo": true
+      },
+      {
+        "name": "Протон (H⁺)",
+        "nameEn": "Proton (H⁺)",
+        "formula": "H⁺",
+        "isCo": true
+      }
+    ],
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 1990 550 C 2006 522, 2022 501, 2028 498 C 2034 501, 2050 522, 2066 550",
+      "inCofactor": "Аденозинтрифосфат",
+      "inCofactorEn": "ATP",
+      "inText": "+ АТФ",
+      "inTextRu": "+ АТФ",
+      "inTextEn": "+ ATP",
+      "inX": 1966,
+      "inY": 564,
+      "outCofactor": "Аденозиндифосфат",
+      "outCofactorEn": "ADP",
+      "outText": "АДФ + H⁺",
+      "outTextRu": "АДФ + H⁺",
+      "outTextEn": "ADP + H⁺",
+      "outX": 2092,
+      "outY": 564,
+      "inItems": [
+        {
+          "name": "Аденозинтрифосфат",
+          "nameEn": "ATP",
+          "text": "+ АТФ",
+          "textRu": "+ АТФ",
+          "textEn": "+ ATP",
+          "isEnergy": true
+        }
+      ],
+      "outItems": [
+        {
+          "name": "Аденозиндифосфат",
+          "nameEn": "ADP",
+          "text": "АДФ",
+          "textRu": "АДФ",
+          "textEn": "ADP"
+        }
+      ]
+    },
+    "activatorsRu": [
+      "Ионы Mg²⁺"
+    ],
+    "activatorsEn": [
+      "Mg²⁺ ions"
+    ],
+    "inhibitorsRu": [
+      "Накопление АДФ"
+    ],
+    "inhibitorsEn": [
+      "ADP accumulation"
+    ],
+    "mechanismRu": "Необратимо фосфорилирует C3-гидроксил D-глицеральдегида за счёт второй молекулы АТФ, уравнивая энергетическую цену входа фруктозы с глюкозой (-2 АТФ). В печени полученные ГАФ и ДАФ могут как идти вниз в гликолиз (+4 АТФ ➔ +2 АТФ нетто до пирувата), так и вверх через обратную альдолазу (ALDO) ➔ F1,6BP ➔ FBP1 ➔ GPI ➔ G6PC1 для синтеза свободной D-глюкозы.",
+    "mechanismEn": "Irreversibly phosphorylates D-glyceraldehyde at C3 consuming the second ATP (-2 ATP total matching glycolysis). In liver, G3P + DHAP feed downstream ATP payoff (+2 net ATP) or condense upward via gluconeogenesis to blood glucose.",
+    "clinicalNoteRu": "Недостаточность TKFC вызывает редкую триокиназную недостаточность (TKFCD) с неврологическими расстройствами, гипогликемией и катарактой; при здоровом ферменте предупреждает восстановление глицеральдегида в токсичный глицерол или оксалат.",
+    "energyBalanceRu": "Расход второй АТФ (-1 АТФ; всего -2 АТФ как в гликолизе)",
+    "energyBalanceEn": "Second ATP spent (-1 ATP; cumulative -2 ATP matching glycolysis)",
+    "netAtpYieldRu": "Итог от Фруктозы ➔ Пируват: +2 АТФ нетто; в печени: путь синтеза Глюкозы (➔ G6P ➔ G6PC1)",
+    "netAtpYieldEn": "Fructose ➔ Pyruvate total: +2 net ATP; or hepatic gluconeogenesis to glucose"
+  },
+  {
+    "id": "d0000004-0000-0000-0000-000000000004",
+    "stepNumber": 4,
+    "code": "R_HK_FRU",
+    "pathwayCode": "PW-FRUCTOSE",
+    "pathwayNameRu": "Фруктолиз (Мышцы / Адипоциты)",
+    "pathwayNameEn": "Fructolysis (Muscle / Adipose)",
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "nameRu": "Внепечёночное фосфорилирование фруктозы во Ф6Ф",
+    "nameEn": "Extrahepatic hexokinase phosphorylation of fructose to F6P",
+    "sourceMetaboliteId": "b0000004-0000-0000-0000-000000000001",
+    "targetMetaboliteId": "b0000002-0000-0000-0000-000000000003",
+    "pathData": "M 2160 83 L 1680 83",
+    "tooltipX": 1920,
+    "tooltipY": 66,
+    "enzymeRu": "Гексокиназа 1 / 2",
+    "enzymeEn": "Hexokinase 1 / 2",
+    "enzymeShort": "HK1 / HK2",
+    "ecNumber": "2.7.1.1",
+    "gene": "HK1, HK2",
+    "uniprotId": "P19367",
+    "isReversible": false,
+    "deltaG0": "-16.7 кДж/моль",
+    "substrates": [
+      {
+        "name": "D-Фруктоза",
+        "nameEn": "D-Fructose",
+        "formula": "C₆H₁₂O₆"
+      },
+      {
+        "name": "Аденозинтрифосфат",
+        "nameEn": "ATP",
+        "formula": "C₁₀H₁₂N₅O₁₃P₃⁴⁻",
+        "isCo": true
+      }
+    ],
+    "products": [
+      {
+        "name": "Фруктозо-6-фосфат",
+        "nameEn": "Fructose 6-phosphate",
+        "formula": "C₆H₁₁O₉P²⁻"
+      },
+      {
+        "name": "Аденозиндифосфат",
+        "nameEn": "ADP",
+        "formula": "C₁₀H₁₂N₅O₁₀P₂³⁻",
+        "isCo": true
+      },
+      {
+        "name": "Протон (H⁺)",
+        "nameEn": "Proton (H⁺)",
+        "formula": "H⁺",
+        "isCo": true
+      }
+    ],
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 1885 135 C 1900 106, 1914 86, 1920 83 C 1926 86, 1940 106, 1955 135",
+      "inCofactor": "Аденозинтрифосфат",
+      "inCofactorEn": "ATP",
+      "inText": "+ АТФ",
+      "inTextRu": "+ АТФ",
+      "inTextEn": "+ ATP",
+      "inX": 1870,
+      "inY": 148,
+      "outCofactor": "Аденозиндифосфат",
+      "outCofactorEn": "ADP",
+      "outText": "АДФ + H⁺",
+      "outTextRu": "АДФ + H⁺",
+      "outTextEn": "ADP + H⁺",
+      "outX": 1974,
+      "outY": 148,
+      "inItems": [
+        {
+          "name": "Аденозинтрифосфат",
+          "nameEn": "ATP",
+          "text": "+ АТФ",
+          "textRu": "+ АТФ",
+          "textEn": "+ ATP",
+          "isEnergy": true
+        }
+      ],
+      "outItems": [
+        {
+          "name": "Аденозиндифосфат",
+          "nameEn": "ADP",
+          "text": "АДФ",
+          "textRu": "АДФ",
+          "textEn": "ADP"
+        }
+      ]
+    },
+    "activatorsRu": [
+      "Ионы Mg²⁺"
+    ],
+    "activatorsEn": [
+      "Mg²⁺ ions"
+    ],
+    "inhibitorsRu": [
+      "D-Глюкоза (более высокое сродство к HK)",
+      "Глюкозо-6-фосфат (аллостерическое торможение)"
+    ],
+    "inhibitorsEn": [
+      "D-Glucose (much lower Km outcompetes fructose)",
+      "Glucose 6-phosphate feedback"
+    ],
+    "mechanismRu": "В скелетных мышцах, почках и жировой ткани, где отсутствует печёночная фруктокиназа KHK-C, неспецифическая гексокиназа медленно фосфорилирует фруктозу прямо в положение C6, давая Ф6Ф — субстрат PFK-1 и фосфоглюкоизомеразы (GPI).",
+    "mechanismEn": "In skeletal muscle and adipose tissue lacking KHK-C, hexokinase phosphorylates fructose directly at C6 into F6P, feeding PFK-1 under full energy regulation.",
+    "clinicalNoteRu": "Этот запасной путь объясняет появление фруктозурии при сохранной общей утилизации фруктозы в мышцах, а также защищённость внепечёночных тканей от резкого истощения АТФ, характерного для печёночной KHK.",
+    "energyBalanceRu": "Расход: -1 АТФ (далее ещё -1 АТФ на PFK-1 ➔ всего -2 АТФ)",
+    "energyBalanceEn": "Investment: -1 ATP (plus -1 ATP at PFK-1 ➔ -2 ATP total)",
+    "netAtpYieldRu": "Итог по стволу гликолиза: +2 АТФ нетто (аэробно ~30–32 АТФ)",
+    "netAtpYieldEn": "Via main glycolysis payoff: +2 net ATP (~30–32 ATP aerobic)"
+  },
+  {
     id: 'd0000001-0000-0000-0000-000000000001',
     stepNumber: 1,
     code: 'R_CS',
@@ -4000,38 +5192,72 @@ export const HUMAN_REACTIONS: HumanReactionArrow[] = [
 
 export const HUMAN_CROSSROADS: MetabolicCrossroad[] = [
   {
-    id: 'cr-galactose-leloir',
-    nameRu: 'Галактоза (Путь Лелуара) ➔ Г6Ф (G6P)',
-    nameEn: 'Galactose (Leloir Pathway) ➔ G6P',
-    pathwayCode: 'PWY_LELOIR',
+    id: 'cr-galactose-in',
+    nameRu: 'Лактоза пищи ➔ Галактоза',
+    nameEn: 'Dietary Lactose ➔ Galactose',
+    pathwayCode: 'PW-GALACTOSE',
     pathwayNameRu: 'Путь Лелуара',
     pathwayNameEn: 'Leloir Pathway',
     compartmentRu: 'Цитозоль',
     compartmentEn: 'Cytosol',
     direction: 'in',
-    startX: 1210,
-    startY: -77,
-    endX: 1516,
-    endY: -77,
-    textX: 1218,
-    textY: -90,
+    startX: 780,
+    startY: -360,
+    endX: 780,
+    endY: -278,
+    textX: 665,
+    textY: -372,
   },
   {
-    id: 'cr-fructose-entry',
-    nameRu: 'Фруктоза (Фруктолиз) ➔ Ф6Ф / ДАФ + ГАФ',
-    nameEn: 'Fructose (Fructolysis) ➔ F6P / DHAP + GAP',
-    pathwayCode: 'PWY_FRUCTOLYSIS',
+    id: 'cr-glycogen-out',
+    nameRu: 'Выход: УДФ-Глю ➔ Гликоген',
+    nameEn: 'Exit: UDP-Glc ➔ Glycogen',
+    pathwayCode: 'PW-GALACTOSE',
+    pathwayNameRu: 'Синтез гликогена',
+    pathwayNameEn: 'Glycogenesis',
+    compartmentRu: 'Цитозоль',
+    compartmentEn: 'Cytosol',
+    direction: 'out',
+    startX: 1252,
+    startY: -274,
+    endX: 1252,
+    endY: -355,
+    textX: 1150,
+    textY: -372,
+  },
+  {
+    id: 'cr-fructose-in',
+    nameRu: 'Сахароза / диета ➔ Фруктоза',
+    nameEn: 'Dietary Sucrose ➔ Fructose',
+    pathwayCode: 'PW-FRUCTOSE',
     pathwayNameRu: 'Фруктолиз',
     pathwayNameEn: 'Fructolysis',
     compartmentRu: 'Цитозоль',
     compartmentEn: 'Cytosol',
     direction: 'in',
-    startX: 1210,
+    startX: 2450,
     startY: 83,
-    endX: 1516,
+    endX: 2324,
     endY: 83,
-    textX: 1218,
-    textY: 70,
+    textX: 2335,
+    textY: 66,
+  },
+  {
+    id: 'cr-g6pc-out',
+    nameRu: 'Печень (G6PC1) ➔ D-Глюкоза',
+    nameEn: 'Liver (G6PC1) ➔ Blood Glucose',
+    pathwayCode: 'PW-GLYCOLISIS',
+    pathwayNameRu: 'Печёночный синтез глюкозы',
+    pathwayNameEn: 'Hepatic Glucose Release',
+    compartmentRu: 'Цитозоль',
+    compartmentEn: 'Cytosol',
+    direction: 'out',
+    startX: 1680,
+    startY: -90,
+    endX: 1805,
+    endY: -175,
+    textX: 1755,
+    textY: -192,
   },
   {
     id: 'cr-pdh-in',
@@ -4109,9 +5335,9 @@ export const SECTOR_LAYOUT_CONFIGS: SectorLayoutConfig[] = [
     gradientColors: ['rgba(245, 158, 11, 0.14)', 'rgba(245, 158, 11, 0.01)'],
     centerX: 1600,
     centerY: 460,
-    boundingPoly: [{ x: 1020, y: -365 }, { x: 2180, y: -365 }, { x: 2180, y: 1255 }, { x: 1020, y: 1255 }],
-    descriptionRu: 'Расщепление глюкозы до пирувата (10 стадий) с последующим окислительным декарбоксилированием в ПДХ прямо в Ацетил-КоА.',
-    descriptionEn: '10-step oxidation of glucose to pyruvate with pyruvate dehydrogenase complex feeding straight into Acetyl-CoA.',
+    boundingPoly: [{ x: 560, y: -365 }, { x: 2560, y: -365 }, { x: 2560, y: 1255 }, { x: 560, y: 1255 }],
+    descriptionRu: 'Расщепление глюкозы, галактозы (путь Лелуара) и фруктозы (фруктолиз) до пирувата с последующим окислением в ПДХ прямо в Ацетил-КоА.',
+    descriptionEn: 'Oxidation of glucose, galactose (Leloir pathway), and fructose (fructolysis) to pyruvate with PDH complex feeding straight into Acetyl-CoA.',
     connectedHubCode: 'MET_ACETYL_COA',
     targetPathwayId: 'PW-GLYCOLISIS'
   },

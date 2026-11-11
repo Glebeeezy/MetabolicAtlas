@@ -384,6 +384,53 @@
   dominant-baseline: central;
 }
 
+.leloir-cluster-boundary,
+.fructose-cluster-boundary {
+  user-select: none;
+}
+
+.leloir-cluster-rect {
+  fill: rgba(168, 85, 247, 0.035);
+  stroke: rgba(168, 85, 247, 0.42);
+  stroke-dasharray: 6 4;
+  stroke-width: 1.5px;
+}
+
+.leloir-badge-bg {
+  fill: #0f172a;
+  stroke: #a855f7;
+  stroke-width: 1.2px;
+}
+
+.leloir-badge-text {
+  font-size: 10px;
+  font-weight: 800;
+  fill: #c084fc;
+  letter-spacing: 0.06em;
+  dominant-baseline: central;
+}
+
+.fructose-cluster-rect {
+  fill: rgba(249, 115, 22, 0.035);
+  stroke: rgba(249, 115, 22, 0.42);
+  stroke-dasharray: 6 4;
+  stroke-width: 1.5px;
+}
+
+.fructose-badge-bg {
+  fill: #0f172a;
+  stroke: #f97316;
+  stroke-width: 1.2px;
+}
+
+.fructose-badge-text {
+  font-size: 10px;
+  font-weight: 800;
+  fill: #fb923c;
+  letter-spacing: 0.06em;
+  dominant-baseline: central;
+}
+
 /* ==========================================================================
    2. Crossroads (Inbound & Outbound Inflow Lines)
    ========================================================================== */
@@ -1009,6 +1056,14 @@
 
   &--gly {
     color: #f59e0b;
+  }
+
+  &--gal {
+    color: #c084fc;
+  }
+
+  &--fru {
+    color: #fb923c;
   }
 
   &--pdh {
