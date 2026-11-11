@@ -151,7 +151,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
       if (focus.pathwayId === 'PW-PDH') {
         this.zoom.set(95);
         this.panX.set(0);
-        this.panY.set(Math.round((1600 - 1460) * 0.95));
+        this.panY.set(Math.round((1600 - 1490) * 0.95));
         const pdh = this.reactions.find((r) => r.code === 'R_PDH');
         if (pdh) this.onReactionClick(pdh);
         return;
@@ -183,8 +183,8 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
 
   focusOnTca(): void {
     this.zoom.set(85);
-    this.panX.set(Math.round((1600 - 1380) * 0.85));
-    this.panY.set(Math.round((1600 - 2060) * 0.85));
+    this.panX.set(0);
+    this.panY.set(Math.round((1600 - 2190) * 0.85));
   }
 
   focusOnSector(sector: SectorLayoutConfig): void {
@@ -256,7 +256,12 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   }
 
   doesReactionInvolveMetabolite(rx: HumanReactionArrow, met: HumanMetaboliteNode): boolean {
-    if (rx.sourceMetaboliteId === met.id || rx.secondarySourceId === met.id || rx.targetMetaboliteId === met.id) {
+    if (
+      rx.sourceMetaboliteId === met.id ||
+      rx.secondarySourceId === met.id ||
+      rx.targetMetaboliteId === met.id ||
+      rx.secondaryTargetId === met.id
+    ) {
       return true;
     }
     if (!met.isCofactor) {
@@ -323,18 +328,6 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     const selR = this.selectedReaction();
     if (selR) {
       return !this.isSubstrateOfSelected(nodeId) && !this.isProductOfSelected(nodeId);
-    }
-    const selM = this.selectedMetabolite();
-    if (selM) {
-      if (selM.isCofactor) {
-        // Keep bright if this node participates in any reaction involving this cofactor
-        const activeRxs = this.reactions.filter((r) => this.doesReactionInvolveMetabolite(r, selM));
-        const isInvolved = activeRxs.some(
-          (r) => r.sourceMetaboliteId === nodeId || r.secondarySourceId === nodeId || r.targetMetaboliteId === nodeId
-        );
-        return !isInvolved;
-      }
-      return selM.id !== nodeId;
     }
     return false;
   }

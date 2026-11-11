@@ -147,13 +147,56 @@ describe('ReactionArrowComponent', () => {
         return pts;
       };
 
+      const sampleArc = (
+        x0: number,
+        y0: number,
+        rx: number,
+        ry: number,
+        large: number,
+        sweep: number,
+        x1: number,
+        y1: number,
+        steps = 150
+      ): [number, number][] => {
+        const dx2 = (x0 - x1) / 2;
+        const dy2 = (y0 - y1) / 2;
+        const rxSq = rx * rx;
+        const rySq = ry * ry;
+        const x1pSq = dx2 * dx2;
+        const y1pSq = dy2 * dy2;
+        const sign = large === sweep ? -1 : 1;
+        const num = Math.max(0, rxSq * rySq - rxSq * y1pSq - rySq * x1pSq);
+        const den = rxSq * y1pSq + rySq * x1pSq;
+        const factor = sign * Math.sqrt(num / den);
+        const cxp = factor * ((rx * dy2) / ry);
+        const cyp = factor * (-(ry * dx2) / rx);
+        const cx = cxp + (x0 + x1) / 2;
+        const cy = cyp + (y0 + y1) / 2;
+        const ang = (ux: number, uy: number, vx: number, vy: number): number =>
+          (ux * vy - uy * vx < 0 ? -1 : 1) *
+          Math.acos(Math.max(-1, Math.min(1, (ux * vx + uy * vy) / (Math.hypot(ux, uy) * Math.hypot(vx, vy)))));
+        const t1 = ang(1, 0, (dx2 - cxp) / rx, (dy2 - cyp) / ry);
+        let dt = ang((dx2 - cxp) / rx, (dy2 - cyp) / ry, (-dx2 - cxp) / rx, (-dy2 - cyp) / ry);
+        if (!sweep && dt > 0) dt -= 2 * Math.PI;
+        if (sweep && dt < 0) dt += 2 * Math.PI;
+        const pts: [number, number][] = [];
+        for (let i = 0; i <= steps; i++) {
+          const th = t1 + (i / steps) * dt;
+          pts.push([cx + rx * Math.cos(th), cy + ry * Math.sin(th)]);
+        }
+        return pts;
+      };
+
       for (const rx of HUMAN_REACTIONS) {
         if (!rx.cofactorArc?.path) continue;
 
-        // Parse reaction path: M x0 y0 C x1 y1, x2 y2, x3 y3 OR M x0 y0 L x1 y1
+        // Parse reaction path: M x0 y0 C ..., M x0 y0 A ..., or M x0 y0 L x1 y1 (supports negative coords)
         let rxCurvePts: [number, number][] = [];
         const cubicMatch = rx.pathData.match(
-          /M\s*([\d.]+)\s+([\d.]+)\s+C\s*([\d.]+)\s+([\d.]+),\s*([\d.]+)\s+([\d.]+),\s*([\d.]+)\s+([\d.]+)/
+          /M\s*(-?[\d.]+)\s+(-?[\d.]+)\s+C\s*(-?[\d.]+)\s+(-?[\d.]+),\s*(-?[\d.]+)\s+(-?[\d.]+),\s*(-?[\d.]+)\s+(-?[\d.]+)/
+        );
+        const arcMatch = rx.pathData.match(
+          /M\s*(-?[\d.]+)\s+(-?[\d.]+)\s+A\s*(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s+([01])\s+([01])\s+(-?[\d.]+)\s+(-?[\d.]+)/
         );
         if (cubicMatch) {
           rxCurvePts = sampleCubicBezier(
@@ -162,9 +205,20 @@ describe('ReactionArrowComponent', () => {
             [parseFloat(cubicMatch[5]), parseFloat(cubicMatch[6])],
             [parseFloat(cubicMatch[7]), parseFloat(cubicMatch[8])]
           );
+        } else if (arcMatch) {
+          rxCurvePts = sampleArc(
+            parseFloat(arcMatch[1]),
+            parseFloat(arcMatch[2]),
+            parseFloat(arcMatch[3]),
+            parseFloat(arcMatch[4]),
+            parseFloat(arcMatch[6]),
+            parseFloat(arcMatch[7]),
+            parseFloat(arcMatch[8]),
+            parseFloat(arcMatch[9])
+          );
         } else {
-          const lineMatch = rx.pathData.match(/M\s*([\d.]+)\s+([\d.]+)\s+L\s*([\d.]+)\s+([\d.]+)/);
-          expect(lineMatch, `Reaction ${rx.code} must have valid pathData (cubic Bezier or Line)`).toBeTruthy();
+          const lineMatch = rx.pathData.match(/M\s*(-?[\d.]+)\s+(-?[\d.]+)\s+L\s*(-?[\d.]+)\s+(-?[\d.]+)/);
+          expect(lineMatch, `Reaction ${rx.code} must have valid pathData (cubic Bezier, Arc, or Line)`).toBeTruthy();
           if (!lineMatch) continue;
           const x0 = parseFloat(lineMatch[1]);
           const y0 = parseFloat(lineMatch[2]);
@@ -176,13 +230,30 @@ describe('ReactionArrowComponent', () => {
           }
         }
 
-        // Extract numbers from cofactor arc path
-        const arcNumbers = rx.cofactorArc.path.replace(/[MC]/g, ' ').trim().split(/\s+/).map(Number);
-        let minDistanceToRx = Infinity;
+        // Sample cofactor arc path (supports M x0 y0 C ... [C ...])
+        const arcTokens = rx.cofactorArc.path.replace(/,/g, ' ').trim().split(/\s+/);
+        const cofPts: [number, number][] = [];
+        let cur: [number, number] = [0, 0];
+        for (let tIdx = 0; tIdx < arcTokens.length; ) {
+          const cmd = arcTokens[tIdx];
+          if (cmd === 'M') {
+            cur = [parseFloat(arcTokens[tIdx + 1]), parseFloat(arcTokens[tIdx + 2])];
+            cofPts.push(cur);
+            tIdx += 3;
+          } else if (cmd === 'C') {
+            const p1: [number, number] = [parseFloat(arcTokens[tIdx + 1]), parseFloat(arcTokens[tIdx + 2])];
+            const p2: [number, number] = [parseFloat(arcTokens[tIdx + 3]), parseFloat(arcTokens[tIdx + 4])];
+            const p3: [number, number] = [parseFloat(arcTokens[tIdx + 5]), parseFloat(arcTokens[tIdx + 6])];
+            cofPts.push(...sampleCubicBezier(cur, p1, p2, p3, 40));
+            cur = p3;
+            tIdx += 7;
+          } else {
+            tIdx++;
+          }
+        }
 
-        for (let i = 0; i < arcNumbers.length; i += 2) {
-          const ax = arcNumbers[i];
-          const ay = arcNumbers[i + 1];
+        let minDistanceToRx = Infinity;
+        for (const [ax, ay] of cofPts) {
           for (const [rxX, rxY] of rxCurvePts) {
             const dist = Math.hypot(ax - rxX, ay - rxY);
             if (dist < minDistanceToRx) {

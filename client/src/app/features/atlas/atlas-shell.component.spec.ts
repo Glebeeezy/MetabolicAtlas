@@ -218,9 +218,9 @@ describe('AtlasShellComponent', () => {
     expect(acetyl.y).toBe(1560);
     expect(acetyl.isHub).toBe(true);
 
-    // Reaction 8 path connects Malate to OAA (x: 1270), safely clear from x: 1520
+    // Reaction 8 circular arc connects Malate to OAA (x: 1364, y: 1766), safely clear from x: 1520
     const mdh = HUMAN_REACTIONS.find((r) => r.code === 'R_MDH')!;
-    expect(mdh.pathData).toContain('1270 1706');
+    expect(mdh.pathData).toContain('A 420 420 0 0 1 1368 1840');
   });
 
   it('should calculate LOD level based on zoom correctly', () => {
@@ -245,8 +245,8 @@ describe('AtlasShellComponent', () => {
     expect(component.sectorConfigs.length).toBe(5);
     const tcaSector = component.sectorConfigs.find((s) => s.sectorId === 'PW-TCA-CYCLE');
     expect(tcaSector).toBeTruthy();
-    expect(tcaSector?.centerX).toBe(1380);
-    expect(tcaSector?.centerY).toBe(2110);
+    expect(tcaSector?.centerX).toBe(1600);
+    expect(tcaSector?.centerY).toBe(2190);
 
     const glySector = component.sectorConfigs.find((s) => s.sectorId === 'PW-GLYCOLISIS');
     expect(glySector).toBeTruthy();
@@ -355,12 +355,12 @@ describe('AtlasShellComponent', () => {
     const glucose = component.allMetabolites.find((m) => m.code === 'MET_GLUCOSE')!;
     expect(glucose).toBeTruthy();
     expect(glucose.x).toBe(1520);
-    expect(glucose.y).toBe(280);
+    expect(glucose.y).toBe(-274);
 
     // 2. Verify Cytosolic Pyruvate at end of 10-step glycolysis
     const pyrCyto = component.allMetabolites.find((m) => m.code === 'MET_PYRUVATE')!;
     expect(pyrCyto).toBeTruthy();
-    expect(pyrCyto.y).toBe(1270);
+    expect(pyrCyto.y).toBe(1166);
 
     // 3. Verify MPC translocase across inner mitochondrial membrane
     const mpc = component.reactions.find((r) => r.code === 'R_MPC')!;
@@ -369,7 +369,7 @@ describe('AtlasShellComponent', () => {
 
     const pyrMito = component.allMetabolites.find((m) => m.code === 'MET_PYR_MIT')!;
     expect(pyrMito).toBeTruthy();
-    expect(pyrMito.y).toBe(1400);
+    expect(pyrMito.y).toBe(1356);
     expect(mpc.targetMetaboliteId).toBe(pyrMito.id);
 
     // 4. Verify PDH complex feeding directly into central Acetyl-CoA
@@ -584,5 +584,136 @@ describe('AtlasShellComponent', () => {
     const tcaSteps = tcaRxs.map((r) => r.stepNumber).sort((a, b) => (a ?? 0) - (b ?? 0));
     expect(tcaSteps).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
     expect(tcaRxs.every((r) => r.compartmentRu === 'Матрикс митохондрий')).toBe(true);
+  });
+
+  it('should hide hub orbit ring, metabolic hub badges, and reaction energy strip/comparison cards in UI while keeping Acetyl-CoA as the sole hub border', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    const rHk = component.reactions.find((r) => r.code === 'R_HK')!;
+    component.onReactionClick(rHk);
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+
+    // 1. Only halo glow remains around Acetyl-CoA; dashed orbit ring is removed
+    expect(el.querySelector('.central-hub-beacon .beacon-pulse-halo')).toBeTruthy();
+    expect(el.querySelector('.beacon-orbit-ring')).toBeNull();
+
+    // 2. Hub badge is removed from all metabolites, and only Acetyl-CoA keeps isHub border state
+    const hubMetabolites = component.allMetabolites.filter((m) => m.isHub).map((m) => m.code);
+    expect(hubMetabolites).toEqual(['MET_ACETYL_COA']);
+    expect(el.querySelector('.role-badge-bg--hub')).toBeNull();
+    expect(el.textContent).not.toContain('ХАБ МЕТАБОЛИЗМА');
+    expect(el.textContent).not.toContain('METABOLIC HUB');
+    expect(el.querySelectorAll('.metabolite-tile.is-hub').length).toBe(1);
+
+    // 3. Step impact/net strip and Aerobic vs Anaerobic card are removed from reaction cards
+    expect(el.querySelector('.rx-energy-strip')).toBeNull();
+    expect(el.querySelector('.energetics-card')).toBeNull();
+  });
+
+  it('should provide generously spaced Glycolysis/MPC/PDH arrows without overlapping metabolite nodes', () => {
+    const verticalGlySteps = ['R_HK', 'R_GPI', 'R_PFK1', 'R_ALDO', 'R_GAPDH', 'R_PGK', 'R_PGAM', 'R_ENO', 'R_PK'];
+    for (const code of verticalGlySteps) {
+      const rx = HUMAN_REACTIONS.find((r) => r.code === code)!;
+      const nums = rx.pathData.match(/-?\d+(?:\.\d+)?/g)!.map(Number);
+      const len = Math.hypot(nums[2] - nums[0], nums[3] - nums[1]);
+      expect(len, `${code} vertical arrow length`).toBe(86);
+    }
+
+    const tpi = HUMAN_REACTIONS.find((r) => r.code === 'R_TPI')!;
+    const tpiNums = tpi.pathData.match(/-?\d+(?:\.\d+)?/g)!.map(Number);
+    expect(Math.hypot(tpiNums[2] - tpiNums[0], tpiNums[3] - tpiNums[1])).toBe(205);
+
+    const mpc = HUMAN_REACTIONS.find((r) => r.code === 'R_MPC')!;
+    const mpcNums = mpc.pathData.match(/-?\d+(?:\.\d+)?/g)!.map(Number);
+    expect(Math.hypot(mpcNums[2] - mpcNums[0], mpcNums[3] - mpcNums[1])).toBe(116);
+
+    const pdh = HUMAN_REACTIONS.find((r) => r.code === 'R_PDH')!;
+    const pdhNums = pdh.pathData.match(/-?\d+(?:\.\d+)?/g)!.map(Number);
+    expect(Math.hypot(pdhNums[2] - pdhNums[0], pdhNums[3] - pdhNums[1])).toBe(130);
+
+    for (let i = 0; i < HUMAN_METABOLITES.length; i++) {
+      for (let j = i + 1; j < HUMAN_METABOLITES.length; j++) {
+        const a = HUMAN_METABOLITES[i];
+        const b = HUMAN_METABOLITES[j];
+        const overlaps =
+          a.x < b.x + b.width &&
+          a.x + a.width > b.x &&
+          a.y < b.y + b.height &&
+          a.y + a.height > b.y;
+        expect(overlaps, `Nodes ${a.code} and ${b.code} must not overlap`).toBe(false);
+      }
+    }
+  });
+
+  it('should not dim other metabolites when selecting a substance while still highlighting connected reactions', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+    const citrate = component.allMetabolites.find((m) => m.code === 'MET_CITRATE')!;
+    const dhap = component.allMetabolites.find((m) => m.code === 'MET_DHAP')!;
+
+    component.onMetaboliteClick(citrate);
+    fixture.detectChanges();
+
+    for (const m of component.allMetabolites) {
+      expect(component.isNodeDimmed(m.id), `${m.code} should remain undimmed`).toBe(false);
+    }
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelectorAll('.metabolite-tile.is-dimmed').length).toBe(0);
+
+    const cs = component.reactions.find((r) => r.code === 'R_CS')!;
+    const aco = component.reactions.find((r) => r.code === 'R_ACO')!;
+    const hk = component.reactions.find((r) => r.code === 'R_HK')!;
+    expect(component.isReactionDimmed(cs.id)).toBe(false);
+    expect(component.isReactionDimmed(aco.id)).toBe(false);
+    expect(component.isReactionDimmed(hk.id)).toBe(true);
+
+    // Selecting DHAP should also keep secondary target reaction R_ALDO undimmed
+    component.onMetaboliteClick(dhap);
+    fixture.detectChanges();
+    const aldo = component.reactions.find((r) => r.code === 'R_ALDO')!;
+    expect(component.isReactionDimmed(aldo.id)).toBe(false);
+  });
+
+  it('should arrange all 8 TCA intermediates and circular arcs symmetrically around (1600, 2190) with R=420', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const tcaCodes = [
+      'MET_OAA',
+      'MET_CITRATE',
+      'MET_ISOCITRATE',
+      'MET_AKG',
+      'MET_SUCCINYL_COA',
+      'MET_SUCCINATE',
+      'MET_FUMARATE',
+      'MET_MALATE',
+    ];
+    for (const code of tcaCodes) {
+      const m = HUMAN_METABOLITES.find((item) => item.code === code)!;
+      const cx = m.x + m.width / 2;
+      const cy = m.y + m.height / 2;
+      const radius = Math.hypot(cx - 1600, cy - 2190);
+      expect(Math.abs(radius - 420), `${code} center radius ${radius.toFixed(2)}`).toBeLessThan(1.5);
+    }
+
+    const tcaRxs = HUMAN_REACTIONS.filter((r) => r.pathwayCode === 'PW-TCA-CYCLE');
+    expect(tcaRxs.length).toBe(8);
+    for (const rx of tcaRxs) {
+      expect(rx.pathData, `${rx.code} circular SVG arc`).toContain('A 420 420 0 0 1');
+    }
+
+    const el = fixture.nativeElement as HTMLElement;
+    const guide = el.querySelector('.tca-guide-ring');
+    expect(guide?.getAttribute('cx')).toBe('1600');
+    expect(guide?.getAttribute('cy')).toBe('2190');
+    expect(guide?.getAttribute('r')).toBe('420');
+
+    component.focusOnTca();
+    expect(component.panX()).toBe(0);
+    expect(component.panY()).toBe(Math.round((1600 - 2190) * 0.85));
   });
 });

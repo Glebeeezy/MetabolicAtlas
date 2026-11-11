@@ -55,8 +55,8 @@
 }
 
 .canvas-svg {
-  width: 3200px;
-  height: 3200px;
+  width: 4200px;
+  height: 4200px;
   max-width: none;
   max-height: none;
   overflow: visible;
@@ -196,11 +196,6 @@
   .beacon-pulse-halo {
     animation: beaconGlowPulse 3.5s ease-in-out infinite;
   }
-
-  .beacon-orbit-ring {
-    animation: orbitDashRotate 30s linear infinite;
-    transform-origin: 1600px 1600px;
-  }
 }
 
 @keyframes highwayFlow {
@@ -222,15 +217,6 @@
     transform: scale(1.08);
     opacity: 1;
     transform-origin: 1600px 1600px;
-  }
-}
-
-@keyframes orbitDashRotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
   }
 }
 
@@ -270,6 +256,13 @@
   &--matrix {
     stroke: rgba(16, 185, 129, 0.22);
   }
+}
+
+.tca-guide-ring {
+  fill: none;
+  stroke: rgba(16, 185, 129, 0.16);
+  stroke-width: 1.5px;
+  stroke-dasharray: 6 6;
 }
 
 .compartment-tag {
@@ -606,19 +599,6 @@
     font-size: 8px;
     font-weight: 700;
     fill: var(--color-product-accent);
-  }
-
-  .role-badge-bg--hub {
-    fill: rgba(16, 185, 129, 0.18);
-    stroke: #10B981;
-    stroke-width: 0.75px;
-  }
-
-  .role-badge-text--hub {
-    font-family: var(--font-sans);
-    font-size: 8px;
-    font-weight: 700;
-    fill: #10B981;
   }
 
   /* Hub node (Acetyl-CoA): Emerald Accent */
@@ -1070,145 +1050,6 @@
     font-family: var(--font-mono);
     color: #fbbf24;
     font-weight: 700;
-  }
-}
-
-.rx-energy-strip {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin-top: 0.65rem;
-}
-
-.rx-energy-pill {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.3rem 0.55rem;
-  border-radius: var(--radius-sm);
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(245, 158, 11, 0.2);
-  font-size: 0.725rem;
-
-  &--net {
-    border-color: rgba(16, 185, 129, 0.25);
-    background: rgba(16, 185, 129, 0.04);
-  }
-}
-
-.rx-energy-tag {
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-
-  &--impact {
-    color: #fbbf24;
-  }
-
-  &--net {
-    color: #34d399;
-  }
-}
-
-.rx-energy-text {
-  color: var(--color-text-primary);
-  font-weight: 600;
-}
-
-.energetics-card {
-  background: rgba(15, 23, 42, 0.75);
-  border: 1px solid rgba(245, 158, 11, 0.28);
-  border-radius: var(--radius-md);
-  padding: 0.85rem;
-  margin-top: 1.25rem;
-
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.45rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  }
-
-  &__badge {
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: #fbbf24;
-  }
-
-  &__ratio {
-    font-size: 0.68rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    padding: 0.15rem 0.4rem;
-    border-radius: 4px;
-    background: rgba(16, 185, 129, 0.15);
-    color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.35);
-  }
-
-  &__body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-}
-
-.energetics-row {
-  padding: 0.6rem 0.7rem;
-  border-radius: var(--radius-sm);
-
-  &--anaerobic {
-    background: rgba(239, 68, 68, 0.06);
-    border-left: 3px solid #ef4444;
-  }
-
-  &--aerobic {
-    background: rgba(16, 185, 129, 0.07);
-    border-left: 3px solid #10b981;
-  }
-
-  &__title {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.775rem;
-    color: var(--color-text-primary);
-    margin-bottom: 0.25rem;
-  }
-
-  &__formula {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: var(--color-text-secondary);
-    margin-bottom: 0.35rem;
-  }
-
-  &__desc {
-    font-size: 0.7rem;
-    line-height: 1.4;
-    color: var(--color-text-muted);
-    margin: 0;
-  }
-}
-
-.energetics-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: var(--radius-full);
-
-  &--anaerobic {
-    background: #ef4444;
-    box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
-  }
-
-  &--aerobic {
-    background: #10b981;
-    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
   }
 }
 
