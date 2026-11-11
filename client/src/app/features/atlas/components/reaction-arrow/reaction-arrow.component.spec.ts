@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { LocaleService } from '../../../../core/services/locale.service';
 import { ReactionArrowComponent, ReactionArrowData } from './reaction-arrow.component';
 
 @Component({
@@ -9,7 +10,11 @@ import { ReactionArrowComponent, ReactionArrowData } from './reaction-arrow.comp
     <svg>
       <g ma-reaction-arrow
         [reaction]="testReaction"
-        [isSelected]="isSelected"
+        [isSelected]="isSelected()"
+        [isHovered]="isHovered()"
+        [isDimmed]="isDimmed()"
+        [isFluxAnimated]="isFluxAnimated()"
+        [showEnzymeLabel]="showEnzymeLabel()"
         (reactionClick)="clicked = $event"
         (cofactorClick)="clickedCofactor = $event"
       ></g>
@@ -48,7 +53,11 @@ class TestHostComponent {
     },
     mechanismRu: 'Тест механизм',
   };
-  isSelected = false;
+  isSelected = signal(false);
+  isHovered = signal(false);
+  isDimmed = signal(false);
+  isFluxAnimated = signal(false);
+  showEnzymeLabel = signal(false);
   clicked: ReactionArrowData | null = null;
   clickedCofactor: string | null = null;
 }
@@ -271,13 +280,16 @@ describe('ReactionArrowComponent', () => {
     });
   });
 
-  it('should render double-headed marker-start only when reaction is reversible', () => {
+  it('should render single arrow for irreversible and two opposing dual-lane arrows for reversible reactions', () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
-    const lineEl = (fixture.nativeElement as HTMLElement).querySelector('path.reaction-line')!;
-    expect(lineEl.getAttribute('marker-start')).toBeNull();
-    expect(lineEl.getAttribute('marker-end')).toBe('url(#rx-arrowhead)');
+    const el = fixture.nativeElement as HTMLElement;
+    const irrevLines = el.querySelectorAll('path.reaction-line');
+    expect(irrevLines.length).toBe(1);
+    expect(irrevLines[0].getAttribute('marker-start')).toBeNull();
+    expect(irrevLines[0].getAttribute('marker-end')).toBe('url(#rx-arrowhead)');
+    expect(el.querySelectorAll('path.reaction-line--dual').length).toBe(0);
 
     const revFixture = TestBed.createComponent(TestHostComponent);
     revFixture.componentInstance.testReaction = {
@@ -285,11 +297,179 @@ describe('ReactionArrowComponent', () => {
       id: 'test-rx-rev',
       isReversible: true,
     };
+    revFixture.componentInstance.isFluxAnimated.set(true);
     revFixture.detectChanges();
 
-    const revLineEl = (revFixture.nativeElement as HTMLElement).querySelector('path.reaction-line')!;
-    expect(revLineEl.getAttribute('marker-start')).toBe('url(#rx-arrowhead)');
-    expect(revLineEl.getAttribute('marker-end')).toBe('url(#rx-arrowhead)');
+    const revEl = revFixture.nativeElement as HTMLElement;
+    const dualLines = revEl.querySelectorAll('path.reaction-line--dual');
+    expect(dualLines.length).toBe(2);
+    expect(revEl.querySelector('path.reaction-line--forward')).toBeTruthy();
+    expect(revEl.querySelector('path.reaction-line--reverse')).toBeTruthy();
+
+    dualLines.forEach((line) => {
+      expect(line.getAttribute('marker-start')).toBeNull();
+      expect(line.getAttribute('marker-end')).toBe('url(#rx-arrowhead-dual)');
+    });
+
+    expect(revEl.querySelectorAll('path.reaction-flux-flow--dual').length).toBe(2);
+  });
+
+  it('should apply selected, hovered, and dimmed classes on internal reaction-arrow-root with matching dual markers', () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.componentInstance.testReaction = {
+      ...fixture.componentInstance.testReaction,
+      id: 'test-rx-state',
+      isReversible: true,
+    };
+    fixture.componentInstance.isHovered.set(true);
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    const root = el.querySelector('g.reaction-arrow-root')!;
+    expect(root.classList.contains('is-hovered')).toBe(true);
+    expect(root.classList.contains('is-selected')).toBe(false);
+    expect(
+      el.querySelector('path.reaction-line--forward')?.getAttribute('marker-end')
+    ).toBe('url(#rx-arrowhead-dual-hover)');
+
+    fixture.componentInstance.isSelected.set(true);
+    fixture.componentInstance.isDimmed.set(true);
+    fixture.detectChanges();
+
+    expect(root.classList.contains('is-selected')).toBe(true);
+    expect(root.classList.contains('is-dimmed')).toBe(true);
+    expect(
+      el.querySelector('path.reaction-line--forward')?.getAttribute('marker-end')
+    ).toBe('url(#rx-arrowhead-dual-active)');
+    expect(
+      el.querySelector('path.reaction-line--reverse')?.getAttribute('marker-end')
+    ).toBe('url(#rx-arrowhead-dual-active)');
+  });
+
+  it('should render clickable branches and junction pill for structured multi-branch reactions', () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.componentInstance.testReaction = {
+      ...fixture.componentInstance.testReaction,
+      id: 'test-rx-branched',
+      code: 'R_BRANCHED',
+      isReversible: true,
+      junction: { x: 100, y: 100, label: 'GALT', width: 54, height: 22 },
+      branches: [
+        { id: 'b1', role: 'in', metaboliteId: 'm1', pathData: 'M 0 100 L 73 100' },
+        { id: 'b2', role: 'out', metaboliteId: 'm2', pathData: 'M 127 100 L 200 100' },
+        { id: 'b3', role: 'out', metaboliteId: 'm3', pathData: 'M 100 89 L 100 20' },
+      ],
+    };
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    const hitboxes = Array.from(el.querySelectorAll('path.reaction-hitbox'));
+    expect(hitboxes.length).toBe(3);
+    expect(el.querySelectorAll('path.reaction-line--dual').length).toBe(6);
+
+    const host = fixture.componentInstance;
+    for (const hitbox of hitboxes) {
+      host.clicked = null;
+      hitbox.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect((host.clicked as ReactionArrowData | null)?.code).toBe('R_BRANCHED');
+    }
+
+    const junction = el.querySelector('g.reaction-junction')!;
+    expect(junction).toBeTruthy();
+    expect(junction.textContent?.trim()).toBe('GALT');
+    host.clicked = null;
+    junction.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect((host.clicked as ReactionArrowData | null)?.code).toBe('R_BRANCHED');
+  });
+
+  it('should render permanent clickable enzyme badge with regulatory indicator and dynamic hover tooltip when showEnzymeLabel is true', () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    const host = fixture.componentInstance;
+    host.testReaction = {
+      ...host.testReaction,
+      id: 'test-rx-badge',
+      code: 'R_PFK1',
+      enzymeShort: 'PFK-1',
+      enzymeRu: 'Фосфофруктокиназа-1 (ключевой регуляторный шаг гликолиза)',
+      isReversible: false,
+      activatorsRu: ['АМФ'],
+    };
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('g.reaction-enzyme-badge')).toBeNull();
+
+    host.showEnzymeLabel.set(true);
+    fixture.detectChanges();
+
+    const badge = el.querySelector('g.reaction-enzyme-badge')!;
+    expect(badge).toBeTruthy();
+    expect(badge.textContent?.trim()).toBe('PFK-1');
+    expect(badge.querySelector('.reaction-enzyme-badge-reg')).toBeTruthy();
+
+    host.clicked = null;
+    badge.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect((host.clicked as ReactionArrowData | null)?.code).toBe('R_PFK1');
+
+    host.isHovered.set(true);
+    fixture.detectChanges();
+
+    const tooltip = el.querySelector('g.reaction-tooltip')!;
+    expect(tooltip).toBeTruthy();
+    expect(tooltip.getAttribute('transform')).toBe('translate(50,32)');
+    const tooltipRect = tooltip.querySelector('rect.tooltip-bg')!;
+    expect(Number(tooltipRect.getAttribute('width'))).toBeGreaterThan(220);
+  });
+
+  it('should switch enzyme badge, junction label, and hover tooltip between RU and EN locales', () => {
+    const localeService = TestBed.inject(LocaleService);
+    localeService.setLocale('ru');
+
+    const fixture = TestBed.createComponent(TestHostComponent);
+    const host = fixture.componentInstance;
+    try {
+      host.testReaction = {
+        ...host.testReaction,
+        id: 'test-rx-i18n',
+        code: 'R_ENO',
+        enzymeShort: 'ENO1',
+        enzymeShortRu: 'Енолаза',
+        enzymeRu: 'Енолаза',
+        enzymeEn: 'Enolase (Phosphopyruvate hydratase)',
+      };
+      host.showEnzymeLabel.set(true);
+      host.isHovered.set(true);
+      fixture.detectChanges();
+
+      const el = fixture.nativeElement as HTMLElement;
+      expect(el.querySelector('g.reaction-enzyme-badge')?.textContent?.trim()).toBe('Енолаза');
+      expect(el.querySelector('g.reaction-tooltip')?.textContent?.trim()).toBe('Енолаза • Енолаза');
+
+      localeService.setLocale('en');
+      fixture.detectChanges();
+      expect(el.querySelector('g.reaction-enzyme-badge')?.textContent?.trim()).toBe('ENO1');
+      expect(el.querySelector('g.reaction-tooltip')?.textContent?.trim()).toBe(
+        'ENO1 • Enolase (Phosphopyruvate hydratase)'
+      );
+
+      // Junction labels also adapt per locale
+      const junctionFixture = TestBed.createComponent(TestHostComponent);
+      junctionFixture.componentInstance.testReaction = {
+        ...junctionFixture.componentInstance.testReaction,
+        junction: { x: 100, y: 100, label: 'CS', labelRu: 'ЦС', width: 38, height: 20 },
+      };
+      junctionFixture.detectChanges();
+      const junction = (junctionFixture.nativeElement as HTMLElement).querySelector('g.reaction-junction')!;
+      expect(junction.textContent?.trim()).toBe('CS');
+      expect(junction.getAttribute('aria-label')).toBe('CS');
+
+      localeService.setLocale('ru');
+      junctionFixture.detectChanges();
+      expect(junction.textContent?.trim()).toBe('ЦС');
+      expect(junction.getAttribute('aria-label')).toBe('ЦС');
+    } finally {
+      localeService.setLocale('ru');
+    }
   });
 });
 

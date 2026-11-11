@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { AtlasStateService } from '../../core/services/atlas-state.service';
+import { LocaleService } from '../../core/services/locale.service';
 import { AtlasShellComponent, HUMAN_METABOLITES, HUMAN_REACTIONS } from './atlas-shell.component';
 
 describe('AtlasShellComponent', () => {
@@ -116,9 +117,17 @@ describe('AtlasShellComponent', () => {
     expect(component.activeCarrierFilter()).toBeNull();
     component.toggleEnergyFilter('NADH');
     expect(component.activeCarrierFilter()).toBe('NADH');
-    expect(component.selectedReaction()?.stepNumber).toBe(3);
+    expect(component.selectedReaction()?.code).toBe('R_GAPDH');
+    expect(component.isReactionDimmed(HUMAN_REACTIONS.find((r) => r.code === 'R_PDH')!.id)).toBe(false);
+    expect(component.isReactionDimmed(HUMAN_REACTIONS.find((r) => r.code === 'R_IDH')!.id)).toBe(false);
+    expect(component.isReactionDimmed(HUMAN_REACTIONS.find((r) => r.code === 'R_HK')!.id)).toBe(true);
 
-    component.toggleEnergyFilter('NADH');
+    component.toggleEnergyFilter('ATP');
+    expect(component.activeCarrierFilter()).toBe('ATP');
+    expect(component.selectedReaction()?.code).toBe('R_HK');
+    expect(component.isReactionDimmed(HUMAN_REACTIONS.find((r) => r.code === 'R_GAPDH')!.id)).toBe(true);
+
+    component.toggleEnergyFilter('ATP');
     expect(component.activeCarrierFilter()).toBeNull();
   });
 
@@ -579,11 +588,22 @@ describe('AtlasShellComponent', () => {
     const g3p = component.allMetabolites.find((m) => m.code === 'MET_G3P')!;
     expect(g3p.pathwaysRu.some((p) => p.pathwayCode === 'PW-FRUCTOSE' && p.reactionCode === 'R_TKFC')).toBe(true);
 
-    // Canvas crossroads
-    expect(component.crossroads.some((cr) => cr.id === 'cr-galactose-in')).toBe(true);
-    expect(component.crossroads.some((cr) => cr.id === 'cr-glycogen-out')).toBe(true);
-    expect(component.crossroads.some((cr) => cr.id === 'cr-fructose-in')).toBe(true);
+    // Canvas crossroads (lactose, sucrose, and glycogen crossroads replaced by full nodes/reactions)
     expect(component.crossroads.some((cr) => cr.id === 'cr-g6pc-out')).toBe(true);
+    expect(component.crossroads.some((cr) => cr.id === 'cr-galactose-in')).toBe(false);
+    expect(component.crossroads.some((cr) => cr.id === 'cr-glycogen-out')).toBe(false);
+    expect(component.crossroads.some((cr) => cr.id === 'cr-fructose-in')).toBe(false);
+
+    // Disaccharides & Glycogen integration
+    const glyAndDisacCodes = ['MET_GLYCOGEN', 'MET_LACTOSE', 'MET_SUCROSE'];
+    for (const code of glyAndDisacCodes) {
+      expect(component.allMetabolites.some((m) => m.code === code), `Missing metabolite ${code}`).toBe(true);
+    }
+    for (const code of ['R_UGP2', 'R_GYS', 'R_PYG']) {
+      expect(component.reactions.find((r) => r.code === code)?.pathwayCode).toBe('PW-GLYCOGEN');
+    }
+    expect(component.reactions.find((r) => r.code === 'R_LCT')?.pathwayCode).toBe('PW-GALACTOSE');
+    expect(component.reactions.find((r) => r.code === 'R_SI')?.pathwayCode).toBe('PW-FRUCTOSE');
   });
 
   it('should enforce distinct pathway taxonomy and compartments across Glycolysis, MPC, PDH, and TCA', () => {
@@ -775,6 +795,7 @@ describe('AtlasShellComponent', () => {
 
     const el = fixture.nativeElement as HTMLElement;
     expect(el.querySelector('.leloir-cluster-boundary')).toBeTruthy();
+    expect(el.querySelector('.glycogen-cluster-boundary')).toBeTruthy();
     expect(el.querySelector('.fructose-cluster-boundary')).toBeTruthy();
 
     const allCatalog = atlasState.pathways().find((p) => p.id === 'ALL')!;
@@ -786,7 +807,14 @@ describe('AtlasShellComponent', () => {
     expect(component.selectedReaction()?.code).toBe('R_GALK1');
     expect(component.zoom()).toBe(80);
     expect(component.panX()).toBe(Math.round((1600 - 1100) * 0.8));
-    expect(component.panY()).toBe(Math.round((1600 - -160) * 0.8));
+    expect(component.panY()).toBe(Math.round((1600 - -240) * 0.8));
+
+    atlasState.selectPathway('PW-GLYCOGEN');
+    fixture.detectChanges();
+    expect(component.selectedReaction()?.code).toBe('R_GYS');
+    expect(component.zoom()).toBe(85);
+    expect(component.panX()).toBe(Math.round((1600 - 1320) * 0.85));
+    expect(component.panY()).toBe(Math.round((1600 - -260) * 0.85));
 
     atlasState.selectPathway('PW-FRUCTOSE');
     fixture.detectChanges();
@@ -794,5 +822,251 @@ describe('AtlasShellComponent', () => {
     expect(component.zoom()).toBe(80);
     expect(component.panX()).toBe(Math.round((1600 - 1990) * 0.8));
     expect(component.panY()).toBe(Math.round((1600 - 260) * 0.8));
+  });
+
+  it('should structure complex multi-branch reactions with non-overlapping junctions and clickable branches', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const expectedConfigs: Record<string, { label: string; branchCount: number }> = {
+      R_ALDO: { label: 'ALDOA', branchCount: 3 },
+      R_ALDOB: { label: 'ALDOB', branchCount: 3 },
+      R_GALT: { label: 'GALT', branchCount: 4 },
+      R_CS: { label: 'CS', branchCount: 3 },
+      R_LCT: { label: 'LCT', branchCount: 3 },
+      R_SI: { label: 'SI', branchCount: 3 },
+    };
+
+    const el = fixture.nativeElement as HTMLElement;
+    const reactionGroups = Array.from(el.querySelectorAll('g[ma-reaction-arrow]'));
+
+    for (const [code, cfg] of Object.entries(expectedConfigs)) {
+      const rxIndex = component.reactions.findIndex((r) => r.code === code);
+      expect(rxIndex).toBeGreaterThanOrEqual(0);
+      const rx = component.reactions[rxIndex];
+
+      expect(rx.junction?.label).toBe(cfg.label);
+      expect(rx.branches?.length).toBe(cfg.branchCount);
+
+      // Geometry guard: junction pill must never overlap any metabolite tile box
+      const j = rx.junction!;
+      const halfW = (j.width ?? 52) / 2;
+      const halfH = (j.height ?? 20) / 2;
+      for (const met of HUMAN_METABOLITES) {
+        const overlapsX = j.x + halfW > met.x && j.x - halfW < met.x + met.width;
+        const overlapsY = j.y + halfH > met.y && j.y - halfH < met.y + met.height;
+        expect(overlapsX && overlapsY).toBe(false);
+      }
+
+      // Clickability check: every branch hitbox and the junction pill select the reaction
+      const rxGroup = reactionGroups[rxIndex];
+      const hitboxes = Array.from(rxGroup.querySelectorAll('path.reaction-hitbox'));
+      expect(hitboxes.length).toBe(cfg.branchCount);
+
+      for (const hitbox of hitboxes) {
+        component.selectedReaction.set(null);
+        hitbox.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        fixture.detectChanges();
+        expect(component.selectedReaction()?.code).toBe(code);
+      }
+
+      const junctionEl = rxGroup.querySelector('g.reaction-junction');
+      expect(junctionEl).toBeTruthy();
+      component.selectedReaction.set(null);
+      junctionEl!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      fixture.detectChanges();
+      expect(component.selectedReaction()?.code).toBe(code);
+    }
+  });
+
+  it('should render opposing dual lanes without marker-start for all reversible atlas reactions', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    const reactionGroups = Array.from(el.querySelectorAll('g[ma-reaction-arrow]'));
+    expect(reactionGroups.length).toBe(component.reactions.length);
+
+    component.reactions.forEach((rx, idx) => {
+      const groupEl = reactionGroups[idx];
+      if (rx.isReversible) {
+        const dualLines = groupEl.querySelectorAll('path.reaction-line--dual');
+        const expectedSegments = rx.branches?.length ?? 1;
+        expect(dualLines.length).toBe(expectedSegments * 2);
+        dualLines.forEach((line) => {
+          expect(line.getAttribute('marker-start')).toBeNull();
+          expect(line.getAttribute('marker-end')).toBe('url(#rx-arrowhead-dual)');
+        });
+      }
+    });
+  });
+
+  it('should hide covered corridor superhighways at LOD 2+ so reactions stay clickable cleanly', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.zoom.set(35);
+    fixture.detectChanges();
+    expect(component.lodLevel()).toBe(1);
+    expect(component.visibleSuperHighways().some((h) => h.id === 'hw-gly-pdh')).toBe(true);
+    expect(component.visibleSuperHighways().some((h) => h.id === 'hw-hub-tca')).toBe(true);
+
+    component.zoom.set(80);
+    fixture.detectChanges();
+    expect(component.lodLevel()).toBe(2);
+    expect(component.visibleSuperHighways().some((h) => h.id === 'hw-gly-pdh')).toBe(false);
+    expect(component.visibleSuperHighways().some((h) => h.id === 'hw-hub-tca')).toBe(false);
+  });
+
+  it('should render simplified abbrev cards at LOD 1 and full tiles + enzyme badges at LOD 2+', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    const el = fixture.nativeElement as HTMLElement;
+
+    component.zoom.set(35);
+    fixture.detectChanges();
+    expect(component.lodLevel()).toBe(1);
+    expect(el.querySelectorAll('.metabolite-tile__abbrev').length).toBe(component.canvasMetabolites.length);
+    expect(el.querySelectorAll('.metabolite-tile__formula').length).toBe(0);
+    expect(el.querySelectorAll('g.reaction-enzyme-badge').length).toBe(0);
+
+    component.zoom.set(80);
+    fixture.detectChanges();
+    expect(component.lodLevel()).toBe(2);
+    expect(el.querySelectorAll('.metabolite-tile__abbrev').length).toBe(0);
+    expect(el.querySelectorAll('.metabolite-tile__title').length).toBe(component.canvasMetabolites.length);
+    expect(el.querySelectorAll('.metabolite-tile__formula').length).toBe(component.canvasMetabolites.length);
+    // 33 reactions - 6 junction reactions - R_MPC (has dedicated gateway marker) = 26 enzyme arrow badges
+    expect(el.querySelectorAll('g.reaction-enzyme-badge').length).toBe(26);
+  });
+
+  it('should render pathway labels, reversibility signs, and clickable allosteric effector chips in inspector', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    const el = fixture.nativeElement as HTMLElement;
+    fixture.detectChanges();
+
+    const pfk = HUMAN_REACTIONS.find((r) => r.code === 'R_PFK1')!;
+    component.onReactionClick(pfk);
+    fixture.detectChanges();
+
+    expect(el.querySelector('.inspector-header__type')?.textContent).toContain('Гликолиз • Стадия 3 из 10');
+    expect(el.querySelector('.rev-pill')?.textContent).toContain('Необратимая');
+    expect(el.querySelector('.flux-divider-arrow')?.textContent?.trim()).toBe('➔');
+
+    // Clickable allosteric inhibitor chip (e.g. Цитрат or АТФ) navigates directly to metabolite view
+    const clickableChip = Array.from(el.querySelectorAll('button.reg-chip.is-clickable'))[0] as HTMLButtonElement;
+    expect(clickableChip).toBeTruthy();
+    clickableChip.click();
+    fixture.detectChanges();
+    expect(component.selectedMetabolite()).toBeTruthy();
+    expect(component.selectedReaction()).toBeNull();
+
+    // Reversible reaction updates inspector arrow, role badges, and localized Leloir header
+    const galt = HUMAN_REACTIONS.find((r) => r.code === 'R_GALT')!;
+    component.onReactionClick(galt);
+    fixture.detectChanges();
+    expect(el.querySelector('.inspector-header__type')?.textContent).toContain('Путь Лелуара');
+    expect(el.querySelector('.rev-pill')?.textContent).toContain('Обратимая');
+    expect(el.querySelector('.flux-divider-arrow')?.textContent?.trim()).toBe('⇄');
+    expect(Array.from(el.querySelectorAll('.role-badge-text')).some((n) => n.textContent?.includes('⇄'))).toBe(true);
+  });
+
+  it('should render localized Russian enzyme labels on canvas badges, junctions, and MPC gateway and switch cleanly to EN', () => {
+    const localeService = TestBed.inject(LocaleService);
+    localeService.setLocale('ru');
+
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    const el = fixture.nativeElement as HTMLElement;
+    try {
+      // Every reaction defines a localized Russian map label
+      for (const rx of HUMAN_REACTIONS) {
+        expect(rx.enzymeShortRu).toBeTruthy();
+        if (rx.junction) {
+          expect(rx.junction.labelRu).toBeTruthy();
+        }
+      }
+
+      component.zoom.set(80);
+      fixture.detectChanges();
+
+      const ruBadges = Array.from(el.querySelectorAll('g.reaction-enzyme-badge-text, .reaction-enzyme-badge-text'))
+        .map((n) => n.textContent?.trim() ?? '');
+      expect(ruBadges).toContain('ФФК-1');
+      expect(ruBadges).toContain('Енолаза');
+      expect(ruBadges).toContain('Фумараза');
+      expect(ruBadges).toContain('Сукц.-КоА синт.');
+      expect(ruBadges).toContain('ПДХ');
+      expect(ruBadges).toContain('УДФГ-пироф.');
+      expect(ruBadges).toContain('Гликогенсинтаза');
+      expect(ruBadges).toContain('Гликогенфосфор.');
+
+      const ruJunctions = Array.from(el.querySelectorAll('.reaction-junction-label'))
+        .map((n) => n.textContent?.trim() ?? '');
+      expect(ruJunctions).toEqual(['АЛДО-A', 'ГАЛТ', 'АЛДО-B', 'ЦС', 'Лактаза', 'Сахараза']);
+      expect(el.querySelector('.mpc-channel-text')?.textContent?.trim()).toBe('МПЦ1/2');
+
+      localeService.setLocale('en');
+      fixture.detectChanges();
+
+      const enBadges = Array.from(el.querySelectorAll('.reaction-enzyme-badge-text'))
+        .map((n) => n.textContent?.trim() ?? '');
+      expect(enBadges).toContain('PFK-1');
+      expect(enBadges).toContain('ENO1');
+      expect(enBadges).toContain('FH');
+      expect(enBadges).toContain('SUCLG2');
+      expect(enBadges).toContain('PDH');
+      expect(enBadges).toContain('UGP2');
+      expect(enBadges).toContain('GYS1/2 + GBE1');
+      expect(enBadges).toContain('PYGL/M + AGL');
+
+      const enJunctions = Array.from(el.querySelectorAll('.reaction-junction-label'))
+        .map((n) => n.textContent?.trim() ?? '');
+      expect(enJunctions).toEqual(['ALDOA', 'GALT', 'ALDOB', 'CS', 'LCT', 'SI']);
+      expect(el.querySelector('.mpc-channel-text')?.textContent?.trim()).toBe('MPC1/2');
+    } finally {
+      localeService.setLocale('ru');
+    }
+  });
+
+  it('should support clickable UTP/UDP/PPi cofactors without Pi or UDP-Glc token collisions and clickable LOD 1 subpathway cards', () => {
+    const atlasState = TestBed.inject(AtlasStateService);
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    const el = fixture.nativeElement as HTMLElement;
+
+    const metUtp = component.allMetabolites.find((m) => m.code === 'MET_UTP')!;
+    const metUdp = component.allMetabolites.find((m) => m.code === 'MET_UDP')!;
+    const metPpi = component.allMetabolites.find((m) => m.code === 'MET_PPI')!;
+    const metPi = component.allMetabolites.find((m) => m.code === 'MET_PI')!;
+    expect(metUtp && metUdp && metPpi && metPi).toBeTruthy();
+
+    // MET_UDP must match R_GYS product UDP without false-matching UDP-glucose in R_GALT/R_GALE/R_UGP2
+    const udpRxs = component.getReactionsForMetabolite(metUdp.id).map((r) => r.rx.code);
+    expect(udpRxs).toEqual(['R_GYS']);
+
+    // MET_PPI must match R_UGP2 while MET_PI matches phosphorolysis R_PYG without matching PPi
+    expect(component.getReactionsForMetabolite(metPpi.id).map((r) => r.rx.code)).toEqual(['R_UGP2']);
+    const piRxCodes = component.getReactionsForMetabolite(metPi.id).map((r) => r.rx.code);
+    expect(piRxCodes).toContain('R_PYG');
+    expect(piRxCodes).not.toContain('R_UGP2');
+
+    // Macro LOD 1 renders clickable subpathway anchor cards that select & focus PW-GLYCOGEN
+    component.zoom.set(35);
+    fixture.detectChanges();
+    const cards = Array.from(el.querySelectorAll('.macro-subpathway-card'));
+    expect(cards.length).toBe(3);
+
+    const glycogenCard = cards.find((c) => c.getAttribute('aria-label')?.includes('гликоген')) as SVGElement;
+    expect(glycogenCard).toBeTruthy();
+    glycogenCard.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fixture.detectChanges();
+
+    expect(atlasState.selectedPathwayId()).toBe('PW-GLYCOGEN');
+    expect(component.selectedReaction()?.code).toBe('R_GYS');
   });
 });

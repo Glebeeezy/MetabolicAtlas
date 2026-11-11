@@ -33,6 +33,7 @@ import { ReactionArrowComponent } from './components/reaction-arrow/reaction-arr
 import { ChemicalStructureComponent } from './components/chemical-structure/chemical-structure.component';
 
 export type InspectorTab = 'reaction' | 'molecule';
+export type CarrierFilter = 'NADH' | 'FADH2' | 'GTP' | 'ATP';
 
 // Re-export data models and datasets for backward compatibility with tests and callers
 export {
@@ -96,7 +97,46 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   readonly reactions = HUMAN_REACTIONS;
   readonly crossroads = HUMAN_CROSSROADS;
   readonly sectorConfigs = SECTOR_LAYOUT_CONFIGS;
+  readonly macroSubpathways = [
+    {
+      pathwayId: 'PW-GALACTOSE',
+      titleRu: 'Лактоза ➔ Путь Лелуара',
+      titleEn: 'Lactose ➔ Leloir Pathway',
+      subtitleRu: 'Гал ➔ Гал-1-Ф ⇄ Г1Ф ➔ Г6Ф',
+      subtitleEn: 'Gal ➔ Gal-1-P ⇄ G1P ➔ G6P',
+      color: '#A855F7',
+      x: 940,
+      y: -190,
+    },
+    {
+      pathwayId: 'PW-GLYCOGEN',
+      titleRu: 'Метаболизм гликогена',
+      titleEn: 'Glycogen Metabolism',
+      subtitleRu: 'Г1Ф ➔ УДФ-Глю ⇄ Гликоген',
+      subtitleEn: 'G1P ➔ UDP-Glc ⇄ Glycogen',
+      color: '#06B6D4',
+      x: 1320,
+      y: -455,
+    },
+    {
+      pathwayId: 'PW-FRUCTOSE',
+      titleRu: 'Сахароза ➔ Фруктолиз',
+      titleEn: 'Sucrose ➔ Fructolysis',
+      subtitleRu: 'Фру ➔ Ф1Ф ➔ ДАФ + ГА',
+      subtitleEn: 'Fru ➔ F1P ➔ DHAP + GA',
+      color: '#F97316',
+      x: 2145,
+      y: 240,
+    },
+  ] as const;
+  private static readonly COVERED_CORRIDOR_HIGHWAYS = new Set(['hw-gly-pdh', 'hw-hub-tca']);
+
   readonly superHighways = PATHWAY_SUPER_HIGHWAYS;
+  readonly visibleSuperHighways = computed(() =>
+    this.lodLevel() >= 2
+      ? this.superHighways.filter((hw) => !AtlasShellComponent.COVERED_CORRIDOR_HIGHWAYS.has(hw.id))
+      : this.superHighways
+  );
 
   // Active selections (Mutex)
   readonly selectedReaction = signal<HumanReactionArrow | null>(null);
@@ -118,7 +158,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
 
   // Interactivity signals
   readonly isFluxAnimated = this.atlasStateService.isFluxAnimated;
-  readonly activeCarrierFilter = signal<'NADH' | 'FADH2' | 'GTP' | null>(null);
+  readonly activeCarrierFilter = signal<CarrierFilter | null>(null);
   readonly copyFeedback = signal<string | null>(null);
   private copyTimeoutId?: ReturnType<typeof setTimeout>;
 
@@ -160,9 +200,18 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
       if (focus.pathwayId === 'PW-GALACTOSE') {
         this.zoom.set(80);
         this.panX.set(Math.round((1600 - 1100) * 0.8));
-        this.panY.set(Math.round((1600 - -160) * 0.8));
+        this.panY.set(Math.round((1600 - -240) * 0.8));
         const galk1 = this.reactions.find((r) => r.code === 'R_GALK1');
         if (galk1) this.onReactionClick(galk1);
+        return;
+      }
+
+      if (focus.pathwayId === 'PW-GLYCOGEN') {
+        this.zoom.set(85);
+        this.panX.set(Math.round((1600 - 1320) * 0.85));
+        this.panY.set(Math.round((1600 - -260) * 0.85));
+        const gys = this.reactions.find((r) => r.code === 'R_GYS');
+        if (gys) this.onReactionClick(gys);
         return;
       }
 
@@ -277,6 +326,49 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     return r.targetMetaboliteId === nodeId || r.secondaryTargetId === nodeId;
   }
 
+  private static normalizeCofactorToken(raw: string): string {
+    return raw
+      .trim()
+      .toLowerCase()
+      .replace(/ᵢ/g, 'i')
+      .replace(/₂/g, '2')
+      .replace(/⁺/g, '+')
+      .replace(/′/g, "'");
+  }
+
+  /**
+   * Matches cofactor alias/token without substring collisions (e.g. UDP vs UDP-Glc, Pi vs PPi).
+   */
+  private doesCofactorMatchCandidate(met: HumanMetaboliteNode, candidate: string): boolean {
+    if (!candidate) return false;
+    const normCandidate = AtlasShellComponent.normalizeCofactorToken(candidate);
+    if (!normCandidate) return false;
+
+    const aliases = [
+      met.nameRu,
+      met.nameEn,
+      met.abbrevRu,
+      met.abbrevEn,
+      ...(met.synonymsRu ?? []),
+      ...(met.synonymsEn ?? []),
+    ]
+      .map((alias) => AtlasShellComponent.normalizeCofactorToken(alias))
+      .filter((alias) => alias.length > 0);
+
+    const candidateNoParen = normCandidate.replace(/\s*\([^)]*\)/g, '').trim();
+    const tokens = normCandidate
+      .split(/[\s()+/,➔→]+/)
+      .map((t) => t.replace(/^[+−\-]+|[+−\-]+$/g, ''))
+      .filter(Boolean);
+
+    return aliases.some(
+      (alias) =>
+        normCandidate === alias ||
+        (candidateNoParen.length > 0 && candidateNoParen === alias) ||
+        tokens.includes(alias)
+    );
+  }
+
   doesReactionInvolveMetabolite(rx: HumanReactionArrow, met: HumanMetaboliteNode): boolean {
     if (
       rx.sourceMetaboliteId === met.id ||
@@ -289,24 +381,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     if (!met.isCofactor) {
       return false;
     }
-    const matches = (candidate: string) => {
-      if (!candidate) return false;
-      const c = candidate.toLowerCase();
-      const ru = met.nameRu.toLowerCase();
-      const en = met.nameEn.toLowerCase();
-      const abbrevRu = met.abbrevRu.toLowerCase();
-      const abbrevEn = met.abbrevEn.toLowerCase();
-      if (c.includes(ru) || c.includes(en) || c.includes(abbrevRu) || c.includes(abbrevEn) || ru.includes(c) || en.includes(c) || abbrevRu.includes(c) || abbrevEn.includes(c)) return true;
-      if (met.synonymsRu.some((syn) => {
-        const s = syn.toLowerCase();
-        return c.includes(s) || s.includes(c);
-      })) return true;
-      if (met.synonymsEn && met.synonymsEn.some((syn) => {
-        const s = syn.toLowerCase();
-        return c.includes(s) || s.includes(c);
-      })) return true;
-      return false;
-    };
+    const matches = (candidate: string) => this.doesCofactorMatchCandidate(met, candidate);
 
     if (rx.substrates.some((s) => matches(s.name) || (s.nameEn && matches(s.nameEn)))) return true;
     if (rx.products.some((p) => matches(p.name) || (p.nameEn && matches(p.nameEn)))) return true;
@@ -348,7 +423,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
           r.targetMetaboliteId === nodeId ||
           r.secondaryTargetId === nodeId
       );
-      if (!hasNode) return true;
+      return !hasNode;
     }
 
     const selR = this.selectedReaction();
@@ -376,9 +451,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     const filter = this.activeCarrierFilter();
     if (filter) {
       const r = this.reactionMap().get(reactionId);
-      if (!r || !this.isReactionMatchesFilter(r, filter)) {
-        return true;
-      }
+      return !r || !this.isReactionMatchesFilter(r, filter);
     }
 
     const selR = this.selectedReaction();
@@ -394,20 +467,36 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  private isReactionMatchesFilter(rx: HumanReactionArrow, filter: 'NADH' | 'FADH2' | 'GTP'): boolean {
-    if (rx.pathwayCode === 'PW-GALACTOSE' || rx.pathwayCode === 'PW-FRUCTOSE') {
-      return false;
+  private static readonly CARRIER_PATTERNS: Record<CarrierFilter, RegExp> = {
+    NADH: /\b(?:nadh|nad\+)\b|надн|над⁺|nad⁺/i,
+    FADH2: /\b(?:fadh2?|fad)\b|фадн|фад/i,
+    GTP: /\b(?:gtp|gdp)\b|гтф|гдф/i,
+    ATP: /\b(?:atp|adp)\b|атф|адф/i,
+  };
+
+  private isReactionMatchesFilter(rx: HumanReactionArrow, filter: CarrierFilter): boolean {
+    const tokens: string[] = [];
+    for (const s of rx.substrates) {
+      tokens.push(s.name, s.nameEn ?? '');
     }
-    if (filter === 'NADH') {
-      return rx.stepNumber === 3 || rx.stepNumber === 4 || rx.stepNumber === 8;
+    for (const p of rx.products) {
+      tokens.push(p.name, p.nameEn ?? '');
     }
-    if (filter === 'FADH2') {
-      return rx.stepNumber === 6;
+    const arc = rx.cofactorArc;
+    if (arc) {
+      tokens.push(
+        arc.inCofactor ?? '',
+        arc.inCofactorEn ?? '',
+        arc.outCofactor ?? '',
+        arc.outCofactorEn ?? '',
+        arc.inText ?? '',
+        arc.outText ?? ''
+      );
+      for (const item of [...(arc.inItems ?? []), ...(arc.outItems ?? [])]) {
+        tokens.push(item.name, item.nameEn ?? '', item.text, item.textEn ?? '');
+      }
     }
-    if (filter === 'GTP') {
-      return rx.stepNumber === 5;
-    }
-    return false;
+    return AtlasShellComponent.CARRIER_PATTERNS[filter].test(tokens.join(' '));
   }
 
   ngOnInit(): void {
@@ -482,6 +571,11 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     }
   }
 
+  onMacroSubpathwayClick(pathwayId: string, event: Event): void {
+    event.stopPropagation();
+    this.atlasStateService.selectPathway(pathwayId);
+  }
+
   selectReactionByCode(code: string): void {
     const rx = this.reactions.find((r) => r.code === code);
     if (rx) {
@@ -493,7 +587,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     this.atlasStateService.toggleFlux();
   }
 
-  toggleEnergyFilter(carrier: 'NADH' | 'FADH2' | 'GTP'): void {
+  toggleEnergyFilter(carrier: CarrierFilter): void {
     if (this.activeCarrierFilter() === carrier) {
       this.activeCarrierFilter.set(null);
     } else {
@@ -504,6 +598,55 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
         this.onReactionClick(firstMatch);
       }
     }
+  }
+
+  getPathwayStepLabel(rx: HumanReactionArrow): string {
+    const isEn = this.localeService.locale() === 'en';
+    if (rx.code === 'R_LCT') {
+      return isEn
+        ? 'Leloir Pathway • Dietary Lactose Entry'
+        : 'Путь Лелуара • Вход (Гидролиз лактозы)';
+    }
+    if (rx.code === 'R_SI') {
+      return isEn
+        ? 'Fructolysis • Dietary Sucrose Entry'
+        : 'Фруктолиз • Вход (Гидролиз сахарозы)';
+    }
+    const labels: Record<string, { ru: string; en: string }> = {
+      'PW-GLYCOLISIS': {
+        ru: `Гликолиз • Стадия ${rx.stepNumber} из 10`,
+        en: `Glycolysis • Step ${rx.stepNumber} of 10`,
+      },
+      'PW-GALACTOSE': {
+        ru: `Путь Лелуара (Галактоза) • Стадия ${rx.stepNumber} из 4`,
+        en: `Leloir Pathway (Galactose) • Step ${rx.stepNumber} of 4`,
+      },
+      'PW-GLYCOGEN': {
+        ru: `Метаболизм гликогена • Стадия ${rx.stepNumber} из 3`,
+        en: `Glycogen Metabolism • Step ${rx.stepNumber} of 3`,
+      },
+      'PW-FRUCTOSE': {
+        ru: `Фруктолиз • Стадия ${rx.stepNumber} из 4`,
+        en: `Fructolysis • Step ${rx.stepNumber} of 4`,
+      },
+      'PW-MPC': {
+        ru: 'Мембранный транспорт • MPC1/2',
+        en: 'Membrane Transport • MPC1/2',
+      },
+      'PW-PDH': {
+        ru: 'ПДХ-комплекс (E1–E2–E3)',
+        en: 'PDH Complex (E1–E2–E3)',
+      },
+      'PW-TCA-CYCLE': {
+        ru: `Цикл Кребса (ЦТК) • Стадия ${rx.stepNumber} из 8`,
+        en: `TCA Cycle • Step ${rx.stepNumber} of 8`,
+      },
+    };
+    const match = rx.pathwayCode ? labels[rx.pathwayCode] : undefined;
+    if (match) {
+      return isEn ? match.en : match.ru;
+    }
+    return isEn ? rx.nameEn : rx.nameRu;
   }
 
   findMetabolite(nameRu?: string, nameEn?: string): HumanMetaboliteNode | undefined {
@@ -573,24 +716,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
       } else if (r.targetMetaboliteId === metId || r.secondaryTargetId === metId) {
         list.push({ rx: r, role: 'product' });
       } else if (targetMet && targetMet.isCofactor) {
-        const matches = (candidate: string) => {
-          if (!candidate) return false;
-          const c = candidate.toLowerCase();
-          const ru = targetMet.nameRu.toLowerCase();
-          const en = targetMet.nameEn.toLowerCase();
-          const abbrevRu = targetMet.abbrevRu.toLowerCase();
-          const abbrevEn = targetMet.abbrevEn.toLowerCase();
-          if (c.includes(ru) || c.includes(en) || c.includes(abbrevRu) || c.includes(abbrevEn) || ru.includes(c) || en.includes(c) || abbrevRu.includes(c) || abbrevEn.includes(c)) return true;
-          if (targetMet.synonymsRu.some((syn) => {
-            const s = syn.toLowerCase();
-            return c.includes(s) || s.includes(c);
-          })) return true;
-          if (targetMet.synonymsEn && targetMet.synonymsEn.some((syn) => {
-            const s = syn.toLowerCase();
-            return c.includes(s) || s.includes(c);
-          })) return true;
-          return false;
-        };
+        const matches = (candidate: string) => this.doesCofactorMatchCandidate(targetMet, candidate);
 
         const isSub =
           r.substrates.some((s) => matches(s.name) || (s.nameEn && matches(s.nameEn))) ||
@@ -624,6 +750,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
       const matchesActive =
         (activePathwayId === 'PW-GLYCOLISIS' && p.pathwayCode === 'PW-GLYCOLISIS') ||
         (activePathwayId === 'PW-GALACTOSE' && (p.pathwayCode === 'PW-GALACTOSE' || p.pathwayCode === 'PWY_LELOIR')) ||
+        (activePathwayId === 'PW-GLYCOGEN' && (p.pathwayCode === 'PW-GLYCOGEN' || p.pathwayCode === 'PWY_GLYCOGEN')) ||
         (activePathwayId === 'PW-FRUCTOSE' && (p.pathwayCode === 'PW-FRUCTOSE' || p.pathwayCode === 'PWY_FRUCTOLYSIS')) ||
         (activePathwayId === 'PW-PDH' && (p.pathwayCode === 'PW-PDH' || p.pathwayCode === 'PW-MPC')) ||
         (activePathwayId === 'PW-TCA-CYCLE' && (p.pathwayCode === 'PW-TCA-CYCLE' || p.pathwayCode === 'PWY_TCA'));

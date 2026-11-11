@@ -39,47 +39,90 @@
   >
     <svg
       class="canvas-svg"
-      viewBox="-500 -500 4200 4200"
+      viewBox="-500 -720 4200 4420"
       preserveAspectRatio="xMidYMid meet"
     >
       <defs>
         <!-- Standard Reaction Arrowhead -->
         <marker
           id="rx-arrowhead"
-          viewBox="0 0 12 12"
-          refX="10"
-          refY="6"
-          markerWidth="9"
-          markerHeight="9"
+          markerUnits="userSpaceOnUse"
+          viewBox="0 0 12 10"
+          refX="11"
+          refY="5"
+          markerWidth="13"
+          markerHeight="11"
           orient="auto-start-reverse"
         >
-          <path d="M 1 2 L 11 6 L 1 10 z" fill="var(--color-reaction-line, #334155)" />
+          <path d="M 1 1 L 11 5 L 1 9 z" fill="var(--color-reaction-line, #334155)" />
         </marker>
 
         <!-- Active/Selected Reaction Arrowhead (Coral) -->
         <marker
           id="rx-arrowhead-active"
-          viewBox="0 0 12 12"
-          refX="10"
-          refY="6"
-          markerWidth="10"
-          markerHeight="10"
+          markerUnits="userSpaceOnUse"
+          viewBox="0 0 12 10"
+          refX="11"
+          refY="5"
+          markerWidth="14"
+          markerHeight="12"
           orient="auto-start-reverse"
         >
-          <path d="M 1 2 L 11 6 L 1 10 z" fill="#FB7185" />
+          <path d="M 1 1 L 11 5 L 1 9 z" fill="#FB7185" />
         </marker>
 
         <!-- Hovered Reaction Arrowhead (Cyan) -->
         <marker
           id="rx-arrowhead-hover"
-          viewBox="0 0 12 12"
-          refX="10"
-          refY="6"
-          markerWidth="10"
-          markerHeight="10"
+          markerUnits="userSpaceOnUse"
+          viewBox="0 0 12 10"
+          refX="11"
+          refY="5"
+          markerWidth="14"
+          markerHeight="12"
           orient="auto-start-reverse"
         >
-          <path d="M 1 2 L 11 6 L 1 10 z" fill="#38BDF8" />
+          <path d="M 1 1 L 11 5 L 1 9 z" fill="#38BDF8" />
+        </marker>
+
+        <!-- Compact Dual-Lane Opposing Reaction Arrowheads (for reversible ⇄ reactions) -->
+        <marker
+          id="rx-arrowhead-dual"
+          markerUnits="userSpaceOnUse"
+          viewBox="0 0 10 8"
+          refX="9"
+          refY="4"
+          markerWidth="9.5"
+          markerHeight="7.5"
+          orient="auto"
+        >
+          <path d="M 1 1 L 9 4 L 1 7 z" fill="var(--color-reaction-line, #334155)" />
+        </marker>
+
+        <marker
+          id="rx-arrowhead-dual-active"
+          markerUnits="userSpaceOnUse"
+          viewBox="0 0 10 8"
+          refX="9"
+          refY="4"
+          markerWidth="10.5"
+          markerHeight="8"
+          orient="auto"
+        >
+          <path d="M 1 1 L 9 4 L 1 7 z" fill="#FB7185" />
+        </marker>
+
+        <marker
+          id="rx-arrowhead-dual-hover"
+          markerUnits="userSpaceOnUse"
+          viewBox="0 0 10 8"
+          refX="9"
+          refY="4"
+          markerWidth="10.5"
+          markerHeight="8"
+          orient="auto"
+        >
+          <path d="M 1 1 L 9 4 L 1 7 z" fill="#38BDF8" />
         </marker>
 
         <!-- Cofactor Small Arrowhead -->
@@ -145,7 +188,7 @@
         <circle cx="1600" cy="1600" r="760" class="polar-grid-circle" />
         <circle cx="1600" cy="1600" r="1300" class="polar-grid-circle" />
         <circle cx="1600" cy="1600" r="1980" class="polar-grid-circle polar-grid-circle--outer" />
-        <line x1="1600" y1="-450" x2="1600" y2="3650" class="polar-axis-line" />
+        <line x1="1600" y1="-650" x2="1600" y2="3650" class="polar-axis-line" />
         <line x1="-450" y1="1600" x2="3650" y2="1600" class="polar-axis-line" />
       </g>
 
@@ -190,11 +233,44 @@
             }
           </g>
         }
+
+        <!-- Macro Sub-Pathway Anchor Cards (Visible at Macro LOD 1) -->
+        @if (lodLevel() === 1) {
+          @for (sub of macroSubpathways; track sub.pathwayId) {
+            <g
+              class="macro-subpathway-card"
+              [class.is-active]="atlasStateService.selectedPathwayId() === sub.pathwayId"
+              [attr.transform]="'translate(' + sub.x + ',' + sub.y + ')'"
+              (click)="onMacroSubpathwayClick(sub.pathwayId, $event)"
+              role="button"
+              tabindex="0"
+              [attr.aria-label]="localeService.locale() === 'ru' ? sub.titleRu : sub.titleEn"
+            >
+              <rect x="-108" y="-22" width="216" height="44" rx="11" class="macro-subpathway-card__bg" />
+              <rect
+                x="-108"
+                y="-22"
+                width="216"
+                height="44"
+                rx="11"
+                class="macro-subpathway-card__border"
+                [attr.stroke]="sub.color"
+              />
+              <circle cx="-88" cy="0" r="4.5" [attr.fill]="sub.color" />
+              <text x="-74" y="-5" class="macro-subpathway-card__title">
+                {{ localeService.locale() === 'ru' ? sub.titleRu : sub.titleEn }}
+              </text>
+              <text x="-74" y="10" class="macro-subpathway-card__desc">
+                {{ localeService.locale() === 'ru' ? sub.subtitleRu : sub.subtitleEn }}
+              </text>
+            </g>
+          }
+        }
       </g>
 
       <!-- 2. Pathway Super-Highways (Flux Channels connecting Sectors) -->
       <g class="superhighways-layer">
-        @for (hw of superHighways; track hw.id) {
+        @for (hw of visibleSuperHighways(); track hw.id) {
           @let isSel = selectedHighway()?.id === hw.id;
           @let isHov = hoveredHighway()?.id === hw.id;
 
@@ -248,17 +324,17 @@
         <!-- Cytosol Compartment (Glycolysis + Galactose Leloir + Fructose Fructolysis) -->
         <rect
           x="560"
-          y="-365"
+          y="-640"
           width="2000"
-          height="1620"
+          height="1895"
           rx="32"
           class="compartment-rect compartment-rect--cytosol"
           fill="url(#cytosolGlow)"
         />
         <!-- Glycolysis Cytosolic Banner -->
         <g class="zone-banner zone-banner--amber">
-          <rect x="1410" y="-345" width="380" height="24" rx="6" class="zone-banner-bg zone-banner-bg--amber" />
-          <text x="1600" y="-333" text-anchor="middle" class="zone-banner-text zone-banner-text--amber">
+          <rect x="1620" y="-338" width="290" height="24" rx="6" class="zone-banner-bg zone-banner-bg--amber" />
+          <text x="1765" y="-326" text-anchor="middle" class="zone-banner-text zone-banner-text--amber">
             {{ localeService.locale() === 'ru' ? 'ГЛИКОЛИЗ • 10 СТАДИЙ (ЦИТОПЛАЗМА)' : 'GLYCOLYSIS • 10 STEPS (CYTOSOL)' }}
           </text>
         </g>
@@ -273,10 +349,28 @@
             rx="18"
             class="leloir-cluster-rect"
           />
-          <g transform="translate(596, -325)">
+          <g transform="translate(815, -325)">
             <rect x="0" y="0" width="280" height="22" rx="4" class="leloir-badge-bg" />
             <text x="140" y="11" text-anchor="middle" class="leloir-badge-text">
               {{ localeService.locale() === 'ru' ? 'ПУТЬ ЛЕЛУАРА • ГАЛАКТОЗА (4 СТАДИИ)' : 'LELOIR PATHWAY • GALACTOSE (4 STEPS)' }}
+            </text>
+          </g>
+        </g>
+
+        <!-- Glycogen Metabolism Sub-Cluster (Synthesis & Phosphorolysis) -->
+        <g class="glycogen-cluster-boundary">
+          <rect
+            x="1132"
+            y="-492"
+            width="376"
+            height="472"
+            rx="18"
+            class="glycogen-cluster-rect"
+          />
+          <g transform="translate(1144, -484)">
+            <rect x="0" y="0" width="244" height="22" rx="4" class="glycogen-badge-bg" />
+            <text x="122" y="11" text-anchor="middle" class="glycogen-badge-text">
+              {{ localeService.locale() === 'ru' ? 'ОБМЕН ГЛИКОГЕНА • СИНТЕЗ И РАСПАД' : 'GLYCOGEN METABOLISM • RESERVE' }}
             </text>
           </g>
         </g>
@@ -319,7 +413,9 @@
           <!-- MPC (Mitochondrial Pyruvate Carrier) Gateway Marker offset clear of arrow axis -->
           <g transform="translate(1672, 1298)" class="mpc-channel-marker">
             <rect x="-42" y="-12" width="84" height="24" rx="6" class="mpc-channel-bg" />
-            <text x="0" y="0" class="mpc-channel-text">MPC1/2</text>
+            <text x="0" y="0" class="mpc-channel-text">
+              {{ localeService.locale() === 'ru' ? 'МПЦ1/2' : 'MPC1/2' }}
+            </text>
           </g>
         </g>
 
@@ -408,6 +504,7 @@
             [isDimmed]="isDim"
             [isFluxAnimated]="isFluxAnimated()"
             [selectedCofactorName]="selectedCofactorName()"
+            [showEnzymeLabel]="lodLevel() >= 2"
             (reactionClick)="onReactionClick($event)"
             (reactionHover)="hoveredReaction.set($event)"
             (reactionLeave)="hoveredReaction.set(null)"
@@ -470,28 +567,36 @@
             <!-- Micro 2D Chemical Skeleton Icon on the left -->
             <g class="metabolite-tile__structure" transform="translate(10, 8)" [innerHTML]="getSafeSvg(met.skeletalSvg)"></g>
 
-            <!-- Text Information -->
-            <text x="64" y="32" class="metabolite-tile__title">
-              {{ localeService.locale() === 'ru' ? met.nameRu : met.nameEn }}
-            </text>
+            <!-- Text Information (Macro LOD 1 shows compact abbreviation; Meso/Micro LOD 2-3 shows full name + formula) -->
+            @if (lodLevel() === 1) {
+              <text x="64" y="42" class="metabolite-tile__abbrev">
+                {{ localeService.locale() === 'ru' ? met.abbrevRu : met.abbrevEn }}
+              </text>
+            } @else {
+              <text x="64" y="32" class="metabolite-tile__title">
+                {{ localeService.locale() === 'ru' ? met.nameRu : met.nameEn }}
+              </text>
 
-            <text x="64" y="49" class="metabolite-tile__formula">
-              {{ met.formula }}
-            </text>
+              <text x="64" y="49" class="metabolite-tile__formula">
+                {{ met.formula }}
+              </text>
+            }
 
             <!-- Role Badge when reaction is selected (Вход / Выход) -->
             @if (isSub) {
+              @let revMark = selectedReaction()?.isReversible ? ' ⇄' : '';
               <g [attr.transform]="'translate(10, ' + (met.height - 18) + ')'">
-                <rect width="102" height="15" rx="3" class="role-badge-bg role-badge-bg--sub" />
-                <text x="51" y="11" text-anchor="middle" class="role-badge-text role-badge-text--sub">
-                  {{ localeService.locale() === 'ru' ? 'Вход (Субстрат)' : 'Input (Substrate)' }}
+                <rect width="110" height="15" rx="3" class="role-badge-bg role-badge-bg--sub" />
+                <text x="55" y="11" text-anchor="middle" class="role-badge-text role-badge-text--sub">
+                  {{ (localeService.locale() === 'ru' ? 'Вход (Субстрат)' : 'Input (Substrate)') + revMark }}
                 </text>
               </g>
             } @else if (isProd) {
+              @let revMark = selectedReaction()?.isReversible ? ' ⇄' : '';
               <g [attr.transform]="'translate(10, ' + (met.height - 18) + ')'">
-                <rect width="102" height="15" rx="3" class="role-badge-bg role-badge-bg--prod" />
-                <text x="51" y="11" text-anchor="middle" class="role-badge-text role-badge-text--prod">
-                  {{ localeService.locale() === 'ru' ? 'Выход (Продукт)' : 'Output (Product)' }}
+                <rect width="110" height="15" rx="3" class="role-badge-bg role-badge-bg--prod" />
+                <text x="55" y="11" text-anchor="middle" class="role-badge-text role-badge-text--prod">
+                  {{ (localeService.locale() === 'ru' ? 'Выход (Продукт)' : 'Output (Product)') + revMark }}
                 </text>
               </g>
             }
@@ -602,17 +707,7 @@
           @if (selectedReaction(); as rx) {
             <span class="live-dot live-dot--rx" aria-hidden="true"></span>
             <span class="type-text">
-              @if (rx.pathwayCode === 'PW-GLYCOLISIS') {
-                {{ localeService.locale() === 'ru' ? ('Гликолиз • Стадия ' + rx.stepNumber + ' из 10') : ('Glycolysis • Step ' + rx.stepNumber + ' of 10') }}
-              } @else if (rx.pathwayCode === 'PW-MPC') {
-                {{ localeService.locale() === 'ru' ? 'Мембранный транспорт • MPC1/2' : 'Membrane Transport • MPC1/2' }}
-              } @else if (rx.pathwayCode === 'PW-PDH') {
-                {{ localeService.locale() === 'ru' ? 'ПДХ-комплекс (E1-E2-E3)' : 'PDH Complex (E1-E2-E3)' }}
-              } @else if (rx.pathwayCode === 'PW-TCA-CYCLE') {
-                {{ localeService.locale() === 'ru' ? ('Цикл Кребса (ЦТК) • Стадия ' + rx.stepNumber + ' из 8') : ('TCA Cycle • Step ' + rx.stepNumber + ' of 8') }}
-              } @else {
-                {{ rx.nameRu }}
-              }
+              {{ getPathwayStepLabel(rx) }}
             </span>
             @if (rx.compartmentRu) {
               <span class="compartment-pill" [class.compartment-pill--cyto]="rx.compartmentRu === 'Цитозоль'" [class.compartment-pill--matrix]="rx.compartmentRu.includes('Матрикс')">
@@ -662,39 +757,32 @@
               class="step-badge"
               [class.step-badge--gly]="rx.pathwayCode === 'PW-GLYCOLISIS'"
               [class.step-badge--gal]="rx.pathwayCode === 'PW-GALACTOSE'"
+              [class.step-badge--glyco]="rx.pathwayCode === 'PW-GLYCOGEN'"
               [class.step-badge--fru]="rx.pathwayCode === 'PW-FRUCTOSE'"
               [class.step-badge--pdh]="rx.pathwayCode === 'PW-PDH'"
               [class.step-badge--mpc]="rx.pathwayCode === 'PW-MPC'"
               [class.step-badge--tca]="rx.pathwayCode === 'PW-TCA-CYCLE'"
             >
-              @if (rx.pathwayCode === 'PW-GLYCOLISIS') {
-                {{ localeService.locale() === 'ru' ? ('Гликолиз • Стадия ' + rx.stepNumber + ' из 10') : ('Glycolysis • Step ' + rx.stepNumber + ' of 10') }}
-              } @else if (rx.pathwayCode === 'PW-GALACTOSE') {
-                {{ localeService.locale() === 'ru' ? ('Путь Лелуара (Галактоза) • Стадия ' + rx.stepNumber + ' из 4') : ('Leloir Pathway (Galactose) • Step ' + rx.stepNumber + ' of 4') }}
-              } @else if (rx.pathwayCode === 'PW-FRUCTOSE') {
-                {{ localeService.locale() === 'ru' ? ('Фруктолиз / Гликолиз • Стадия ' + rx.stepNumber + ' из 4') : ('Fructolysis / Glycolysis • Step ' + rx.stepNumber + ' of 4') }}
-              } @else if (rx.pathwayCode === 'PW-MPC') {
-                {{ localeService.locale() === 'ru' ? 'Шлюз MPC1/2 • Внутренняя мембрана' : 'MPC1/2 Gateway • IMM' }}
-              } @else if (rx.pathwayCode === 'PW-PDH') {
-                {{ localeService.locale() === 'ru' ? 'Комплекс ПДХ • E1-E2-E3' : 'PDH Complex • E1-E2-E3' }}
-              } @else {
-                {{ localeService.locale() === 'ru' ? ('ЦТК (Цикл Кребса) • Стадия ' + rx.stepNumber + ' из 8') : ('TCA Cycle • Step ' + rx.stepNumber + ' of 8') }}
-              }
+              {{ getPathwayStepLabel(rx) }}
             </span>
             <h2 class="rx-title">{{ localeService.locale() === 'ru' ? rx.nameRu : rx.nameEn }}</h2>
             <div class="rx-meta-pill">
               <span class="code-font">{{ rx.code }}</span>
               <span>•</span>
-              <span>{{ rx.isReversible ? (localeService.locale() === 'ru' ? 'Обратимая' : 'Reversible') : (localeService.locale() === 'ru' ? 'Необратимая' : 'Irreversible') }}</span>
+              <span class="rev-pill" [class.is-reversible]="rx.isReversible">
+                {{ rx.isReversible ? (localeService.locale() === 'ru' ? '⇄ Обратимая' : '⇄ Reversible') : (localeService.locale() === 'ru' ? '➔ Необратимая' : '➔ Irreversible') }}
+              </span>
               <span>•</span>
               <span class="energy-font">ΔG°' = {{ rx.deltaG0 }}</span>
             </div>
           </div>
 
-          <!-- Section: Substrate ➔ Product Comparison Cards with Clickable Metabolite & Cofactor Links -->
+          <!-- Section: Substrate ➔/⇄ Product Comparison Cards with Clickable Metabolite & Cofactor Links -->
           <div class="inspector-section">
             <div class="section-title-row">
-              <h3 class="section-title">{{ localeService.locale() === 'ru' ? 'Субстрат ➔ Продукт' : 'Substrate ➔ Product' }}</h3>
+              <h3 class="section-title">
+                {{ localeService.locale() === 'ru' ? ('Субстрат ' + (rx.isReversible ? '⇄' : '➔') + ' Продукт') : ('Substrate ' + (rx.isReversible ? '⇄' : '➔') + ' Product') }}
+              </h3>
               <span class="section-hint">{{ localeService.locale() === 'ru' ? 'нажмите для перехода ↗' : 'click to inspect ↗' }}</span>
             </div>
 
@@ -728,7 +816,7 @@
                 </div>
               </div>
 
-              <div class="flux-divider-arrow" aria-hidden="true">➔</div>
+              <div class="flux-divider-arrow" aria-hidden="true">{{ rx.isReversible ? '⇄' : '➔' }}</div>
 
               <!-- Right: Product Card (Coral outline) -->
               <div class="flux-card flux-card--product">
@@ -803,15 +891,49 @@
               <h3 class="section-title">{{ localeService.locale() === 'ru' ? 'Аллостерическая регуляция' : 'Allosteric Regulation' }}</h3>
               <div class="regulation-grid">
                 @if (rx.activatorsRu; as acts) {
+                  @let activeList = localeService.locale() === 'ru' ? acts : (rx.activatorsEn || acts);
                   <div class="reg-box reg-box--pos">
-                    <span class="reg-title">{{ localeService.locale() === 'ru' ? '+ Активаторы:' : '+ Activators:' }}</span>
-                    <span class="reg-tags">{{ (localeService.locale() === 'ru' ? acts : (rx.activatorsEn || acts)).join(', ') }}</span>
+                    <span class="reg-title">{{ localeService.locale() === 'ru' ? '+ Активаторы' : '+ Activators' }}</span>
+                    <div class="reg-chip-list">
+                      @for (tag of activeList; track tag) {
+                        @let linkedEff = findMetaboliteByName(tag);
+                        @if (linkedEff) {
+                          <button
+                            type="button"
+                            class="reg-chip reg-chip--pos is-clickable"
+                            (click)="onMetaboliteClick(linkedEff)"
+                            [title]="localeService.locale() === 'ru' ? ('Открыть: ' + linkedEff.nameRu) : ('Inspect: ' + linkedEff.nameEn)"
+                          >
+                            {{ tag }} <span aria-hidden="true">↗</span>
+                          </button>
+                        } @else {
+                          <span class="reg-chip reg-chip--pos">{{ tag }}</span>
+                        }
+                      }
+                    </div>
                   </div>
                 }
                 @if (rx.inhibitorsRu; as inhs) {
+                  @let inhibList = localeService.locale() === 'ru' ? inhs : (rx.inhibitorsEn || inhs);
                   <div class="reg-box reg-box--neg">
-                    <span class="reg-title">{{ localeService.locale() === 'ru' ? '− Ингибиторы:' : '− Inhibitors:' }}</span>
-                    <span class="reg-tags">{{ (localeService.locale() === 'ru' ? inhs : (rx.inhibitorsEn || inhs)).join(', ') }}</span>
+                    <span class="reg-title">{{ localeService.locale() === 'ru' ? '− Ингибиторы' : '− Inhibitors' }}</span>
+                    <div class="reg-chip-list">
+                      @for (tag of inhibList; track tag) {
+                        @let linkedEff = findMetaboliteByName(tag);
+                        @if (linkedEff) {
+                          <button
+                            type="button"
+                            class="reg-chip reg-chip--neg is-clickable"
+                            (click)="onMetaboliteClick(linkedEff)"
+                            [title]="localeService.locale() === 'ru' ? ('Открыть: ' + linkedEff.nameRu) : ('Inspect: ' + linkedEff.nameEn)"
+                          >
+                            {{ tag }} <span aria-hidden="true">↗</span>
+                          </button>
+                        } @else {
+                          <span class="reg-chip reg-chip--neg">{{ tag }}</span>
+                        }
+                      }
+                    </div>
                   </div>
                 }
               </div>
@@ -996,7 +1118,7 @@
                           [class.role-pill--sub]="rel.role === 'substrate'"
                           [class.role-pill--prod]="rel.role === 'product'"
                         >
-                          {{ rel.role === 'substrate' ? (localeService.locale() === 'ru' ? 'Вход (Субстрат)' : 'Input (Substrate)') : (localeService.locale() === 'ru' ? 'Выход (Продукт)' : 'Output (Product)') }}
+                          {{ (rel.role === 'substrate' ? (localeService.locale() === 'ru' ? 'Вход (Субстрат)' : 'Input (Substrate)') : (localeService.locale() === 'ru' ? 'Выход (Продукт)' : 'Output (Product)')) + (rel.rx.isReversible ? ' ⇄' : '') }}
                         </span>
                       </div>
                       <div class="related-rx-name">

@@ -1,22 +1,12 @@
-import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
 import { HeaderComponent } from './header.component';
-import { AtlasStateService } from '../../../core/services/atlas-state.service';
 import { SidebarService } from '../../../core/services/sidebar.service';
-
-@Component({ standalone: true, template: '' })
-class DummyComponent {}
 
 describe('HeaderComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HeaderComponent],
-      providers: [
-        provideRouter([{ path: '**', component: DummyComponent }]),
-        AtlasStateService,
-        SidebarService,
-      ],
+      providers: [SidebarService],
     }).compileComponents();
   });
 
@@ -38,33 +28,14 @@ describe('HeaderComponent', () => {
     expect(sidebarService.isOpen()).toBe(false);
   });
 
-  it('should render pathway switcher links in header with ALL as the first item', () => {
+  it('should render brand badge and switcher controls without the center pathway bar', () => {
     const fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
-    const links = fixture.nativeElement.querySelectorAll('.nav__link');
-    expect(links.length).toBeGreaterThanOrEqual(2);
 
-    const firstCode = links[0].querySelector('.nav__code')?.textContent?.trim();
-    expect(firstCode).toBe('ALL');
-  });
-
-  it('should render horizontal scroll buttons', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    fixture.detectChanges();
-    const prevBtn = fixture.nativeElement.querySelector('.nav__scroll-btn--prev');
-    const nextBtn = fixture.nativeElement.querySelector('.nav__scroll-btn--next');
-    expect(prevBtn).toBeTruthy();
-    expect(nextBtn).toBeTruthy();
-  });
-
-  it('should select pathway when clicking a pill', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const atlasStateService = TestBed.inject(AtlasStateService);
-    fixture.detectChanges();
-
-    const links = fixture.nativeElement.querySelectorAll('.nav__link');
-    links[1].click();
-
-    expect(atlasStateService.selectedPathwayId()).toBe('PW-TCA-CYCLE');
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('.header__title-badge')).toBeTruthy();
+    expect(el.querySelector('.nav')).toBeNull();
+    expect(el.querySelector('ma-locale-switcher')).toBeTruthy();
+    expect(el.querySelector('ma-theme-switcher')).toBeTruthy();
   });
 });

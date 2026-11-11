@@ -1,12 +1,25 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   input,
   output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LocaleService } from '../../../../core/services/locale.service';
+import type { ReactionBranch, ReactionJunction } from '../../atlas-data';
+import { computeDualArrowPaths } from '../../utils/reaction-geometry.util';
+
+interface RenderableReactionSegment {
+  id: string;
+  hitboxPath: string;
+  pathData: string;
+  showArrow: boolean;
+  isReversible: boolean;
+  forwardPath: string;
+  reversePath: string;
+}
 
 export type CofactorPreset = 'tangent-swoop' | 'lateral-loop' | 'perpendicular-dip' | 'through-cross';
 
@@ -64,11 +77,14 @@ export interface ReactionArrowData {
   secondaryTargetId?: string;
   secondaryPathData?: string;
   pathData: string;
+  junction?: ReactionJunction;
+  branches?: ReactionBranch[];
   tooltipX: number;
   tooltipY: number;
   enzymeRu: string;
   enzymeEn: string;
   enzymeShort: string;
+  enzymeShortRu?: string;
   ecNumber: string;
   gene: string;
   uniprotId: string;
@@ -96,51 +112,116 @@ export interface ReactionArrowData {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <!-- Invisible wide hitbox for easy clicking -->
-    <svg:path
-      [attr.d]="reaction().pathData"
-      class="reaction-hitbox"
-      fill="none"
-      stroke="transparent"
-      stroke-width="28"
-      (click)="reactionClick.emit(reaction()); $event.stopPropagation()"
-      (mouseenter)="reactionHover.emit(reaction())"
-      (mouseleave)="reactionLeave.emit()"
-    />
+    <svg:g
+      class="reaction-arrow-root"
+      [class.is-selected]="isSelected()"
+      [class.is-hovered]="isHovered()"
+      [class.is-dimmed]="isDimmed()"
+    >
+      @for (seg of renderableSegments(); track seg.id) {
+        <!-- Invisible wide hitbox for easy clicking on every segment -->
+        <svg:path
+          [attr.d]="seg.hitboxPath"
+          class="reaction-hitbox"
+          fill="none"
+          stroke="transparent"
+          stroke-width="28"
+          (click)="onSelect($event)"
+          (mouseenter)="reactionHover.emit(reaction())"
+          (mouseleave)="reactionLeave.emit()"
+        />
 
-    <!-- Visible sleek reaction line -->
-    <svg:path
-      [attr.d]="reaction().pathData"
-      class="reaction-line"
-      fill="none"
-      [attr.marker-start]="reaction().isReversible ? (isSelected() ? 'url(#rx-arrowhead-active)' : (isHovered() ? 'url(#rx-arrowhead-hover)' : 'url(#rx-arrowhead)')) : null"
-      [attr.marker-end]="isSelected() ? 'url(#rx-arrowhead-active)' : (isHovered() ? 'url(#rx-arrowhead-hover)' : 'url(#rx-arrowhead)')"
-      [class.reaction-line--animated]="isFluxAnimated()"
-      (click)="reactionClick.emit(reaction()); $event.stopPropagation()"
-      (mouseenter)="reactionHover.emit(reaction())"
-      (mouseleave)="reactionLeave.emit()"
-    />
+        @if (seg.isReversible) {
+          <!-- Dual parallel/concentric opposing directional lanes (⇄) -->
+          <svg:path
+            [attr.d]="seg.forwardPath"
+            class="reaction-line reaction-line--dual reaction-line--forward"
+            fill="none"
+            [attr.marker-end]="seg.showArrow ? dualMarkerUrl() : null"
+            [class.reaction-line--animated]="isFluxAnimated()"
+            (click)="onSelect($event)"
+            (mouseenter)="reactionHover.emit(reaction())"
+            (mouseleave)="reactionLeave.emit()"
+          />
+          <svg:path
+            [attr.d]="seg.reversePath"
+            class="reaction-line reaction-line--dual reaction-line--reverse"
+            fill="none"
+            [attr.marker-end]="seg.showArrow ? dualMarkerUrl() : null"
+            [class.reaction-line--animated]="isFluxAnimated()"
+            (click)="onSelect($event)"
+            (mouseenter)="reactionHover.emit(reaction())"
+            (mouseleave)="reactionLeave.emit()"
+          />
+          @if (isFluxAnimated() && !isDimmed()) {
+            <svg:path
+              [attr.d]="seg.forwardPath"
+              class="reaction-flux-flow reaction-flux-flow--dual"
+              fill="none"
+            />
+            <svg:path
+              [attr.d]="seg.reversePath"
+              class="reaction-flux-flow reaction-flux-flow--dual"
+              fill="none"
+            />
+          }
+        } @else {
+          <!-- Single directional reaction line -->
+          <svg:path
+            [attr.d]="seg.pathData"
+            class="reaction-line"
+            fill="none"
+            [attr.marker-end]="seg.showArrow ? singleMarkerUrl() : null"
+            [class.reaction-line--animated]="isFluxAnimated()"
+            (click)="onSelect($event)"
+            (mouseenter)="reactionHover.emit(reaction())"
+            (mouseleave)="reactionLeave.emit()"
+          />
+          @if (isFluxAnimated() && !isDimmed()) {
+            <svg:path
+              [attr.d]="seg.pathData"
+              class="reaction-flux-flow"
+              fill="none"
+            />
+          }
+        }
+      }
 
-    <!-- Animated Flux Pulse Overlay (if enabled) -->
-    @if (isFluxAnimated() && !isDimmed()) {
-      <svg:path
-        [attr.d]="reaction().pathData"
-        class="reaction-flux-flow"
-        fill="none"
-      />
-    }
-
-    <!-- Secondary Source Feeder (e.g. Acetyl-CoA feeding down into Citrate Synthase) -->
-    @if (reaction().secondaryPathData) {
-      <svg:path
-        [attr.d]="reaction().secondaryPathData"
-        class="reaction-secondary-line"
-        [class.reaction-secondary-line--active]="isSelected()"
-        [class.reaction-secondary-line--hover]="isHovered()"
-        fill="none"
-        [attr.marker-end]="isSelected() ? 'url(#rx-arrowhead-active)' : (isHovered() ? 'url(#rx-arrowhead-hover)' : 'url(#rx-arrowhead)')"
-      />
-    }
+      <!-- Reaction Junction Pill (for multi-substrate / multi-product enzymes) -->
+      @if (reaction().junction; as junc) {
+        @let jW = junc.width ?? 52;
+        @let jH = junc.height ?? 20;
+        <svg:g
+          class="reaction-junction"
+          [class.is-selected]="isSelected()"
+          [class.is-hovered]="isHovered()"
+          [attr.transform]="'translate(' + junc.x + ',' + junc.y + ')'"
+          (click)="onSelect($event)"
+          (mouseenter)="reactionHover.emit(reaction())"
+          (mouseleave)="reactionLeave.emit()"
+          role="button"
+          tabindex="0"
+          [attr.aria-label]="junctionLabel()"
+        >
+          <svg:rect
+            [attr.x]="-jW / 2"
+            [attr.y]="-jH / 2"
+            [attr.width]="jW"
+            [attr.height]="jH"
+            [attr.rx]="jH / 2"
+            class="reaction-junction-bg"
+          />
+          <svg:text
+            x="0"
+            y="0"
+            text-anchor="middle"
+            dominant-baseline="central"
+            class="reaction-junction-label"
+          >
+            {{ junctionLabel() }}
+          </svg:text>
+        </svg:g>
+      }
 
     <!-- Cofactor Swoop Arc & Clickable Cofactor Pills -->
     @if (reaction().cofactorArc; as arc) {
@@ -318,22 +399,70 @@ export interface ReactionArrowData {
       }
     }
 
-    <!-- Hover Enzyme Tooltip -->
-    @if (isHovered() && !isSelected()) {
+    <!-- Persistent Compact Enzyme Badge (LOD 2-3, for simple non-junction reactions) -->
+    @if (showEnzymeLabel() && !reaction().junction && reaction().code !== 'R_MPC') {
+      @let eW = badgeWidth();
       <svg:g
+        class="reaction-enzyme-badge"
         [attr.transform]="'translate(' + reaction().tooltipX + ',' + reaction().tooltipY + ')'"
-        class="reaction-tooltip"
+        (click)="onSelect($event)"
+        (mouseenter)="reactionHover.emit(reaction())"
+        (mouseleave)="reactionLeave.emit()"
       >
-        <svg:rect x="-95" y="-22" width="190" height="24" rx="5" class="tooltip-bg" />
-        <svg:text x="0" y="-6" text-anchor="middle" class="tooltip-text">
-          {{ reaction().enzymeShort }} • {{ localeService.locale() === 'ru' ? reaction().enzymeRu : reaction().enzymeEn }}
+        <svg:rect
+          [attr.x]="-eW / 2"
+          y="-9"
+          [attr.width]="eW"
+          height="18"
+          rx="9"
+          class="reaction-enzyme-badge-bg"
+        />
+        @if (hasKeyRegulation()) {
+          <svg:circle
+            [attr.cx]="-eW / 2 + 7"
+            cy="0"
+            r="2.2"
+            class="reaction-enzyme-badge-reg"
+          />
+        }
+        <svg:text
+          [attr.x]="hasKeyRegulation() ? 4 : 0"
+          y="0"
+          text-anchor="middle"
+          dominant-baseline="central"
+          class="reaction-enzyme-badge-text"
+        >
+          {{ badgeLabel() }}
         </svg:text>
       </svg:g>
     }
+
+    <!-- Hover Enzyme Tooltip -->
+    @if (isHovered() && !isSelected()) {
+      @let tW = tooltipWidth();
+      <svg:g
+        [attr.transform]="'translate(' + reaction().tooltipX + ',' + resolvedTooltipY() + ')'"
+        class="reaction-tooltip"
+      >
+        <svg:rect [attr.x]="-tW / 2" y="-22" [attr.width]="tW" height="24" rx="5" class="tooltip-bg" />
+        <svg:text x="0" y="-6" text-anchor="middle" class="tooltip-text">
+          {{ tooltipText() }}
+        </svg:text>
+      </svg:g>
+    }
+    </svg:g>
   `,
   styles: [`
     :host {
       display: contents;
+    }
+
+    .reaction-arrow-root {
+      transition: opacity 0.2s ease;
+
+      &.is-dimmed {
+        opacity: 0.18;
+      }
     }
 
     .reaction-hitbox {
@@ -343,11 +472,35 @@ export interface ReactionArrowData {
 
     .reaction-line {
       cursor: pointer;
-      stroke: var(--color-reaction-line, #334155);
+      stroke: var(--color-reaction-line, #334e68);
       stroke-width: 2.8px;
       stroke-linecap: round;
       transition: stroke 0.18s ease, stroke-width 0.18s ease, filter 0.18s ease;
       pointer-events: stroke;
+
+      &--dual {
+        stroke-width: 2.1px;
+      }
+    }
+
+    .reaction-arrow-root.is-hovered:not(.is-selected) .reaction-line {
+      stroke: var(--color-substrate-accent, #38bdf8);
+      stroke-width: 3.5px;
+      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
+
+      &.reaction-line--dual {
+        stroke-width: 2.5px;
+      }
+    }
+
+    .reaction-arrow-root.is-selected .reaction-line {
+      stroke: var(--color-reaction-active, #fb7185);
+      stroke-width: 3.8px;
+      filter: drop-shadow(0 0 10px rgba(251, 113, 133, 0.75));
+
+      &.reaction-line--dual {
+        stroke-width: 2.7px;
+      }
     }
 
     .reaction-flux-flow {
@@ -358,6 +511,11 @@ export interface ReactionArrowData {
       animation: fluxFlowAnim 1.2s linear infinite;
       pointer-events: none;
       opacity: 0.85;
+
+      &--dual {
+        stroke-width: 1.5px;
+        stroke-dasharray: 5 9;
+      }
     }
 
     @keyframes fluxFlowAnim {
@@ -369,23 +527,85 @@ export interface ReactionArrowData {
       }
     }
 
-    .reaction-secondary-line {
-      stroke: var(--color-reaction-line, #334155);
-      stroke-width: 2.2px;
-      stroke-dasharray: 4 3;
-      stroke-linecap: round;
+    .reaction-junction {
+      cursor: pointer;
+      pointer-events: all;
+    }
+
+    .reaction-junction-bg {
+      fill: var(--color-bg-surface, #0f172a);
+      stroke: var(--color-reaction-line, #334e68);
+      stroke-width: 1.8px;
+      transition: stroke 0.18s ease, fill 0.18s ease, filter 0.18s ease;
+    }
+
+    .reaction-junction-label {
+      font-size: 9.5px;
+      font-weight: 800;
+      font-family: var(--font-mono, ui-monospace, monospace);
+      fill: var(--color-text-primary, #e2e8f0);
+      letter-spacing: 0.03em;
+      user-select: none;
       pointer-events: none;
-      transition: stroke 0.18s ease, stroke-width 0.18s ease;
+    }
 
-      &--active {
-        stroke: #fb7185;
-        stroke-width: 2.6px;
-        stroke-dasharray: none;
-      }
+    .reaction-arrow-root.is-hovered:not(.is-selected) .reaction-junction-bg {
+      stroke: var(--color-substrate-accent, #38bdf8);
+      filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.5));
+    }
 
-      &--hover {
-        stroke: #38bdf8;
-      }
+    .reaction-arrow-root.is-selected .reaction-junction-bg {
+      stroke: var(--color-reaction-active, #fb7185);
+      stroke-width: 2.2px;
+      filter: drop-shadow(0 0 8px rgba(251, 113, 133, 0.65));
+    }
+
+    .reaction-arrow-root.is-selected .reaction-junction-label {
+      fill: var(--color-reaction-active, #fb7185);
+    }
+
+    .reaction-enzyme-badge {
+      cursor: pointer;
+      pointer-events: all;
+    }
+
+    .reaction-enzyme-badge-bg {
+      fill: var(--color-bg-surface, #0f172a);
+      stroke: var(--color-border-subtle, #334155);
+      stroke-width: 1.2px;
+      transition: stroke 0.18s ease, fill 0.18s ease;
+    }
+
+    .reaction-enzyme-badge-reg {
+      fill: #f59e0b;
+      pointer-events: none;
+    }
+
+    .reaction-enzyme-badge-text {
+      font-size: 8.5px;
+      font-weight: 700;
+      font-family: var(--font-mono, ui-monospace, monospace);
+      fill: var(--color-text-secondary, #cbd5e1);
+      letter-spacing: 0.02em;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .reaction-arrow-root.is-hovered:not(.is-selected) .reaction-enzyme-badge-bg {
+      stroke: var(--color-substrate-accent, #38bdf8);
+    }
+
+    .reaction-arrow-root.is-hovered:not(.is-selected) .reaction-enzyme-badge-text {
+      fill: var(--color-substrate-accent, #38bdf8);
+    }
+
+    .reaction-arrow-root.is-selected .reaction-enzyme-badge-bg {
+      stroke: var(--color-reaction-active, #fb7185);
+      stroke-width: 1.6px;
+    }
+
+    .reaction-arrow-root.is-selected .reaction-enzyme-badge-text {
+      fill: var(--color-reaction-active, #fb7185);
     }
 
     .cofactor-arc {
@@ -536,11 +756,139 @@ export class ReactionArrowComponent {
   readonly isDimmed = input<boolean>(false);
   readonly isFluxAnimated = input<boolean>(false);
   readonly selectedCofactorName = input<string | null>(null);
+  readonly showEnzymeLabel = input<boolean>(false);
 
   readonly reactionClick = output<ReactionArrowData>();
   readonly reactionHover = output<ReactionArrowData>();
   readonly reactionLeave = output<void>();
   readonly cofactorClick = output<string>();
+
+  readonly renderableSegments = computed<RenderableReactionSegment[]>(() => {
+    const rx = this.reaction();
+    const buildSegment = (
+      id: string,
+      pathData: string,
+      isReversible: boolean,
+      showArrow: boolean
+    ): RenderableReactionSegment => {
+      if (isReversible) {
+        const { forwardPath, reversePath } = computeDualArrowPaths(pathData, 4.5);
+        return {
+          id,
+          hitboxPath: pathData,
+          pathData,
+          showArrow,
+          isReversible: true,
+          forwardPath,
+          reversePath,
+        };
+      }
+      return {
+        id,
+        hitboxPath: pathData,
+        pathData,
+        showArrow,
+        isReversible: false,
+        forwardPath: pathData,
+        reversePath: '',
+      };
+    };
+
+    if (rx.branches?.length) {
+      return rx.branches.map((branch) =>
+        buildSegment(
+          branch.id,
+          branch.pathData,
+          branch.isReversible ?? rx.isReversible,
+          branch.showArrow ?? true
+        )
+      );
+    }
+
+    const segments: RenderableReactionSegment[] = [
+      buildSegment('primary', rx.pathData, rx.isReversible, true),
+    ];
+    if (rx.secondaryPathData) {
+      segments.push(buildSegment('secondary', rx.secondaryPathData, false, true));
+    }
+    return segments;
+  });
+
+  readonly singleMarkerUrl = computed(() =>
+    this.isSelected()
+      ? 'url(#rx-arrowhead-active)'
+      : this.isHovered()
+        ? 'url(#rx-arrowhead-hover)'
+        : 'url(#rx-arrowhead)'
+  );
+
+  readonly dualMarkerUrl = computed(() =>
+    this.isSelected()
+      ? 'url(#rx-arrowhead-dual-active)'
+      : this.isHovered()
+        ? 'url(#rx-arrowhead-dual-hover)'
+        : 'url(#rx-arrowhead-dual)'
+  );
+
+  readonly localizedEnzymeShort = computed(() => {
+    const rx = this.reaction();
+    return this.localeService.locale() === 'en'
+      ? rx.enzymeShort
+      : rx.enzymeShortRu || rx.enzymeShort;
+  });
+
+  readonly junctionLabel = computed(() => {
+    const rx = this.reaction();
+    const junc = rx.junction;
+    if (!junc) return '';
+    return this.localeService.locale() === 'en'
+      ? junc.label || rx.enzymeShort
+      : junc.labelRu || junc.label || this.localizedEnzymeShort();
+  });
+
+  readonly badgeLabel = computed(() => {
+    const rx = this.reaction();
+    if (rx.code === 'R_PDH') {
+      return this.localeService.locale() === 'en' ? 'PDH' : 'ПДХ';
+    }
+    return this.localizedEnzymeShort();
+  });
+
+  readonly hasKeyRegulation = computed(() => {
+    const rx = this.reaction();
+    return !rx.isReversible && Boolean(rx.activatorsRu?.length || rx.inhibitorsRu?.length);
+  });
+
+  readonly badgeWidth = computed(() => {
+    const extra = this.hasKeyRegulation() ? 18 : 12;
+    return Math.max(36, Math.round(this.badgeLabel().length * 5.8 + extra));
+  });
+
+  readonly tooltipText = computed(() => {
+    const rx = this.reaction();
+    const enzymeName = this.localeService.locale() === 'en' ? rx.enzymeEn : rx.enzymeRu;
+    return `${this.localizedEnzymeShort()} • ${enzymeName}`;
+  });
+
+  readonly tooltipWidth = computed(() =>
+    Math.max(140, Math.round(this.tooltipText().length * 5.9 + 24))
+  );
+
+  readonly resolvedTooltipY = computed(() => {
+    const rx = this.reaction();
+    if (rx.junction) {
+      return Math.abs(rx.tooltipY - rx.junction.y) < 22 ? rx.tooltipY - 22 : rx.tooltipY;
+    }
+    if (this.showEnzymeLabel() && rx.code !== 'R_MPC') {
+      return rx.tooltipY - 18;
+    }
+    return rx.tooltipY;
+  });
+
+  onSelect(event: Event): void {
+    event.stopPropagation();
+    this.reactionClick.emit(this.reaction());
+  }
 
   getChipWidth(text: string): number {
     return Math.max(28, text.length * 8.2 + 8);

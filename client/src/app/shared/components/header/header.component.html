@@ -27,61 +27,6 @@
       </div>
     </div>
 
-    <!-- Center: Quick Pathway Switcher with Scroll Controls -->
-    <nav class="nav" [attr.aria-label]="localeService.locale() === 'ru' ? 'Выбор метаболического пути' : 'Metabolic pathway selection'">
-      <button
-        type="button"
-        class="nav__scroll-btn nav__scroll-btn--prev"
-        [class.is-hidden]="!canScrollLeft()"
-        [disabled]="!canScrollLeft()"
-        (click)="scrollLeft()"
-        [attr.aria-label]="localeService.locale() === 'ru' ? 'Прокрутить список путей влево' : 'Scroll pathways left'"
-        [title]="localeService.locale() === 'ru' ? 'Прокрутить влево' : 'Scroll left'"
-      >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-      </button>
-
-      <div
-        #navScrollContainer
-        class="nav__scroll-container"
-        [class.has-left-shadow]="canScrollLeft()"
-        [class.has-right-shadow]="canScrollRight()"
-        (scroll)="updateScrollState()"
-      >
-        <div class="nav__pill-container">
-          @for (item of pathwayPills; track item.id) {
-            <button
-              type="button"
-              class="nav__link"
-              [class.active]="atlasStateService.selectedPathwayId() === item.id"
-              (click)="onSelectPathway(item.id)"
-              [title]="localeService.locale() === 'ru' ? item.nameRu : item.nameEn"
-            >
-              <span class="nav__dot" [style.background-color]="item.dotColor"></span>
-              <span class="nav__label">{{ localeService.locale() === 'ru' ? item.nameRu : item.nameEn }}</span>
-              <span class="nav__code">{{ item.code }}</span>
-            </button>
-          }
-        </div>
-      </div>
-
-      <button
-        type="button"
-        class="nav__scroll-btn nav__scroll-btn--next"
-        [class.is-hidden]="!canScrollRight()"
-        [disabled]="!canScrollRight()"
-        (click)="scrollRight()"
-        [attr.aria-label]="localeService.locale() === 'ru' ? 'Прокрутить список путей вправо' : 'Scroll pathways right'"
-        [title]="localeService.locale() === 'ru' ? 'Прокрутить вправо' : 'Scroll right'"
-      >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </button>
-    </nav>
-
     <!-- Right: Language Switcher on the left, Animated Theme Switcher on the right -->
     <div class="controls">
       <ma-locale-switcher />
