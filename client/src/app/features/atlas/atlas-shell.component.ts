@@ -596,6 +596,13 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     }
   }
 
+  selectMetaboliteByCode(code: string): void {
+    const met = this.allMetabolites.find((m) => m.code === code);
+    if (met) {
+      this.onMetaboliteClick(met);
+    }
+  }
+
   toggleFluxAnimation(): void {
     this.atlasStateService.toggleFlux();
   }

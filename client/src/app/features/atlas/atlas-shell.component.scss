@@ -281,9 +281,7 @@
   border: 1px solid rgba(56, 189, 248, 0.25);
 }
 
-/* ==========================================================================
-   1. Mitochondrial Compartment Backdrop
-   ========================================================================== */
+// 1. Mitochondrial Compartment Backdrop
 .compartment-rect {
   stroke: rgba(255, 255, 255, 0.07);
   stroke-width: 1.5px;
@@ -510,8 +508,14 @@
   stroke-width: 1px;
 }
 
+.oxphos-ims-badge-bg {
+  fill: rgba(15, 23, 42, 0.92);
+  stroke: rgba(56, 189, 248, 0.4);
+  stroke-width: 1px;
+}
+
 .oxphos-ims-text {
-  font-size: 8.2px;
+  font-size: 7.5px;
   font-weight: 800;
   fill: #38bdf8;
   letter-spacing: 0.05em;
@@ -519,11 +523,12 @@
 }
 
 .oxphos-ims-sub {
-  font-size: 7.2px;
+  font-size: 7px;
   font-weight: 700;
   fill: #7dd3fc;
   letter-spacing: 0.04em;
   opacity: 0.85;
+  dominant-baseline: central;
 }
 
 .oxphos-badge-bg {
@@ -668,18 +673,37 @@
   font-family: var(--font-mono, monospace);
 }
 
-.redox-scale-badge {
-  rect {
-    fill: rgba(15, 23, 42, 0.85);
-    stroke: rgba(245, 158, 11, 0.4);
-    stroke-width: 1px;
+.atp-terminal-badge {
+  cursor: pointer;
+  user-select: none;
+
+  .atp-terminal-bg {
+    fill: #0c1a2e;
+    stroke: #38bdf8;
+    stroke-width: 1.8px;
+    filter: drop-shadow(0 2px 8px rgba(56, 189, 248, 0.35));
+    transition: stroke 0.2s ease, filter 0.2s ease, fill 0.2s ease;
   }
 
-  text {
+  &:hover .atp-terminal-bg {
+    stroke: #7dd3fc;
+    fill: #0f2744;
+    filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.6));
+  }
+
+  .atp-terminal-title {
+    font-size: 11px;
+    font-weight: 900;
+    fill: #38bdf8;
+    letter-spacing: 0.06em;
+    dominant-baseline: central;
+  }
+
+  .atp-terminal-sub {
     font-size: 7.5px;
-    font-weight: 800;
-    fill: #fbbf24;
-    font-family: var(--font-mono, monospace);
+    font-weight: 700;
+    fill: #94a3b8;
+    dominant-baseline: central;
   }
 }
 
@@ -692,9 +716,7 @@
   }
 }
 
-/* ==========================================================================
-   2. Crossroads (Inbound & Outbound Inflow Lines)
-   ========================================================================== */
+// 2. Crossroads (Inbound & Outbound Inflow Lines)
 .crossroad-line {
   stroke: #475569;
   stroke-dasharray: 5 4;
@@ -714,9 +736,7 @@
   user-select: none;
 }
 
-/* ==========================================================================
-   3. Primary Reaction Arrows (Direct Flux Flow)
-   ========================================================================== */
+// 3. Primary Reaction Arrows (Direct Flux Flow)
 .reaction-arrow-group {
   cursor: pointer;
   outline: none;
