@@ -345,15 +345,17 @@ describe('AtlasShellComponent', () => {
 
     const nadh = component.findMetaboliteByName('НАДН')!;
     const nadhRxs = component.getReactionsForMetabolite(nadh.id);
-    // 3 TCA (IDH, OGDH, MDH) + 2 Northern (GAPDH, PDH) = 5 reactions
-    expect(nadhRxs.length).toBe(5);
-    expect(nadhRxs.every((item) => item.role === 'product')).toBe(true);
+    // 3 TCA (IDH, OGDH, MDH) + 2 Northern (GAPDH, PDH) + 1 OxPhos (Complex I) = 6 reactions
+    expect(nadhRxs.length).toBe(6);
+    expect(nadhRxs.filter((item) => item.role === 'product').length).toBe(5);
+    expect(nadhRxs.find((item) => item.rx.code === 'R_ETC_CI')?.role).toBe('substrate');
 
     const nad = component.findMetaboliteByName('НАД⁺')!;
     const nadRxs = component.getReactionsForMetabolite(nad.id);
-    // 3 TCA (IDH, OGDH, MDH) + 2 Northern (GAPDH, PDH) = 5 reactions
-    expect(nadRxs.length).toBe(5);
-    expect(nadRxs.every((item) => item.role === 'substrate')).toBe(true);
+    // 3 TCA (IDH, OGDH, MDH) + 2 Northern (GAPDH, PDH) + 1 OxPhos (Complex I) = 6 reactions
+    expect(nadRxs.length).toBe(6);
+    expect(nadRxs.filter((item) => item.role === 'substrate').length).toBe(5);
+    expect(nadRxs.find((item) => item.rx.code === 'R_ETC_CI')?.role).toBe('product');
   });
 
   it('should verify Phase 2 Glycolysis & PDH cascade feeding directly into central Acetyl-CoA', () => {
@@ -939,8 +941,8 @@ describe('AtlasShellComponent', () => {
     expect(el.querySelectorAll('.metabolite-tile__abbrev').length).toBe(0);
     expect(el.querySelectorAll('.metabolite-tile__title').length).toBe(component.canvasMetabolites.length);
     expect(el.querySelectorAll('.metabolite-tile__formula').length).toBe(component.canvasMetabolites.length);
-    // 33 reactions - 6 junction reactions - R_MPC (has dedicated gateway marker) = 26 enzyme arrow badges
-    expect(el.querySelectorAll('g.reaction-enzyme-badge').length).toBe(26);
+    // 37 reactions - 6 junction reactions - R_MPC (has dedicated gateway marker) = 30 enzyme arrow badges
+    expect(el.querySelectorAll('g.reaction-enzyme-badge').length).toBe(30);
   });
 
   it('should render pathway labels, reversibility signs, and clickable allosteric effector chips in inspector', () => {
@@ -1068,5 +1070,77 @@ describe('AtlasShellComponent', () => {
 
     expect(atlasState.selectedPathwayId()).toBe('PW-GLYCOGEN');
     expect(component.selectedReaction()?.code).toBe('R_GYS');
+  });
+
+  it('should render OxPhos crista compartment, 5 decorative complexes, proton gradient, and focus camera on PW-OXPHOS', () => {
+    const atlasState = TestBed.inject(AtlasStateService);
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+
+    // Verify OxPhos Crista compartment & decorative complex structures in SVG
+    expect(el.querySelector('.oxphos-cluster-rect')).toBeTruthy();
+    expect(el.querySelector('.oxphos-ims-band')).toBeTruthy();
+    expect(el.querySelectorAll('.membrane-complex-deco').length).toBe(5);
+
+    // Verify localized complex labels in Russian
+    const complexSubsRu = Array.from(el.querySelectorAll('.membrane-complex-deco .complex-sub')).map((s) => s.textContent?.trim());
+    expect(complexSubsRu).toContain('НАДН-Q');
+    expect(complexSubsRu).toContain('СДГ');
+    expect(complexSubsRu).toContain('Цит. bc₁');
+    expect(complexSubsRu).toContain('ЦОК');
+    expect(complexSubsRu).toContain('F₁ АТФ');
+
+    // Switch to English and verify localized labels
+    const localeService = TestBed.inject(LocaleService);
+    localeService.setLocale('en');
+    fixture.detectChanges();
+
+    const complexSubsEn = Array.from(el.querySelectorAll('.membrane-complex-deco .complex-sub')).map((s) => s.textContent?.trim());
+    expect(complexSubsEn).toContain('NADH-Q');
+    expect(complexSubsEn).toContain('SDH');
+    expect(complexSubsEn).toContain('Cyt bc₁');
+    expect(complexSubsEn).toContain('COX');
+    expect(complexSubsEn).toContain('F₁ ATP');
+
+    // Restore Russian
+    localeService.setLocale('ru');
+    fixture.detectChanges();
+
+    // Verify Proton Gradient Layer & PMF badge
+    expect(el.querySelector('.proton-gradient-layer')).toBeTruthy();
+    expect(el.querySelector('.pmf-badge-bg')).toBeTruthy();
+    expect(el.querySelectorAll('.proton-vector-line').length).toBeGreaterThanOrEqual(4);
+
+    // Verify OxPhos metabolites exist on canvas with authentic formulas
+    const qh2 = component.canvasMetabolites.find((m) => m.code === 'MET_QH2');
+    const cytc = component.canvasMetabolites.find((m) => m.code === 'MET_CYT_C');
+    const o2 = component.canvasMetabolites.find((m) => m.code === 'MET_O2');
+    const h2o = component.canvasMetabolites.find((m) => m.code === 'MET_METABOLIC_H2O');
+    expect(qh2 && cytc && o2 && h2o).toBeTruthy();
+    expect(qh2?.formula).toBe('C₅₉H₉₂O₄');
+    expect(o2?.formula).toBe('O₂');
+    expect(h2o?.formula).toBe('H₂O');
+
+    // Selecting PW-OXPHOS should center camera on crista and select Step 1 (Complex I)
+    atlasState.selectPathway('PW-OXPHOS');
+    fixture.detectChanges();
+
+    expect(component.zoom()).toBe(75);
+    expect(component.panY()).toBe(Math.round((1600 - 3020) * 0.75));
+    expect(component.selectedReaction()?.code).toBe('R_ETC_CI');
+    expect(component.activeTab()).toBe('reaction');
+
+    // Context pill should display OxPhos localized text
+    const pill = el.querySelector('.context-pill__label')?.textContent?.trim();
+    expect(pill).toContain('Дыхательная цепь');
+
+    // HUD quick OxPhos button
+    component.zoom.set(100);
+    component.focusOnOxphos();
+    expect(component.zoom()).toBe(75);
+    expect(component.panY()).toBe(Math.round((1600 - 3020) * 0.75));
   });
 });

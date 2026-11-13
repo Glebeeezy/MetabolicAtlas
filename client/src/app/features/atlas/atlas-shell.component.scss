@@ -493,6 +493,205 @@
   dominant-baseline: central;
 }
 
+.oxphos-cluster-boundary {
+  user-select: none;
+}
+
+.oxphos-cluster-rect {
+  fill: rgba(14, 165, 233, 0.035);
+  stroke: rgba(14, 165, 233, 0.38);
+  stroke-dasharray: 6 4;
+  stroke-width: 1.5px;
+}
+
+.oxphos-ims-band {
+  fill: rgba(14, 165, 233, 0.09);
+  stroke: rgba(56, 189, 248, 0.25);
+  stroke-width: 1px;
+}
+
+.oxphos-ims-text {
+  font-size: 8.2px;
+  font-weight: 800;
+  fill: #38bdf8;
+  letter-spacing: 0.05em;
+  dominant-baseline: central;
+}
+
+.oxphos-ims-sub {
+  font-size: 7.2px;
+  font-weight: 700;
+  fill: #7dd3fc;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+.oxphos-badge-bg {
+  fill: #0f172a;
+  stroke: #0ea5e9;
+  stroke-width: 1.2px;
+}
+
+.oxphos-badge-text {
+  font-size: 10px;
+  font-weight: 800;
+  fill: #38bdf8;
+  letter-spacing: 0.08em;
+  dominant-baseline: central;
+}
+
+.membrane-complex-deco {
+  cursor: pointer;
+
+  .complex-protein-body {
+    fill: #0c1a2e;
+    stroke: #0ea5e9;
+    stroke-width: 1.8px;
+    filter: drop-shadow(0 2px 6px rgba(14, 165, 233, 0.3));
+    transition: stroke 0.2s ease, filter 0.2s ease, fill 0.2s ease;
+  }
+
+  &:hover .complex-protein-body {
+    stroke: #38bdf8;
+    fill: #0f2744;
+    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.5));
+  }
+
+  .complex-label {
+    font-size: 14px;
+    font-weight: 900;
+    fill: #38bdf8;
+    dominant-baseline: central;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .complex-sub {
+    font-size: 8.5px;
+    font-weight: 700;
+    fill: #94a3b8;
+    letter-spacing: 0.04em;
+    dominant-baseline: central;
+  }
+
+  .atp-synthase-stalk {
+    stroke: #0ea5e9;
+    stroke-width: 3.5px;
+    stroke-linecap: round;
+  }
+}
+
+.proton-gradient-layer {
+  user-select: none;
+
+  .proton-vector-line {
+    stroke: #38bdf8;
+    stroke-width: 2.2px;
+    stroke-dasharray: 4 3;
+    animation: protonFluxAnim 1s linear infinite;
+
+    &--downhill {
+      stroke: #10b981;
+      stroke-width: 2.4px;
+      stroke-dasharray: 3 3;
+    }
+  }
+
+  .proton-chip-bg {
+    fill: #0f172a;
+    stroke: #38bdf8;
+    stroke-width: 1px;
+
+    &--atp {
+      stroke: #10b981;
+    }
+  }
+
+  .proton-chip-text {
+    font-size: 8.5px;
+    font-weight: 800;
+    fill: #38bdf8;
+    font-family: var(--font-mono, monospace);
+
+    &--atp {
+      fill: #10b981;
+    }
+  }
+
+  .pmf-badge-bg {
+    fill: rgba(15, 23, 42, 0.9);
+    stroke: #38bdf8;
+    stroke-width: 1.2px;
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.35));
+  }
+
+  .pmf-badge-text {
+    font-size: 9px;
+    font-weight: 800;
+    fill: #e2e8f0;
+    letter-spacing: 0.05em;
+    font-family: var(--font-mono, monospace);
+  }
+}
+
+.substrate-inflow-arrow {
+  stroke: #38bdf8;
+  stroke-width: 2.2px;
+  stroke-dasharray: 4 3;
+  animation: protonFluxAnim 1.2s linear infinite;
+}
+
+.substrate-inflow-label {
+  font-size: 8px;
+  font-weight: 800;
+  fill: #7dd3fc;
+  letter-spacing: 0.05em;
+}
+
+.electron-transfer-path {
+  stroke: #f59e0b;
+  stroke-width: 2.4px;
+  stroke-dasharray: 5 3;
+  animation: protonFluxAnim 1.4s linear infinite;
+  fill: none;
+}
+
+.redox-chip-bg {
+  fill: #0f172a;
+  stroke: #f59e0b;
+  stroke-width: 1.2px;
+}
+
+.redox-chip-text {
+  font-size: 8px;
+  font-weight: 800;
+  fill: #fbbf24;
+  font-family: var(--font-mono, monospace);
+}
+
+.redox-scale-badge {
+  rect {
+    fill: rgba(15, 23, 42, 0.85);
+    stroke: rgba(245, 158, 11, 0.4);
+    stroke-width: 1px;
+  }
+
+  text {
+    font-size: 7.5px;
+    font-weight: 800;
+    fill: #fbbf24;
+    font-family: var(--font-mono, monospace);
+  }
+}
+
+@keyframes protonFluxAnim {
+  from {
+    stroke-dashoffset: 14;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
 /* ==========================================================================
    2. Crossroads (Inbound & Outbound Inflow Lines)
    ========================================================================== */
@@ -1150,6 +1349,10 @@
 
   &--tca {
     color: #38bdf8;
+  }
+
+  &--oxphos {
+    color: #0ea5e9;
   }
 }
 

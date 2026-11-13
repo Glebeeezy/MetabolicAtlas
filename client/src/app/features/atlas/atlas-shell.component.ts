@@ -224,6 +224,13 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
         return;
       }
 
+      if (focus.pathwayId === 'PW-OXPHOS') {
+        this.focusOnOxphos();
+        const ci = this.reactions.find((r) => r.code === 'R_ETC_CI');
+        if (ci) this.onReactionClick(ci);
+        return;
+      }
+
       const sector = this.sectorConfigs.find((s) => s.targetPathwayId === focus.pathwayId);
       if (sector) {
         this.focusOnSector(sector);
@@ -252,6 +259,12 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     this.zoom.set(85);
     this.panX.set(0);
     this.panY.set(Math.round((1600 - 2190) * 0.85));
+  }
+
+  focusOnOxphos(): void {
+    this.zoom.set(75);
+    this.panX.set(0);
+    this.panY.set(Math.round((1600 - 3020) * 0.75));
   }
 
   focusOnSector(sector: SectorLayoutConfig): void {
@@ -641,6 +654,10 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
         ru: `Цикл Кребса (ЦТК) • Стадия ${rx.stepNumber} из 8`,
         en: `TCA Cycle • Step ${rx.stepNumber} of 8`,
       },
+      'PW-OXPHOS': {
+        ru: `Дыхательная цепь (OxPhos) • Стадия ${rx.stepNumber} из 4`,
+        en: `OxPhos / ETC • Step ${rx.stepNumber} of 4`,
+      },
     };
     const match = rx.pathwayCode ? labels[rx.pathwayCode] : undefined;
     if (match) {
@@ -753,7 +770,8 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
         (activePathwayId === 'PW-GLYCOGEN' && (p.pathwayCode === 'PW-GLYCOGEN' || p.pathwayCode === 'PWY_GLYCOGEN')) ||
         (activePathwayId === 'PW-FRUCTOSE' && (p.pathwayCode === 'PW-FRUCTOSE' || p.pathwayCode === 'PWY_FRUCTOLYSIS')) ||
         (activePathwayId === 'PW-PDH' && (p.pathwayCode === 'PW-PDH' || p.pathwayCode === 'PW-MPC')) ||
-        (activePathwayId === 'PW-TCA-CYCLE' && (p.pathwayCode === 'PW-TCA-CYCLE' || p.pathwayCode === 'PWY_TCA'));
+        (activePathwayId === 'PW-TCA-CYCLE' && (p.pathwayCode === 'PW-TCA-CYCLE' || p.pathwayCode === 'PWY_TCA')) ||
+        (activePathwayId === 'PW-OXPHOS' && (p.pathwayCode === 'PW-OXPHOS' || p.pathwayCode === 'PWY_ETC' || p.pathwayCode === 'PWY_OXPHOS'));
 
       if (matchesActive || (activePathwayId === 'ALL' && p.isCurrentPathway)) {
         current.push(p);
