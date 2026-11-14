@@ -13,6 +13,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ApiService } from '../../core/services/api.service';
 import { LocaleService } from '../../core/services/locale.service';
 import { AtlasStateService } from '../../core/services/atlas-state.service';
+import { MetabolismService } from '../../core/metabolism';
 import {
   ALL_METABOLITES,
   COFACTOR_METABOLITES,
@@ -68,6 +69,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   protected readonly api = inject(ApiService);
   protected readonly localeService = inject(LocaleService);
   protected readonly atlasStateService = inject(AtlasStateService);
+  protected readonly metabolismService = inject(MetabolismService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly safeSvgCache = new Map<string, SafeHtml>();
 
@@ -91,12 +93,12 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   private dragStartClientY = 0;
   private hasMovedDrag = false;
 
-  // Static datasets
-  readonly canvasMetabolites = HUMAN_METABOLITES; // Tile nodes on canvas
-  readonly allMetabolites = ALL_METABOLITES;       // Includes all cofactors
-  readonly reactions = HUMAN_REACTIONS;
-  readonly crossroads = HUMAN_CROSSROADS;
-  readonly sectorConfigs = SECTOR_LAYOUT_CONFIGS;
+  // Datasets provided via MetabolismService (Data Access Layer)
+  readonly canvasMetabolites = this.metabolismService.canvasMetabolites; // Tile nodes on canvas
+  readonly allMetabolites = this.metabolismService.allMetabolites;       // Includes all cofactors
+  readonly reactions = this.metabolismService.reactions;
+  readonly crossroads = this.metabolismService.crossroads;
+  readonly sectorConfigs = this.metabolismService.sectorConfigs;
   readonly macroSubpathways = [
     {
       pathwayId: 'PW-GALACTOSE',
@@ -131,7 +133,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   ] as const;
   private static readonly COVERED_CORRIDOR_HIGHWAYS = new Set(['hw-gly-pdh', 'hw-hub-tca']);
 
-  readonly superHighways = PATHWAY_SUPER_HIGHWAYS;
+  readonly superHighways = this.metabolismService.superHighways;
   readonly visibleSuperHighways = computed(() =>
     this.lodLevel() >= 2
       ? this.superHighways.filter((hw) => !AtlasShellComponent.COVERED_CORRIDOR_HIGHWAYS.has(hw.id))
