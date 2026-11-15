@@ -31,9 +31,11 @@ import {
   GlobalMetabolicCanvasState,
 } from './atlas-data';
 import { ReactionArrowComponent } from './components/reaction-arrow/reaction-arrow.component';
-import { ChemicalStructureComponent } from './components/chemical-structure/chemical-structure.component';
 import { AtlasZoomControlsComponent } from './overlays/zoom-controls/atlas-zoom-controls.component';
 import { AtlasContextPillComponent } from './overlays/context-pill/atlas-context-pill.component';
+import { AtlasInspectorComponent } from './overlays/inspector/atlas-inspector.component';
+import { ReactionInspectorComponent } from './overlays/inspector/reaction-inspector/reaction-inspector.component';
+import { MetaboliteInspectorComponent } from './overlays/inspector/metabolite-inspector/metabolite-inspector.component';
 
 export type InspectorTab = 'reaction' | 'molecule';
 export type CarrierFilter = 'NADH' | 'FADH2' | 'GTP' | 'ATP';
@@ -65,9 +67,11 @@ export type {
   imports: [
     CommonModule,
     ReactionArrowComponent,
-    ChemicalStructureComponent,
     AtlasZoomControlsComponent,
     AtlasContextPillComponent,
+    AtlasInspectorComponent,
+    ReactionInspectorComponent,
+    MetaboliteInspectorComponent,
   ],
   templateUrl: './atlas-shell.component.html',
   styleUrl: './atlas-shell.component.scss',

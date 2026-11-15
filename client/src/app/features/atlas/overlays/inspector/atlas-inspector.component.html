@@ -1,0 +1,64 @@
+<aside
+  class="context-inspector"
+  data-interactive="true"
+  [attr.aria-label]="locale() === 'ru' ? 'Контекстная панель биохимической информации' : 'Biochemical context inspector'"
+  (wheel)="$event.stopPropagation()"
+>
+  <!-- Single-Context Inspector Header -->
+  <div class="inspector-header">
+    <div class="inspector-header__type">
+      @if (selectedReaction(); as rx) {
+        <span class="live-dot live-dot--rx" aria-hidden="true"></span>
+        <span class="type-text">
+          {{ getPathwayStepLabel(rx) }}
+        </span>
+        @if (rx.compartmentRu) {
+          <span
+            class="compartment-pill"
+            [class.compartment-pill--cyto]="rx.compartmentRu === 'Цитозоль'"
+            [class.compartment-pill--matrix]="rx.compartmentRu.includes('Матрикс')"
+          >
+            {{ locale() === 'ru' ? rx.compartmentRu : rx.compartmentEn }}
+          </span>
+        }
+      } @else if (selectedMetabolite(); as met) {
+        <span class="live-dot live-dot--met" aria-hidden="true"></span>
+        <span class="type-text">
+          {{ met.isCofactor ? (locale() === 'ru' ? 'Кофермент / Кофактор' : 'Coenzyme / Cofactor') : (locale() === 'ru' ? 'Химическое вещество • Метаболит' : 'Chemical Entity • Metabolite') }}
+        </span>
+        @if (met.compartmentRu) {
+          <span
+            class="compartment-pill"
+            [class.compartment-pill--cyto]="met.compartmentRu === 'Цитозоль'"
+            [class.compartment-pill--matrix]="met.compartmentRu.includes('Матрикс')"
+          >
+            {{ locale() === 'ru' ? met.compartmentRu : met.compartmentEn }}
+          </span>
+        }
+      }
+    </div>
+
+    <button
+      type="button"
+      class="inspector-close-btn"
+      (click)="closeInspector.emit()"
+      [attr.aria-label]="locale() === 'ru' ? 'Закрыть панель' : 'Close inspector'"
+      [title]="locale() === 'ru' ? 'Закрыть панель' : 'Close inspector'"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Copy feedback floating notification toast -->
+  @if (copyFeedback()) {
+    <div class="copy-feedback-toast" role="status">
+      ✓ {{ copyFeedback() }}
+    </div>
+  }
+
+  <ng-content select="[reaction-view]"></ng-content>
+  <ng-content select="[metabolite-view]"></ng-content>
+</aside>

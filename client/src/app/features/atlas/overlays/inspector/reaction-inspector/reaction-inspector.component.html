@@ -1,0 +1,192 @@
+@let rx = reaction();
+<div class="inspector-content">
+  <!-- Step Title -->
+  <div class="rx-header">
+    <span
+      class="step-badge"
+      [class.step-badge--gly]="rx.pathwayCode === 'PW-GLYCOLISIS'"
+      [class.step-badge--gal]="rx.pathwayCode === 'PW-GALACTOSE'"
+      [class.step-badge--glyco]="rx.pathwayCode === 'PW-GLYCOGEN'"
+      [class.step-badge--fru]="rx.pathwayCode === 'PW-FRUCTOSE'"
+      [class.step-badge--pdh]="rx.pathwayCode === 'PW-PDH'"
+      [class.step-badge--mpc]="rx.pathwayCode === 'PW-MPC'"
+      [class.step-badge--tca]="rx.pathwayCode === 'PW-TCA-CYCLE'"
+      [class.step-badge--oxphos]="rx.pathwayCode === 'PW-OXPHOS'"
+    >
+      {{ getPathwayStepLabel(rx) }}
+    </span>
+    <h2 class="rx-title">{{ locale() === 'ru' ? rx.nameRu : rx.nameEn }}</h2>
+    <div class="rx-meta-pill">
+      <span class="code-font">{{ rx.code }}</span>
+      <span>•</span>
+      <span class="rev-pill" [class.is-reversible]="rx.isReversible">
+        {{ rx.isReversible ? (locale() === 'ru' ? '⇄ Обратимая' : '⇄ Reversible') : (locale() === 'ru' ? '➔ Необратимая' : '➔ Irreversible') }}
+      </span>
+      <span>•</span>
+      <span class="energy-font">ΔG°' = {{ rx.deltaG0 }}</span>
+    </div>
+  </div>
+
+  <!-- Section: Substrate ➔/⇄ Product Comparison Cards with Clickable Metabolite & Cofactor Links -->
+  <div class="inspector-section">
+    <div class="section-title-row">
+      <h3 class="section-title">
+        {{ locale() === 'ru' ? ('Субстрат ' + (rx.isReversible ? '⇄' : '➔') + ' Продукт') : ('Substrate ' + (rx.isReversible ? '⇄' : '➔') + ' Product') }}
+      </h3>
+      <span class="section-hint">{{ locale() === 'ru' ? 'нажмите для перехода ↗' : 'click to inspect ↗' }}</span>
+    </div>
+
+    <div class="flux-cards-container">
+      <!-- Left: Substrate Card (Cyan outline) -->
+      <div class="flux-card flux-card--substrate">
+        <div class="flux-card__header">
+          <span class="flux-card__tag">{{ locale() === 'ru' ? 'Вход (Субстраты)' : 'Input (Substrates)' }}</span>
+        </div>
+        <div class="flux-card__list">
+          @for (sub of rx.substrates; track $index) {
+            @let linkedMet = findMetabolite(sub.name, sub.nameEn);
+            <div
+              class="participant-row"
+              [class.is-co]="sub.isCo"
+              [class.is-clickable]="!!linkedMet"
+              (click)="linkedMet && metaboliteClick.emit(linkedMet)"
+              [attr.role]="linkedMet ? 'button' : null"
+              [attr.tabindex]="linkedMet ? 0 : null"
+              [attr.title]="linkedMet ? (locale() === 'ru' ? ('Перейти к: ' + linkedMet.nameRu) : ('Navigate to: ' + linkedMet.nameEn)) : null"
+            >
+              <div class="participant-name-group">
+                <span class="participant-name">{{ locale() === 'ru' ? sub.name : (sub.nameEn || sub.name) }}</span>
+                @if (linkedMet) {
+                  <span class="participant-nav-icon" aria-hidden="true">↗</span>
+                }
+              </div>
+              <span class="participant-formula font-mono">{{ sub.formula }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="flux-divider-arrow" aria-hidden="true">{{ rx.isReversible ? '⇄' : '➔' }}</div>
+
+      <!-- Right: Product Card (Coral outline) -->
+      <div class="flux-card flux-card--product">
+        <div class="flux-card__header">
+          <span class="flux-card__tag">{{ locale() === 'ru' ? 'Выход (Продукты)' : 'Output (Products)' }}</span>
+        </div>
+        <div class="flux-card__list">
+          @for (prod of rx.products; track $index) {
+            @let linkedMet = findMetabolite(prod.name, prod.nameEn);
+            <div
+              class="participant-row"
+              [class.is-co]="prod.isCo"
+              [class.is-clickable]="!!linkedMet"
+              (click)="linkedMet && metaboliteClick.emit(linkedMet)"
+              [attr.role]="linkedMet ? 'button' : null"
+              [attr.tabindex]="linkedMet ? 0 : null"
+              [attr.title]="linkedMet ? (locale() === 'ru' ? ('Перейти к: ' + linkedMet.nameRu) : ('Navigate to: ' + linkedMet.nameEn)) : null"
+            >
+              <div class="participant-name-group">
+                <span class="participant-name">{{ locale() === 'ru' ? prod.name : (prod.nameEn || prod.name) }}</span>
+                @if (linkedMet) {
+                  <span class="participant-nav-icon" aria-hidden="true">↗</span>
+                }
+              </div>
+              <span class="participant-formula font-mono">{{ prod.formula }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section: Catalytic Enzyme -->
+  <div class="inspector-section">
+    <h3 class="section-title">{{ locale() === 'ru' ? 'Катализирующий фермент' : 'Catalytic Enzyme' }}</h3>
+    <div class="enzyme-details-card">
+      <div class="enzyme-details-card__title">
+        <span>{{ locale() === 'ru' ? rx.enzymeRu : rx.enzymeEn }}</span>
+        <span class="gene-pill">{{ locale() === 'ru' ? 'ген: ' : 'gene: ' }}{{ rx.gene }}</span>
+      </div>
+
+      <div class="enzyme-meta-row">
+        <span class="ec-badge font-mono">{{ locale() === 'ru' ? 'Шифр КФ / EC: ' : 'Enzyme Comm. / EC: ' }}{{ rx.ecNumber }}</span>
+        <a
+          [href]="'https://www.uniprot.org/uniprotkb/' + rx.uniprotId"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="uniprot-link"
+        >
+          UniProt: {{ rx.uniprotId }} ↗
+        </a>
+      </div>
+
+      <p class="enzyme-mechanism-desc">
+        {{ locale() === 'ru' ? rx.mechanismRu : (rx.mechanismEn || rx.mechanismRu) }}
+      </p>
+
+      @if (rx.clinicalNoteRu) {
+        <div class="clinical-note-box">
+          <span class="clinical-note-icon">💡</span>
+          <span class="clinical-note-text">
+            {{ locale() === 'ru' ? rx.clinicalNoteRu : (rx.clinicalNoteEn || rx.clinicalNoteRu) }}
+          </span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Section: Allosteric Regulation -->
+  @if (rx.activatorsRu || rx.inhibitorsRu) {
+    <div class="inspector-section">
+      <h3 class="section-title">{{ locale() === 'ru' ? 'Аллостерическая регуляция' : 'Allosteric Regulation' }}</h3>
+      <div class="regulation-grid">
+        @if (rx.activatorsRu; as acts) {
+          @let activeList = locale() === 'ru' ? acts : (rx.activatorsEn || acts);
+          <div class="reg-box reg-box--pos">
+            <span class="reg-title">{{ locale() === 'ru' ? '+ Активаторы' : '+ Activators' }}</span>
+            <div class="reg-chip-list">
+              @for (tag of activeList; track $index) {
+                @let linkedEff = findMetaboliteByName(tag);
+                @if (linkedEff) {
+                  <button
+                    type="button"
+                    class="reg-chip reg-chip--pos is-clickable"
+                    (click)="metaboliteClick.emit(linkedEff)"
+                    [title]="locale() === 'ru' ? ('Открыть: ' + linkedEff.nameRu) : ('Inspect: ' + linkedEff.nameEn)"
+                  >
+                    {{ tag }} <span aria-hidden="true">↗</span>
+                  </button>
+                } @else {
+                  <span class="reg-chip reg-chip--pos">{{ tag }}</span>
+                }
+              }
+            </div>
+          </div>
+        }
+        @if (rx.inhibitorsRu; as inhs) {
+          @let inhibList = locale() === 'ru' ? inhs : (rx.inhibitorsEn || inhs);
+          <div class="reg-box reg-box--neg">
+            <span class="reg-title">{{ locale() === 'ru' ? '− Ингибиторы' : '− Inhibitors' }}</span>
+            <div class="reg-chip-list">
+              @for (tag of inhibList; track $index) {
+                @let linkedEff = findMetaboliteByName(tag);
+                @if (linkedEff) {
+                  <button
+                    type="button"
+                    class="reg-chip reg-chip--neg is-clickable"
+                    (click)="metaboliteClick.emit(linkedEff)"
+                    [title]="locale() === 'ru' ? ('Открыть: ' + linkedEff.nameRu) : ('Inspect: ' + linkedEff.nameEn)"
+                  >
+                    {{ tag }} <span aria-hidden="true">↗</span>
+                  </button>
+                } @else {
+                  <span class="reg-chip reg-chip--neg">{{ tag }}</span>
+                }
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

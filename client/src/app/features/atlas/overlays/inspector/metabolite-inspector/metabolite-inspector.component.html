@@ -1,0 +1,280 @@
+@let met = metabolite();
+<div class="inspector-content">
+  <!-- Molecule / Cofactor Title -->
+  <div class="molecule-header">
+    <div class="title-carbon-row">
+      <h2 class="molecule-title">{{ locale() === 'ru' ? met.nameRu : met.nameEn }}</h2>
+      <span class="carbon-pill">{{ locale() === 'ru' ? met.carbons : (met.carbonsEn || met.carbons) }}</span>
+    </div>
+    <div class="molecule-en-name">
+      {{ locale() === 'ru' ? (met.nameEn + ' (' + met.abbrevRu + ')') : (met.nameRu + ' (' + met.abbrevEn + ')') }}
+    </div>
+  </div>
+
+  <!-- Big Formula & 2D Structure Card with Quick Copy -->
+  <div class="structure-visual-card">
+    <div class="structure-visual-card__top">
+      <div class="structure-visual-card__formula">
+        {{ met.formula }}
+      </div>
+      <button
+        type="button"
+        class="quick-copy-btn"
+        (click)="triggerCopy(met.formula, locale() === 'ru' ? 'Формула' : 'Formula')"
+        [title]="locale() === 'ru' ? 'Скопировать формулу' : 'Copy formula'"
+        [attr.aria-label]="locale() === 'ru' ? 'Скопировать химическую формулу' : 'Copy chemical formula'"
+      >
+        {{ locale() === 'ru' ? 'Копировать 📋' : 'Copy 📋' }}
+      </button>
+    </div>
+
+    <div class="structure-visual-card__drawing">
+      <ma-chemical-structure
+        [svgContent]="met.structureSvg || met.skeletalSvg"
+        [altText]="(locale() === 'ru' ? '2D-структура: ' : '2D Structure: ') + (locale() === 'ru' ? met.nameRu : met.nameEn)"
+      />
+    </div>
+    <div class="structure-visual-card__note">
+      {{ met.isCofactor ? (locale() === 'ru' ? 'Структурная схема кофермента / кофактора' : 'Structural scheme of coenzyme / cofactor') : (locale() === 'ru' ? 'Скелетная 2D-структура промежуточного метаболита' : 'Skeletal 2D structure of intermediate metabolite') }}
+    </div>
+  </div>
+
+  <!-- Description -->
+  <p class="molecule-desc">
+    {{ locale() === 'ru' ? met.descriptionRu : (met.descriptionEn || met.descriptionRu) }}
+  </p>
+
+  <!-- MULTI-PATHWAY / MULTI-CYCLE PARTICIPATION SECTION -->
+  <div class="inspector-section">
+    <div class="section-title-row">
+      <h3 class="section-title">{{ locale() === 'ru' ? 'Участие в метаболических путях и циклах' : 'Metabolic Pathway Participation' }}</h3>
+      <span class="section-count">({{ met.pathwaysRu?.length || 1 }})</span>
+    </div>
+
+    @if (getSortedPathways(met); as sorted) {
+      <!-- 1. Current Active Pathway (TCA Cycle) - Pinned Priority -->
+      @if (sorted.current.length > 0) {
+        <div class="pathway-group pathway-group--current">
+          <div class="pathway-group__header">
+            <span class="live-dot live-dot--current"></span>
+            <span class="pathway-group__title">
+              {{ locale() === 'ru' ? (sorted.current[0].pathwayNameRu || 'Текущий активный путь') : (sorted.current[0].pathwayNameEn || 'Current Active Pathway') }}
+            </span>
+            <span class="pathway-priority-tag">
+              {{ locale() === 'ru' ? 'Активный путь' : 'Active Pathway' }}
+            </span>
+          </div>
+
+          <div class="pathway-items-list">
+            @for (item of sorted.current; track $index) {
+              <div
+                class="pathway-item-card pathway-item-card--current"
+                [class.is-clickable]="!!item.reactionCode"
+                (click)="item.reactionCode && reactionCodeClick.emit(item.reactionCode)"
+                role="button"
+                [attr.tabindex]="item.reactionCode ? 0 : null"
+                [attr.title]="item.reactionCode ? (locale() === 'ru' ? ('Нажмите для перехода к реакции ' + item.reactionCode) : ('Click to view reaction ' + item.reactionCode)) : null"
+              >
+                <div class="pathway-item-top">
+                  @if (item.stepNumber) {
+                    <span class="step-pill">
+                      {{ locale() === 'ru' ? ('Стадия ' + item.stepNumber) : ('Step ' + item.stepNumber) }}
+                    </span>
+                  }
+                  <span
+                    class="role-pill"
+                    [class.role-pill--sub]="item.role === 'substrate'"
+                    [class.role-pill--prod]="item.role === 'product'"
+                    [class.role-pill--co]="item.role === 'cofactor'"
+                  >
+                    {{ getRoleName(item.role) }}
+                  </span>
+                  @if (item.reactionCode) {
+                    <span class="jump-arrow">{{ locale() === 'ru' ? 'перейти ↗' : 'view ↗' }}</span>
+                  }
+                </div>
+                <p class="pathway-item-desc">
+                  {{ locale() === 'ru' ? item.detailsRu : (item.detailsEn || item.detailsRu) }}
+                </p>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- 2. Other Human Pathways (Crossroads, Glycolysis, Lipids, etc.) -->
+      @if (sorted.others.length > 0) {
+        <div class="pathway-group pathway-group--others">
+          <div class="pathway-group__header">
+            <span class="pathway-group__title">
+              {{ locale() === 'ru' ? 'Другие метаболические пути' : 'Other Metabolic Pathways' }}
+            </span>
+          </div>
+
+          <div class="pathway-items-list">
+            @for (item of sorted.others; track $index) {
+              <div
+                class="pathway-item-card pathway-item-card--other"
+                [class.is-clickable]="!!item.reactionCode"
+                (click)="item.reactionCode && reactionCodeClick.emit(item.reactionCode)"
+                role="button"
+                [attr.tabindex]="item.reactionCode ? 0 : null"
+                [attr.title]="item.reactionCode ? (locale() === 'ru' ? ('Нажмите для перехода к реакции ' + item.reactionCode) : ('Click to view reaction ' + item.reactionCode)) : null"
+              >
+                <div class="pathway-item-top">
+                  <span class="other-pathway-badge">
+                    {{ locale() === 'ru' ? item.pathwayNameRu : (item.pathwayNameEn || item.pathwayNameRu) }}
+                  </span>
+                  @if (item.stepNumber) {
+                    <span class="step-pill">
+                      {{ locale() === 'ru' ? ('Стадия ' + item.stepNumber) : ('Step ' + item.stepNumber) }}
+                    </span>
+                  }
+                  <span class="role-pill role-pill--subtle">
+                    {{ getRoleName(item.role) }}
+                  </span>
+                  @if (item.reactionCode) {
+                    <span class="jump-arrow">{{ locale() === 'ru' ? 'перейти ↗' : 'view ↗' }}</span>
+                  }
+                </div>
+                <p class="pathway-item-desc">
+                  {{ locale() === 'ru' ? item.detailsRu : (item.detailsEn || item.detailsRu) }}
+                </p>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- Connected Reactions (Two-way link to reaction passport!) -->
+  @if (relatedReactions(); as relatedRxs) {
+    @if (relatedRxs.length > 0) {
+      <div class="inspector-section">
+        <h3 class="section-title">
+          {{ locale() === 'ru' ? 'Связанные стадии на карте' : 'Connected Pathway Steps' }}
+        </h3>
+        <div class="related-reactions-list">
+          @for (rel of relatedRxs; track rel.rx.id) {
+            <div
+              class="related-rx-item"
+              (click)="reactionClick.emit(rel.rx)"
+              role="button"
+              tabindex="0"
+              [attr.title]="(locale() === 'ru' ? 'Открыть реакцию: ' : 'Open reaction: ') + (locale() === 'ru' ? rel.rx.nameRu : rel.rx.nameEn)"
+            >
+              <div class="related-rx-header">
+                <span class="step-pill">
+                  {{ locale() === 'ru' ? ('Стадия ' + rel.rx.stepNumber) : ('Step ' + rel.rx.stepNumber) }}
+                </span>
+                <span
+                  class="role-pill"
+                  [class.role-pill--sub]="rel.role === 'substrate'"
+                  [class.role-pill--prod]="rel.role === 'product'"
+                >
+                  {{ (rel.role === 'substrate' ? (locale() === 'ru' ? 'Вход (Субстрат)' : 'Input (Substrate)') : (locale() === 'ru' ? 'Выход (Продукт)' : 'Output (Product)')) + (rel.rx.isReversible ? ' ⇄' : '') }}
+                </span>
+              </div>
+              <div class="related-rx-name">
+                <span>{{ locale() === 'ru' ? rel.rx.nameRu : rel.rx.nameEn }}</span>
+                <span class="related-rx-arrow">↗</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+
+  <!-- Chemical properties -->
+  <div class="inspector-section">
+    <h3 class="section-title">
+      {{ locale() === 'ru' ? 'Биохимические свойства' : 'Biochemical Properties' }}
+    </h3>
+    @if (met.smiles) {
+      <div class="info-row">
+        <span class="info-label">SMILES-код:</span>
+        <button
+          type="button"
+          class="code-copy-btn font-mono text-xs"
+          (click)="triggerCopy(met.smiles, 'SMILES')"
+          [title]="locale() === 'ru' ? 'Нажмите, чтобы скопировать SMILES' : 'Click to copy SMILES'"
+        >
+          {{ met.smiles.length > 28 ? (met.smiles | slice:0:28) + '...' : met.smiles }} 📋
+        </button>
+      </div>
+    }
+    <div class="info-row">
+      <span class="info-label">{{ locale() === 'ru' ? 'Компартмент:' : 'Compartment:' }}</span>
+      <span class="info-value">{{ locale() === 'ru' ? (met.compartmentRu || 'Матрикс митохондрий') : (met.compartmentEn || 'Mitochondrial Matrix') }} (H. sapiens)</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">{{ locale() === 'ru' ? 'Углеродный остов:' : 'Carbon Backbone:' }}</span>
+      <span class="info-value font-mono font-bold">{{ locale() === 'ru' ? met.carbons : (met.carbonsEn || met.carbons) }}</span>
+    </div>
+  </div>
+
+  <!-- External Cross-References (PubChem / ChEBI / InChIKey) -->
+  <div class="inspector-section">
+    <h3 class="section-title">{{ locale() === 'ru' ? 'Внешние базы данных' : 'External Databases' }}</h3>
+
+    @if (met.chebi) {
+      <div class="db-card">
+        <div class="db-card__head">
+          <span class="db-title">ChEBI</span>
+          <a
+            [href]="'https://www.ebi.ac.uk/chebi/searchId.do?chebiId=' + met.chebi"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="db-ext-link"
+          >
+            {{ met.chebi }} ↗
+          </a>
+        </div>
+      </div>
+    }
+
+    @if (met.inchiKey) {
+      <div class="db-card">
+        <div class="db-card__head">
+          <span class="db-title">InChIKey</span>
+          <button
+            type="button"
+            class="code-copy-btn font-mono text-xs"
+            (click)="triggerCopy(met.inchiKey, 'InChIKey')"
+            [title]="locale() === 'ru' ? 'Нажмите, чтобы скопировать InChIKey' : 'Click to copy InChIKey'"
+          >
+            {{ met.inchiKey }} 📋
+          </button>
+        </div>
+      </div>
+    }
+
+    <div class="db-card">
+      <div class="db-card__head">
+        <span class="db-title">PubChem</span>
+        <a
+          [href]="'https://pubchem.ncbi.nlm.nih.gov/#query=' + met.nameEn"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="db-ext-link"
+        >
+          {{ locale() === 'ru' ? 'Открыть в PubChem ↗' : 'Open in PubChem ↗' }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Synonyms -->
+  @if (met.synonymsRu && met.synonymsRu.length > 0) {
+    <div class="inspector-section">
+      <h3 class="section-title">{{ locale() === 'ru' ? 'Синонимы и тривиальные названия' : 'Synonyms & Trivial Names' }}</h3>
+      <div class="synonyms-tags">
+        @for (syn of (locale() === 'ru' ? met.synonymsRu : (met.synonymsEn || met.synonymsRu)); track $index) {
+          <span class="syn-tag">{{ syn }}</span>
+        }
+      </div>
+    </div>
+  }
+</div>

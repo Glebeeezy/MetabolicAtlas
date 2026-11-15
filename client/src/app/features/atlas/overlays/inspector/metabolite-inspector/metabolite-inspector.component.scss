@@ -1,0 +1,456 @@
+:host {
+  display: contents;
+}
+
+.inspector-content {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.25rem;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-strong);
+    border-radius: 3px;
+  }
+}
+
+.molecule-header {
+  margin-bottom: 1rem;
+}
+
+.title-carbon-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.molecule-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.carbon-pill {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: var(--color-substrate-accent);
+  background: rgba(56, 189, 248, 0.15);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+}
+
+.molecule-en-name {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.2rem;
+}
+
+/* Visual Card with big formula and 2D chemical structure */
+.structure-visual-card {
+  padding: 1.25rem 1rem;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 1rem;
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 0.75rem;
+  }
+
+  &__formula {
+    font-family: var(--font-mono);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--color-substrate-accent);
+    letter-spacing: 0.04em;
+    margin-bottom: 0;
+  }
+
+  &__drawing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 110px;
+    margin-bottom: 0.6rem;
+    padding: 0.5rem 0.25rem;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+  }
+
+  &__note {
+    font-size: 0.725rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+}
+
+.quick-copy-btn {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--color-border-subtle);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-substrate-accent);
+    background: rgba(56, 189, 248, 0.1);
+    border-color: var(--color-substrate-accent);
+  }
+}
+
+.code-copy-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  transition: all var(--transition-fast);
+
+  &:hover {
+    color: var(--color-substrate-accent);
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.molecule-desc {
+  font-size: 0.825rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+}
+
+/* Sections */
+.inspector-section {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+
+  .section-title {
+    margin-bottom: 0;
+  }
+}
+
+.section-count {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+/* Multi-Pathway / Multi-Cycle Participation */
+.pathway-group {
+  margin-bottom: 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-surface);
+  overflow: hidden;
+
+  &--current {
+    border-color: rgba(56, 189, 248, 0.4);
+    background: rgba(56, 189, 248, 0.03);
+
+    .pathway-group__header {
+      background: rgba(56, 189, 248, 0.08);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+  }
+
+  &--others {
+    .pathway-group__header {
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  &__title {
+    font-size: 0.725rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-primary);
+    flex: 1;
+  }
+}
+
+.live-dot--current {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  background: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+}
+
+.pathway-priority-tag {
+  font-size: 0.625rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius-sm);
+}
+
+.pathway-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.pathway-item-card {
+  padding: 0.6rem 0.75rem;
+  transition: all var(--transition-fast);
+
+  &--current {
+    &.is-clickable {
+      cursor: pointer;
+
+      &:hover {
+        background: rgba(56, 189, 248, 0.08);
+
+        .jump-arrow {
+          transform: translate(2px, -2px);
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  &--other {
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .pathway-item-top {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .pathway-item-desc {
+    font-size: 0.75rem;
+    line-height: 1.45;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .other-pathway-badge {
+    font-size: 0.675rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  .jump-arrow {
+    font-size: 0.675rem;
+    font-weight: 700;
+    color: var(--color-substrate-accent);
+    opacity: 0.7;
+    margin-left: auto;
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
+  }
+}
+
+.role-pill--co {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.role-pill--subtle {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Related Reactions for Selected Metabolite */
+.related-reactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.related-rx-item {
+  padding: 0.55rem 0.75rem;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+
+  &:hover {
+    border-color: var(--color-substrate-accent);
+    background: rgba(56, 189, 248, 0.06);
+
+    .related-rx-arrow {
+      transform: translate(2px, -2px);
+      opacity: 1;
+    }
+  }
+
+  .related-rx-header {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .step-pill {
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--color-substrate-accent);
+    background: rgba(56, 189, 248, 0.12);
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .role-pill {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--radius-sm);
+
+    &--sub {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    &--prod {
+      color: #fb7185;
+      background: rgba(251, 113, 133, 0.12);
+    }
+  }
+
+  .related-rx-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .related-rx-arrow {
+    color: var(--color-substrate-accent);
+    opacity: 0.7;
+    font-weight: 700;
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
+  }
+}
+
+/* General properties row */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  font-size: 0.8rem;
+
+  .info-label {
+    color: var(--color-text-secondary);
+  }
+
+  .info-value {
+    color: var(--color-text-primary);
+  }
+}
+
+.text-xs {
+  font-size: 0.725rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+/* External Database Cards */
+.db-card {
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  margin-bottom: 0.45rem;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .db-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+  }
+
+  .db-ext-link {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--color-substrate-accent);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Synonyms Tags */
+.synonyms-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+
+  .syn-tag {
+    font-size: 0.725rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-subtle);
+    color: var(--color-text-secondary);
+  }
+}
