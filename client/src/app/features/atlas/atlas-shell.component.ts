@@ -7,6 +7,7 @@ import {
   OnDestroy,
   OnInit,
   signal,
+  ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -60,7 +61,11 @@ export type {
 @Component({
   selector: 'ma-atlas-shell',
   standalone: true,
-  imports: [CommonModule, ReactionArrowComponent, ChemicalStructureComponent],
+  imports: [
+    CommonModule,
+    ReactionArrowComponent,
+    ChemicalStructureComponent,
+  ],
   templateUrl: './atlas-shell.component.html',
   styleUrl: './atlas-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -310,6 +315,9 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   // Global pan handlers
   private onWindowMouseMoveHandler?: (e: MouseEvent) => void;
   private onWindowMouseUpHandler?: (e: MouseEvent) => void;
+  private rafPanId: number | null = null;
+  private pendingPanX = 0;
+  private pendingPanY = 0;
 
   // Fast ID dictionaries
   readonly metaboliteMap = computed(() => {
@@ -328,17 +336,177 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     return map;
   });
 
-  // Highlight check helpers
-  isSubstrateOfSelected(nodeId: string): boolean {
+  // O(1) Reactive computed sets for highlight checks
+  readonly selectedSubstrateIds = computed<Set<string>>(() => {
     const r = this.selectedReaction();
-    if (!r) return false;
-    return r.sourceMetaboliteId === nodeId || r.secondarySourceId === nodeId;
+    if (!r) return new Set();
+    const set = new Set<string>();
+    if (r.sourceMetaboliteId) set.add(r.sourceMetaboliteId);
+    if (r.secondarySourceId) set.add(r.secondarySourceId);
+    return set;
+  });
+
+  readonly selectedProductIds = computed<Set<string>>(() => {
+    const r = this.selectedReaction();
+    if (!r) return new Set();
+    const set = new Set<string>();
+    if (r.targetMetaboliteId) set.add(r.targetMetaboliteId);
+    if (r.secondaryTargetId) set.add(r.secondaryTargetId);
+    return set;
+  });
+
+  readonly matchingQueryNodeIds = computed<Set<string> | null>(() => {
+    const query = this.atlasStateService.searchQuery().toLowerCase();
+    if (!query) return null;
+    const matched = new Set<string>();
+    for (const met of this.canvasMetabolites) {
+      if (
+        met.nameRu.toLowerCase().includes(query) ||
+        met.nameEn.toLowerCase().includes(query) ||
+        met.code.toLowerCase().includes(query) ||
+        met.formula.toLowerCase().includes(query) ||
+        met.synonymsRu.some((s) => s.toLowerCase().includes(query))
+      ) {
+        matched.add(met.id);
+      }
+    }
+    return matched;
+  });
+
+  readonly matchingQueryReactionIds = computed<Set<string> | null>(() => {
+    const query = this.atlasStateService.searchQuery().toLowerCase();
+    if (!query) return null;
+    const matched = new Set<string>();
+    for (const rx of this.reactions) {
+      if (
+        rx.nameRu.toLowerCase().includes(query) ||
+        rx.nameEn.toLowerCase().includes(query) ||
+        rx.enzymeRu.toLowerCase().includes(query) ||
+        rx.code.toLowerCase().includes(query) ||
+        rx.substrates.some((s) => s.name.toLowerCase().includes(query)) ||
+        rx.products.some((p) => p.name.toLowerCase().includes(query))
+      ) {
+        matched.add(rx.id);
+      }
+    }
+    return matched;
+  });
+
+  readonly activeCarrierMatchingReactionIds = computed<Set<string> | null>(() => {
+    const filter = this.activeCarrierFilter();
+    if (!filter) return null;
+    const matched = new Set<string>();
+    for (const rx of this.reactions) {
+      if (this.isReactionMatchesFilter(rx, filter)) {
+        matched.add(rx.id);
+      }
+    }
+    return matched;
+  });
+
+  readonly activeCarrierMatchingNodeIds = computed<Set<string> | null>(() => {
+    const rxIds = this.activeCarrierMatchingReactionIds();
+    if (!rxIds) return null;
+    const matched = new Set<string>();
+    for (const rx of this.reactions) {
+      if (rxIds.has(rx.id)) {
+        matched.add(rx.sourceMetaboliteId);
+        if (rx.secondarySourceId) matched.add(rx.secondarySourceId);
+        matched.add(rx.targetMetaboliteId);
+        if (rx.secondaryTargetId) matched.add(rx.secondaryTargetId);
+      }
+    }
+    return matched;
+  });
+
+  readonly selectedMetaboliteInvolvedReactionIds = computed<Set<string> | null>(() => {
+    const selM = this.selectedMetabolite();
+    if (!selM) return null;
+    const matched = new Set<string>();
+    for (const rx of this.reactions) {
+      if (this.doesReactionInvolveMetabolite(rx, selM)) {
+        matched.add(rx.id);
+      }
+    }
+    return matched;
+  });
+
+  readonly dimmedNodeIds = computed<Set<string>>(() => {
+    const set = new Set<string>();
+    const queryMatches = this.matchingQueryNodeIds();
+    const carrierNodes = this.activeCarrierMatchingNodeIds();
+    const selR = this.selectedReaction();
+    const subIds = this.selectedSubstrateIds();
+    const prodIds = this.selectedProductIds();
+
+    for (const met of this.canvasMetabolites) {
+      if (queryMatches !== null && !queryMatches.has(met.id)) {
+        set.add(met.id);
+        continue;
+      }
+      if (carrierNodes !== null) {
+        if (!carrierNodes.has(met.id)) {
+          set.add(met.id);
+        }
+        continue;
+      }
+      if (selR) {
+        if (!subIds.has(met.id) && !prodIds.has(met.id)) {
+          set.add(met.id);
+        }
+      }
+    }
+    return set;
+  });
+
+  readonly dimmedReactionIds = computed<Set<string>>(() => {
+    const set = new Set<string>();
+    const queryMatches = this.matchingQueryReactionIds();
+    const carrierRxs = this.activeCarrierMatchingReactionIds();
+    const selR = this.selectedReaction();
+    const selMRxs = this.selectedMetaboliteInvolvedReactionIds();
+
+    for (const rx of this.reactions) {
+      if (queryMatches !== null && !queryMatches.has(rx.id)) {
+        set.add(rx.id);
+        continue;
+      }
+      if (carrierRxs !== null) {
+        if (!carrierRxs.has(rx.id)) {
+          set.add(rx.id);
+        }
+        continue;
+      }
+      if (selR) {
+        if (selR.id !== rx.id) {
+          set.add(rx.id);
+        }
+        continue;
+      }
+      if (selMRxs !== null) {
+        if (!selMRxs.has(rx.id)) {
+          set.add(rx.id);
+        }
+      }
+    }
+    return set;
+  });
+
+  // Highlight check helpers (O(1) using computed sets)
+  isSubstrateOfSelected(nodeId: string): boolean {
+    return this.selectedSubstrateIds().has(nodeId);
   }
 
   isProductOfSelected(nodeId: string): boolean {
-    const r = this.selectedReaction();
-    if (!r) return false;
-    return r.targetMetaboliteId === nodeId || r.secondaryTargetId === nodeId;
+    return this.selectedProductIds().has(nodeId);
+  }
+
+  isNodeDimmed(nodeId: string): boolean {
+    return this.dimmedNodeIds().has(nodeId);
+  }
+
+  isReactionDimmed(reactionId: string): boolean {
+    return this.dimmedReactionIds().has(reactionId);
   }
 
   private static normalizeCofactorToken(raw: string): string {
@@ -413,75 +581,6 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  isNodeDimmed(nodeId: string): boolean {
-    const query = this.atlasStateService.searchQuery().toLowerCase();
-    if (query) {
-      const met = this.metaboliteMap().get(nodeId);
-      if (!met) return true;
-      const match =
-        met.nameRu.toLowerCase().includes(query) ||
-        met.nameEn.toLowerCase().includes(query) ||
-        met.code.toLowerCase().includes(query) ||
-        met.formula.toLowerCase().includes(query) ||
-        met.synonymsRu.some((s) => s.toLowerCase().includes(query));
-      if (!match) return true;
-    }
-
-    const filter = this.activeCarrierFilter();
-    if (filter) {
-      // Keep nodes participating in filtered reactions bright
-      const rxMatches = this.reactions.filter((r) => this.isReactionMatchesFilter(r, filter));
-      const hasNode = rxMatches.some(
-        (r) =>
-          r.sourceMetaboliteId === nodeId ||
-          r.secondarySourceId === nodeId ||
-          r.targetMetaboliteId === nodeId ||
-          r.secondaryTargetId === nodeId
-      );
-      return !hasNode;
-    }
-
-    const selR = this.selectedReaction();
-    if (selR) {
-      return !this.isSubstrateOfSelected(nodeId) && !this.isProductOfSelected(nodeId);
-    }
-    return false;
-  }
-
-  isReactionDimmed(reactionId: string): boolean {
-    const query = this.atlasStateService.searchQuery().toLowerCase();
-    if (query) {
-      const rx = this.reactionMap().get(reactionId);
-      if (!rx) return true;
-      const match =
-        rx.nameRu.toLowerCase().includes(query) ||
-        rx.nameEn.toLowerCase().includes(query) ||
-        rx.enzymeRu.toLowerCase().includes(query) ||
-        rx.code.toLowerCase().includes(query) ||
-        rx.substrates.some((s) => s.name.toLowerCase().includes(query)) ||
-        rx.products.some((p) => p.name.toLowerCase().includes(query));
-      if (!match) return true;
-    }
-
-    const filter = this.activeCarrierFilter();
-    if (filter) {
-      const r = this.reactionMap().get(reactionId);
-      return !r || !this.isReactionMatchesFilter(r, filter);
-    }
-
-    const selR = this.selectedReaction();
-    if (selR) {
-      return selR.id !== reactionId;
-    }
-    const selM = this.selectedMetabolite();
-    if (selM) {
-      const r = this.reactionMap().get(reactionId);
-      if (!r) return true;
-      return !this.doesReactionInvolveMetabolite(r, selM);
-    }
-    return false;
-  }
-
   private static readonly CARRIER_PATTERNS: Record<CarrierFilter, RegExp> = {
     NADH: /\b(?:nadh|nad\+)\b|надн|над⁺|nad⁺/i,
     FADH2: /\b(?:fadh2?|fad)\b|фадн|фад/i,
@@ -540,14 +639,33 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
         if (dx > 4 || dy > 4) {
           this.hasMovedDrag = true;
         }
-        this.panX.set(e.clientX - this.dragStartX);
-        this.panY.set(e.clientY - this.dragStartY);
+        this.pendingPanX = e.clientX - this.dragStartX;
+        this.pendingPanY = e.clientY - this.dragStartY;
+
+        if (typeof requestAnimationFrame === 'function') {
+          if (this.rafPanId === null) {
+            this.rafPanId = requestAnimationFrame(() => {
+              this.panX.set(this.pendingPanX);
+              this.panY.set(this.pendingPanY);
+              this.rafPanId = null;
+            });
+          }
+        } else {
+          this.panX.set(this.pendingPanX);
+          this.panY.set(this.pendingPanY);
+        }
       }
     };
 
     this.onWindowMouseUpHandler = () => {
       if (this.isDragging()) {
         this.isDragging.set(false);
+        if (this.rafPanId !== null && typeof cancelAnimationFrame === 'function') {
+          cancelAnimationFrame(this.rafPanId);
+          this.rafPanId = null;
+          this.panX.set(this.pendingPanX);
+          this.panY.set(this.pendingPanY);
+        }
       }
     };
 
@@ -556,6 +674,10 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   }
 
   private removeGlobalPanListeners(): void {
+    if (this.rafPanId !== null && typeof cancelAnimationFrame === 'function') {
+      cancelAnimationFrame(this.rafPanId);
+      this.rafPanId = null;
+    }
     if (typeof window === 'undefined') return;
     if (this.onWindowMouseMoveHandler) {
       window.removeEventListener('mousemove', this.onWindowMouseMoveHandler);
@@ -859,22 +981,74 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   }
 
   onWheel(event: WheelEvent): void {
-    const target = event.target as HTMLElement;
+    const target = event.target as HTMLElement | null;
     // Only suppress map zoom when hovering over the right inspector panel to allow its native text scrolling
-    if (target.closest('.context-inspector')) {
+    if (target?.closest?.('.context-inspector')) {
       return;
     }
     event.preventDefault();
+
     const zoomDelta = event.deltaY < 0 ? 10 : -10;
-    this.zoom.update((z) => Math.max(15, Math.min(250, z + zoomDelta)));
+    const oldZoom = this.zoom();
+    const newZoom = Math.max(15, Math.min(250, oldZoom + zoomDelta));
+    if (newZoom === oldZoom) return;
+
+    const s1 = oldZoom / 100;
+    const s2 = newZoom / 100;
+
+    // Find the canvas-viewport to get mouse cursor relative to container
+    const viewport =
+      (event.currentTarget as HTMLElement | null) ??
+      target?.closest?.('.canvas-viewport') ??
+      null;
+
+    if (viewport && typeof viewport.getBoundingClientRect === 'function') {
+      const rect = viewport.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0 && typeof event.clientX === 'number') {
+        const Cx = event.clientX - rect.left;
+        const Cy = event.clientY - rect.top;
+        const Ox = rect.width / 2;
+        const Oy = rect.height / 2;
+
+        const panX1 = this.panX();
+        const panY1 = this.panY();
+
+        const scaleDiff = s2 / s1 - 1;
+        const panX2 = panX1 - (Cx - Ox - panX1) * scaleDiff;
+        const panY2 = panY1 - (Cy - Oy - panY1) * scaleDiff;
+
+        this.panX.set(Math.round(panX2));
+        this.panY.set(Math.round(panY2));
+        this.zoom.set(newZoom);
+        return;
+      }
+    }
+
+    // Fallback if viewport geometry is not available (e.g. headless tests)
+    this.zoom.set(newZoom);
+  }
+
+  /**
+   * Applies screen-centric zoom (used by bottom-right HUD buttons).
+   * Zooms relative to the center of the screen/viewport.
+   */
+  private applyScreenCentricZoom(zoomDelta: number): void {
+    const oldZoom = this.zoom();
+    const newZoom = Math.max(15, Math.min(250, oldZoom + zoomDelta));
+    if (newZoom === oldZoom) return;
+
+    const ratio = newZoom / oldZoom;
+    this.panX.update((x) => Math.round(x * ratio));
+    this.panY.update((y) => Math.round(y * ratio));
+    this.zoom.set(newZoom);
   }
 
   zoomIn(): void {
-    this.zoom.update((z) => Math.min(z + 15, 250));
+    this.applyScreenCentricZoom(15);
   }
 
   zoomOut(): void {
-    this.zoom.update((z) => Math.max(z - 15, 15));
+    this.applyScreenCentricZoom(-15);
   }
 
   resetZoom(): void {

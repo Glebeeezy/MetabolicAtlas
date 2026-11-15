@@ -919,7 +919,7 @@
                   <span class="flux-card__tag">{{ localeService.locale() === 'ru' ? 'Вход (Субстраты)' : 'Input (Substrates)' }}</span>
                 </div>
                 <div class="flux-card__list">
-                  @for (sub of rx.substrates; track sub.name) {
+                  @for (sub of rx.substrates; track $index) {
                     @let linkedMet = findMetabolite(sub.name, sub.nameEn);
                     <div
                       class="participant-row"
@@ -950,7 +950,7 @@
                   <span class="flux-card__tag">{{ localeService.locale() === 'ru' ? 'Выход (Продукты)' : 'Output (Products)' }}</span>
                 </div>
                 <div class="flux-card__list">
-                  @for (prod of rx.products; track prod.name) {
+                  @for (prod of rx.products; track $index) {
                     @let linkedMet = findMetabolite(prod.name, prod.nameEn);
                     <div
                       class="participant-row"
@@ -1021,7 +1021,7 @@
                   <div class="reg-box reg-box--pos">
                     <span class="reg-title">{{ localeService.locale() === 'ru' ? '+ Активаторы' : '+ Activators' }}</span>
                     <div class="reg-chip-list">
-                      @for (tag of activeList; track tag) {
+                      @for (tag of activeList; track $index) {
                         @let linkedEff = findMetaboliteByName(tag);
                         @if (linkedEff) {
                           <button
@@ -1044,7 +1044,7 @@
                   <div class="reg-box reg-box--neg">
                     <span class="reg-title">{{ localeService.locale() === 'ru' ? '− Ингибиторы' : '− Inhibitors' }}</span>
                     <div class="reg-chip-list">
-                      @for (tag of inhibList; track tag) {
+                      @for (tag of inhibList; track $index) {
                         @let linkedEff = findMetaboliteByName(tag);
                         @if (linkedEff) {
                           <button
@@ -1137,7 +1137,7 @@
                   </div>
 
                   <div class="pathway-items-list">
-                    @for (item of sorted.current; track item.pathwayCode + item.detailsRu) {
+                    @for (item of sorted.current; track $index) {
                       <div
                         class="pathway-item-card pathway-item-card--current"
                         [class.is-clickable]="!!item.reactionCode"
@@ -1183,7 +1183,7 @@
                   </div>
 
                   <div class="pathway-items-list">
-                    @for (item of sorted.others; track item.pathwayCode + item.pathwayNameRu) {
+                    @for (item of sorted.others; track $index) {
                       <div
                         class="pathway-item-card pathway-item-card--other"
                         [class.is-clickable]="!!item.reactionCode"
@@ -1342,7 +1342,7 @@
             <div class="inspector-section">
               <h3 class="section-title">{{ localeService.locale() === 'ru' ? 'Синонимы и тривиальные названия' : 'Synonyms & Trivial Names' }}</h3>
               <div class="synonyms-tags">
-                @for (syn of (localeService.locale() === 'ru' ? met.synonymsRu : (met.synonymsEn || met.synonymsRu)); track syn) {
+                @for (syn of (localeService.locale() === 'ru' ? met.synonymsRu : (met.synonymsEn || met.synonymsRu)); track $index) {
                   <span class="syn-tag">{{ syn }}</span>
                 }
               </div>

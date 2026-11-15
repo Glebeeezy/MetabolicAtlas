@@ -307,6 +307,86 @@ describe('AtlasShellComponent', () => {
     expect(component.zoom()).toBe(110); // unchanged
   });
 
+  it('should perform screen-centric zoom on HUD zoomIn and zoomOut when canvas is panned', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    // Initial state
+    expect(component.zoom()).toBe(100);
+    component.panX.set(100);
+    component.panY.set(-50);
+
+    // Zoom in (+15%)
+    component.zoomIn();
+    expect(component.zoom()).toBe(115);
+    expect(component.panX()).toBe(115);
+    expect(component.panY()).toBe(-57);
+
+    // Zoom out (-15%)
+    component.zoomOut();
+    expect(component.zoom()).toBe(100);
+    expect(component.panX()).toBe(100);
+    expect(component.panY()).toBe(-50);
+  });
+
+  it('should perform mouse-centric zoom on wheel relative to cursor position', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.zoom()).toBe(100);
+    expect(component.panX()).toBe(0);
+    expect(component.panY()).toBe(0);
+
+    const mockViewport = document.createElement('section');
+    mockViewport.classList.add('canvas-viewport');
+    mockViewport.getBoundingClientRect = () =>
+      ({
+        left: 0,
+        top: 0,
+        right: 1000,
+        bottom: 800,
+        width: 1000,
+        height: 800,
+        x: 0,
+        y: 0,
+        toJSON: () => {},
+      }) as DOMRect;
+
+    const childTarget = document.createElement('polygon');
+    mockViewport.appendChild(childTarget);
+
+    // Zoom in from 100% to 110% at cursor (700, 400), center is (500, 400)
+    // Offset from center is +200px. At +10% zoom, panX should adjust by -20px.
+    const wheelIn = new WheelEvent('wheel', {
+      deltaY: -100,
+      clientX: 700,
+      clientY: 400,
+      bubbles: true,
+    });
+    Object.defineProperty(wheelIn, 'target', { value: childTarget });
+
+    component.onWheel(wheelIn);
+    expect(component.zoom()).toBe(110);
+    expect(component.panX()).toBe(-20);
+    expect(component.panY()).toBe(0);
+
+    // Zoom out from 110% to 100% at same cursor (700, 400)
+    const wheelOut = new WheelEvent('wheel', {
+      deltaY: 100,
+      clientX: 700,
+      clientY: 400,
+      bubbles: true,
+    });
+    Object.defineProperty(wheelOut, 'target', { value: childTarget });
+
+    component.onWheel(wheelOut);
+    expect(component.zoom()).toBe(100);
+    expect(component.panX()).toBe(0);
+    expect(component.panY()).toBe(0);
+  });
+
   it('should perform global cross-highlighting when a cofactor is selected', () => {
     const fixture = TestBed.createComponent(AtlasShellComponent);
     const component = fixture.componentInstance;

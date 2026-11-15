@@ -8,8 +8,25 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LocaleService } from '../../../../core/services/locale.service';
-import type { ReactionBranch, ReactionJunction } from '../../atlas-data';
+import {
+  CofactorParticipant,
+  CofactorPreset,
+  HumanReactionArrow,
+  ReactionBranch,
+  ReactionCofactorArc,
+  ReactionJunction,
+} from '../../../../core/metabolism';
 import { computeDualArrowPaths } from '../../utils/reaction-geometry.util';
+
+export type {
+  CofactorPreset,
+  CofactorParticipant,
+  ReactionCofactorArc,
+  ReactionBranch,
+  ReactionJunction,
+};
+
+export type ReactionArrowData = HumanReactionArrow;
 
 interface RenderableReactionSegment {
   id: string;
@@ -19,92 +36,6 @@ interface RenderableReactionSegment {
   isReversible: boolean;
   forwardPath: string;
   reversePath: string;
-}
-
-export type CofactorPreset = 'tangent-swoop' | 'lateral-loop' | 'perpendicular-dip' | 'through-cross';
-
-export interface CofactorParticipant {
-  name: string;
-  nameEn?: string;
-  text: string;
-  textRu?: string;
-  textEn?: string;
-  dx?: number;
-  dy?: number;
-  isEnergy?: boolean;
-  isGtp?: boolean;
-}
-
-export interface ReactionCofactorArc {
-  preset?: CofactorPreset;
-  path: string;
-  inCofactor?: string;
-  inCofactorEn?: string;
-  inText?: string;
-  inTextRu?: string;
-  inTextEn?: string;
-  inX?: number;
-  inY?: number;
-  inAnchor?: 'start' | 'middle' | 'end';
-  outCofactor?: string;
-  outCofactorEn?: string;
-  outText?: string;
-  outTextRu?: string;
-  outTextEn?: string;
-  outX?: number;
-  outY?: number;
-  outAnchor?: 'start' | 'middle' | 'end';
-  isEnergy?: boolean;
-  isGtp?: boolean;
-  inItems?: CofactorParticipant[];
-  outItems?: CofactorParticipant[];
-}
-
-export interface ReactionArrowData {
-  id: string;
-  stepNumber: number;
-  code: string;
-  nameRu: string;
-  nameEn: string;
-  pathwayCode?: string;
-  pathwayNameRu?: string;
-  pathwayNameEn?: string;
-  compartmentRu?: string;
-  compartmentEn?: string;
-  sourceMetaboliteId: string;
-  targetMetaboliteId: string;
-  secondarySourceId?: string;
-  secondaryTargetId?: string;
-  secondaryPathData?: string;
-  pathData: string;
-  junction?: ReactionJunction;
-  branches?: ReactionBranch[];
-  tooltipX: number;
-  tooltipY: number;
-  enzymeRu: string;
-  enzymeEn: string;
-  enzymeShort: string;
-  enzymeShortRu?: string;
-  ecNumber: string;
-  gene: string;
-  uniprotId: string;
-  isReversible: boolean;
-  deltaG0: string;
-  substrates: { name: string; nameEn?: string; formula: string; isCo?: boolean }[];
-  products: { name: string; nameEn?: string; formula: string; isCo?: boolean }[];
-  cofactorArc?: ReactionCofactorArc;
-  activatorsRu?: string[];
-  activatorsEn?: string[];
-  inhibitorsRu?: string[];
-  inhibitorsEn?: string[];
-  mechanismRu: string;
-  mechanismEn?: string;
-  energyBalanceRu?: string;
-  energyBalanceEn?: string;
-  netAtpYieldRu?: string;
-  netAtpYieldEn?: string;
-  clinicalNoteRu?: string;
-  clinicalNoteEn?: string;
 }
 
 @Component({
