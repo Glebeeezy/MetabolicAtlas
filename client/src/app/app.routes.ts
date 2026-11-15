@@ -40,16 +40,26 @@ export const routes: Routes = [
     title: 'Search | Metabolic Atlas',
   },
   {
-    path: 'articles',
+    path: 'textbook',
     loadComponent: () =>
-      import('./features/articles/articles-shell.component').then((m) => m.ArticlesShellComponent),
-    title: 'Articles | Metabolic Atlas',
+      import('./features/textbook/textbook-shell.component').then((m) => m.TextbookShellComponent),
+    title: 'Textbook | Metabolic Atlas',
+  },
+  {
+    path: 'textbook/:chapterId',
+    loadComponent: () =>
+      import('./features/textbook/textbook-shell.component').then((m) => m.TextbookShellComponent),
+    title: 'Textbook Chapter | Metabolic Atlas',
+  },
+  {
+    path: 'articles',
+    redirectTo: 'textbook',
+    pathMatch: 'full',
   },
   {
     path: 'articles/:slug',
-    loadComponent: () =>
-      import('./features/articles/articles-shell.component').then((m) => m.ArticlesShellComponent),
-    title: 'Article | Metabolic Atlas',
+    redirectTo: 'textbook',
+    pathMatch: 'full',
   },
   {
     path: '**',

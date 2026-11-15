@@ -25,16 +25,20 @@ describe('SidebarComponent', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should render single navigation link to interactive map', () => {
+  it('should render navigation links to interactive map and textbook', () => {
     const fixture = TestBed.createComponent(SidebarComponent);
     fixture.detectChanges();
 
     const navLinks = fixture.nativeElement.querySelectorAll('.nav-link');
-    expect(navLinks.length).toBe(1);
+    expect(navLinks.length).toBe(2);
 
-    const link = navLinks[0] as HTMLAnchorElement;
-    expect(link.getAttribute('href') ?? link.getAttribute('routerLink')).toBe('/atlas');
-    expect(link.textContent).toContain('Интерактивная карта');
+    const mapLink = navLinks[0] as HTMLAnchorElement;
+    expect(mapLink.getAttribute('href') ?? mapLink.getAttribute('routerLink')).toBe('/atlas');
+    expect(mapLink.textContent).toContain('Интерактивная карта');
+
+    const textbookLink = navLinks[1] as HTMLAnchorElement;
+    expect(textbookLink.getAttribute('href') ?? textbookLink.getAttribute('routerLink')).toBe('/textbook');
+    expect(textbookLink.textContent).toContain('Онлайн-учебник');
   });
 
   it('should close on mobile when link is clicked', () => {

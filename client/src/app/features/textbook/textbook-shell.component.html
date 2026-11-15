@@ -1,0 +1,49 @@
+<section class="textbook-container">
+  <header class="textbook-header">
+    <div class="textbook-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+      </svg>
+      <span>{{ localeService.locale() === 'ru' ? 'Онлайн-учебник' : 'Textbook' }}</span>
+    </div>
+
+    <h1 class="textbook-title">
+      {{ localeService.locale() === 'ru' ? 'Биохимия и метаболизм человека' : 'Human Biochemistry & Metabolism' }}
+    </h1>
+    <p class="textbook-subtitle">
+      {{ localeService.locale() === 'ru'
+        ? 'Систематизированное интерактивное руководство: термодинамика, ферментативный катализ и интеграция путей с интерактивной картой.'
+        : 'Systematic interactive textbook: thermodynamics, enzyme catalysis, and pathway integration with the metabolic atlas.' }}
+    </p>
+  </header>
+
+  <div class="chapters-grid">
+    @for (ch of chapters; track ch.id) {
+      <article class="chapter-card">
+        <div class="chapter-card__number">{{ localeService.locale() === 'ru' ? 'Глава ' + ch.number : 'Chapter ' + ch.number }}</div>
+        <h2 class="chapter-card__title">
+          {{ localeService.locale() === 'ru' ? ch.titleRu : ch.titleEn }}
+        </h2>
+        <p class="chapter-card__description">
+          {{ localeService.locale() === 'ru' ? ch.descriptionRu : ch.descriptionEn }}
+        </p>
+        
+        <div class="chapter-card__actions">
+          <a
+            routerLink="/atlas"
+            class="action-btn action-btn--map"
+            [attr.title]="localeService.locale() === 'ru' ? 'Открыть этот путь на карте' : 'Open this pathway on the map'"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
+              <line x1="9" y1="3" x2="9" y2="18"></line>
+              <line x1="15" y1="6" x2="15" y2="21"></line>
+            </svg>
+            <span>{{ localeService.locale() === 'ru' ? 'Показать на карте' : 'View on Map' }}</span>
+          </a>
+        </div>
+      </article>
+    }
+  </div>
+</section>
