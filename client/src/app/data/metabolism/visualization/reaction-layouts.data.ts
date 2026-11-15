@@ -1451,9 +1451,20 @@ export const REACTION_LAYOUTS: ReactionLayout[] = [
         {
           "name": "Аденозиндифосфат",
           "nameEn": "ADP",
-          "text": "2 АДФ + Фᵢ",
-          "textRu": "2 АДФ + Фᵢ",
-          "textEn": "2 ADP + Pi"
+          "text": "2 АДФ",
+          "textRu": "2 АДФ",
+          "textEn": "2 ADP",
+          "dx": -26,
+          "dy": 0
+        },
+        {
+          "name": "Неорганический фосфат (Фᵢ)",
+          "nameEn": "Inorganic phosphate (Pi)",
+          "text": "Фᵢ",
+          "textRu": "Фᵢ",
+          "textEn": "Pi",
+          "dx": 26,
+          "dy": 0
         }
       ]
     }
@@ -1462,7 +1473,25 @@ export const REACTION_LAYOUTS: ReactionLayout[] = [
     "reactionId": "d0000007-0000-0000-0000-000000000002",
     "pathData": "M 2755 1957 L 2900 1957",
     "tooltipX": 2828,
-    "tooltipY": 1940
+    "tooltipY": 1940,
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 2800 1880 C 2808 1910, 2818 1957, 2828 1957 C 2838 1957, 2848 1910, 2856 1880",
+      "inCofactor": "Карбамоилфосфат",
+      "inCofactorEn": "Carbamoyl phosphate",
+      "inText": "+ Карбамоил-P",
+      "inTextRu": "+ Карбамоил-P",
+      "inTextEn": "+ Carb-P",
+      "inX": 2755,
+      "inY": 1870,
+      "outCofactor": "Неорганический фосфат (Фᵢ)",
+      "outCofactorEn": "Inorganic phosphate (Pi)",
+      "outText": "Фᵢ",
+      "outTextRu": "Фᵢ",
+      "outTextEn": "Pi",
+      "outX": 2885,
+      "outY": 1870
+    }
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000003",
@@ -1493,16 +1522,38 @@ export const REACTION_LAYOUTS: ReactionLayout[] = [
           "text": "+ АТФ",
           "textRu": "+ АТФ",
           "textEn": "+ ATP",
-          "isEnergy": true
+          "isEnergy": true,
+          "dx": -26,
+          "dy": 0
+        },
+        {
+          "name": "L-Аспартат",
+          "nameEn": "L-Aspartate",
+          "text": "+ Асп",
+          "textRu": "+ Асп",
+          "textEn": "+ Asp",
+          "dx": 26,
+          "dy": 0
         }
       ],
       "outItems": [
         {
-          "name": "Пирофосфат",
-          "nameEn": "Pyrophosphate",
-          "text": "АМФ + ФФᵢ",
-          "textRu": "АМФ + ФФᵢ",
-          "textEn": "AMP + PPi"
+          "name": "Аденозинмонофосфат",
+          "nameEn": "AMP",
+          "text": "АМФ",
+          "textRu": "АМФ",
+          "textEn": "AMP",
+          "dx": -24,
+          "dy": 0
+        },
+        {
+          "name": "Пирофосфат (ФФᵢ)",
+          "nameEn": "Pyrophosphate (PPi)",
+          "text": "ФФᵢ",
+          "textRu": "ФФᵢ",
+          "textEn": "PPi",
+          "dx": 24,
+          "dy": 0
         }
       ]
     }
@@ -1529,11 +1580,11 @@ export const REACTION_LAYOUTS: ReactionLayout[] = [
       "inTextEn": "+ H₂O",
       "inX": 3095,
       "inY": 2050,
-      "outCofactor": "Мочевина",
-      "outCofactorEn": "Urea",
-      "outText": "Мочевина",
-      "outTextRu": "Мочевина",
-      "outTextEn": "Urea",
+      "outCofactor": "L-Орнитин",
+      "outCofactorEn": "L-Ornithine",
+      "outText": "Орнитин",
+      "outTextRu": "Орнитин",
+      "outTextEn": "Ornithine",
       "outX": 3205,
       "outY": 2050
     }
@@ -1552,15 +1603,83 @@ export const REACTION_LAYOUTS: ReactionLayout[] = [
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000008",
-    "pathData": "M 2800 2357 C 2600 2357, 2350 2351, 2140 2351",
-    "tooltipX": 2470,
-    "tooltipY": 2335
+    "pathData": "M 2500 2477 C 2350 2477, 2200 2351, 2063 2351",
+    "tooltipX": 2320,
+    "tooltipY": 2420,
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 2450 2410 C 2440 2442, 2430 2477, 2420 2477 C 2410 2477, 2400 2442, 2390 2410",
+      "inCofactor": "Никотинамидадениндинуклеотид (НАД⁺)",
+      "inCofactorEn": "Nicotinamide adenine dinucleotide (NAD⁺)",
+      "inText": "+ НАД⁺",
+      "inTextRu": "+ НАД⁺",
+      "inTextEn": "+ NAD⁺",
+      "inX": 2465,
+      "inY": 2400,
+      "outCofactor": "НАДН",
+      "outCofactorEn": "NADH",
+      "outText": "НАДН + NH₄⁺",
+      "outTextRu": "НАДН + NH₄⁺",
+      "outTextEn": "NADH + NH₄⁺",
+      "outX": 2360,
+      "outY": 2400,
+      "inItems": [
+        {
+          "name": "Никотинамидадениндинуклеотид (НАД⁺)",
+          "nameEn": "Nicotinamide adenine dinucleotide (NAD⁺)",
+          "text": "+ НАД⁺",
+          "textRu": "+ НАД⁺",
+          "textEn": "+ NAD⁺",
+          "dx": 0,
+          "dy": 0
+        }
+      ],
+      "outItems": [
+        {
+          "name": "НАДН",
+          "nameEn": "NADH",
+          "text": "НАДН",
+          "textRu": "НАДН",
+          "textEn": "NADH",
+          "isEnergy": true,
+          "dx": -26,
+          "dy": 0
+        },
+        {
+          "name": "Аммиак",
+          "nameEn": "Ammonia",
+          "text": "NH₄⁺",
+          "textRu": "NH₄⁺",
+          "textEn": "NH₄⁺",
+          "dx": 26,
+          "dy": 0
+        }
+      ]
+    }
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000009",
-    "pathData": "M 2655 2357 L 2800 2357",
-    "tooltipX": 2727,
-    "tooltipY": 2340
+    "pathData": "M 2850 2477 L 2655 2477",
+    "tooltipX": 2752,
+    "tooltipY": 2460,
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 2780 2410 C 2772 2440, 2760 2477, 2752 2477 C 2744 2477, 2732 2440, 2724 2410",
+      "inCofactor": "Вода (H₂O)",
+      "inCofactorEn": "Water (H₂O)",
+      "inText": "+ H₂O",
+      "inTextRu": "+ H₂O",
+      "inTextEn": "+ H₂O",
+      "inX": 2795,
+      "inY": 2400,
+      "outCofactor": "Аммиак",
+      "outCofactorEn": "Ammonia",
+      "outText": "NH₄⁺",
+      "outTextRu": "NH₄⁺",
+      "outTextEn": "NH₄⁺",
+      "outX": 2710,
+      "outY": 2400
+    }
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000010",
@@ -1576,8 +1695,8 @@ export const REACTION_LAYOUTS: ReactionLayout[] = [
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000012",
-    "pathData": "M 3150 2357 C 2700 2420, 2250 2550, 1836 2578",
+    "pathData": "M 3150 2677 C 2700 2677, 2250 2578, 1836 2578",
     "tooltipX": 2500,
-    "tooltipY": 2470
+    "tooltipY": 2630
   }
 ];

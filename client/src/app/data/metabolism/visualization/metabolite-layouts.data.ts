@@ -543,8 +543,8 @@ export const METABOLITE_LAYOUTS: MetaboliteLayout[] = [
   },
   {
     "metaboliteId": "b0000007-0000-0000-0000-000000000002",
-    "x": 2800,
-    "y": 2320,
+    "x": 2500,
+    "y": 2440,
     "width": 155,
     "height": 74,
     "color": "#E11D48",
@@ -553,8 +553,8 @@ export const METABOLITE_LAYOUTS: MetaboliteLayout[] = [
   },
   {
     "metaboliteId": "b0000007-0000-0000-0000-000000000003",
-    "x": 2500,
-    "y": 2320,
+    "x": 2850,
+    "y": 2440,
     "width": 155,
     "height": 74,
     "color": "#E11D48",
@@ -664,7 +664,7 @@ export const METABOLITE_LAYOUTS: MetaboliteLayout[] = [
   {
     "metaboliteId": "b0000007-0000-0000-0000-000000000014",
     "x": 3150,
-    "y": 2320,
+    "y": 2640,
     "width": 155,
     "height": 74,
     "color": "#E11D48",

@@ -126,7 +126,7 @@ export const SECTOR_LAYOUT_CONFIGS: SectorLayoutConfig[] = [
     "categoryEn": "Amino Acid Metabolism",
     "centerAngleRad": 0,
     "radiusMin": 350,
-    "radiusMax": 1400,
+    "radiusMax": 1500,
     "themeColor": "#E11D48",
     "gradientColors": [
       "rgba(225, 29, 72, 0.14)",
@@ -145,11 +145,11 @@ export const SECTOR_LAYOUT_CONFIGS: SectorLayoutConfig[] = [
       },
       {
         "x": 3550,
-        "y": 2550
+        "y": 2800
       },
       {
         "x": 2300,
-        "y": 2550
+        "y": 2800
       }
     ],
     "descriptionRu": "Катаболизм аминокислот, трансаминирование (АлАТ, АсАТ) и орнитиновый цикл мочевины с фумаратным шунтом к ЦТК.",

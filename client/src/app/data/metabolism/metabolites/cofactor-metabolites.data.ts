@@ -135,12 +135,18 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
     "synonymsRu": [
       "НАД⁺",
       "Окисленный никотинамидадениндинуклеотид",
+      "Никотинамидадениндинуклеотид (НАД⁺)",
+      "Никотинамидадениндинуклеотид",
+      "НАД",
       "NAD⁺",
       "Кофермент дегидрогеназ"
     ],
     "synonymsEn": [
       "NAD⁺",
       "Oxidized nicotinamide adenine dinucleotide",
+      "Nicotinamide adenine dinucleotide (NAD⁺)",
+      "Nicotinamide adenine dinucleotide",
+      "NAD",
       "Dehydrogenase coenzyme"
     ],
     "isCofactor": true,

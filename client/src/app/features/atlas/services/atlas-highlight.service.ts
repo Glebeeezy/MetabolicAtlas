@@ -90,6 +90,11 @@ export class AtlasHighlightService {
     const set = new Set<string>();
     if (r.sourceMetaboliteId) set.add(r.sourceMetaboliteId);
     if (r.secondarySourceId) set.add(r.secondarySourceId);
+    if (r.branches) {
+      for (const b of r.branches) {
+        if (b.role === 'in') set.add(b.metaboliteId);
+      }
+    }
     return set;
   });
 
@@ -99,6 +104,11 @@ export class AtlasHighlightService {
     const set = new Set<string>();
     if (r.targetMetaboliteId) set.add(r.targetMetaboliteId);
     if (r.secondaryTargetId) set.add(r.secondaryTargetId);
+    if (r.branches) {
+      for (const b of r.branches) {
+        if (b.role === 'out') set.add(b.metaboliteId);
+      }
+    }
     return set;
   });
 
@@ -304,12 +314,10 @@ export class AtlasHighlightService {
       rx.sourceMetaboliteId === met.id ||
       rx.secondarySourceId === met.id ||
       rx.targetMetaboliteId === met.id ||
-      rx.secondaryTargetId === met.id
+      rx.secondaryTargetId === met.id ||
+      rx.branches?.some((b) => b.metaboliteId === met.id)
     ) {
       return true;
-    }
-    if (!met.isCofactor) {
-      return false;
     }
     const matches = (candidate: string) => this.doesCofactorMatchCandidate(met, candidate);
 
