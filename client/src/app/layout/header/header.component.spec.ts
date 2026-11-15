@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HeaderComponent } from './header.component';
-import { SidebarService } from '../../../core/services/sidebar.service';
+import { SidebarService } from '../../core/services/sidebar.service';
 
 describe('HeaderComponent', () => {
   beforeEach(async () => {

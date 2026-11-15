@@ -5,8 +5,8 @@ import {
 } from '@angular/core';
 import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher.component';
 import { LocaleSwitcherComponent } from '../locale-switcher/locale-switcher.component';
-import { SidebarService } from '../../../core/services/sidebar.service';
-import { LocaleService } from '../../../core/services/locale.service';
+import { SidebarService } from '../../core/services/sidebar.service';
+import { LocaleService } from '../../core/services/locale.service';
 
 /**
  * Top application header containing sidebar toggle, brand badge,

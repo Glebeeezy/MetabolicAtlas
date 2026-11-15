@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { SidebarComponent } from './sidebar.component';
-import { SidebarService } from '../../../core/services/sidebar.service';
-import { LocaleService } from '../../../core/services/locale.service';
+import { SidebarService } from '../../core/services/sidebar.service';
+import { LocaleService } from '../../core/services/locale.service';
 
 @Component({ standalone: true, template: '' })
 class DummyComponent {}

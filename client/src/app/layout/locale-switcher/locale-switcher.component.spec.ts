@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { LocaleSwitcherComponent } from './locale-switcher.component';
-import { LocaleService } from '../../../core/services/locale.service';
+import { LocaleService } from '../../core/services/locale.service';
 
 describe('LocaleSwitcherComponent', () => {
   beforeEach(async () => {

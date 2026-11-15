@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { LocaleService } from '../../../core/services/locale.service';
+import { LocaleService } from '../../core/services/locale.service';
 
 /**
  * Control for toggling user language between Russian (RU) and English (EN).

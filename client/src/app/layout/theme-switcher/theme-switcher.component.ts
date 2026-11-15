@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ThemeService } from '../../../core/services/theme.service';
-import { LocaleService } from '../../../core/services/locale.service';
+import { ThemeService } from '../../core/services/theme.service';
+import { LocaleService } from '../../core/services/locale.service';
 
 /**
  * Control for toggling between light and dark color themes.

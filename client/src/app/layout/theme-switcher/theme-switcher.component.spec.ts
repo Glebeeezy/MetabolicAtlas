@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ThemeSwitcherComponent } from './theme-switcher.component';
-import { ThemeService } from '../../../core/services/theme.service';
+import { ThemeService } from '../../core/services/theme.service';
 
 describe('ThemeSwitcherComponent', () => {
   beforeEach(async () => {

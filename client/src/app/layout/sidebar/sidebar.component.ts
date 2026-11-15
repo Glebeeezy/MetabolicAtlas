@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { SidebarService } from '../../../core/services/sidebar.service';
-import { LocaleService } from '../../../core/services/locale.service';
+import { SidebarService } from '../../core/services/sidebar.service';
+import { LocaleService } from '../../core/services/locale.service';
 
 @Component({
   selector: 'ma-sidebar',
