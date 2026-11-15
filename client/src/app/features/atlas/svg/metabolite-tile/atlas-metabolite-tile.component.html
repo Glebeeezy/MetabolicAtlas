@@ -1,0 +1,63 @@
+<!-- Invisible hitbox -->
+<svg:rect
+  x="-6"
+  y="-6"
+  [attr.width]="met().width + 12"
+  [attr.height]="met().height + 12"
+  rx="16"
+  class="node-hitbox"
+  fill="transparent"
+/>
+
+<!-- Card Background -->
+<svg:rect
+  [attr.width]="met().width"
+  [attr.height]="met().height"
+  rx="12"
+  class="metabolite-tile__bg"
+/>
+
+<!-- Card Border with dynamic Substrate (Cyan) / Product (Coral) highlighting -->
+<svg:rect
+  [attr.width]="met().width"
+  [attr.height]="met().height"
+  rx="12"
+  class="metabolite-tile__border"
+/>
+
+<!-- Micro 2D Chemical Skeleton Icon on the left -->
+<svg:g class="metabolite-tile__structure" transform="translate(10, 8)" [innerHTML]="safeSvg()"></svg:g>
+
+<!-- Text Information (Macro LOD 1 shows compact abbreviation; Meso/Micro LOD 2-3 shows full name + formula) -->
+@if (lodLevel() === 1) {
+  <svg:text x="64" y="42" class="metabolite-tile__abbrev">
+    {{ locale() === 'ru' ? met().abbrevRu : met().abbrevEn }}
+  </svg:text>
+} @else {
+  <svg:text x="64" y="32" class="metabolite-tile__title">
+    {{ locale() === 'ru' ? met().nameRu : met().nameEn }}
+  </svg:text>
+
+  <svg:text x="64" y="49" class="metabolite-tile__formula">
+    {{ met().formula }}
+  </svg:text>
+}
+
+<!-- Role Badge when reaction is selected (Вход / Выход) -->
+@if (isSubstrate()) {
+  @let revMark = isReversibleReaction() ? ' ⇄' : '';
+  <svg:g [attr.transform]="'translate(10, ' + (met().height - 18) + ')'">
+    <svg:rect width="110" height="15" rx="3" class="role-badge-bg role-badge-bg--sub" />
+    <svg:text x="55" y="11" text-anchor="middle" class="role-badge-text role-badge-text--sub">
+      {{ (locale() === 'ru' ? 'Вход (Субстрат)' : 'Input (Substrate)') + revMark }}
+    </svg:text>
+  </svg:g>
+} @else if (isProduct()) {
+  @let revMark = isReversibleReaction() ? ' ⇄' : '';
+  <svg:g [attr.transform]="'translate(10, ' + (met().height - 18) + ')'">
+    <svg:rect width="110" height="15" rx="3" class="role-badge-bg role-badge-bg--prod" />
+    <svg:text x="55" y="11" text-anchor="middle" class="role-badge-text role-badge-text--prod">
+      {{ (locale() === 'ru' ? 'Выход (Продукт)' : 'Output (Product)') + revMark }}
+    </svg:text>
+  </svg:g>
+}

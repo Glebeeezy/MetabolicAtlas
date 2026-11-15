@@ -45,6 +45,7 @@ import { AtlasCompartmentLayerComponent } from './svg/compartment-layer/atlas-co
 import { AtlasOxPhosLayerComponent } from './svg/oxphos-layer/atlas-oxphos-layer.component';
 import { AtlasMembraneComplexComponent } from './svg/membrane-complex/atlas-membrane-complex.component';
 import { AtlasAtpTerminalComponent } from './svg/atp-terminal/atlas-atp-terminal.component';
+import { AtlasMetaboliteTileComponent } from './svg/metabolite-tile/atlas-metabolite-tile.component';
 
 export type InspectorTab = 'reaction' | 'molecule';
 export type CarrierFilter = 'NADH' | 'FADH2' | 'GTP' | 'ATP';
@@ -90,6 +91,7 @@ export type {
     AtlasOxPhosLayerComponent,
     AtlasMembraneComplexComponent,
     AtlasAtpTerminalComponent,
+    AtlasMetaboliteTileComponent,
   ],
   templateUrl: './atlas-shell.component.html',
   styleUrl: './atlas-shell.component.scss',

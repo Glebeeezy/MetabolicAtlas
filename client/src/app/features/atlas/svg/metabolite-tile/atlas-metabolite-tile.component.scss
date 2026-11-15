@@ -1,0 +1,131 @@
+:host {
+  display: contents;
+  cursor: pointer;
+  outline: none;
+  transition: opacity 0.2s ease;
+}
+
+.node-hitbox {
+  cursor: pointer;
+  pointer-events: all;
+  fill: transparent;
+  stroke: none;
+}
+
+.metabolite-tile__bg {
+  fill: var(--color-bg-surface);
+  stroke: none;
+  filter: drop-shadow(var(--shadow-sm));
+  transition: fill var(--transition-fast);
+}
+
+.metabolite-tile__border {
+  fill: none;
+  stroke: var(--color-border-subtle);
+  stroke-width: 1.5px;
+  transition: stroke 0.18s ease, stroke-width 0.18s ease, filter 0.18s ease;
+}
+
+.metabolite-tile__structure {
+  pointer-events: none;
+  color: var(--color-text-secondary);
+}
+
+.metabolite-tile__title {
+  font-size: 11px;
+  font-weight: 700;
+  fill: var(--color-text-primary);
+  stroke: none;
+  pointer-events: none;
+  letter-spacing: -0.01em;
+}
+
+.metabolite-tile__formula {
+  font-size: 9.5px;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  fill: var(--color-text-muted);
+  stroke: none;
+  pointer-events: none;
+}
+
+.metabolite-tile__abbrev {
+  font-size: 13px;
+  font-weight: 800;
+  fill: var(--color-text-primary);
+  stroke: none;
+  pointer-events: none;
+  letter-spacing: -0.01em;
+}
+
+/* Dynamic Role Badges */
+.role-badge-bg--sub {
+  fill: rgba(56, 189, 248, 0.18);
+  stroke: var(--color-substrate-accent);
+  stroke-width: 0.75px;
+}
+
+.role-badge-text--sub {
+  font-family: var(--font-sans);
+  font-size: 8px;
+  font-weight: 700;
+  fill: var(--color-substrate-accent);
+  stroke: none;
+}
+
+.role-badge-bg--prod {
+  fill: rgba(251, 113, 133, 0.18);
+  stroke: var(--color-product-accent);
+  stroke-width: 0.75px;
+}
+
+.role-badge-text--prod {
+  font-family: var(--font-sans);
+  font-size: 8px;
+  font-weight: 700;
+  fill: var(--color-product-accent);
+  stroke: none;
+}
+
+/* Hub node (Acetyl-CoA): Emerald Accent */
+:host(.is-hub:not(.is-substrate):not(.is-product):not(.is-selected)) .metabolite-tile__border {
+  stroke: rgba(16, 185, 129, 0.7);
+  stroke-width: 1.5px;
+}
+
+:host(.is-hub:hover:not(.is-dimmed)) .metabolite-tile__border {
+  stroke: #10B981;
+  filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.5));
+}
+
+/* Hover state */
+:host(:hover:not(.is-dimmed)) .metabolite-tile__border {
+  stroke: var(--color-substrate-accent);
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
+}
+
+/* Selected directly */
+:host(.is-selected) .metabolite-tile__border {
+  stroke: var(--color-substrate-accent) !important;
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.65));
+}
+
+/* Substrate role: Neon Cyan */
+:host(.is-substrate) .metabolite-tile__border {
+  stroke: var(--color-substrate-accent) !important;
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.7));
+}
+
+/* Product role: Bright Coral */
+:host(.is-product) .metabolite-tile__border {
+  stroke: var(--color-product-accent) !important;
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 12px rgba(251, 113, 133, 0.7));
+}
+
+/* Dimmed */
+:host(.is-dimmed) {
+  opacity: 0.18;
+}

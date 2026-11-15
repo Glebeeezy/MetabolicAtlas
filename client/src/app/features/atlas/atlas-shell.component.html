@@ -362,85 +362,19 @@
           @let isDim = isNodeDimmed(met.id);
 
           <g
-            class="metabolite-tile"
-            data-interactive="true"
-            [class.is-substrate]="isSub"
-            [class.is-product]="isProd"
-            [class.is-selected]="isSel"
-            [class.is-dimmed]="isDim"
-            [class.is-hub]="met.isHub"
-            [attr.transform]="'translate(' + met.x + ',' + met.y + ')'"
-            (click)="onMetaboliteClick(met); $event.stopPropagation()"
-            (mouseenter)="hoveredMetabolite.set(met)"
-            (mouseleave)="hoveredMetabolite.set(null)"
-            role="button"
-            tabindex="0"
-            [attr.aria-label]="localeService.locale() === 'ru' ? met.nameRu : met.nameEn"
-          >
-            <!-- Invisible hitbox -->
-            <rect
-              x="-6"
-              y="-6"
-              [attr.width]="met.width + 12"
-              [attr.height]="met.height + 12"
-              rx="16"
-              class="node-hitbox"
-              fill="transparent"
-            />
-
-            <!-- Card Background -->
-            <rect
-              [attr.width]="met.width"
-              [attr.height]="met.height"
-              rx="12"
-              class="metabolite-tile__bg"
-            />
-
-            <!-- Card Border with dynamic Substrate (Cyan) / Product (Coral) highlighting -->
-            <rect
-              [attr.width]="met.width"
-              [attr.height]="met.height"
-              rx="12"
-              class="metabolite-tile__border"
-            />
-
-            <!-- Micro 2D Chemical Skeleton Icon on the left -->
-            <g class="metabolite-tile__structure" transform="translate(10, 8)" [innerHTML]="getSafeSvg(met.skeletalSvg)"></g>
-
-            <!-- Text Information (Macro LOD 1 shows compact abbreviation; Meso/Micro LOD 2-3 shows full name + formula) -->
-            @if (lodLevel() === 1) {
-              <text x="64" y="42" class="metabolite-tile__abbrev">
-                {{ localeService.locale() === 'ru' ? met.abbrevRu : met.abbrevEn }}
-              </text>
-            } @else {
-              <text x="64" y="32" class="metabolite-tile__title">
-                {{ localeService.locale() === 'ru' ? met.nameRu : met.nameEn }}
-              </text>
-
-              <text x="64" y="49" class="metabolite-tile__formula">
-                {{ met.formula }}
-              </text>
-            }
-
-            <!-- Role Badge when reaction is selected (Вход / Выход) -->
-            @if (isSub) {
-              @let revMark = selectedReaction()?.isReversible ? ' ⇄' : '';
-              <g [attr.transform]="'translate(10, ' + (met.height - 18) + ')'">
-                <rect width="110" height="15" rx="3" class="role-badge-bg role-badge-bg--sub" />
-                <text x="55" y="11" text-anchor="middle" class="role-badge-text role-badge-text--sub">
-                  {{ (localeService.locale() === 'ru' ? 'Вход (Субстрат)' : 'Input (Substrate)') + revMark }}
-                </text>
-              </g>
-            } @else if (isProd) {
-              @let revMark = selectedReaction()?.isReversible ? ' ⇄' : '';
-              <g [attr.transform]="'translate(10, ' + (met.height - 18) + ')'">
-                <rect width="110" height="15" rx="3" class="role-badge-bg role-badge-bg--prod" />
-                <text x="55" y="11" text-anchor="middle" class="role-badge-text role-badge-text--prod">
-                  {{ (localeService.locale() === 'ru' ? 'Выход (Продукт)' : 'Output (Product)') + revMark }}
-                </text>
-              </g>
-            }
-          </g>
+            ma-metabolite-tile
+            [met]="met"
+            [isSubstrate]="isSub"
+            [isProduct]="isProd"
+            [isSelected]="isSel"
+            [isDimmed]="isDim"
+            [isReversibleReaction]="!!selectedReaction()?.isReversible"
+            [lodLevel]="lodLevel()"
+            [locale]="localeService.locale()"
+            (metaboliteClick)="onMetaboliteClick($event)"
+            (metaboliteHover)="hoveredMetabolite.set($event)"
+            (metaboliteLeave)="hoveredMetabolite.set(null)"
+          ></g>
         }
       </g>
     </svg>
