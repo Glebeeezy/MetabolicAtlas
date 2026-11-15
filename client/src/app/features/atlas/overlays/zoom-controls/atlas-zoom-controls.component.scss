@@ -1,0 +1,73 @@
+:host {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.25rem;
+  z-index: 20;
+  display: block;
+}
+
+.canvas-overlay {
+  display: block;
+}
+
+.hud-panel {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  gap: 2px;
+  border-radius: var(--radius-full);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-md);
+}
+
+.hud-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+
+  &:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+  }
+
+  &:active {
+    transform: scale(0.92);
+  }
+
+  &.is-active {
+    background: rgba(56, 189, 248, 0.2);
+    color: var(--color-substrate-accent);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+  }
+}
+
+.hud-zoom-value {
+  padding: 0 0.5rem;
+  height: 32px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  transition: background var(--transition-fast);
+
+  &:hover {
+    background: var(--color-bg-hover);
+  }
+}
+
+.hud-divider {
+  width: 1px;
+  height: 18px;
+  background-color: var(--color-border-subtle);
+  margin: 0 3px;
+}

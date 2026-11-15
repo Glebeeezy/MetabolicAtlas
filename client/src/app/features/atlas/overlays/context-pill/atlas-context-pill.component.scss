@@ -1,0 +1,60 @@
+:host {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 20;
+  display: block;
+}
+
+.canvas-overlay {
+  display: block;
+}
+
+.context-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-sm);
+
+  &__status {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+  }
+
+  &__label {
+    font-size: 0.775rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  &__stats {
+    font-size: 0.725rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    padding-left: 0.35rem;
+    border-left: 1px solid var(--color-border-subtle);
+  }
+}
+
+.lod-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1.5px 6px;
+  border-radius: 9999px;
+  background-color: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-left: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}

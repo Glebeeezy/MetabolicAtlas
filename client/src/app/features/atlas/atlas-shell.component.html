@@ -6,35 +6,12 @@
   (wheel)="onWheel($event)"
 >
   <!-- Top-left overlay: Active Map Context Pill -->
-  <div class="canvas-overlay canvas-overlay--top-left" data-interactive="true">
-    <div class="context-pill">
-      <span class="context-pill__status" aria-hidden="true"></span>
-      <span class="context-pill__label">
-        @if (atlasStateService.selectedPathwayId() === 'ALL') {
-          {{ localeService.locale() === 'ru' ? 'Все пути (Обзор метаболизма человека)' : 'All Pathways (Human Metabolic Atlas)' }}
-        } @else if (atlasStateService.selectedPathwayId() === 'PW-TCA-CYCLE') {
-          {{ localeService.locale() === 'ru' ? 'Цикл трикарбоновых кислот (ЦТК / Цикл Кребса)' : 'Citric Acid Cycle (TCA / Krebs Cycle)' }}
-        } @else if (atlasStateService.selectedPathwayId() === 'PW-OXPHOS') {
-          {{ localeService.locale() === 'ru' ? 'Дыхательная цепь (OxPhos / АТФ)' : 'Electron Transport Chain (OxPhos / ATP)' }}
-        } @else {
-          {{ localeService.locale() === 'ru' ? atlasStateService.selectedPathway().nameRu : atlasStateService.selectedPathway().nameEn }}
-        }
-      </span>
-      <span class="context-pill__stats">
-        @if (atlasStateService.selectedPathwayId() === 'ALL') {
-          {{ localeService.locale() === 'ru' ? 'Центральный метаболизм • Секторы, хаб Ацетил-КоА и супер-магистрали' : 'Central Metabolism • Sectors, Acetyl-CoA Hub & Superhighways' }}
-        } @else if (atlasStateService.selectedPathwayId() === 'PW-TCA-CYCLE') {
-          {{ localeService.locale() === 'ru' ? 'Матрикс митохондрий • 8 ферментов' : 'Mitochondrial Matrix • 8 Enzymes' }}
-        } @else if (atlasStateService.selectedPathwayId() === 'PW-OXPHOS') {
-          {{ localeService.locale() === 'ru' ? 'Кристы ВММ • 5 комплексов • Градиент Δψ ≈ −180 мВ' : 'Mitochondrial Cristae • 5 Complexes • Δψ ≈ −180 mV PMF' }}
-        } @else {
-          {{ localeService.locale() === 'ru' ? atlasStateService.selectedPathway().categoryRu : atlasStateService.selectedPathway().categoryEn }} •
-          {{ atlasStateService.selectedPathway().reactionCount }} {{ localeService.locale() === 'ru' ? 'реакций' : 'reactions' }}
-        }
-        <span class="lod-badge">LOD {{ lodLevel() }}</span>
-      </span>
-    </div>
-  </div>
+  <ma-atlas-context-pill
+    [selectedPathway]="atlasStateService.selectedPathway()"
+    [selectedPathwayId]="atlasStateService.selectedPathwayId()"
+    [locale]="localeService.locale()"
+    [lodLevel]="lodLevel()"
+  />
 
   <!-- Interactive SVG Metabolic Map Canvas -->
   <div
@@ -761,62 +738,14 @@
   </div>
 
   <!-- Bottom-right overlay: Floating Zoom, Flux & Canvas Controls -->
-  <div class="canvas-overlay canvas-overlay--bottom-right" data-interactive="true">
-    <div class="hud-panel" role="toolbar" [attr.aria-label]="localeService.locale() === 'ru' ? 'Управление масштабом карты и потоком' : 'Map zoom and flux controls'">
-      <!-- Quick Macro View (Overview) -->
-      <button
-        type="button"
-        class="hud-btn"
-        (click)="zoomToMacro()"
-        [title]="localeService.locale() === 'ru' ? 'Макро-обзор всей карты (LOD 1)' : 'Macro view of the entire universe (LOD 1)'"
-        [attr.aria-label]="localeService.locale() === 'ru' ? 'Макро-обзор' : 'Macro view'"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="2" y1="12" x2="22" y2="12"></line>
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-        </svg>
-      </button>
-
-      <!-- Zoom In (+) -->
-      <button
-        type="button"
-        class="hud-btn"
-        (click)="zoomIn()"
-        [title]="localeService.locale() === 'ru' ? 'Увеличить масштаб (+)' : 'Zoom in (+)'"
-        [attr.aria-label]="localeService.locale() === 'ru' ? 'Увеличить масштаб' : 'Zoom in'"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-      </button>
-
-      <!-- Zoom value display / Reset to 100% -->
-      <button
-        type="button"
-        class="hud-zoom-value"
-        (click)="resetZoom()"
-        [title]="localeService.locale() === 'ru' ? 'Сбросить масштаб на 100%' : 'Reset zoom to 100%'"
-        [attr.aria-label]="localeService.locale() === 'ru' ? 'Сбросить масштаб' : 'Reset zoom'"
-      >
-        {{ zoom() }}%
-      </button>
-
-      <!-- Zoom Out (-) -->
-      <button
-        type="button"
-        class="hud-btn"
-        (click)="zoomOut()"
-        [title]="localeService.locale() === 'ru' ? 'Уменьшить масштаб (-)' : 'Zoom out (-)'"
-        [attr.aria-label]="localeService.locale() === 'ru' ? 'Уменьшить масштаб' : 'Zoom out'"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-      </button>
-    </div>
-  </div>
+  <ma-atlas-zoom-controls
+    [zoom]="zoom()"
+    [locale]="localeService.locale()"
+    (zoomIn)="zoomIn()"
+    (zoomOut)="zoomOut()"
+    (resetZoom)="resetZoom()"
+    (zoomToMacro)="zoomToMacro()"
+  />
 
   <!-- Right Side Inspector: Molecule / Reaction Detail View (Single-Context, Mutex) -->
   @if (selectedReaction() || selectedMetabolite()) {

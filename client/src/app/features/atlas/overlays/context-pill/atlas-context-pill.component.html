@@ -1,0 +1,29 @@
+<div class="canvas-overlay canvas-overlay--top-left" data-interactive="true">
+  <div class="context-pill">
+    <span class="context-pill__status" aria-hidden="true"></span>
+    <span class="context-pill__label">
+      @if (pathwayId() === 'ALL') {
+        {{ locale() === 'ru' ? 'Все пути (Обзор метаболизма человека)' : 'All Pathways (Human Metabolic Atlas)' }}
+      } @else if (pathwayId() === 'PW-TCA-CYCLE') {
+        {{ locale() === 'ru' ? 'Цикл трикарбоновых кислот (ЦТК / Цикл Кребса)' : 'Citric Acid Cycle (TCA / Krebs Cycle)' }}
+      } @else if (pathwayId() === 'PW-OXPHOS') {
+        {{ locale() === 'ru' ? 'Дыхательная цепь (OxPhos / АТФ)' : 'Electron Transport Chain (OxPhos / ATP)' }}
+      } @else {
+        {{ locale() === 'ru' ? selectedPathway()?.nameRu : selectedPathway()?.nameEn }}
+      }
+    </span>
+    <span class="context-pill__stats">
+      @if (pathwayId() === 'ALL') {
+        {{ locale() === 'ru' ? 'Центральный метаболизм • Секторы, хаб Ацетил-КоА и супер-магистрали' : 'Central Metabolism • Sectors, Acetyl-CoA Hub & Superhighways' }}
+      } @else if (pathwayId() === 'PW-TCA-CYCLE') {
+        {{ locale() === 'ru' ? 'Матрикс митохондрий • 8 ферментов' : 'Mitochondrial Matrix • 8 Enzymes' }}
+      } @else if (pathwayId() === 'PW-OXPHOS') {
+        {{ locale() === 'ru' ? 'Кристы ВММ • 5 комплексов • Градиент Δψ ≈ −180 мВ' : 'Mitochondrial Cristae • 5 Complexes • Δψ ≈ −180 mV PMF' }}
+      } @else {
+        {{ locale() === 'ru' ? selectedPathway()?.categoryRu : selectedPathway()?.categoryEn }} •
+        {{ selectedPathway()?.reactionCount }} {{ locale() === 'ru' ? 'реакций' : 'reactions' }}
+      }
+      <span class="lod-badge">LOD {{ lodLevel() }}</span>
+    </span>
+  </div>
+</div>

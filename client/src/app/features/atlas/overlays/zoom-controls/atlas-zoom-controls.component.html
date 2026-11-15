@@ -1,0 +1,60 @@
+<div class="canvas-overlay canvas-overlay--bottom-right" data-interactive="true">
+  <div
+    class="hud-panel"
+    role="toolbar"
+    [attr.aria-label]="locale() === 'ru' ? 'Управление масштабом карты и потоком' : 'Map zoom and flux controls'"
+  >
+    <!-- Quick Macro View (Overview) -->
+    <button
+      type="button"
+      class="hud-btn"
+      (click)="zoomToMacro.emit()"
+      [title]="locale() === 'ru' ? 'Макро-обзор всей карты (LOD 1)' : 'Macro view of the entire universe (LOD 1)'"
+      [attr.aria-label]="locale() === 'ru' ? 'Макро-обзор' : 'Macro view'"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="2" y1="12" x2="22" y2="12"></line>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+      </svg>
+    </button>
+
+    <!-- Zoom In (+) -->
+    <button
+      type="button"
+      class="hud-btn"
+      (click)="zoomIn.emit()"
+      [title]="locale() === 'ru' ? 'Увеличить масштаб (+)' : 'Zoom in (+)'"
+      [attr.aria-label]="locale() === 'ru' ? 'Увеличить масштаб' : 'Zoom in'"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+    </button>
+
+    <!-- Zoom value display / Reset to 100% -->
+    <button
+      type="button"
+      class="hud-zoom-value"
+      (click)="resetZoom.emit()"
+      [title]="locale() === 'ru' ? 'Сбросить масштаб на 100%' : 'Reset zoom to 100%'"
+      [attr.aria-label]="locale() === 'ru' ? 'Сбросить масштаб' : 'Reset zoom'"
+    >
+      {{ zoom() }}%
+    </button>
+
+    <!-- Zoom Out (-) -->
+    <button
+      type="button"
+      class="hud-btn"
+      (click)="zoomOut.emit()"
+      [title]="locale() === 'ru' ? 'Уменьшить масштаб (-)' : 'Zoom out (-)'"
+      [attr.aria-label]="locale() === 'ru' ? 'Уменьшить масштаб' : 'Zoom out'"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+    </button>
+  </div>
+</div>
