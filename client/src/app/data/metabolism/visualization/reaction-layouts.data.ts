@@ -1414,5 +1414,171 @@ export const REACTION_LAYOUTS: ReactionLayout[] = [
       "outY": 3030,
       "isEnergy": true
     }
+  },
+  {
+    "reactionId": "d0000007-0000-0000-0000-000000000001",
+    "pathData": "M 2575 1757 L 2620 1757",
+    "tooltipX": 2598,
+    "tooltipY": 1735,
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 2565 1720 C 2580 1735, 2590 1750, 2598 1757 C 2590 1764, 2580 1779, 2565 1794",
+      "inCofactor": "Аденозинтрифосфат",
+      "inCofactorEn": "ATP",
+      "inText": "+ 2 АТФ",
+      "inTextRu": "+ 2 АТФ",
+      "inTextEn": "+ 2 ATP",
+      "inX": 2540,
+      "inY": 1720,
+      "outCofactor": "Аденозиндифосфат",
+      "outCofactorEn": "ADP",
+      "outText": "2 АДФ + Фᵢ",
+      "outTextRu": "2 АДФ + Фᵢ",
+      "outTextEn": "2 ADP + Pi",
+      "outX": 2530,
+      "outY": 1794,
+      "inItems": [
+        {
+          "name": "Аденозинтрифосфат",
+          "nameEn": "ATP",
+          "text": "+ 2 АТФ",
+          "textRu": "+ 2 АТФ",
+          "textEn": "+ 2 ATP",
+          "isEnergy": true
+        }
+      ],
+      "outItems": [
+        {
+          "name": "Аденозиндифосфат",
+          "nameEn": "ADP",
+          "text": "2 АДФ + Фᵢ",
+          "textRu": "2 АДФ + Фᵢ",
+          "textEn": "2 ADP + Pi"
+        }
+      ]
+    }
+  },
+  {
+    "reactionId": "d0000007-0000-0000-0000-000000000002",
+    "pathData": "M 2575 1917 L 2620 1917",
+    "tooltipX": 2598,
+    "tooltipY": 1900
+  },
+  {
+    "reactionId": "d0000007-0000-0000-0000-000000000003",
+    "pathData": "M 2775 1917 L 2820 1917",
+    "tooltipX": 2798,
+    "tooltipY": 1900,
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 2765 1880 C 2780 1895, 2790 1910, 2798 1917 C 2790 1924, 2780 1939, 2765 1954",
+      "inCofactor": "Аденозинтрифосфат",
+      "inCofactorEn": "ATP",
+      "inText": "+ АТФ",
+      "inTextRu": "+ АТФ",
+      "inTextEn": "+ ATP",
+      "inX": 2740,
+      "inY": 1880,
+      "outCofactor": "Пирофосфат",
+      "outCofactorEn": "Pyrophosphate",
+      "outText": "АМФ + ФФᵢ",
+      "outTextRu": "АМФ + ФФᵢ",
+      "outTextEn": "AMP + PPi",
+      "outX": 2730,
+      "outY": 1954,
+      "inItems": [
+        {
+          "name": "Аденозинтрифосфат",
+          "nameEn": "ATP",
+          "text": "+ АТФ",
+          "textRu": "+ АТФ",
+          "textEn": "+ ATP",
+          "isEnergy": true
+        }
+      ],
+      "outItems": [
+        {
+          "name": "Пирофосфат",
+          "nameEn": "Pyrophosphate",
+          "text": "АМФ + ФФᵢ",
+          "textRu": "АМФ + ФФᵢ",
+          "textEn": "AMP + PPi"
+        }
+      ]
+    }
+  },
+  {
+    "reactionId": "d0000007-0000-0000-0000-000000000004",
+    "pathData": "M 2897 1954 L 2897 2040",
+    "secondaryPathData": "M 2897 1997 C 2750 2000, 2550 2030, 2300 2050",
+    "tooltipX": 2915,
+    "tooltipY": 1997
+  },
+  {
+    "reactionId": "d0000007-0000-0000-0000-000000000005",
+    "pathData": "M 2820 2077 L 2775 2077",
+    "secondaryPathData": "M 2775 2077 C 2650 2077, 2500 2030, 2497 1954",
+    "tooltipX": 2798,
+    "tooltipY": 2060,
+    "cofactorArc": {
+      "preset": "tangent-swoop",
+      "path": "M 2810 2040 C 2805 2055, 2800 2070, 2798 2077 C 2800 2084, 2805 2099, 2810 2114",
+      "inCofactor": "Вода",
+      "inCofactorEn": "Water",
+      "inText": "+ H₂O",
+      "inTextRu": "+ H₂O",
+      "inTextEn": "+ H₂O",
+      "inX": 2835,
+      "inY": 2040,
+      "outCofactor": "Мочевина",
+      "outCofactorEn": "Urea",
+      "outText": "Мочевина",
+      "outTextRu": "Мочевина",
+      "outTextEn": "Urea",
+      "outX": 2835,
+      "outY": 2114
+    }
+  },
+  {
+    "reactionId": "d0000007-0000-0000-0000-000000000006",
+    "pathData": "M 2420 1517 L 2320 1517",
+    "tooltipX": 2370,
+    "tooltipY": 1500
+  },
+  {
+    "reactionId": "d0000007-0000-0000-0000-000000000007",
+    "pathData": "M 2897 1554 L 2897 1650",
+    "tooltipX": 2915,
+    "tooltipY": 1602
+  },
+  {
+    "reactionId": "d0000007-0000-0000-0000-000000000008",
+    "pathData": "M 2600 2237 L 2575 2237",
+    "tooltipX": 2588,
+    "tooltipY": 2220
+  },
+  {
+    "reactionId": "d0000007-0000-0000-0000-000000000009",
+    "pathData": "M 2497 2200 C 2497 2150, 2550 2150, 2600 2200",
+    "tooltipX": 2548,
+    "tooltipY": 2140
+  },
+  {
+    "reactionId": "d0000007-0000-0000-0000-000000000010",
+    "pathData": "M 2640 1424 L 2530 1480",
+    "tooltipX": 2585,
+    "tooltipY": 1450
+  },
+  {
+    "reactionId": "d0000007-0000-0000-0000-000000000011",
+    "pathData": "M 2320 1600 L 2300 1600",
+    "tooltipX": 2310,
+    "tooltipY": 1585
+  },
+  {
+    "reactionId": "d0000007-0000-0000-0000-000000000012",
+    "pathData": "M 2820 2237 L 2755 2237",
+    "tooltipX": 2787,
+    "tooltipY": 2220
   }
 ];

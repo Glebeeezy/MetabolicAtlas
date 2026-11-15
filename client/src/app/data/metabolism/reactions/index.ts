@@ -1,5 +1,6 @@
 export * from './carbohydrates';
 export * from './energy';
+export * from './proteins';
 
 import {
   GLYCOLYSIS_REACTIONS,
@@ -9,6 +10,7 @@ import {
   GLYCOGEN_REACTIONS,
 } from './carbohydrates';
 import { TCA_REACTIONS, OXPHOS_REACTIONS } from './energy';
+import { PROTEIN_METABOLISM_REACTIONS } from './proteins';
 import { BiologicalReaction } from '../../../core/metabolism/models';
 
 /**
@@ -29,4 +31,5 @@ export const ALL_BIOLOGICAL_REACTIONS: BiologicalReaction[] = [
   rLct,
   rSi,
   ...OXPHOS_REACTIONS,
+  ...PROTEIN_METABOLISM_REACTIONS,
 ];

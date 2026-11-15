@@ -112,6 +112,13 @@ describe('AtlasViewportService', () => {
     expect(service.panY()).toBe(Math.round((1600 - 3020) * 0.75));
   });
 
+  it('should focus on Urea Cycle', () => {
+    service.focusOnUreaCycle();
+    expect(service.zoom()).toBe(75);
+    expect(service.panX()).toBe(Math.round((1600 - 2675) * 0.75));
+    expect(service.panY()).toBe(Math.round((1600 - 1750) * 0.75));
+  });
+
   it('should focus on sector', () => {
     const sector: SectorLayoutConfig = {
       sectorId: 'test-sec',

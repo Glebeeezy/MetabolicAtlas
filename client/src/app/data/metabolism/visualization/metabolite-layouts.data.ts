@@ -530,5 +530,145 @@ export const METABOLITE_LAYOUTS: MetaboliteLayout[] = [
     "color": "#A855F7",
     "skeletalSvg": "<circle cx=\"14\" cy=\"21\" r=\"3.5\" fill=\"#A855F7\"/><line x1=\"17\" y1=\"21\" x2=\"27\" y2=\"21\" stroke=\"currentColor\" stroke-width=\"1.6\"/><circle cx=\"30\" cy=\"21\" r=\"3.5\" fill=\"#A855F7\"/>",
     "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <circle cx=\"80\" cy=\"50\" r=\"16\" fill=\"rgba(168,85,247,0.2)\" stroke=\"#A855F7\" stroke-width=\"2\"/>\n  <text x=\"80\" y=\"50\" fill=\"#A855F7\" font-size=\"14\" font-weight=\"800\" text-anchor=\"middle\" dominant-baseline=\"central\">P</text>\n  <line x1=\"96\" y1=\"50\" x2=\"112\" y2=\"50\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"120\" y=\"50\" fill=\"#EF4444\" font-size=\"13\" font-weight=\"800\" text-anchor=\"middle\" dominant-baseline=\"central\">O</text>\n  <line x1=\"128\" y1=\"50\" x2=\"144\" y2=\"50\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <circle cx=\"160\" cy=\"50\" r=\"16\" fill=\"rgba(168,85,247,0.2)\" stroke=\"#A855F7\" stroke-width=\"2\"/>\n  <text x=\"160\" y=\"50\" fill=\"#A855F7\" font-size=\"14\" font-weight=\"800\" text-anchor=\"middle\" dominant-baseline=\"central\">P</text>\n  <text x=\"120\" y=\"84\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">ФФᵢ + H₂O ➔ 2 Фᵢ (PPA1)</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000001",
+    "x": 2600,
+    "y": 1350,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<path d=\"M 10 24 L 20 16 L 30 24 L 40 16\" stroke=\"#E11D48\" stroke-width=\"2\" fill=\"none\"/><circle cx=\"20\" cy=\"16\" r=\"2.5\" fill=\"#38BDF8\"/><circle cx=\"40\" cy=\"16\" r=\"2.5\" fill=\"#EF4444\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <rect x=\"30\" y=\"25\" width=\"180\" height=\"50\" rx=\"8\" fill=\"rgba(225, 29, 72, 0.12)\" stroke=\"#E11D48\" stroke-width=\"1.5\"/>\n  <text x=\"120\" y=\"46\" fill=\"#E11D48\" font-size=\"14\" font-weight=\"800\" text-anchor=\"middle\">[— NH — CH(R) — CO —]ₙ</text>\n  <text x=\"120\" y=\"64\" fill=\"#94A3B8\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">Полипептидная цепь белка</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000002",
+    "x": 2600,
+    "y": 2200,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<path d=\"M 10 20 L 20 28 L 30 20 L 40 28\" stroke=\"#E11D48\" stroke-width=\"2\" fill=\"none\"/><circle cx=\"20\" cy=\"28\" r=\"3\" fill=\"#38BDF8\"/><circle cx=\"40\" cy=\"28\" r=\"2.5\" fill=\"#EF4444\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"30\" y=\"50\" fill=\"#EF4444\" font-size=\"12\" font-weight=\"700\">⁻OOC</text>\n  <line x1=\"65\" y1=\"46\" x2=\"95\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"110\" y=\"46\" fill=\"#CBD5E1\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">CH₂—CH₂</text>\n  <line x1=\"135\" y1=\"46\" x2=\"160\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"180\" y=\"38\" fill=\"#38BDF8\" font-size=\"11\" font-weight=\"700\">NH₃⁺</text>\n  <text x=\"180\" y=\"58\" fill=\"#EF4444\" font-size=\"12\" font-weight=\"700\">COO⁻</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000003",
+    "x": 2420,
+    "y": 2200,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<path d=\"M 10 20 L 20 28 L 30 20 L 40 28\" stroke=\"#E11D48\" stroke-width=\"1.8\" fill=\"none\"/><circle cx=\"10\" cy=\"20\" r=\"2.5\" fill=\"#38BDF8\"/><circle cx=\"40\" cy=\"28\" r=\"2.5\" fill=\"#EF4444\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"25\" y=\"50\" fill=\"#38BDF8\" font-size=\"11\" font-weight=\"700\">H₂N-CO</text>\n  <line x1=\"75\" y1=\"46\" x2=\"105\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"120\" y=\"46\" fill=\"#CBD5E1\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">CH₂—CH₂</text>\n  <line x1=\"145\" y1=\"46\" x2=\"170\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"188\" y=\"38\" fill=\"#38BDF8\" font-size=\"11\" font-weight=\"700\">NH₂</text>\n  <text x=\"188\" y=\"58\" fill=\"#EF4444\" font-size=\"12\" font-weight=\"700\">COOH</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000004",
+    "x": 2420,
+    "y": 1480,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<path d=\"M 12 28 L 24 18 L 36 28\" stroke=\"#E11D48\" stroke-width=\"2\" fill=\"none\"/><circle cx=\"24\" cy=\"18\" r=\"3\" fill=\"#38BDF8\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"55\" y=\"50\" fill=\"#CBD5E1\" font-size=\"13\" font-weight=\"700\">CH₃</text>\n  <line x1=\"85\" y1=\"46\" x2=\"115\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"125\" y=\"34\" fill=\"#38BDF8\" font-size=\"12\" font-weight=\"700\" text-anchor=\"middle\">NH₂</text>\n  <text x=\"125\" y=\"52\" fill=\"#CBD5E1\" font-size=\"12\" font-weight=\"600\" text-anchor=\"middle\">CH</text>\n  <line x1=\"140\" y1=\"46\" x2=\"170\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"180\" y=\"50\" fill=\"#EF4444\" font-size=\"13\" font-weight=\"700\">COOH</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000005",
+    "x": 2820,
+    "y": 1480,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<path d=\"M 12 20 L 22 28 L 32 20\" stroke=\"#E11D48\" stroke-width=\"2\" fill=\"none\"/><circle cx=\"22\" cy=\"28\" r=\"3\" fill=\"#38BDF8\"/><circle cx=\"32\" cy=\"20\" r=\"2.5\" fill=\"#EF4444\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"40\" y=\"50\" fill=\"#EF4444\" font-size=\"12\" font-weight=\"700\">⁻OOC</text>\n  <line x1=\"75\" y1=\"46\" x2=\"110\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"125\" y=\"46\" fill=\"#CBD5E1\" font-size=\"12\" font-weight=\"600\" text-anchor=\"middle\">CH₂</text>\n  <line x1=\"140\" y1=\"46\" x2=\"165\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"185\" y=\"38\" fill=\"#38BDF8\" font-size=\"11\" font-weight=\"700\">NH₃⁺</text>\n  <text x=\"185\" y=\"58\" fill=\"#EF4444\" font-size=\"12\" font-weight=\"700\">COO⁻</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000006",
+    "x": 2420,
+    "y": 1720,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<circle cx=\"24\" cy=\"20\" r=\"5\" fill=\"rgba(56, 189, 248, 0.2)\" stroke=\"#38BDF8\" stroke-width=\"1.8\"/><circle cx=\"24\" cy=\"12\" r=\"2\" fill=\"#CBD5E1\"/><circle cx=\"31\" cy=\"24\" r=\"2\" fill=\"#CBD5E1\"/><circle cx=\"17\" cy=\"24\" r=\"2\" fill=\"#CBD5E1\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <circle cx=\"120\" cy=\"50\" r=\"22\" fill=\"rgba(56, 189, 248, 0.15)\" stroke=\"#38BDF8\" stroke-width=\"2\"/>\n  <text x=\"120\" y=\"50\" fill=\"#38BDF8\" font-size=\"16\" font-weight=\"800\" text-anchor=\"middle\" dominant-baseline=\"central\">NH₄⁺</text>\n  <text x=\"120\" y=\"82\" fill=\"#94A3B8\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">Ион аммония (аммиак)</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000007",
+    "x": 2620,
+    "y": 1720,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<circle cx=\"14\" cy=\"20\" r=\"3\" fill=\"#38BDF8\"/><line x1=\"17\" y1=\"20\" x2=\"28\" y2=\"20\" stroke=\"#E11D48\" stroke-width=\"2\"/><circle cx=\"34\" cy=\"20\" r=\"4\" fill=\"#F59E0B\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"40\" y=\"50\" fill=\"#38BDF8\" font-size=\"12\" font-weight=\"700\">H₂N</text>\n  <line x1=\"65\" y1=\"46\" x2=\"90\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"98\" y=\"32\" fill=\"#EF4444\" font-size=\"12\" font-weight=\"700\" text-anchor=\"middle\">O</text>\n  <line x1=\"98\" y1=\"36\" x2=\"98\" y2=\"44\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"98\" y=\"52\" fill=\"#CBD5E1\" font-size=\"12\" font-weight=\"600\" text-anchor=\"middle\">C</text>\n  <line x1=\"108\" y1=\"46\" x2=\"130\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <rect x=\"132\" y=\"32\" width=\"75\" height=\"28\" rx=\"6\" fill=\"rgba(245, 158, 11, 0.16)\" stroke=\"#F59E0B\" stroke-width=\"1.4\"/>\n  <text x=\"169\" y=\"46\" fill=\"#F59E0B\" font-size=\"11\" font-weight=\"800\" text-anchor=\"middle\" dominant-baseline=\"central\">O-PO₃²⁻</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000008",
+    "x": 2420,
+    "y": 1880,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<path d=\"M 10 24 L 18 16 L 26 24 L 34 16\" stroke=\"#E11D48\" stroke-width=\"1.8\" fill=\"none\"/><circle cx=\"10\" cy=\"24\" r=\"2.5\" fill=\"#38BDF8\"/><circle cx=\"34\" cy=\"16\" r=\"2.5\" fill=\"#38BDF8\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"25\" y=\"50\" fill=\"#38BDF8\" font-size=\"11\" font-weight=\"700\">H₂N-CH₂</text>\n  <line x1=\"78\" y1=\"46\" x2=\"110\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"125\" y=\"46\" fill=\"#CBD5E1\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">CH₂—CH₂</text>\n  <line x1=\"145\" y1=\"46\" x2=\"170\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"188\" y=\"38\" fill=\"#38BDF8\" font-size=\"11\" font-weight=\"700\">NH₂</text>\n  <text x=\"188\" y=\"58\" fill=\"#EF4444\" font-size=\"12\" font-weight=\"700\">COOH</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000009",
+    "x": 2620,
+    "y": 1880,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<path d=\"M 10 22 L 20 22 L 28 14 L 36 22\" stroke=\"#E11D48\" stroke-width=\"1.8\" fill=\"none\"/><circle cx=\"10\" cy=\"22\" r=\"2.5\" fill=\"#38BDF8\"/><circle cx=\"20\" cy=\"22\" r=\"2\" fill=\"#EF4444\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"20\" y=\"50\" fill=\"#38BDF8\" font-size=\"10\" font-weight=\"700\">H₂N-CO-NH</text>\n  <line x1=\"88\" y1=\"46\" x2=\"115\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"132\" y=\"46\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">(CH₂)₃</text>\n  <line x1=\"150\" y1=\"46\" x2=\"172\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"190\" y=\"38\" fill=\"#38BDF8\" font-size=\"11\" font-weight=\"700\">NH₂</text>\n  <text x=\"190\" y=\"58\" fill=\"#EF4444\" font-size=\"12\" font-weight=\"700\">COOH</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000010",
+    "x": 2820,
+    "y": 1880,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<path d=\"M 8 20 L 18 20 L 26 14 L 34 20 L 42 14\" stroke=\"#E11D48\" stroke-width=\"1.8\" fill=\"none\"/><circle cx=\"26\" cy=\"14\" r=\"2.5\" fill=\"#38BDF8\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"40\" y=\"38\" fill=\"#38BDF8\" font-size=\"11\" font-weight=\"700\">Цитруллин</text>\n  <text x=\"120\" y=\"38\" fill=\"#E11D48\" font-size=\"14\" font-weight=\"800\" text-anchor=\"middle\">~ C(=NH) ~</text>\n  <text x=\"190\" y=\"38\" fill=\"#38BDF8\" font-size=\"11\" font-weight=\"700\" text-anchor=\"end\">Аспартат</text>\n  <text x=\"120\" y=\"65\" fill=\"#94A3B8\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">Конденсат для расщепления ASL</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000011",
+    "x": 2820,
+    "y": 2040,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<path d=\"M 10 24 L 18 16 L 26 24 L 34 16 L 42 24\" stroke=\"#E11D48\" stroke-width=\"1.8\" fill=\"none\"/><circle cx=\"42\" cy=\"24\" r=\"3\" fill=\"#38BDF8\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"20\" y=\"50\" fill=\"#38BDF8\" font-size=\"10\" font-weight=\"700\">H₂N-C(=NH)-NH</text>\n  <line x1=\"102\" y1=\"46\" x2=\"124\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"142\" y=\"46\" fill=\"#CBD5E1\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">(CH₂)₃</text>\n  <line x1=\"160\" y1=\"46\" x2=\"180\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"198\" y=\"38\" fill=\"#38BDF8\" font-size=\"11\" font-weight=\"700\">NH₂</text>\n  <text x=\"198\" y=\"58\" fill=\"#EF4444\" font-size=\"12\" font-weight=\"700\">COOH</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000012",
+    "x": 2620,
+    "y": 2040,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<line x1=\"12\" y1=\"20\" x2=\"24\" y2=\"20\" stroke=\"#E11D48\" stroke-width=\"2\"/><circle cx=\"12\" cy=\"20\" r=\"3\" fill=\"#38BDF8\"/><line x1=\"24\" y1=\"20\" x2=\"36\" y2=\"20\" stroke=\"#E11D48\" stroke-width=\"2\"/><circle cx=\"36\" cy=\"20\" r=\"3\" fill=\"#38BDF8\"/><circle cx=\"24\" cy=\"12\" r=\"2.5\" fill=\"#EF4444\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <line x1=\"75\" y1=\"50\" x2=\"110\" y2=\"50\" stroke=\"#94A3B8\" stroke-width=\"2.5\" stroke-linecap=\"round\"/>\n  <text x=\"55\" y=\"54\" fill=\"#38BDF8\" font-size=\"14\" font-weight=\"800\" text-anchor=\"middle\">H₂N</text>\n  <line x1=\"130\" y1=\"50\" x2=\"165\" y2=\"50\" stroke=\"#94A3B8\" stroke-width=\"2.5\" stroke-linecap=\"round\"/>\n  <text x=\"185\" y=\"54\" fill=\"#38BDF8\" font-size=\"14\" font-weight=\"800\" text-anchor=\"middle\">NH₂</text>\n  <line x1=\"120\" y1=\"45\" x2=\"120\" y2=\"25\" stroke=\"#94A3B8\" stroke-width=\"2.5\" stroke-linecap=\"round\"/>\n  <circle cx=\"120\" cy=\"20\" r=\"8\" fill=\"rgba(239, 68, 68, 0.2)\" stroke=\"#EF4444\" stroke-width=\"1.5\"/>\n  <text x=\"120\" y=\"20\" fill=\"#EF4444\" font-size=\"12\" font-weight=\"800\" text-anchor=\"middle\" dominant-baseline=\"central\">O</text>\n  <text x=\"120\" y=\"75\" fill=\"#CBD5E1\" font-size=\"11\" font-weight=\"700\" text-anchor=\"middle\">Мочевина (H₂N—CO—NH₂)</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000013",
+    "x": 2320,
+    "y": 1600,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<path d=\"M 10 16 L 18 24 L 26 16 L 34 24\" stroke=\"#E11D48\" stroke-width=\"2\" fill=\"none\"/><circle cx=\"10\" cy=\"16\" r=\"2.5\" fill=\"#E11D48\"/><circle cx=\"34\" cy=\"24\" r=\"3\" fill=\"#38BDF8\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"40\" y=\"50\" fill=\"#CBD5E1\" font-size=\"12\" font-weight=\"700\">(CH₃)₂CH-CH₂</text>\n  <line x1=\"115\" y1=\"46\" x2=\"140\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"155\" y=\"36\" fill=\"#38BDF8\" font-size=\"11\" font-weight=\"700\">NH₂</text>\n  <text x=\"155\" y=\"58\" fill=\"#EF4444\" font-size=\"12\" font-weight=\"700\">COOH</text>\n  <text x=\"120\" y=\"80\" fill=\"#94A3B8\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">L-Лейцин / L-Лизин (Кетогенные АК)</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "b0000007-0000-0000-0000-000000000014",
+    "x": 2820,
+    "y": 2200,
+    "width": 155,
+    "height": 74,
+    "color": "#E11D48",
+    "skeletalSvg": "<path d=\"M 10 24 L 20 16 L 30 24\" stroke=\"#E11D48\" stroke-width=\"2\" fill=\"none\"/><circle cx=\"30\" cy=\"24\" r=\"3\" fill=\"#F59E0B\"/>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"45\" y=\"50\" fill=\"#CBD5E1\" font-size=\"12\" font-weight=\"700\">CH₃—CH₂—CO</text>\n  <line x1=\"118\" y1=\"46\" x2=\"145\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <rect x=\"148\" y=\"32\" width=\"65\" height=\"28\" rx=\"6\" fill=\"rgba(245, 158, 11, 0.16)\" stroke=\"#F59E0B\" stroke-width=\"1.4\"/>\n  <text x=\"180\" y=\"46\" fill=\"#F59E0B\" font-size=\"11\" font-weight=\"800\" text-anchor=\"middle\" dominant-baseline=\"central\">S-CoA</text>\n  <text x=\"120\" y=\"80\" fill=\"#94A3B8\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">Пропионил-КоА (BCAA ➔ Сукцинил-КоА)</text>\n</svg>"
   }
 ];

@@ -30,5 +30,9 @@ describe('TextbookShellComponent', () => {
     const mapLinks = fixture.nativeElement.querySelectorAll('.action-btn--map');
     expect(mapLinks.length).toBe(TEXTBOOK_CHAPTERS.length);
     expect(mapLinks[0].getAttribute('href')).toBe('/atlas');
+
+    const ureaChapter = TEXTBOOK_CHAPTERS.find((c) => c.id === 'ch-amino-acids');
+    expect(ureaChapter).toBeDefined();
+    expect(ureaChapter?.pathwayId).toBe('PW-UREA-CYCLE');
   });
 });

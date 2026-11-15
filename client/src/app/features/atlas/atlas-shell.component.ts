@@ -223,6 +223,13 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
         return;
       }
 
+      if (focus.pathwayId === 'PW-UREA-CYCLE') {
+        this.focusOnUreaCycle();
+        const cps1 = this.reactions.find((r) => r.code === 'R_CPS1');
+        if (cps1) this.onReactionClick(cps1);
+        return;
+      }
+
       const sector = this.sectorConfigs.find((s) => s.targetPathwayId === focus.pathwayId);
       if (sector) {
         this.focusOnSector(sector);
@@ -254,6 +261,10 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
 
   focusOnOxphos(): void {
     this.viewport.focusOnOxphos();
+  }
+
+  focusOnUreaCycle(): void {
+    this.viewport.focusOnUreaCycle();
   }
 
   focusOnSector(sector: SectorLayoutConfig): void {

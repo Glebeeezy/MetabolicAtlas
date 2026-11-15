@@ -52,6 +52,15 @@ export const TEXTBOOK_CHAPTERS: TextbookChapter[] = [
     descriptionEn: 'Mitochondrial complexes I–IV, proton translocation across inner membrane, electrochemical gradient and rotary mechanics of ATP synthase (V).',
     pathwayId: 'PW-OXPHOS',
   },
+  {
+    id: 'ch-amino-acids',
+    number: 5,
+    titleRu: 'Белковый обмен: Аминокислоты и цикл мочевины',
+    titleEn: 'Protein Metabolism: Amino Acids & Urea Cycle',
+    descriptionRu: 'Катаболизм белков, трансаминирование (АлАТ, АсАТ), глутаматный азотистый коллектор (GLUD1) и цикл мочевины Кребса-Гензелейта с шунтом фумарата в ЦТК.',
+    descriptionEn: 'Protein degradation, transamination network (ALT, AST), glutamate dehydrogenase (GLUD1), and the Krebs-Henseleit urea cycle linked to TCA via fumarate.',
+    pathwayId: 'PW-UREA-CYCLE',
+  },
 ];
 
 @Component({

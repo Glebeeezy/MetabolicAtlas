@@ -2120,5 +2120,579 @@ export const BIOLOGICAL_HUMAN_METABOLITES: BiologicalMetabolite[] = [
         "reactionNameEn": "Oxygen reduction by cytochrome c oxidase"
       }
     ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000001",
+    "code": "MET_PROTEIN",
+    "nameRu": "Белки (Полипептиды)",
+    "nameEn": "Proteins (Polypeptides)",
+    "abbrevRu": "Белок",
+    "abbrevEn": "Prot",
+    "formula": "(C₁₀H₁₆N₂O₃)ₙ",
+    "carbons": ">100C",
+    "carbonsEn": ">100C",
+    "smiles": "NC(CC(=O)N)C(=O)O",
+    "chebi": "CHEBI:36080",
+    "inchiKey": "PROTEIN-POLYMER-N",
+    "descriptionRu": "Высокомолекулярные полипептиды пищевого происхождения и тканевого белкового пула. В организме подвергаются непрерывному протеолизу пептидазами и протеасомами до свободных аминокислот, обеспечивая азотистый баланс и обновление клеточных структур.",
+    "descriptionEn": "High-molecular-weight polypeptides of dietary intake and endogenous tissue protein pool, continuously cleaved by proteases into free amino acids.",
+    "synonymsRu": [
+      "Белки",
+      "Полипептиды",
+      "Протеины",
+      "Пищевой белок"
+    ],
+    "synonymsEn": [
+      "Proteins",
+      "Polypeptides",
+      "Dietary protein",
+      "Tissue proteins"
+    ],
+    "compartmentRu": "Цитозоль / Протеосомы",
+    "compartmentEn": "Cytosol / Proteasomes",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Обмен белков и аминокислот",
+        "pathwayNameEn": "Protein & Amino Acid Metabolism",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Первичный субстрат деградации белкового фонда клетки.",
+        "detailsEn": "Primary substrate for intracellular proteolysis.",
+        "stepNumber": 1,
+        "reactionCode": "R_PROTEOLYSIS"
+      }
+    ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000002",
+    "code": "MET_GLU",
+    "nameRu": "L-Глутамат",
+    "nameEn": "L-Glutamate",
+    "abbrevRu": "Глу",
+    "abbrevEn": "Glu",
+    "formula": "C₅H₈NO₄⁻",
+    "carbons": "5C",
+    "carbonsEn": "5C",
+    "smiles": "C(CC(=O)[O-])C(C(=O)[O-])[NH3+]",
+    "chebi": "CHEBI:29985",
+    "inchiKey": "WHUUTDBBITLFOD-UHFFFAOYSA-M",
+    "descriptionRu": "Центральный метаболический коллектор аминогрупп в клетках человека. Образуется в реакциях трансаминирования большинства аминокислот с α-кетоглутаратом. В матриксе митохондрий печени подвергается окислительному дезаминированию глутаматдегидрогеназой (GLUD1) с освобождением аммиака для цикла мочевины.",
+    "descriptionEn": "Central cellular amino group collector. Formed via transamination of amino acids with alpha-ketoglutarate, feeding ammonia to urea cycle via glutamate dehydrogenase.",
+    "synonymsRu": [
+      "Глутаминовая кислота",
+      "L-Глутамат",
+      "Глутаминат"
+    ],
+    "synonymsEn": [
+      "L-Glutamate",
+      "Glutamic acid",
+      "L-Glutamic acid"
+    ],
+    "compartmentRu": "Цитозоль / Митохондрии",
+    "compartmentEn": "Cytosol / Mitochondria",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Трансаминирование и цикл мочевины",
+        "pathwayNameEn": "Transamination & Urea Cycle",
+        "isCurrentPathway": true,
+        "role": "intermediate",
+        "detailsRu": "Ключевой коллектор азота: поставляет NH₄⁺ в CPS1 через реакцию GLUD1.",
+        "detailsEn": "Key nitrogen collector supplying NH₄⁺ to CPS1 through GLUD1.",
+        "stepNumber": 2,
+        "reactionCode": "R_GLUD1"
+      },
+      {
+        "pathwayCode": "PW-TCA-CYCLE",
+        "pathwayNameRu": "Цикл трикарбоновых кислот",
+        "pathwayNameEn": "Citric Acid Cycle",
+        "isCurrentPathway": false,
+        "role": "intermediate",
+        "detailsRu": "Прямая обратимая связь с α-кетоглутаратом (α-КГ) через трансаминазы.",
+        "detailsEn": "Direct reversible bridge with alpha-ketoglutarate via transaminases."
+      }
+    ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000003",
+    "code": "MET_GLN",
+    "nameRu": "L-Глутамин",
+    "nameEn": "L-Glutamine",
+    "abbrevRu": "Глн",
+    "abbrevEn": "Gln",
+    "formula": "C₅H₁₀N₂O₃",
+    "carbons": "5C",
+    "carbonsEn": "5C",
+    "smiles": "C(CC(=O)N)C(C(=O)O)N",
+    "chebi": "CHEBI:18050",
+    "inchiKey": "ZDXPYRJPNDTMRX-VKHMYHEASA-N",
+    "descriptionRu": "Главная нетоксичная транспортная форма аммиака в крови человека. Синтезируется глутаминсинтетазой в мышцах и мозге, транспортируется в печень, где гидролизуется митохондриальной глутаминазой (GLS) с высвобождением аммиака для синтеза мочевины.",
+    "descriptionEn": "Major non-toxic circulating carrier of ammonia in human blood. Hydrolyzed by hepatic mitochondrial glutaminase (GLS) yielding free ammonia for urea synthesis.",
+    "synonymsRu": [
+      "L-Глутамин",
+      "Глутамин",
+      "2-Аминоглутараминовая кислота"
+    ],
+    "synonymsEn": [
+      "L-Glutamine",
+      "Glutamine",
+      "Levoglutamide"
+    ],
+    "compartmentRu": "Кровь / Митохондрии печени",
+    "compartmentEn": "Blood / Hepatic Mitochondria",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Обезвреживание аммиака",
+        "pathwayNameEn": "Ammonia Disposal",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Расщепление глутаминазой GLS ➔ Глутамат + NH₄⁺.",
+        "detailsEn": "Glutaminase GLS cleavage ➔ Glutamate + NH₄⁺.",
+        "stepNumber": 1,
+        "reactionCode": "R_GLS"
+      }
+    ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000004",
+    "code": "MET_ALA",
+    "nameRu": "L-Аланин",
+    "nameEn": "L-Alanine",
+    "abbrevRu": "Ала",
+    "abbrevEn": "Ala",
+    "formula": "C₃H₇NO₂",
+    "carbons": "3C",
+    "carbonsEn": "3C",
+    "smiles": "CC(C(=O)O)N",
+    "chebi": "CHEBI:16977",
+    "inchiKey": "QNAYBMKLOCPYGJ-REOHCLFDSA-N",
+    "descriptionRu": "Ключевая аминокислота глюкозо-аланинового цикла между скелетными мышцами и печенью. Переносит аминогруппы из мышц в печень, где трансаминируется аланинаминотрансферазой (АЛТ/АлАТ) в пируват, служащий субстратом глюконеогенеза.",
+    "descriptionEn": "Key amino acid of the glucose-alanine cycle transporting muscle amino nitrogen to liver for gluconeogenesis via ALT transamination.",
+    "synonymsRu": [
+      "L-Аланин",
+      "Аланин",
+      "2-Аминопропановая кислота"
+    ],
+    "synonymsEn": [
+      "L-Alanine",
+      "Alanine",
+      "2-Aminopropanoic acid"
+    ],
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Глюкозо-аланиновый цикл / АЛТ",
+        "pathwayNameEn": "Glucose-Alanine Cycle / ALT",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Аланин + α-КГ ⇄ Пируват + Глутамат (АЛТ).",
+        "detailsEn": "Alanine + alpha-KG ⇄ Pyruvate + Glutamate (ALT).",
+        "stepNumber": 1,
+        "reactionCode": "R_ALT"
+      }
+    ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000005",
+    "code": "MET_ASP",
+    "nameRu": "L-Аспартат",
+    "nameEn": "L-Aspartate",
+    "abbrevRu": "Асп",
+    "abbrevEn": "Asp",
+    "formula": "C₄H₆NO₄⁻",
+    "carbons": "4C",
+    "carbonsEn": "4C",
+    "smiles": "C(C(C(=O)[O-])[NH3+])C(=O)[O-]",
+    "chebi": "CHEBI:29991",
+    "inchiKey": "CKLJMWTZIZZHRP-UHFFFAOYSA-M",
+    "descriptionRu": "Дикарбоновая аминокислота, поставляющая второй атом азота в цикл мочевины при конденсации с L-цитруллином (аргининосукцинатсинтетаза ASS1). Образуется из оксалоацетата реакцией аспартатаминотрансферазы (АСТ/АсАТ) и связывает цикл мочевины с ЦТК (малат-аспартатный челнок).",
+    "descriptionEn": "Dicarboxylic amino acid providing the second nitrogen atom to the urea cycle via ASS1, synthesized from oxaloacetate via AST transamination.",
+    "synonymsRu": [
+      "L-Аспартат",
+      "Аспарагиновая кислота",
+      "Аминоянтарная кислота"
+    ],
+    "synonymsEn": [
+      "L-Aspartate",
+      "Aspartic acid",
+      "L-Aspartic acid"
+    ],
+    "compartmentRu": "Цитозоль / Митохондрии",
+    "compartmentEn": "Cytosol / Mitochondria",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Цикл мочевины (Стадия ASS1)",
+        "pathwayNameEn": "Urea Cycle (ASS1 Step)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Конденсируется с цитруллином в аргининосукцинат с затратой 1 АТФ.",
+        "detailsEn": "Condenses with citrulline into argininosuccinate consuming 1 ATP.",
+        "stepNumber": 3,
+        "reactionCode": "R_ASS1"
+      }
+    ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000006",
+    "code": "MET_AMMONIA",
+    "nameRu": "Аммиак / Ион аммония (NH₄⁺)",
+    "nameEn": "Ammonium Ion (NH₄⁺)",
+    "abbrevRu": "NH₄⁺",
+    "abbrevEn": "NH₄⁺",
+    "formula": "NH₄⁺",
+    "carbons": "0C (Азотистый метаболит)",
+    "carbonsEn": "0C (Nitrogenous metabolite)",
+    "smiles": "[NH4+]",
+    "chebi": "CHEBI:28938",
+    "inchiKey": "QGZKDVFQNNGYKY-UHFFFAOYSA-O",
+    "descriptionRu": "Высокотоксичный конечный продукт дезаминирования аминокислот, пуринов и пиримидинов. В норме быстро связывается в митохондриях гепатоцитов ферментом карбамоилфосфатсинтетазой I (CPS1) для экскреции в виде безвредной мочевины.",
+    "descriptionEn": "Neurotoxic byproduct of amino acid deamination, rapidly converted to carbamoyl phosphate by mitochondrial CPS1 in hepatocytes.",
+    "synonymsRu": [
+      "Ион аммония",
+      "Аммиак",
+      "NH4+"
+    ],
+    "synonymsEn": [
+      "Ammonium ion",
+      "Ammonia",
+      "NH4+"
+    ],
+    "compartmentRu": "Матрикс митохондрий печени",
+    "compartmentEn": "Mitochondrial Matrix (Liver)",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Синтез карбамоилфосфата (CPS1)",
+        "pathwayNameEn": "Carbamoyl Phosphate Synthesis (CPS1)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "NH₄⁺ + HCO₃⁻ + 2 АТФ ➔ Карбамоилфосфат + 2 АДФ + Фᵢ.",
+        "detailsEn": "NH₄⁺ + HCO₃⁻ + 2 ATP ➔ Carbamoyl phosphate + 2 ADP + Pi.",
+        "stepNumber": 1,
+        "reactionCode": "R_CPS1"
+      }
+    ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000007",
+    "code": "MET_CARBAMOYL_P",
+    "nameRu": "Карбамоилфосфат",
+    "nameEn": "Carbamoyl Phosphate",
+    "abbrevRu": "КФ",
+    "abbrevEn": "CP",
+    "formula": "CH₄NO₅P",
+    "carbons": "1C",
+    "carbonsEn": "1C",
+    "smiles": "C(=O)(N)OP(=O)(O)O",
+    "chebi": "CHEBI:15849",
+    "inchiKey": "FFPAOMJSTUSXNZ-UHFFFAOYSA-N",
+    "descriptionRu": "Высокоэнергетический макроэргический метаболит, образующийся в митохондриях печени ферментом CPS1 при участии N-ацетилглутамата (NAG). Служит донором карбамоильной группы для орнитина в цикле мочевины и для аспартата в синтезе пиримидинов.",
+    "descriptionEn": "Activated high-energy intermediate synthesized by CPS1 with N-acetylglutamate activation, donating carbamoyl group to ornithine.",
+    "synonymsRu": [
+      "Карбамоилфосфат",
+      "Карбамилфосфат"
+    ],
+    "synonymsEn": [
+      "Carbamoyl phosphate",
+      "Carbamyl phosphate"
+    ],
+    "compartmentRu": "Матрикс митохондрий",
+    "compartmentEn": "Mitochondrial Matrix",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Цикл мочевины (Стадия 1)",
+        "pathwayNameEn": "Urea Cycle (Step 1)",
+        "isCurrentPathway": true,
+        "role": "intermediate",
+        "detailsRu": "Переносится орнитинкарбамоилтрансферазой OTC на орнитин с образованием цитруллина.",
+        "detailsEn": "Transferred by OTC onto ornithine to form citrulline.",
+        "stepNumber": 2,
+        "reactionCode": "R_OTC"
+      }
+    ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000008",
+    "code": "MET_ORNITHINE",
+    "nameRu": "L-Орнитин",
+    "nameEn": "L-Ornithine",
+    "abbrevRu": "Орн",
+    "abbrevEn": "Orn",
+    "formula": "C₅H₁₂N₂O₂",
+    "carbons": "5C",
+    "carbonsEn": "5C",
+    "smiles": "C(CC(C(=O)O)N)CN",
+    "chebi": "CHEBI:15729",
+    "inchiKey": "AHLPHDDOFPSVST-UHFFFAOYSA-N",
+    "descriptionRu": "Непротеиногенная диаминомонокарбоновая аминокислота, выполняющая роль каталитического челнока цикла мочевины. Регенерируется аргиназой (ARG1) в цитозоле и переносится антипортером ORNT1/SLC25A15 в митохондрии для акцепта карбамоила.",
+    "descriptionEn": "Non-proteinogenic carrier amino acid that accepts carbamoyl phosphate from OTC in mitochondria, regenerated by ARG1 in cytosol.",
+    "synonymsRu": [
+      "L-Орнитин",
+      "Орнитин",
+      "2,5-Диаминопентановая кислота"
+    ],
+    "synonymsEn": [
+      "L-Ornithine",
+      "Ornithine"
+    ],
+    "compartmentRu": "Митохондрии / Цитозоль",
+    "compartmentEn": "Mitochondria / Cytosol",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Цикл мочевины (Регенерация)",
+        "pathwayNameEn": "Urea Cycle (Regeneration)",
+        "isCurrentPathway": true,
+        "role": "intermediate",
+        "detailsRu": "Акцептор карбамоильной группы (OTC) и продукт расщепления аргинина (ARG1).",
+        "detailsEn": "Carbamoyl acceptor (OTC) and ARG1 cleavage product.",
+        "stepNumber": 2,
+        "reactionCode": "R_OTC"
+      }
+    ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000009",
+    "code": "MET_CITRULLINE",
+    "nameRu": "L-Цитруллин",
+    "nameEn": "L-Citrulline",
+    "abbrevRu": "Цитр",
+    "abbrevEn": "Cit",
+    "formula": "C₆H₁₃N₃O₃",
+    "carbons": "6C",
+    "carbonsEn": "6C",
+    "smiles": "C(CC(C(=O)O)N)CNC(=O)N",
+    "chebi": "CHEBI:16349",
+    "inchiKey": "RHGKLRLKDJIPSS-UHFFFAOYSA-N",
+    "descriptionRu": "Интермедиат орнитинового цикла. Образуется в митохондриальном матриксе реакцией OTC из орнитина и карбамоилфосфата, затем экспортируется через внутреннюю мембрану в цитозоль гепатоцита переносчиком ORNT1 для последующей конденсации с аспартатом.",
+    "descriptionEn": "Mitochondrial urea cycle intermediate produced by OTC, exported into cytosol to condense with aspartate via ASS1.",
+    "synonymsRu": [
+      "L-Цитруллин",
+      "Цитруллин"
+    ],
+    "synonymsEn": [
+      "L-Citrulline",
+      "Citrulline"
+    ],
+    "compartmentRu": "Митохондрии ➔ Цитозоль",
+    "compartmentEn": "Mitochondria ➔ Cytosol",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Цикл мочевины (Стадия OTC ➔ ASS1)",
+        "pathwayNameEn": "Urea Cycle (OTC ➔ ASS1 Step)",
+        "isCurrentPathway": true,
+        "role": "intermediate",
+        "detailsRu": "Синтезируется в матриксе, экспортируется в цитозоль к ферменту ASS1.",
+        "detailsEn": "Synthesized in matrix, exported to cytosol for ASS1 condensation.",
+        "stepNumber": 2,
+        "reactionCode": "R_OTC"
+      }
+    ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000010",
+    "code": "MET_ARGININOSUCCINATE",
+    "nameRu": "L-Аргининосукцинат",
+    "nameEn": "L-Argininosuccinate",
+    "abbrevRu": "АС",
+    "abbrevEn": "AS",
+    "formula": "C₁₀H₁₈N₄O₆",
+    "carbons": "10C",
+    "carbonsEn": "10C",
+    "smiles": "C(CC(C(=O)O)N)CNC(=N)NC(CC(=O)O)C(=O)O",
+    "chebi": "CHEBI:15848",
+    "inchiKey": "QWTDNUCVQCZILF-UHFFFAOYSA-N",
+    "descriptionRu": "Узловой интермедиат цикла мочевины, соединяющий углеродные скелеты цитруллина и аспартата. Образуется с затратой АТФ (с гидролизом до АМФ и PPi). Расщепляется ферментом аргининосукцинатлиазой (ASL) на аргинин и фумарат, образуя «велосипед Кребса».",
+    "descriptionEn": "Key branch intermediate formed from citrulline and aspartate by ASS1, cleaved by ASL into arginine and fumarate (Krebs bicycle).",
+    "synonymsRu": [
+      "L-Аргининосукцинат",
+      "Аргининоянтарная кислота"
+    ],
+    "synonymsEn": [
+      "L-Argininosuccinate",
+      "Argininosuccinic acid"
+    ],
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Цикл мочевины (Стадия ASL)",
+        "pathwayNameEn": "Urea Cycle (ASL Step)",
+        "isCurrentPathway": true,
+        "role": "intermediate",
+        "detailsRu": "Расщепление на L-Аргинин и Фумарат (шунт в цикл Кребса).",
+        "detailsEn": "Cleaved into L-Arginine and Fumarate (Krebs bicycle shunt).",
+        "stepNumber": 4,
+        "reactionCode": "R_ASL"
+      }
+    ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000011",
+    "code": "MET_ARGININE",
+    "nameRu": "L-Аргинин",
+    "nameEn": "L-Arginine",
+    "abbrevRu": "Арг",
+    "abbrevEn": "Arg",
+    "formula": "C₆H₁₄N₄O₂",
+    "carbons": "6C",
+    "carbonsEn": "6C",
+    "smiles": "C(CC(C(=O)O)N)CNC(=N)N",
+    "chebi": "CHEBI:16467",
+    "inchiKey": "ODKSFYDXXFIFQN-UHFFFAOYSA-N",
+    "descriptionRu": "Основная протеиногенная аминокислота с гуанидиновой группой. Непосредственный предшественник мочевины в цикле мочевины: фермент аргиназа 1 (ARG1) гидролизует гуанидиновую группу с выделением мочевины и регенерацией орнитина.",
+    "descriptionEn": "Basic proteogenic amino acid carrying a guanidino group, cleaved by arginase-1 (ARG1) into urea and ornithine.",
+    "synonymsRu": [
+      "L-Аргинин",
+      "Аргинин",
+      "2-Амино-5-гуанидиновалериановая кислота"
+    ],
+    "synonymsEn": [
+      "L-Arginine",
+      "Arginine"
+    ],
+    "compartmentRu": "Цитозоль",
+    "compartmentEn": "Cytosol",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Цикл мочевины (Финал: ARG1)",
+        "pathwayNameEn": "Urea Cycle (Final ARG1 Step)",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Гидролиз аргиназой ➔ Мочевина + L-Орнитин.",
+        "detailsEn": "Arginase-1 cleavage ➔ Urea + L-Ornithine.",
+        "stepNumber": 5,
+        "reactionCode": "R_ARG1"
+      }
+    ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000012",
+    "code": "MET_UREA",
+    "nameRu": "Мочевина (Карбамид)",
+    "nameEn": "Urea (Carbamide)",
+    "abbrevRu": "Мочевина",
+    "abbrevEn": "Urea",
+    "formula": "CH₄N₂O",
+    "carbons": "1C (Продукт детоксикации N)",
+    "carbonsEn": "1C (Nitrogen disposal end-product)",
+    "smiles": "C(=O)(N)N",
+    "chebi": "CHEBI:16199",
+    "inchiKey": "XSQUKJJJFZCRTK-UHFFFAOYSA-N",
+    "descriptionRu": "Главный конечный водорастворимый продукт обезвреживания токсичного аммиака у млекопитающих. Синтезируется исключительно гепатоцитами печени (~25–35 г/сутки), поступает в системный кровоток и фильтруется почками для выведения с мочой.",
+    "descriptionEn": "Major non-toxic end product of ammonia disposal in ureotelic mammals, synthesized by liver ARG1 and excreted by kidneys.",
+    "synonymsRu": [
+      "Мочевина",
+      "Карбамид",
+      "Диамид угольной кислоты"
+    ],
+    "synonymsEn": [
+      "Urea",
+      "Carbamide"
+    ],
+    "compartmentRu": "Цитозоль печени ➔ Кровь ➔ Почки",
+    "compartmentEn": "Liver Cytosol ➔ Blood ➔ Kidneys",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Цикл мочевины (Конечный продукт)",
+        "pathwayNameEn": "Urea Cycle (Terminal Product)",
+        "isCurrentPathway": true,
+        "role": "product",
+        "detailsRu": "Конечный продукт экскреции азота организмом человека.",
+        "detailsEn": "End product of nitrogen disposal in humans.",
+        "stepNumber": 5,
+        "reactionCode": "R_ARG1"
+      }
+    ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000013",
+    "code": "MET_LEU_LYS",
+    "nameRu": "Кетогенные аминокислоты (Leu, Lys)",
+    "nameEn": "Ketogenic Amino Acids (Leu, Lys)",
+    "abbrevRu": "Лей/Лиз",
+    "abbrevEn": "Leu/Lys",
+    "formula": "C₆H₁₃NO₂",
+    "carbons": "6C",
+    "carbonsEn": "6C",
+    "smiles": "CC(C)CC(C(=O)O)N",
+    "chebi": "CHEBI:15603",
+    "inchiKey": "ROHFNLRQFUQHCH-UHFFFAOYSA-N",
+    "descriptionRu": "Строго кетогенные незаменимые аминокислоты человека. Их углеродные скелеты не могут быть преобразованы в глюкозу и окисляются исключительно до Ацетил-КоА и Ацетоацетил-КоА, питая ЦТК или кетогенез.",
+    "descriptionEn": "Strictly ketogenic essential amino acids catabolized exclusively into Acetyl-CoA and Acetoacetyl-CoA.",
+    "synonymsRu": [
+      "Кетогенные АК",
+      "L-Лейцин и L-Лизин",
+      "Лейцин"
+    ],
+    "synonymsEn": [
+      "Ketogenic amino acids",
+      "L-Leucine and L-Lysine",
+      "Leucine"
+    ],
+    "compartmentRu": "Цитозоль / Митохондрии",
+    "compartmentEn": "Cytosol / Mitochondria",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Кетогенный катаболизм",
+        "pathwayNameEn": "Ketogenic Catabolism",
+        "isCurrentPathway": true,
+        "role": "substrate",
+        "detailsRu": "Окисление до Ацетил-КоА (вход в центральный хаб).",
+        "detailsEn": "Oxidation into Acetyl-CoA entering central hub.",
+        "stepNumber": 1,
+        "reactionCode": "R_LEU_CAT"
+      }
+    ]
+  },
+  {
+    "id": "b0000007-0000-0000-0000-000000000014",
+    "code": "MET_PROPIONYL_COA",
+    "nameRu": "Пропионил-КоА (BCAA метаболизм)",
+    "nameEn": "Propionyl-CoA (BCAA Metabolism)",
+    "abbrevRu": "Проп-КоА",
+    "abbrevEn": "Prop-CoA",
+    "formula": "C₂₄H₄₀N₇O₁₇P₃S",
+    "carbons": "3C",
+    "carbonsEn": "3C",
+    "smiles": "CCC(=O)SCCNC(=O)CCNC(=O)C(C(C)(C)COP(=O)(O)OP(=O)(O)OCC1C(C(C(O1)N2C=NC3=C2N=CN=C3N)O)OP(=O)(O)O)O",
+    "chebi": "CHEBI:15539",
+    "inchiKey": "QAIPRVGIBGTUOW-UHFFFAOYSA-N",
+    "descriptionRu": "Ключевой 3-углеродный тиоэфир катаболизма разветвленных аминокислот (валин, изолейцин), а также метионина и треонина. Через биотин-зависимую пропионил-КоА-карбоксилазу и витамин B12-зависимую метилмалонил-КоА-мутазу конвертируется в Сукцинил-КоА для входа в ЦТК.",
+    "descriptionEn": "Key 3C thioester intermediate of branched-chain amino acid catabolism (Val, Ile, Met, Thr), carboxylated into Succinyl-CoA for TCA cycle entry.",
+    "synonymsRu": [
+      "Пропионил-КоА",
+      "Пропионилкофермент А"
+    ],
+    "synonymsEn": [
+      "Propionyl-CoA",
+      "Propionyl coenzyme A"
+    ],
+    "compartmentRu": "Матрикс митохондрий",
+    "compartmentEn": "Mitochondrial Matrix",
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Катаболизм разветвленных АК",
+        "pathwayNameEn": "BCAA Catabolism",
+        "isCurrentPathway": true,
+        "role": "intermediate",
+        "detailsRu": "Превращение в Сукцинил-КоА (анаплеротический вход в ЦТК).",
+        "detailsEn": "Conversion into Succinyl-CoA (anaplerotic TCA entry).",
+        "stepNumber": 2,
+        "reactionCode": "R_PROPIONYL_ENTRY"
+      }
+    ]
   }
 ];

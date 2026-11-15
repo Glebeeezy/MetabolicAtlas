@@ -36,5 +36,7 @@ describe('AtlasCompartmentLayerComponent', () => {
     expect(matrix).toBeTruthy();
     expect(tcaRing).toBeTruthy();
     expect(mpc).toBeTruthy();
+    expect(compiled.querySelector('.urea-cluster-boundary')).toBeTruthy();
+    expect(compiled.querySelector('.ornt-channel-marker')).toBeTruthy();
   });
 });

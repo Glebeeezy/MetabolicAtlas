@@ -425,16 +425,16 @@ describe('AtlasShellComponent', () => {
 
     const nadh = component.findMetaboliteByName('НАДН')!;
     const nadhRxs = component.getReactionsForMetabolite(nadh.id);
-    // 3 TCA (IDH, OGDH, MDH) + 2 Northern (GAPDH, PDH) + 1 OxPhos (Complex I) = 6 reactions
-    expect(nadhRxs.length).toBe(6);
-    expect(nadhRxs.filter((item) => item.role === 'product').length).toBe(5);
+    // 3 TCA (IDH, OGDH, MDH) + 2 Northern (GAPDH, PDH) + 1 OxPhos (Complex I) + 2 Protein (GLUD1, LEU_CAT) = 8 reactions
+    expect(nadhRxs.length).toBe(8);
+    expect(nadhRxs.filter((item) => item.role === 'product').length).toBe(7);
     expect(nadhRxs.find((item) => item.rx.code === 'R_ETC_CI')?.role).toBe('substrate');
 
     const nad = component.findMetaboliteByName('НАД⁺')!;
     const nadRxs = component.getReactionsForMetabolite(nad.id);
-    // 3 TCA (IDH, OGDH, MDH) + 2 Northern (GAPDH, PDH) + 1 OxPhos (Complex I) = 6 reactions
-    expect(nadRxs.length).toBe(6);
-    expect(nadRxs.filter((item) => item.role === 'substrate').length).toBe(5);
+    // 3 TCA (IDH, OGDH, MDH) + 2 Northern (GAPDH, PDH) + 1 OxPhos (Complex I) + 2 Protein (GLUD1, LEU_CAT) = 8 reactions
+    expect(nadRxs.length).toBe(8);
+    expect(nadRxs.filter((item) => item.role === 'substrate').length).toBe(7);
     expect(nadRxs.find((item) => item.rx.code === 'R_ETC_CI')?.role).toBe('product');
   });
 
@@ -1021,8 +1021,8 @@ describe('AtlasShellComponent', () => {
     expect(el.querySelectorAll('.metabolite-tile__abbrev').length).toBe(0);
     expect(el.querySelectorAll('.metabolite-tile__title').length).toBe(component.canvasMetabolites.length);
     expect(el.querySelectorAll('.metabolite-tile__formula').length).toBe(component.canvasMetabolites.length);
-    // 37 reactions - 6 junction reactions - R_MPC (has dedicated gateway marker) = 30 enzyme arrow badges
-    expect(el.querySelectorAll('g.reaction-enzyme-badge').length).toBe(30);
+    // 49 reactions - 6 junction reactions - R_MPC (has dedicated gateway marker) = 42 enzyme arrow badges
+    expect(el.querySelectorAll('g.reaction-enzyme-badge').length).toBe(42);
   });
 
   it('should render pathway labels, reversibility signs, and clickable allosteric effector chips in inspector', () => {
@@ -1131,8 +1131,8 @@ describe('AtlasShellComponent', () => {
     const udpRxs = component.getReactionsForMetabolite(metUdp.id).map((r) => r.rx.code);
     expect(udpRxs).toEqual(['R_GYS']);
 
-    // MET_PPI must match R_UGP2 while MET_PI matches phosphorolysis R_PYG without matching PPi
-    expect(component.getReactionsForMetabolite(metPpi.id).map((r) => r.rx.code)).toEqual(['R_UGP2']);
+    // MET_PPI must match R_UGP2 and R_ASS1 while MET_PI matches phosphorolysis R_PYG without matching PPi
+    expect(component.getReactionsForMetabolite(metPpi.id).map((r) => r.rx.code)).toEqual(['R_UGP2', 'R_ASS1']);
     const piRxCodes = component.getReactionsForMetabolite(metPi.id).map((r) => r.rx.code);
     expect(piRxCodes).toContain('R_PYG');
     expect(piRxCodes).not.toContain('R_UGP2');
@@ -1141,7 +1141,7 @@ describe('AtlasShellComponent', () => {
     component.zoom.set(35);
     fixture.detectChanges();
     const cards = Array.from(el.querySelectorAll('.macro-subpathway-card'));
-    expect(cards.length).toBe(3);
+    expect(cards.length).toBe(4);
 
     const glycogenCard = cards.find((c) => c.getAttribute('aria-label')?.includes('гликоген')) as SVGElement;
     expect(glycogenCard).toBeTruthy();
@@ -1222,5 +1222,35 @@ describe('AtlasShellComponent', () => {
     component.focusOnOxphos();
     expect(component.zoom()).toBe(75);
     expect(component.panY()).toBe(Math.round((1600 - 3020) * 0.75));
+  });
+
+  it('should render hepatic urea cycle cluster, ORNT1 channel, and focus camera on PW-UREA-CYCLE', () => {
+    const fixture = TestBed.createComponent(AtlasShellComponent);
+    const component = fixture.componentInstance;
+    const atlasState = TestBed.inject(AtlasStateService);
+    const el = fixture.nativeElement as HTMLElement;
+    fixture.detectChanges();
+
+    // Verify Urea Cycle cluster backdrop and ORNT1 transport channel
+    expect(el.querySelector('.urea-cluster-boundary')).toBeTruthy();
+    expect(el.querySelector('.ornt-channel-marker')).toBeTruthy();
+
+    // Verify Urea Cycle metabolites exist on canvas with authentic formulas
+    const urea = component.canvasMetabolites.find((m) => m.code === 'MET_UREA');
+    const citrulline = component.canvasMetabolites.find((m) => m.code === 'MET_CITRULLINE');
+    const ornithine = component.canvasMetabolites.find((m) => m.code === 'MET_ORNITHINE');
+    expect(urea && citrulline && ornithine).toBeTruthy();
+    expect(urea?.formula).toBe('CH₄N₂O');
+    expect(citrulline?.formula).toBe('C₆H₁₃N₃O₃');
+
+    // Selecting PW-UREA-CYCLE should focus camera and select Step 1 (CPS1)
+    atlasState.selectPathway('PW-UREA-CYCLE');
+    fixture.detectChanges();
+
+    expect(component.zoom()).toBe(75);
+    expect(component.panX()).toBe(Math.round((1600 - 2675) * 0.75));
+    expect(component.panY()).toBe(Math.round((1600 - 1750) * 0.75));
+    expect(component.selectedReaction()?.code).toBe('R_CPS1');
+    expect(component.activeTab()).toBe('reaction');
   });
 });

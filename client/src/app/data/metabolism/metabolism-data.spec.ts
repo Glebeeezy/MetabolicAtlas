@@ -11,40 +11,40 @@ import {
 } from './index';
 
 describe('Metabolic Data Integrity & Topology Specs', () => {
-  it('should have strictly unique UUIDs across all 53 metabolites', () => {
+  it('should have strictly unique UUIDs across all 67 metabolites', () => {
     const ids = new Set<string>();
     for (const met of ALL_METABOLITES) {
       expect(ids.has(met.id), `Duplicate metabolite UUID: ${met.id} (${met.code})`).toBe(false);
       ids.add(met.id);
     }
-    expect(ids.size).toBe(53);
+    expect(ids.size).toBe(67);
   });
 
-  it('should have strictly unique codes across all 53 metabolites', () => {
+  it('should have strictly unique codes across all 67 metabolites', () => {
     const codes = new Set<string>();
     for (const met of ALL_METABOLITES) {
       expect(codes.has(met.code), `Duplicate metabolite code: ${met.code}`).toBe(false);
       codes.add(met.code);
     }
-    expect(codes.size).toBe(53);
+    expect(codes.size).toBe(67);
   });
 
-  it('should have strictly unique UUIDs across all 37 reactions', () => {
+  it('should have strictly unique UUIDs across all 49 reactions', () => {
     const ids = new Set<string>();
     for (const rx of HUMAN_REACTIONS) {
       expect(ids.has(rx.id), `Duplicate reaction UUID: ${rx.id} (${rx.code})`).toBe(false);
       ids.add(rx.id);
     }
-    expect(ids.size).toBe(37);
+    expect(ids.size).toBe(49);
   });
 
-  it('should have strictly unique codes across all 37 reactions', () => {
+  it('should have strictly unique codes across all 49 reactions', () => {
     const codes = new Set<string>();
     for (const rx of HUMAN_REACTIONS) {
       expect(codes.has(rx.code), `Duplicate reaction code: ${rx.code}`).toBe(false);
       codes.add(rx.code);
     }
-    expect(codes.size).toBe(37);
+    expect(codes.size).toBe(49);
   });
 
   it('should verify all reaction source and target metabolite IDs resolve to existing metabolites', () => {
@@ -86,15 +86,15 @@ describe('Metabolic Data Integrity & Topology Specs', () => {
     }
   });
 
-  it('should preserve all SVG structures and layouts for all 53 metabolites', () => {
-    expect(METABOLITE_LAYOUTS.length).toBe(53);
+  it('should preserve all SVG structures and layouts for all 67 metabolites', () => {
+    expect(METABOLITE_LAYOUTS.length).toBe(67);
     for (const layout of METABOLITE_LAYOUTS) {
       expect(layout.skeletalSvg).toBeTruthy();
       expect(Number.isFinite(layout.width)).toBe(true);
       expect(Number.isFinite(layout.height)).toBe(true);
     }
 
-    // All 36 canvas tile metabolites must have positive dimensions
+    // All 50 canvas tile metabolites must have positive dimensions
     for (const met of HUMAN_METABOLITES) {
       expect(met.width).toBeGreaterThan(0);
       expect(met.height).toBeGreaterThan(0);
@@ -106,8 +106,8 @@ describe('Metabolic Data Integrity & Topology Specs', () => {
     }
   });
 
-  it('should preserve all SVG paths and layout geometry for all 37 reactions', () => {
-    expect(REACTION_LAYOUTS.length).toBe(37);
+  it('should preserve all SVG paths and layout geometry for all 49 reactions', () => {
+    expect(REACTION_LAYOUTS.length).toBe(49);
     for (const layout of REACTION_LAYOUTS) {
       expect(layout.pathData).toBeTruthy();
       expect(Number.isFinite(layout.tooltipX)).toBe(true);

@@ -196,3 +196,52 @@
   letter-spacing: 0.06em;
   dominant-baseline: central;
 }
+
+.urea-cluster-boundary {
+  user-select: none;
+}
+
+.urea-cluster-rect {
+  fill: rgba(225, 29, 72, 0.035);
+  stroke: rgba(225, 29, 72, 0.42);
+  stroke-dasharray: 6 4;
+  stroke-width: 1.5px;
+}
+
+.urea-badge-bg {
+  fill: #0f172a;
+  stroke: #e11d48;
+  stroke-width: 1.2px;
+}
+
+.urea-badge-text {
+  font-size: 10px;
+  font-weight: 800;
+  fill: #fb7185;
+  letter-spacing: 0.06em;
+  dominant-baseline: central;
+}
+
+.urea-membrane-line {
+  stroke: rgba(225, 29, 72, 0.5);
+  stroke-width: 2px;
+  stroke-dasharray: 6 3;
+}
+
+.ornt-channel-marker {
+  user-select: none;
+}
+
+.ornt-channel-bg {
+  fill: #0f172a;
+  stroke: #e11d48;
+  stroke-width: 1.4px;
+}
+
+.ornt-channel-text {
+  font-size: 9.5px;
+  font-weight: 800;
+  fill: #fb7185;
+  text-anchor: middle;
+  dominant-baseline: central;
+}

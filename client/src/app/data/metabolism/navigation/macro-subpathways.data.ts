@@ -31,4 +31,14 @@ export const MACRO_SUBPATHWAYS: readonly MacroSubpathwayAnchor[] = [
     x: 2145,
     y: 240,
   },
+  {
+    pathwayId: 'PW-UREA-CYCLE',
+    titleRu: 'Цикл мочевины и азот',
+    titleEn: 'Urea Cycle & Nitrogen',
+    subtitleRu: 'NH₄⁺ ➔ Цитруллин ➔ Мочевина',
+    subtitleEn: 'NH₄⁺ ➔ Citrulline ➔ Urea',
+    color: '#E11D48',
+    x: 2675,
+    y: 1250,
+  },
 ] as const;

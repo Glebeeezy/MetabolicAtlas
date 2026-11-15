@@ -71,6 +71,31 @@
   </svg:g>
 </svg:g>
 
+<!-- Urea Cycle & Amino Acid Transamination Cluster in East -->
+<svg:g class="urea-cluster-boundary">
+  <svg:rect
+    x="2380"
+    y="1320"
+    width="620"
+    height="980"
+    rx="22"
+    class="urea-cluster-rect"
+  />
+  <svg:g transform="translate(2400, 1330)">
+    <svg:rect x="0" y="0" width="370" height="22" rx="4" class="urea-badge-bg" />
+    <svg:text x="185" y="11" text-anchor="middle" class="urea-badge-text">
+      {{ locale() === 'ru' ? 'ОБМЕН БЕЛКОВ • ЦИКЛ МОЧЕВИНЫ И АЗОТ' : 'PROTEIN METABOLISM • UREA CYCLE & NITROGEN' }}
+    </svg:text>
+  </svg:g>
+
+  <!-- Hepatic Mitochondrial / Cytosol Demarcation with ORNT1 Antiporter -->
+  <svg:line x1="2585" y1="1680" x2="2585" y2="2160" class="urea-membrane-line" />
+  <svg:g transform="translate(2585, 1920)" class="ornt-channel-marker">
+    <svg:rect x="-38" y="-11" width="76" height="22" rx="5" class="ornt-channel-bg" />
+    <svg:text x="0" y="0" class="ornt-channel-text">ORNT1</svg:text>
+  </svg:g>
+</svg:g>
+
 <!-- Outer & Inner Mitochondrial Membranes (Mitochondrial Envelope) -->
 <svg:g class="membrane-boundary-group">
   <!-- Outer Mitochondrial Membrane (OMM) -->

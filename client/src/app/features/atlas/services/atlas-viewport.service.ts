@@ -246,4 +246,10 @@ export class AtlasViewportService implements OnDestroy {
     this.panX.set(Math.round((1600 - 1990) * 0.8));
     this.panY.set(Math.round((1600 - 260) * 0.8));
   }
+
+  focusOnUreaCycle(): void {
+    this.zoom.set(75);
+    this.panX.set(Math.round((1600 - 2675) * 0.75));
+    this.panY.set(Math.round((1600 - 1750) * 0.75));
+  }
 }
