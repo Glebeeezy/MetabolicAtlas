@@ -169,8 +169,8 @@ export const UREA_CYCLE_REACTIONS: BiologicalReaction[] = [
     compartmentRu: 'Цитозоль печени',
     compartmentEn: 'Liver Cytosol',
     sourceMetaboliteId: 'b0000007-0000-0000-0000-000000000011', // MET_ARGININE
-    targetMetaboliteId: 'b0000007-0000-0000-0000-000000000012', // MET_UREA
-    secondaryTargetId: 'b0000007-0000-0000-0000-000000000008', // MET_ORNITHINE (Regenerated)
+    targetMetaboliteId: 'b0000007-0000-0000-0000-000000000008', // MET_ORNITHINE (Regenerated into cycle)
+    secondaryTargetId: 'b0000007-0000-0000-0000-000000000012', // MET_UREA (Excreted waste product)
     enzymeRu: 'Аргиназа 1',
     enzymeEn: 'Arginase-1',
     enzymeShort: 'ARG1',
