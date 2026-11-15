@@ -1,0 +1,23 @@
+:host {
+  display: contents;
+}
+
+.polar-grid-circle {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.08);
+  stroke-width: 1.5px;
+  stroke-dasharray: 4 6;
+
+  &--outer {
+    stroke: rgba(148, 163, 184, 0.14);
+    stroke-dasharray: none;
+    stroke-width: 2px;
+  }
+}
+
+.polar-axis-line {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.06);
+  stroke-width: 1.2px;
+  stroke-dasharray: 6 6;
+}

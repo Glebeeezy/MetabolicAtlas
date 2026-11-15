@@ -36,6 +36,11 @@ import { AtlasContextPillComponent } from './overlays/context-pill/atlas-context
 import { AtlasInspectorComponent } from './overlays/inspector/atlas-inspector.component';
 import { ReactionInspectorComponent } from './overlays/inspector/reaction-inspector/reaction-inspector.component';
 import { MetaboliteInspectorComponent } from './overlays/inspector/metabolite-inspector/metabolite-inspector.component';
+import { AtlasPolarGridComponent } from './svg/polar-grid/atlas-polar-grid.component';
+import { AtlasSectorComponent } from './svg/sector-continent/atlas-sector.component';
+import { AtlasSuperhighwayComponent } from './svg/superhighway/atlas-superhighway.component';
+import { AtlasCentralBeaconComponent } from './svg/central-beacon/atlas-central-beacon.component';
+import { AtlasCrossroadsLayerComponent } from './svg/crossroads-layer/atlas-crossroads-layer.component';
 
 export type InspectorTab = 'reaction' | 'molecule';
 export type CarrierFilter = 'NADH' | 'FADH2' | 'GTP' | 'ATP';
@@ -72,6 +77,11 @@ export type {
     AtlasInspectorComponent,
     ReactionInspectorComponent,
     MetaboliteInspectorComponent,
+    AtlasPolarGridComponent,
+    AtlasSectorComponent,
+    AtlasSuperhighwayComponent,
+    AtlasCentralBeaconComponent,
+    AtlasCrossroadsLayerComponent,
   ],
   templateUrl: './atlas-shell.component.html',
   styleUrl: './atlas-shell.component.scss',

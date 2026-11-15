@@ -1,0 +1,30 @@
+<!-- Wide transparent hitbox -->
+<svg:path
+  [attr.d]="hw().pathData"
+  class="superhighway-hitbox"
+  fill="none"
+  stroke="transparent"
+  stroke-width="32"
+  (click)="onSelect($event)"
+  (mouseenter)="highwayHover.emit(hw())"
+  (mouseleave)="highwayLeave.emit()"
+/>
+<!-- Outer soft glow track -->
+<svg:path
+  [attr.d]="hw().pathData"
+  class="superhighway-glow"
+  [attr.stroke]="hw().themeColor"
+  fill="none"
+  stroke-width="8"
+  pointer-events="none"
+/>
+<!-- Core line with flow dashes -->
+<svg:path
+  [attr.d]="hw().pathData"
+  class="superhighway-core"
+  [class.is-animated]="isAnimated()"
+  [attr.stroke]="hw().themeColor"
+  fill="none"
+  stroke-width="3"
+  pointer-events="none"
+/>

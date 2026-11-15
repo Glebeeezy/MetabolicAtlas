@@ -1,0 +1,23 @@
+@for (cr of crossroads(); track cr.id) {
+  <svg:g class="crossroad-item">
+    <svg:line
+      [attr.x1]="cr.startX"
+      [attr.y1]="cr.startY"
+      [attr.x2]="cr.endX"
+      [attr.y2]="cr.endY"
+      class="crossroad-line"
+      marker-end="url(#rx-arrowhead)"
+    />
+    <svg:rect
+      [attr.x]="cr.textX - 8"
+      [attr.y]="cr.textY - 14"
+      [attr.width]="getBadgeWidth(locale() === 'ru' ? cr.nameRu : cr.nameEn)"
+      height="20"
+      rx="4"
+      class="crossroad-badge-bg"
+    />
+    <svg:text [attr.x]="cr.textX" [attr.y]="cr.textY" class="crossroad-text">
+      {{ locale() === 'ru' ? cr.nameRu : cr.nameEn }}
+    </svg:text>
+  </svg:g>
+}

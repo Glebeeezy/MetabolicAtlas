@@ -1,0 +1,62 @@
+:host {
+  display: contents;
+  cursor: pointer;
+  outline: none;
+}
+
+.sector-polygon {
+  stroke-width: 2px;
+  stroke-opacity: 0.45;
+  transition: all 0.25s ease;
+}
+
+:host(:hover) .sector-polygon,
+:host(.is-hovered) .sector-polygon {
+  stroke-width: 3px;
+  stroke-opacity: 0.95;
+  filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.15));
+}
+
+:host(.is-active) .sector-polygon {
+  stroke-width: 3.5px;
+  stroke-opacity: 1;
+}
+
+.sector-badge-card {
+  transition: transform 0.2s ease;
+
+  &__bg {
+    fill: var(--color-bg-surface);
+    fill-opacity: 0.88;
+    stroke: none;
+  }
+
+  &__border {
+    fill: none;
+    stroke-width: 1.5px;
+    stroke-opacity: 0.55;
+    transition: stroke-opacity 0.2s ease;
+  }
+
+  &__title {
+    font-size: 13px;
+    font-weight: 700;
+    fill: var(--color-text-primary);
+    stroke: none;
+    dominant-baseline: central;
+    letter-spacing: -0.01em;
+  }
+
+  &__desc {
+    font-size: 10.5px;
+    font-weight: 500;
+    fill: var(--color-text-muted);
+    stroke: none;
+    dominant-baseline: central;
+  }
+}
+
+:host(:hover) .sector-badge-card__border,
+:host(.is-hovered) .sector-badge-card__border {
+  stroke-opacity: 1;
+}

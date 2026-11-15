@@ -1,0 +1,64 @@
+:host {
+  display: contents;
+  cursor: pointer;
+  outline: none;
+}
+
+.superhighway-hitbox {
+  cursor: pointer;
+  pointer-events: stroke;
+  fill: none;
+  stroke: transparent;
+}
+
+.superhighway-glow {
+  fill: none;
+  stroke-opacity: 0.22;
+  transition: all 0.25s ease;
+}
+
+.superhighway-core {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 8 6;
+  stroke-opacity: 0.85;
+  transition: all 0.2s ease;
+
+  &.is-animated {
+    animation: highwayFlow 1.6s linear infinite;
+  }
+}
+
+:host(:hover),
+:host(.is-hovered) {
+  .superhighway-glow {
+    stroke-width: 14px;
+    stroke-opacity: 0.5;
+  }
+
+  .superhighway-core {
+    stroke-width: 4px;
+    stroke-opacity: 1;
+  }
+}
+
+:host(.is-active) {
+  .superhighway-glow {
+    stroke-width: 16px;
+    stroke-opacity: 0.6;
+  }
+
+  .superhighway-core {
+    stroke-width: 4.5px;
+    stroke-opacity: 1;
+  }
+}
+
+@keyframes highwayFlow {
+  from {
+    stroke-dashoffset: 28;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}

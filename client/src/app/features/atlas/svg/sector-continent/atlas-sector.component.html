@@ -1,0 +1,25 @@
+<!-- Continent boundary polygon -->
+<svg:polygon
+  [attr.points]="polyPoints()"
+  [attr.fill]="'url(#grad-' + sector().sectorId + ')'"
+  [attr.stroke]="sector().themeColor"
+  class="sector-polygon"
+  (click)="onSelect($event)"
+  (mouseenter)="sectorHover.emit(sector())"
+  (mouseleave)="sectorLeave.emit()"
+/>
+
+<!-- Sector Macro Label Badge (Visible at Macro LOD 1) -->
+@if (lodLevel() === 1) {
+  <svg:g [attr.transform]="'translate(' + sector().centerX + ',' + sector().centerY + ')'" class="sector-badge-card" pointer-events="none">
+    <svg:rect x="-140" y="-28" width="280" height="56" rx="14" class="sector-badge-card__bg" />
+    <svg:rect x="-140" y="-28" width="280" height="56" rx="14" class="sector-badge-card__border" [attr.stroke]="sector().themeColor" />
+    <svg:circle cx="-116" cy="0" r="5" [attr.fill]="sector().themeColor" stroke="none" />
+    <svg:text x="-98" y="-4" class="sector-badge-card__title">
+      {{ locale() === 'ru' ? sector().nameRu : sector().nameEn }}
+    </svg:text>
+    <svg:text x="-98" y="14" class="sector-badge-card__desc">
+      {{ locale() === 'ru' ? sector().categoryRu : sector().categoryEn }}
+    </svg:text>
+  </svg:g>
+}
