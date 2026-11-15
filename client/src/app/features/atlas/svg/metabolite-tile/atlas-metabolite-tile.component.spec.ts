@@ -115,6 +115,7 @@ describe('AtlasMetaboliteTileComponent', () => {
   it('should emit click event when clicked', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const tile = compiled.querySelector('.metabolite-tile') as SVGGElement;
+    expect(tile.getAttribute('transform')).toBe('translate(1600,1800)');
     tile.dispatchEvent(new MouseEvent('click'));
 
     expect(component.clicked).toEqual(mockMetabolite);
