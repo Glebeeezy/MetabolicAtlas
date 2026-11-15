@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HumanMetaboliteNode, HumanReactionArrow, PathwayParticipation } from '../../../atlas-data';
-import { ChemicalStructureComponent } from '../../../components/chemical-structure/chemical-structure.component';
+import { ChemicalStructureComponent } from '../../../../../shared';
 
 @Component({
   selector: 'ma-metabolite-inspector',
