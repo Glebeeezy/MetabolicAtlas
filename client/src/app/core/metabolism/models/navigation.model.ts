@@ -58,3 +58,14 @@ export interface GlobalMetabolicCanvasState {
   focusMetaboliteCode: string | null;
   camera: { x: number; y: number; zoom: number };
 }
+
+export interface MacroSubpathwayAnchor {
+  pathwayId: string;
+  titleRu: string;
+  titleEn: string;
+  subtitleRu: string;
+  subtitleEn: string;
+  color: string;
+  x: number;
+  y: number;
+}

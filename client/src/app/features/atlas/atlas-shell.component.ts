@@ -9,11 +9,11 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ApiService } from '../../core/services/api.service';
 import { LocaleService } from '../../core/services/locale.service';
 import { AtlasStateService } from '../../core/services/atlas-state.service';
 import { MetabolismService } from '../../core/metabolism';
+import { MACRO_SUBPATHWAYS } from '../../data/metabolism/navigation';
 import {
   ALL_METABOLITES,
   COFACTOR_METABOLITES,
@@ -102,17 +102,6 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   protected readonly localeService = inject(LocaleService);
   protected readonly atlasStateService = inject(AtlasStateService);
   protected readonly metabolismService = inject(MetabolismService);
-  private readonly sanitizer = inject(DomSanitizer);
-  private readonly safeSvgCache = new Map<string, SafeHtml>();
-
-  getSafeSvg(rawSvg: string): SafeHtml {
-    let cached = this.safeSvgCache.get(rawSvg);
-    if (!cached) {
-      cached = this.sanitizer.bypassSecurityTrustHtml(rawSvg);
-      this.safeSvgCache.set(rawSvg, cached);
-    }
-    return cached;
-  }
 
   readonly zoom = signal<number>(100);
   readonly panX = signal<number>(0);
@@ -131,38 +120,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   readonly reactions = this.metabolismService.reactions;
   readonly crossroads = this.metabolismService.crossroads;
   readonly sectorConfigs = this.metabolismService.sectorConfigs;
-  readonly macroSubpathways = [
-    {
-      pathwayId: 'PW-GALACTOSE',
-      titleRu: 'Лактоза ➔ Путь Лелуара',
-      titleEn: 'Lactose ➔ Leloir Pathway',
-      subtitleRu: 'Гал ➔ Гал-1-Ф ⇄ Г1Ф ➔ Г6Ф',
-      subtitleEn: 'Gal ➔ Gal-1-P ⇄ G1P ➔ G6P',
-      color: '#A855F7',
-      x: 940,
-      y: -190,
-    },
-    {
-      pathwayId: 'PW-GLYCOGEN',
-      titleRu: 'Метаболизм гликогена',
-      titleEn: 'Glycogen Metabolism',
-      subtitleRu: 'Г1Ф ➔ УДФ-Глю ⇄ Гликоген',
-      subtitleEn: 'G1P ➔ UDP-Glc ⇄ Glycogen',
-      color: '#06B6D4',
-      x: 1320,
-      y: -455,
-    },
-    {
-      pathwayId: 'PW-FRUCTOSE',
-      titleRu: 'Сахароза ➔ Фруктолиз',
-      titleEn: 'Sucrose ➔ Fructolysis',
-      subtitleRu: 'Фру ➔ Ф1Ф ➔ ДАФ + ГА',
-      subtitleEn: 'Fru ➔ F1P ➔ DHAP + GA',
-      color: '#F97316',
-      x: 2145,
-      y: 240,
-    },
-  ] as const;
+  readonly macroSubpathways = MACRO_SUBPATHWAYS;
   private static readonly COVERED_CORRIDOR_HIGHWAYS = new Set(['hw-gly-pdh', 'hw-hub-tca']);
 
   readonly superHighways = this.metabolismService.superHighways;
@@ -771,59 +729,6 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     }
   }
 
-  getPathwayStepLabel(rx: HumanReactionArrow): string {
-    const isEn = this.localeService.locale() === 'en';
-    if (rx.code === 'R_LCT') {
-      return isEn
-        ? 'Leloir Pathway • Dietary Lactose Entry'
-        : 'Путь Лелуара • Вход (Гидролиз лактозы)';
-    }
-    if (rx.code === 'R_SI') {
-      return isEn
-        ? 'Fructolysis • Dietary Sucrose Entry'
-        : 'Фруктолиз • Вход (Гидролиз сахарозы)';
-    }
-    const labels: Record<string, { ru: string; en: string }> = {
-      'PW-GLYCOLISIS': {
-        ru: `Гликолиз • Стадия ${rx.stepNumber} из 10`,
-        en: `Glycolysis • Step ${rx.stepNumber} of 10`,
-      },
-      'PW-GALACTOSE': {
-        ru: `Путь Лелуара (Галактоза) • Стадия ${rx.stepNumber} из 4`,
-        en: `Leloir Pathway (Galactose) • Step ${rx.stepNumber} of 4`,
-      },
-      'PW-GLYCOGEN': {
-        ru: `Метаболизм гликогена • Стадия ${rx.stepNumber} из 3`,
-        en: `Glycogen Metabolism • Step ${rx.stepNumber} of 3`,
-      },
-      'PW-FRUCTOSE': {
-        ru: `Фруктолиз • Стадия ${rx.stepNumber} из 4`,
-        en: `Fructolysis • Step ${rx.stepNumber} of 4`,
-      },
-      'PW-MPC': {
-        ru: 'Мембранный транспорт • MPC1/2',
-        en: 'Membrane Transport • MPC1/2',
-      },
-      'PW-PDH': {
-        ru: 'ПДХ-комплекс (E1–E2–E3)',
-        en: 'PDH Complex (E1–E2–E3)',
-      },
-      'PW-TCA-CYCLE': {
-        ru: `Цикл Кребса (ЦТК) • Стадия ${rx.stepNumber} из 8`,
-        en: `TCA Cycle • Step ${rx.stepNumber} of 8`,
-      },
-      'PW-OXPHOS': {
-        ru: `Дыхательная цепь (OxPhos) • Стадия ${rx.stepNumber} из 4`,
-        en: `OxPhos / ETC • Step ${rx.stepNumber} of 4`,
-      },
-    };
-    const match = rx.pathwayCode ? labels[rx.pathwayCode] : undefined;
-    if (match) {
-      return isEn ? match.en : match.ru;
-    }
-    return isEn ? rx.nameEn : rx.nameRu;
-  }
-
   findMetabolite(nameRu?: string, nameEn?: string): HumanMetaboliteNode | undefined {
     if (nameRu) {
       const found = this.findMetaboliteByName(nameRu);
@@ -945,26 +850,6 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
     }
 
     return { current, others };
-  }
-
-  getRoleName(role: string): string {
-    const isEn = this.localeService.locale() === 'en';
-    switch (role) {
-      case 'substrate':
-        return isEn ? 'Substrate (Input)' : 'Субстрат (Вход)';
-      case 'product':
-        return isEn ? 'Product (Output)' : 'Продукт (Выход)';
-      case 'cofactor':
-        return isEn ? 'Coenzyme / Cofactor' : 'Кофермент / Кофактор';
-      case 'intermediate':
-        return isEn ? 'Intermediate' : 'Интермедиат';
-      default:
-        return isEn ? 'Participant' : 'Участник';
-    }
-  }
-
-  getRoleNameRu(role: string): string {
-    return this.getRoleName(role);
   }
 
   copyText(text: string, label: string): void {
