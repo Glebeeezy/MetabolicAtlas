@@ -38,7 +38,7 @@ export const MACRO_SUBPATHWAYS: readonly MacroSubpathwayAnchor[] = [
     subtitleRu: 'NH₄⁺ ➔ Цитруллин ➔ Мочевина',
     subtitleEn: 'NH₄⁺ ➔ Citrulline ➔ Urea',
     color: '#E11D48',
-    x: 2675,
-    y: 1250,
+    x: 2900,
+    y: 1150,
   },
 ] as const;

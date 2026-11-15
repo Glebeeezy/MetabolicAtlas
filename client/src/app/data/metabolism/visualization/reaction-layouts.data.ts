@@ -1417,26 +1417,26 @@ export const REACTION_LAYOUTS: ReactionLayout[] = [
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000001",
-    "pathData": "M 2575 1757 L 2620 1757",
-    "tooltipX": 2598,
-    "tooltipY": 1735,
+    "pathData": "M 2755 1737 L 2900 1737",
+    "tooltipX": 2828,
+    "tooltipY": 1720,
     "cofactorArc": {
       "preset": "tangent-swoop",
-      "path": "M 2565 1720 C 2580 1735, 2590 1750, 2598 1757 C 2590 1764, 2580 1779, 2565 1794",
+      "path": "M 2800 1660 C 2808 1690, 2818 1737, 2828 1737 C 2838 1737, 2848 1690, 2856 1660",
       "inCofactor": "Аденозинтрифосфат",
       "inCofactorEn": "ATP",
       "inText": "+ 2 АТФ",
       "inTextRu": "+ 2 АТФ",
       "inTextEn": "+ 2 ATP",
-      "inX": 2540,
-      "inY": 1720,
+      "inX": 2770,
+      "inY": 1650,
       "outCofactor": "Аденозиндифосфат",
       "outCofactorEn": "ADP",
       "outText": "2 АДФ + Фᵢ",
       "outTextRu": "2 АДФ + Фᵢ",
       "outTextEn": "2 ADP + Pi",
-      "outX": 2530,
-      "outY": 1794,
+      "outX": 2885,
+      "outY": 1650,
       "inItems": [
         {
           "name": "Аденозинтрифосфат",
@@ -1460,32 +1460,34 @@ export const REACTION_LAYOUTS: ReactionLayout[] = [
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000002",
-    "pathData": "M 2575 1917 L 2620 1917",
-    "tooltipX": 2598,
-    "tooltipY": 1900
+    "pathData": "M 2755 1957 L 2900 1957",
+    "secondaryPathData": "M 2977 1774 L 2977 1920",
+    "tooltipX": 2828,
+    "tooltipY": 1940
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000003",
-    "pathData": "M 2775 1917 L 2820 1917",
-    "tooltipX": 2798,
-    "tooltipY": 1900,
+    "pathData": "M 3055 1957 C 3130 1957, 3175 1817, 3250 1817",
+    "secondaryPathData": "M 3327 1324 L 3327 1780",
+    "tooltipX": 3152,
+    "tooltipY": 1870,
     "cofactorArc": {
       "preset": "tangent-swoop",
-      "path": "M 2765 1880 C 2780 1895, 2790 1910, 2798 1917 C 2790 1924, 2780 1939, 2765 1954",
+      "path": "M 3125 1825 C 3133 1855, 3144 1887, 3152 1887 C 3160 1887, 3171 1855, 3180 1825",
       "inCofactor": "Аденозинтрифосфат",
       "inCofactorEn": "ATP",
       "inText": "+ АТФ",
       "inTextRu": "+ АТФ",
       "inTextEn": "+ ATP",
-      "inX": 2740,
-      "inY": 1880,
+      "inX": 3095,
+      "inY": 1815,
       "outCofactor": "Пирофосфат",
       "outCofactorEn": "Pyrophosphate",
       "outText": "АМФ + ФФᵢ",
       "outTextRu": "АМФ + ФФᵢ",
       "outTextEn": "AMP + PPi",
-      "outX": 2730,
-      "outY": 1954,
+      "outX": 3210,
+      "outY": 1815,
       "inItems": [
         {
           "name": "Аденозинтрифосфат",
@@ -1509,76 +1511,78 @@ export const REACTION_LAYOUTS: ReactionLayout[] = [
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000004",
-    "pathData": "M 2897 1954 L 2897 2040",
-    "secondaryPathData": "M 2897 1997 C 2750 2000, 2550 2030, 2300 2050",
-    "tooltipX": 2915,
-    "tooltipY": 1997
+    "pathData": "M 3327 1854 L 3327 2020",
+    "secondaryPathData": "M 3327 1937 C 3100 1937, 2700 2050, 2300 2050",
+    "tooltipX": 3345,
+    "tooltipY": 1937
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000005",
-    "pathData": "M 2820 2077 L 2775 2077",
-    "secondaryPathData": "M 2775 2077 C 2650 2077, 2500 2030, 2497 1954",
-    "tooltipX": 2798,
-    "tooltipY": 2060,
+    "pathData": "M 3250 2057 C 3180 2057, 3120 2177, 3055 2177",
+    "secondaryPathData": "M 3150 2117 C 2950 2117, 2750 2070, 2677 1994",
+    "tooltipX": 3150,
+    "tooltipY": 2135,
     "cofactorArc": {
       "preset": "tangent-swoop",
-      "path": "M 2810 2040 C 2805 2055, 2800 2070, 2798 2077 C 2800 2084, 2805 2099, 2810 2114",
+      "path": "M 3125 2060 C 3133 2085, 3143 2117, 3151 2117 C 3159 2117, 3169 2085, 3177 2060",
       "inCofactor": "Вода",
       "inCofactorEn": "Water",
       "inText": "+ H₂O",
       "inTextRu": "+ H₂O",
       "inTextEn": "+ H₂O",
-      "inX": 2835,
-      "inY": 2040,
+      "inX": 3095,
+      "inY": 2050,
       "outCofactor": "Мочевина",
       "outCofactorEn": "Urea",
       "outText": "Мочевина",
       "outTextRu": "Мочевина",
       "outTextEn": "Urea",
-      "outX": 2835,
-      "outY": 2114
+      "outX": 3205,
+      "outY": 2050
     }
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000006",
-    "pathData": "M 2420 1517 L 2320 1517",
-    "tooltipX": 2370,
-    "tooltipY": 1500
+    "pathData": "M 2450 1287 C 2150 1287, 1950 1203, 1680 1203",
+    "tooltipX": 2065,
+    "tooltipY": 1225
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000007",
-    "pathData": "M 2897 1554 L 2897 1650",
-    "tooltipX": 2915,
-    "tooltipY": 1602
+    "pathData": "M 3250 1287 C 2700 1287, 2000 1802, 1514 1802",
+    "tooltipX": 2650,
+    "tooltipY": 1400
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000008",
-    "pathData": "M 2600 2237 L 2575 2237",
-    "tooltipX": 2588,
-    "tooltipY": 2220
+    "pathData": "M 2800 2357 C 2600 2357, 2350 2351, 2140 2351",
+    "secondaryPathData": "M 2600 2357 C 2600 2150, 2677 1950, 2677 1774",
+    "tooltipX": 2470,
+    "tooltipY": 2335
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000009",
-    "pathData": "M 2497 2200 C 2497 2150, 2550 2150, 2600 2200",
-    "tooltipX": 2548,
-    "tooltipY": 2140
+    "pathData": "M 2655 2357 L 2800 2357",
+    "secondaryPathData": "M 2727 2357 C 2727 2150, 2677 1950, 2677 1774",
+    "tooltipX": 2727,
+    "tooltipY": 2340
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000010",
-    "pathData": "M 2640 1424 L 2530 1480",
-    "tooltipX": 2585,
-    "tooltipY": 1450
+    "pathData": "M 2850 1134 C 2750 1180, 2600 1180, 2527 1250",
+    "tooltipX": 2700,
+    "tooltipY": 1180
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000011",
-    "pathData": "M 2320 1600 L 2300 1600",
-    "tooltipX": 2310,
-    "tooltipY": 1585
+    "pathData": "M 2450 1557 C 2200 1557, 1900 1600, 1675 1600",
+    "tooltipX": 2060,
+    "tooltipY": 1580
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000012",
-    "pathData": "M 2820 2237 L 2755 2237",
-    "tooltipX": 2787,
-    "tooltipY": 2220
+    "pathData": "M 3150 2357 C 2700 2420, 2250 2550, 1836 2578",
+    "tooltipX": 2500,
+    "tooltipY": 2470
   }
 ];

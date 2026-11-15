@@ -114,9 +114,9 @@ describe('AtlasViewportService', () => {
 
   it('should focus on Urea Cycle', () => {
     service.focusOnUreaCycle();
-    expect(service.zoom()).toBe(75);
-    expect(service.panX()).toBe(Math.round((1600 - 2675) * 0.75));
-    expect(service.panY()).toBe(Math.round((1600 - 1750) * 0.75));
+    expect(service.zoom()).toBe(60);
+    expect(service.panX()).toBe(Math.round((1600 - 2900) * 0.6));
+    expect(service.panY()).toBe(Math.round((1600 - 1750) * 0.6));
   });
 
   it('should focus on sector', () => {
