@@ -1,0 +1,50 @@
+<svg:g class="membrane-complex-deco" [attr.transform]="'translate(' + x() + ',' + y() + ')'">
+  @switch (complexId()) {
+    @case ('I') {
+      <svg:title>{{ locale() === 'ru' ? 'Комплекс I (НАДН:убихинон-оксидоредуктаза)' : 'Complex I (NADH:ubiquinone oxidoreductase)' }}</svg:title>
+      <svg:path d="M 0 0 L 80 0 L 80 32 L 50 32 L 50 85 L 0 85 Z" class="complex-protein-body" />
+      <svg:text x="40" y="20" text-anchor="middle" class="complex-label">I</svg:text>
+      <svg:text x="25" y="60" text-anchor="middle" class="complex-sub">
+        {{ locale() === 'ru' ? 'НАДН-Q' : 'NADH-Q' }}
+      </svg:text>
+    }
+    @case ('II') {
+      <svg:title>{{ locale() === 'ru' ? 'Комплекс II (Сукцинатдегидрогеназа / СДГ)' : 'Complex II (Succinate dehydrogenase / SDH)' }}</svg:title>
+      <svg:rect x="0" y="0" width="60" height="65" rx="8" class="complex-protein-body" />
+      <svg:text x="30" y="24" text-anchor="middle" class="complex-label">II</svg:text>
+      <svg:text x="30" y="44" text-anchor="middle" class="complex-sub">
+        {{ locale() === 'ru' ? 'СДГ' : 'SDH' }}
+      </svg:text>
+    }
+    @case ('III') {
+      <svg:title>{{ locale() === 'ru' ? 'Комплекс III (Коэнзим Q:цитохром c оксидоредуктаза / Цит. bc₁)' : 'Complex III (Coenzyme Q:cytochrome c oxidoreductase / Cyt bc₁)' }}</svg:title>
+      <svg:rect x="0" y="0" width="75" height="75" rx="10" class="complex-protein-body" />
+      <svg:text x="37" y="26" text-anchor="middle" class="complex-label">III</svg:text>
+      <svg:text x="37" y="46" text-anchor="middle" class="complex-sub">
+        {{ locale() === 'ru' ? 'Цит. bc₁' : 'Cyt bc₁' }}
+      </svg:text>
+    }
+    @case ('IV') {
+      <svg:title>{{ locale() === 'ru' ? 'Комплекс IV (Цитохром c оксидаза / ЦОК)' : 'Complex IV (Cytochrome c oxidase / COX)' }}</svg:title>
+      <svg:rect x="0" y="0" width="75" height="75" rx="10" class="complex-protein-body" />
+      <svg:text x="37" y="26" text-anchor="middle" class="complex-label">IV</svg:text>
+      <svg:text x="37" y="46" text-anchor="middle" class="complex-sub">
+        {{ locale() === 'ru' ? 'ЦОК' : 'COX' }}
+      </svg:text>
+    }
+    @case ('V') {
+      <svg:title>{{ locale() === 'ru' ? 'Комплекс V (F₀F₁ АТФ-синтаза)' : 'Complex V (F₀F₁ ATP synthase)' }}</svg:title>
+      <!-- Fo stator/rotor in IMM -->
+      <svg:rect x="8" y="5" width="44" height="28" rx="6" class="complex-protein-body" />
+      <svg:text x="30" y="22" text-anchor="middle" class="complex-sub">F₀</svg:text>
+      <!-- Central gamma stalk -->
+      <svg:line x1="30" y1="33" x2="30" y2="56" class="atp-synthase-stalk" />
+      <!-- F1 alpha3-beta3 catalytic head -->
+      <svg:circle cx="30" cy="74" r="22" class="complex-protein-body" />
+      <svg:text x="30" y="70" text-anchor="middle" class="complex-label">V</svg:text>
+      <svg:text x="30" y="84" text-anchor="middle" class="complex-sub">
+        {{ locale() === 'ru' ? 'F₁ АТФ' : 'F₁ ATP' }}
+      </svg:text>
+    }
+  }
+</svg:g>

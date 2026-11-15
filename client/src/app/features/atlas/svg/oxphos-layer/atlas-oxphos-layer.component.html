@@ -1,0 +1,74 @@
+<!-- OxPhos Crista Compartment (IMM & Complexes I - V) -->
+<svg:g class="oxphos-cluster-boundary">
+  <svg:rect
+    x="920"
+    y="2730"
+    width="1360"
+    height="620"
+    rx="24"
+    class="oxphos-cluster-rect"
+  />
+  <!-- Intermembrane Space strip (P-side, +) -->
+  <svg:rect x="930" y="2738" width="1340" height="42" rx="8" class="oxphos-ims-band" />
+  <svg:g transform="translate(940, 2744)">
+    <svg:rect x="0" y="0" width="145" height="30" rx="5" class="oxphos-ims-badge-bg" />
+    <svg:text x="72" y="11" text-anchor="middle" dominant-baseline="central" class="oxphos-ims-text">
+      {{ locale() === 'ru' ? 'МЕЖМЕМБРАННОЕ ПРОСТРАНСТВО' : 'INTERMEMBRANE SPACE' }}
+    </svg:text>
+    <svg:text x="72" y="22" text-anchor="middle" dominant-baseline="central" class="oxphos-ims-sub">
+      {{ locale() === 'ru' ? 'P-сторона (+) • IMS' : 'P-side (+) • IMS' }}
+    </svg:text>
+  </svg:g>
+
+  <!-- Inner Mitochondrial Membrane line (IMM) -->
+  <svg:line x1="930" y1="2780" x2="2270" y2="2780" class="membrane-line membrane-line--imm" />
+  <svg:text x="942" y="2796" class="membrane-label">
+    {{ locale() === 'ru' ? 'Внутренняя мембрана крист (ВММ)' : 'Inner Crista Membrane (IMM)' }}
+  </svg:text>
+
+  <!-- Crista Zone Banner -->
+  <svg:g transform="translate(1380, 2718)">
+    <svg:rect x="0" y="0" width="440" height="22" rx="4" class="oxphos-badge-bg" />
+    <svg:text x="220" y="11" text-anchor="middle" class="oxphos-badge-text">
+      {{ locale() === 'ru' ? 'ДЫХАТЕЛЬНАЯ ЦЕПЬ И АТФ-СИНТАЗА • КРИСТЫ ВММ' : 'ELECTRON TRANSPORT CHAIN & ATP SYNTHASE • CRISTAE' }}
+    </svg:text>
+  </svg:g>
+
+  <!-- Substrates Inflow Arrows above Complexes -->
+  <!-- Inflow 1: NADH from matrix entering Complex I -->
+  <svg:path d="M 1140 2690 L 1140 2744" class="substrate-inflow-arrow" marker-end="url(#rx-arrowhead)" />
+  <svg:text x="1140" y="2682" class="substrate-inflow-label" text-anchor="middle">
+    {{ locale() === 'ru' ? 'НАДН (матрикс)' : 'NADH (matrix)' }}
+  </svg:text>
+
+  <!-- Inflow 2: Succinate from TCA cycle entering Complex II -->
+  <svg:path d="M 1300 2690 L 1300 2752" class="substrate-inflow-arrow" marker-end="url(#rx-arrowhead)" />
+  <svg:text x="1300" y="2682" class="substrate-inflow-label" text-anchor="middle">
+    {{ locale() === 'ru' ? 'Сукцинат (из ЦТК)' : 'Succinate (from TCA)' }}
+  </svg:text>
+
+  <!-- Electron transfer from Complex II to Ubiquinol-10 -->
+  <svg:path d="M 1300 2820 C 1300 2885, 1360 2940, 1400 3015" class="electron-transfer-path" marker-end="url(#rx-arrowhead)" />
+  <svg:g transform="translate(1335, 2915)">
+    <svg:rect x="-16" y="-7" width="32" height="14" rx="3" class="redox-chip-bg" />
+    <svg:text x="0" y="0" text-anchor="middle" dominant-baseline="central" class="redox-chip-text">2e⁻</svg:text>
+  </svg:g>
+</svg:g>
+
+<!-- Proton Gradient Visual Layer (PMF & Downhill ATP Synthase Flux) -->
+<svg:g class="proton-gradient-layer" pointer-events="none">
+  <!-- Downhill H+ vector: IMS -> Fo rotor -->
+  <svg:line x1="2055" y1="2720" x2="2055" y2="2742" class="proton-vector-line proton-vector-line--downhill" marker-end="url(#rx-arrowhead)" />
+  <svg:g transform="translate(2055, 2710)">
+    <svg:rect x="-24" y="-8" width="48" height="16" rx="4" class="proton-chip-bg proton-chip-bg--atp" />
+    <svg:text x="0" y="0" text-anchor="middle" dominant-baseline="central" class="proton-chip-text proton-chip-text--atp">4H⁺ ↓</svg:text>
+  </svg:g>
+
+  <!-- Central PMF / Voltage Potential Badge in IMS -->
+  <svg:g transform="translate(1395, 2750)">
+    <svg:rect x="-85" y="-10" width="170" height="20" rx="5" class="pmf-badge-bg" />
+    <svg:text x="0" y="1" text-anchor="middle" dominant-baseline="central" class="pmf-badge-text">
+      {{ locale() === 'ru' ? 'Δψ ≈ −180 мВ • ПДС ≈ 220 мВ' : 'Δψ ≈ −180 mV • PMF ≈ 220 mV' }}
+    </svg:text>
+  </svg:g>
+</svg:g>

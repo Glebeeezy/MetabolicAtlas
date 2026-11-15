@@ -1,0 +1,138 @@
+<!-- Cytosol Compartment (Glycolysis + Galactose Leloir + Fructose Fructolysis) -->
+<svg:rect
+  x="560"
+  y="-640"
+  width="2000"
+  height="1895"
+  rx="32"
+  class="compartment-rect compartment-rect--cytosol"
+  fill="url(#cytosolGlow)"
+/>
+
+<!-- Glycolysis Cytosolic Banner -->
+<svg:g class="zone-banner zone-banner--amber">
+  <svg:rect x="1620" y="-338" width="290" height="24" rx="6" class="zone-banner-bg zone-banner-bg--amber" />
+  <svg:text x="1765" y="-326" text-anchor="middle" class="zone-banner-text zone-banner-text--amber">
+    {{ locale() === 'ru' ? 'ГЛИКОЛИЗ • 10 СТАДИЙ (ЦИТОПЛАЗМА)' : 'GLYCOLYSIS • 10 STEPS (CYTOSOL)' }}
+  </svg:text>
+</svg:g>
+
+<!-- Galactose Leloir Sub-Cluster in Left Upper Cytosol -->
+<svg:g class="leloir-cluster-boundary">
+  <svg:rect
+    x="580"
+    y="-335"
+    width="770"
+    height="315"
+    rx="18"
+    class="leloir-cluster-rect"
+  />
+  <svg:g transform="translate(815, -325)">
+    <svg:rect x="0" y="0" width="280" height="22" rx="4" class="leloir-badge-bg" />
+    <svg:text x="140" y="11" text-anchor="middle" class="leloir-badge-text">
+      {{ locale() === 'ru' ? 'ПУТЬ ЛЕЛУАРА • ГАЛАКТОЗА (4 СТАДИИ)' : 'LELOIR PATHWAY • GALACTOSE (4 STEPS)' }}
+    </svg:text>
+  </svg:g>
+</svg:g>
+
+<!-- Glycogen Metabolism Sub-Cluster (Synthesis & Phosphorolysis) -->
+<svg:g class="glycogen-cluster-boundary">
+  <svg:rect
+    x="1132"
+    y="-492"
+    width="376"
+    height="472"
+    rx="18"
+    class="glycogen-cluster-rect"
+  />
+  <svg:g transform="translate(1144, -484)">
+    <svg:rect x="0" y="0" width="244" height="22" rx="4" class="glycogen-badge-bg" />
+    <svg:text x="122" y="11" text-anchor="middle" class="glycogen-badge-text">
+      {{ locale() === 'ru' ? 'ОБМЕН ГЛИКОГЕНА • СИНТЕЗ И РАСПАД' : 'GLYCOGEN METABOLISM • RESERVE' }}
+    </svg:text>
+  </svg:g>
+</svg:g>
+
+<!-- Fructose / Fructolysis Sub-Cluster in Right Cytosol -->
+<svg:g class="fructose-cluster-boundary">
+  <svg:rect
+    x="1825"
+    y="-12"
+    width="640"
+    height="606"
+    rx="18"
+    class="fructose-cluster-rect"
+  />
+  <svg:g transform="translate(1842, -2)">
+    <svg:rect x="0" y="0" width="280" height="22" rx="4" class="fructose-badge-bg" />
+    <svg:text x="140" y="11" text-anchor="middle" class="fructose-badge-text">
+      {{ locale() === 'ru' ? 'ФРУКТОЛИЗ И ШУНТ HK • ФРУКТОЗА' : 'FRUCTOLYSIS & HK SHUNT • FRUCTOSE' }}
+    </svg:text>
+  </svg:g>
+</svg:g>
+
+<!-- Outer & Inner Mitochondrial Membranes (Mitochondrial Envelope) -->
+<svg:g class="membrane-boundary-group">
+  <!-- Outer Mitochondrial Membrane (OMM) -->
+  <svg:line x1="560" y1="1282" x2="2560" y2="1282" class="membrane-line membrane-line--omm" />
+  <svg:text x="576" y="1276" class="membrane-label">
+    {{ locale() === 'ru' ? 'Наружная мембрана митохондрий (НММ)' : 'Outer Mitochondrial Membrane (OMM)' }}
+  </svg:text>
+
+  <!-- Intermembrane Space (IMS) -->
+  <svg:rect x="560" y="1284" width="2000" height="28" class="ims-strip" />
+
+  <!-- Inner Mitochondrial Membrane (IMM) -->
+  <svg:line x1="560" y1="1314" x2="2560" y2="1314" class="membrane-line membrane-line--imm" />
+  <svg:text x="576" y="1328" class="membrane-label">
+    {{ locale() === 'ru' ? 'Внутренняя мембрана митохондрий (ВММ)' : 'Inner Mitochondrial Membrane (IMM)' }}
+  </svg:text>
+
+  <!-- MPC (Mitochondrial Pyruvate Carrier) Gateway Marker -->
+  <svg:g transform="translate(1672, 1298)" class="mpc-channel-marker">
+    <svg:rect x="-42" y="-12" width="84" height="24" rx="6" class="mpc-channel-bg" />
+    <svg:text x="0" y="0" class="mpc-channel-text">
+      {{ locale() === 'ru' ? 'МПЦ1/2' : 'MPC1/2' }}
+    </svg:text>
+  </svg:g>
+</svg:g>
+
+<!-- Dedicated PDH Complex Transition Frame in Matrix -->
+<svg:g class="pdh-cluster-boundary">
+  <svg:rect
+    x="1160"
+    y="1338"
+    width="880"
+    height="214"
+    rx="18"
+    class="pdh-cluster-rect"
+  />
+  <svg:g transform="translate(1178, 1348)">
+    <svg:rect x="0" y="0" width="240" height="22" rx="4" class="pdh-badge-bg" />
+    <svg:text x="120" y="11" text-anchor="middle" class="pdh-badge-text">
+      {{ locale() === 'ru' ? 'КОМПЛЕКС ПДХ (E1 • E2 • E3)' : 'PDH COMPLEX (E1 • E2 • E3)' }}
+    </svg:text>
+  </svg:g>
+</svg:g>
+
+<!-- Mitochondrial Matrix Compartment (TCA Cycle & PDH) -->
+<svg:rect
+  x="960"
+  y="1325"
+  width="1280"
+  height="1360"
+  rx="36"
+  class="compartment-rect compartment-rect--matrix"
+  fill="url(#matrixGlow)"
+/>
+
+<!-- Circular TCA Guide Track -->
+<svg:circle cx="1600" cy="2190" r="420" class="tca-guide-ring" />
+
+<!-- TCA Matrix Banner centered inside the circle -->
+<svg:g class="zone-banner zone-banner--emerald">
+  <svg:rect x="1390" y="1965" width="420" height="24" rx="6" class="zone-banner-bg zone-banner-bg--emerald" />
+  <svg:text x="1600" y="1977" text-anchor="middle" class="zone-banner-text zone-banner-text--emerald">
+    {{ locale() === 'ru' ? 'ЦИКЛ ТРИКАРБОНОВЫХ КИСЛОТ • 8 ФЕРМЕНТОВ (МАТРИКС)' : 'TCA CYCLE • 8 ENZYMES (MITOCHONDRIAL MATRIX)' }}
+  </svg:text>
+</svg:g>

@@ -1,0 +1,14 @@
+<svg:g
+  class="atp-terminal-badge"
+  [attr.transform]="'translate(' + x() + ',' + y() + ')'"
+  (click)="terminalClick.emit()"
+  role="button"
+  tabindex="0"
+  [attr.aria-label]="locale() === 'ru' ? 'Синтез АТФ' : 'ATP Yield'"
+>
+  <svg:rect x="-65" y="0" width="130" height="42" rx="10" class="atp-terminal-bg" />
+  <svg:text x="0" y="17" text-anchor="middle" class="atp-terminal-title">АТФ ⚡</svg:text>
+  <svg:text x="0" y="32" text-anchor="middle" class="atp-terminal-sub">
+    {{ locale() === 'ru' ? 'Синтез АТФ • Продукт' : 'ATP Yield • Product' }}
+  </svg:text>
+</svg:g>

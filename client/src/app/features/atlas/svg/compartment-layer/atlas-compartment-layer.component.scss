@@ -1,0 +1,198 @@
+:host {
+  display: contents;
+}
+
+// 1. Mitochondrial Compartment Backdrop
+.compartment-rect {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.07);
+  stroke-width: 1.5px;
+
+  &--cytosol {
+    stroke: rgba(245, 158, 11, 0.22);
+    stroke-dasharray: 8 6;
+  }
+
+  &--matrix {
+    stroke: rgba(16, 185, 129, 0.22);
+  }
+}
+
+.tca-guide-ring {
+  fill: none;
+  stroke: rgba(16, 185, 129, 0.16);
+  stroke-width: 1.5px;
+  stroke-dasharray: 6 6;
+}
+
+.membrane-line {
+  fill: none;
+  stroke-width: 2px;
+
+  &--omm {
+    stroke: rgba(16, 185, 129, 0.4);
+    stroke-dasharray: 6 3;
+  }
+
+  &--imm {
+    stroke: rgba(16, 185, 129, 0.85);
+  }
+}
+
+.membrane-label {
+  font-size: 9px;
+  font-weight: 600;
+  fill: #64748b;
+  letter-spacing: 0.04em;
+  user-select: none;
+}
+
+.ims-strip {
+  fill: rgba(16, 185, 129, 0.04);
+  stroke: none;
+}
+
+.mpc-channel-marker {
+  user-select: none;
+}
+
+.mpc-channel-bg {
+  fill: #0f172a;
+  stroke: #10b981;
+  stroke-width: 1.5px;
+}
+
+.mpc-channel-text {
+  font-size: 10px;
+  font-weight: 800;
+  fill: #34d399;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.zone-banner {
+  user-select: none;
+}
+
+.zone-banner-bg {
+  stroke-width: 1px;
+
+  &--amber {
+    fill: rgba(15, 23, 42, 0.88);
+    stroke: rgba(245, 158, 11, 0.4);
+  }
+
+  &--emerald {
+    fill: rgba(15, 23, 42, 0.88);
+    stroke: rgba(16, 185, 129, 0.4);
+  }
+}
+
+.zone-banner-text {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  dominant-baseline: central;
+
+  &--amber {
+    fill: #f59e0b;
+  }
+
+  &--emerald {
+    fill: #10b981;
+  }
+}
+
+.pdh-cluster-boundary {
+  user-select: none;
+}
+
+.pdh-cluster-rect {
+  fill: rgba(245, 158, 11, 0.035);
+  stroke: rgba(245, 158, 11, 0.38);
+  stroke-dasharray: 6 4;
+  stroke-width: 1.5px;
+}
+
+.pdh-badge-bg {
+  fill: #0f172a;
+  stroke: #f59e0b;
+  stroke-width: 1.2px;
+}
+
+.pdh-badge-text {
+  font-size: 10px;
+  font-weight: 800;
+  fill: #f59e0b;
+  letter-spacing: 0.08em;
+  dominant-baseline: central;
+}
+
+.leloir-cluster-boundary,
+.glycogen-cluster-boundary,
+.fructose-cluster-boundary {
+  user-select: none;
+}
+
+.leloir-cluster-rect {
+  fill: rgba(168, 85, 247, 0.035);
+  stroke: rgba(168, 85, 247, 0.42);
+  stroke-dasharray: 6 4;
+  stroke-width: 1.5px;
+}
+
+.leloir-badge-bg {
+  fill: #0f172a;
+  stroke: #a855f7;
+  stroke-width: 1.2px;
+}
+
+.leloir-badge-text {
+  font-size: 10px;
+  font-weight: 800;
+  fill: #c084fc;
+  letter-spacing: 0.06em;
+  dominant-baseline: central;
+}
+
+.glycogen-cluster-rect {
+  fill: rgba(6, 182, 212, 0.035);
+  stroke: rgba(6, 182, 212, 0.42);
+  stroke-dasharray: 6 4;
+  stroke-width: 1.5px;
+}
+
+.glycogen-badge-bg {
+  fill: #0f172a;
+  stroke: #06b6d4;
+  stroke-width: 1.2px;
+}
+
+.glycogen-badge-text {
+  font-size: 10px;
+  font-weight: 800;
+  fill: #22d3ee;
+  letter-spacing: 0.06em;
+  dominant-baseline: central;
+}
+
+.fructose-cluster-rect {
+  fill: rgba(249, 115, 22, 0.035);
+  stroke: rgba(249, 115, 22, 0.42);
+  stroke-dasharray: 6 4;
+  stroke-width: 1.5px;
+}
+
+.fructose-badge-bg {
+  fill: #0f172a;
+  stroke: #f97316;
+  stroke-width: 1.2px;
+}
+
+.fructose-badge-text {
+  font-size: 10px;
+  font-weight: 800;
+  fill: #fb923c;
+  letter-spacing: 0.06em;
+  dominant-baseline: central;
+}

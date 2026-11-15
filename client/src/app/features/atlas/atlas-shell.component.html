@@ -255,220 +255,20 @@
       <g ma-central-beacon class="central-hub-beacon" pointer-events="none"></g>
 
       <!-- 4. Cellular Compartment Backdrops: Cytosol, Envelope & Mitochondrial Matrix -->
-      <g class="compartment-layer" pointer-events="none">
-        <!-- Cytosol Compartment (Glycolysis + Galactose Leloir + Fructose Fructolysis) -->
-        <rect
-          x="560"
-          y="-640"
-          width="2000"
-          height="1895"
-          rx="32"
-          class="compartment-rect compartment-rect--cytosol"
-          fill="url(#cytosolGlow)"
-        />
-        <!-- Glycolysis Cytosolic Banner -->
-        <g class="zone-banner zone-banner--amber">
-          <rect x="1620" y="-338" width="290" height="24" rx="6" class="zone-banner-bg zone-banner-bg--amber" />
-          <text x="1765" y="-326" text-anchor="middle" class="zone-banner-text zone-banner-text--amber">
-            {{ localeService.locale() === 'ru' ? 'ГЛИКОЛИЗ • 10 СТАДИЙ (ЦИТОПЛАЗМА)' : 'GLYCOLYSIS • 10 STEPS (CYTOSOL)' }}
-          </text>
-        </g>
+      <g
+        ma-compartment-layer
+        class="compartment-layer"
+        pointer-events="none"
+        [locale]="localeService.locale()"
+      ></g>
 
-        <!-- Galactose Leloir Sub-Cluster in Left Upper Cytosol -->
-        <g class="leloir-cluster-boundary">
-          <rect
-            x="580"
-            y="-335"
-            width="770"
-            height="315"
-            rx="18"
-            class="leloir-cluster-rect"
-          />
-          <g transform="translate(815, -325)">
-            <rect x="0" y="0" width="280" height="22" rx="4" class="leloir-badge-bg" />
-            <text x="140" y="11" text-anchor="middle" class="leloir-badge-text">
-              {{ localeService.locale() === 'ru' ? 'ПУТЬ ЛЕЛУАРА • ГАЛАКТОЗА (4 СТАДИИ)' : 'LELOIR PATHWAY • GALACTOSE (4 STEPS)' }}
-            </text>
-          </g>
-        </g>
-
-        <!-- Glycogen Metabolism Sub-Cluster (Synthesis & Phosphorolysis) -->
-        <g class="glycogen-cluster-boundary">
-          <rect
-            x="1132"
-            y="-492"
-            width="376"
-            height="472"
-            rx="18"
-            class="glycogen-cluster-rect"
-          />
-          <g transform="translate(1144, -484)">
-            <rect x="0" y="0" width="244" height="22" rx="4" class="glycogen-badge-bg" />
-            <text x="122" y="11" text-anchor="middle" class="glycogen-badge-text">
-              {{ localeService.locale() === 'ru' ? 'ОБМЕН ГЛИКОГЕНА • СИНТЕЗ И РАСПАД' : 'GLYCOGEN METABOLISM • RESERVE' }}
-            </text>
-          </g>
-        </g>
-
-        <!-- Fructose / Fructolysis Sub-Cluster in Right Cytosol -->
-        <g class="fructose-cluster-boundary">
-          <rect
-            x="1825"
-            y="-12"
-            width="640"
-            height="606"
-            rx="18"
-            class="fructose-cluster-rect"
-          />
-          <g transform="translate(1842, -2)">
-            <rect x="0" y="0" width="280" height="22" rx="4" class="fructose-badge-bg" />
-            <text x="140" y="11" text-anchor="middle" class="fructose-badge-text">
-              {{ localeService.locale() === 'ru' ? 'ФРУКТОЛИЗ И ШУНТ HK • ФРУКТОЗА' : 'FRUCTOLYSIS & HK SHUNT • FRUCTOSE' }}
-            </text>
-          </g>
-        </g>
-
-        <!-- Outer & Inner Mitochondrial Membranes (Mitochondrial Envelope) -->
-        <g class="membrane-boundary-group">
-          <!-- Outer Mitochondrial Membrane (OMM) -->
-          <line x1="560" y1="1282" x2="2560" y2="1282" class="membrane-line membrane-line--omm" />
-          <text x="576" y="1276" class="membrane-label">
-            {{ localeService.locale() === 'ru' ? 'Наружная мембрана митохондрий (НММ)' : 'Outer Mitochondrial Membrane (OMM)' }}
-          </text>
-
-          <!-- Intermembrane Space (IMS) -->
-          <rect x="560" y="1284" width="2000" height="28" class="ims-strip" />
-
-          <!-- Inner Mitochondrial Membrane (IMM) -->
-          <line x1="560" y1="1314" x2="2560" y2="1314" class="membrane-line membrane-line--imm" />
-          <text x="576" y="1328" class="membrane-label">
-            {{ localeService.locale() === 'ru' ? 'Внутренняя мембрана митохондрий (ВММ)' : 'Inner Mitochondrial Membrane (IMM)' }}
-          </text>
-
-          <!-- MPC (Mitochondrial Pyruvate Carrier) Gateway Marker offset clear of arrow axis -->
-          <g transform="translate(1672, 1298)" class="mpc-channel-marker">
-            <rect x="-42" y="-12" width="84" height="24" rx="6" class="mpc-channel-bg" />
-            <text x="0" y="0" class="mpc-channel-text">
-              {{ localeService.locale() === 'ru' ? 'МПЦ1/2' : 'MPC1/2' }}
-            </text>
-          </g>
-        </g>
-
-        <!-- Dedicated PDH Complex Transition Frame in Matrix -->
-        <g class="pdh-cluster-boundary">
-          <rect
-            x="1160"
-            y="1338"
-            width="880"
-            height="214"
-            rx="18"
-            class="pdh-cluster-rect"
-          />
-          <g transform="translate(1178, 1348)">
-            <rect x="0" y="0" width="240" height="22" rx="4" class="pdh-badge-bg" />
-            <text x="120" y="11" text-anchor="middle" class="pdh-badge-text">
-              {{ localeService.locale() === 'ru' ? 'КОМПЛЕКС ПДХ (E1 • E2 • E3)' : 'PDH COMPLEX (E1 • E2 • E3)' }}
-            </text>
-          </g>
-        </g>
-
-        <!-- Mitochondrial Matrix Compartment (TCA Cycle & PDH) -->
-        <rect
-          x="960"
-          y="1325"
-          width="1280"
-          height="1360"
-          rx="36"
-          class="compartment-rect compartment-rect--matrix"
-          fill="url(#matrixGlow)"
-        />
-
-        <!-- Circular TCA Guide Track -->
-        <circle cx="1600" cy="2190" r="420" class="tca-guide-ring" />
-
-        <!-- TCA Matrix Banner centered inside the circle -->
-        <g class="zone-banner zone-banner--emerald">
-          <rect x="1390" y="1965" width="420" height="24" rx="6" class="zone-banner-bg zone-banner-bg--emerald" />
-          <text x="1600" y="1977" text-anchor="middle" class="zone-banner-text zone-banner-text--emerald">
-            {{ localeService.locale() === 'ru' ? 'ЦИКЛ ТРИКАРБОНОВЫХ КИСЛОТ • 8 ФЕРМЕНТОВ (МАТРИКС)' : 'TCA CYCLE • 8 ENZYMES (MITOCHONDRIAL MATRIX)' }}
-          </text>
-        </g>
-
-        <!-- OxPhos Crista Compartment (IMM & Complexes I - V) -->
-        <g class="oxphos-cluster-boundary">
-          <rect
-            x="920"
-            y="2730"
-            width="1360"
-            height="620"
-            rx="24"
-            class="oxphos-cluster-rect"
-          />
-          <!-- Intermembrane Space strip (P-side, +) -->
-          <rect x="930" y="2738" width="1340" height="42" rx="8" class="oxphos-ims-band" />
-          <g transform="translate(940, 2744)">
-            <rect x="0" y="0" width="145" height="30" rx="5" class="oxphos-ims-badge-bg" />
-            <text x="72" y="11" text-anchor="middle" dominant-baseline="central" class="oxphos-ims-text">
-              {{ localeService.locale() === 'ru' ? 'МЕЖМЕМБРАННОЕ ПРОСТРАНСТВО' : 'INTERMEMBRANE SPACE' }}
-            </text>
-            <text x="72" y="22" text-anchor="middle" dominant-baseline="central" class="oxphos-ims-sub">
-              {{ localeService.locale() === 'ru' ? 'P-сторона (+) • IMS' : 'P-side (+) • IMS' }}
-            </text>
-          </g>
-
-          <!-- Inner Mitochondrial Membrane line (IMM) -->
-          <line x1="930" y1="2780" x2="2270" y2="2780" class="membrane-line membrane-line--imm" />
-          <text x="942" y="2796" class="membrane-label">
-            {{ localeService.locale() === 'ru' ? 'Внутренняя мембрана крист (ВММ)' : 'Inner Crista Membrane (IMM)' }}
-          </text>
-
-          <!-- Crista Zone Banner -->
-          <g transform="translate(1380, 2718)">
-            <rect x="0" y="0" width="440" height="22" rx="4" class="oxphos-badge-bg" />
-            <text x="220" y="11" text-anchor="middle" class="oxphos-badge-text">
-              {{ localeService.locale() === 'ru' ? 'ДЫХАТЕЛЬНАЯ ЦЕПЬ И АТФ-СИНТАЗА • КРИСТЫ ВММ' : 'ELECTRON TRANSPORT CHAIN & ATP SYNTHASE • CRISTAE' }}
-            </text>
-          </g>
-
-          <!-- Substrates Inflow Arrows above Complexes -->
-          <!-- Inflow 1: NADH from matrix entering Complex I -->
-          <path d="M 1140 2690 L 1140 2744" class="substrate-inflow-arrow" marker-end="url(#rx-arrowhead)" />
-          <text x="1140" y="2682" class="substrate-inflow-label" text-anchor="middle">
-            {{ localeService.locale() === 'ru' ? 'НАДН (матрикс)' : 'NADH (matrix)' }}
-          </text>
-
-          <!-- Inflow 2: Succinate from TCA cycle entering Complex II -->
-          <path d="M 1300 2690 L 1300 2752" class="substrate-inflow-arrow" marker-end="url(#rx-arrowhead)" />
-          <text x="1300" y="2682" class="substrate-inflow-label" text-anchor="middle">
-            {{ localeService.locale() === 'ru' ? 'Сукцинат (из ЦТК)' : 'Succinate (from TCA)' }}
-          </text>
-
-          <!-- Electron transfer from Complex II to Ubiquinol-10 -->
-          <path d="M 1300 2820 C 1300 2885, 1360 2940, 1400 3015" class="electron-transfer-path" marker-end="url(#rx-arrowhead)" />
-          <g transform="translate(1335, 2915)">
-            <rect x="-16" y="-7" width="32" height="14" rx="3" class="redox-chip-bg" />
-            <text x="0" y="0" text-anchor="middle" dominant-baseline="central" class="redox-chip-text">2e⁻</text>
-          </g>
-        </g>
-
-        <!-- Proton Gradient Visual Layer (PMF & Downhill ATP Synthase Flux) -->
-        <g class="proton-gradient-layer" pointer-events="none">
-          <!-- Downhill H+ vector: IMS -> Fo rotor -->
-          <line x1="2055" y1="2720" x2="2055" y2="2742" class="proton-vector-line proton-vector-line--downhill" marker-end="url(#rx-arrowhead)" />
-          <g transform="translate(2055, 2710)">
-            <rect x="-24" y="-8" width="48" height="16" rx="4" class="proton-chip-bg proton-chip-bg--atp" />
-            <text x="0" y="0" text-anchor="middle" dominant-baseline="central" class="proton-chip-text proton-chip-text--atp">4H⁺ ↓</text>
-          </g>
-
-          <!-- Central PMF / Voltage Potential Badge in IMS -->
-          <g transform="translate(1395, 2750)">
-            <rect x="-85" y="-10" width="170" height="20" rx="5" class="pmf-badge-bg" />
-            <text x="0" y="1" text-anchor="middle" dominant-baseline="central" class="pmf-badge-text">
-              {{ localeService.locale() === 'ru' ? 'Δψ ≈ −180 мВ • ПДС ≈ 220 мВ' : 'Δψ ≈ −180 mV • PMF ≈ 220 mV' }}
-            </text>
-          </g>
-        </g>
-      </g>
+      <!-- 5. OxPhos Crista Compartment & Proton Gradient Layer -->
+      <g
+        ma-oxphos-layer
+        class="oxphos-layer"
+        pointer-events="none"
+        [locale]="localeService.locale()"
+      ></g>
 
       <!-- 5. Metabolic Crossroads (Outbound & Inbound Pathways) -->
       <g
@@ -507,77 +307,50 @@
 
       <!-- 4. Membrane Complexes Layer (Rendered above reaction paths so efflux arcs pass underneath) -->
       <g class="membrane-complexes-layer">
-        <!-- Complex I: L-shaped transmembrane architecture -->
-        <g class="membrane-complex-deco" transform="translate(1100, 2748)">
-          <svg:title>{{ localeService.locale() === 'ru' ? 'Комплекс I (НАДН:убихинон-оксидоредуктаза)' : 'Complex I (NADH:ubiquinone oxidoreductase)' }}</svg:title>
-          <path d="M 0 0 L 80 0 L 80 32 L 50 32 L 50 85 L 0 85 Z" class="complex-protein-body" />
-          <text x="40" y="20" text-anchor="middle" class="complex-label">I</text>
-          <text x="25" y="60" text-anchor="middle" class="complex-sub">
-            {{ localeService.locale() === 'ru' ? 'НАДН-Q' : 'NADH-Q' }}
-          </text>
-        </g>
-
-        <!-- Complex II: Transmembrane SDH -->
-        <g class="membrane-complex-deco" transform="translate(1270, 2755)">
-          <svg:title>{{ localeService.locale() === 'ru' ? 'Комплекс II (Сукцинатдегидрогеназа / СДГ)' : 'Complex II (Succinate dehydrogenase / SDH)' }}</svg:title>
-          <rect x="0" y="0" width="60" height="65" rx="8" class="complex-protein-body" />
-          <text x="30" y="24" text-anchor="middle" class="complex-label">II</text>
-          <text x="30" y="44" text-anchor="middle" class="complex-sub">
-            {{ localeService.locale() === 'ru' ? 'СДГ' : 'SDH' }}
-          </text>
-        </g>
-
-        <!-- Complex III: Cytochrome bc1 dimer -->
-        <g class="membrane-complex-deco" transform="translate(1520, 2748)">
-          <svg:title>{{ localeService.locale() === 'ru' ? 'Комплекс III (Коэнзим Q:цитохром c оксидоредуктаза / Цит. bc₁)' : 'Complex III (Coenzyme Q:cytochrome c oxidoreductase / Cyt bc₁)' }}</svg:title>
-          <rect x="0" y="0" width="75" height="75" rx="10" class="complex-protein-body" />
-          <text x="37" y="26" text-anchor="middle" class="complex-label">III</text>
-          <text x="37" y="46" text-anchor="middle" class="complex-sub">
-            {{ localeService.locale() === 'ru' ? 'Цит. bc₁' : 'Cyt bc₁' }}
-          </text>
-        </g>
-
-        <!-- Complex IV: Cytochrome c Oxidase -->
-        <g class="membrane-complex-deco" transform="translate(1775, 2748)">
-          <svg:title>{{ localeService.locale() === 'ru' ? 'Комплекс IV (Цитохром c оксидаза / ЦОК)' : 'Complex IV (Cytochrome c oxidase / COX)' }}</svg:title>
-          <rect x="0" y="0" width="75" height="75" rx="10" class="complex-protein-body" />
-          <text x="37" y="26" text-anchor="middle" class="complex-label">IV</text>
-          <text x="37" y="46" text-anchor="middle" class="complex-sub">
-            {{ localeService.locale() === 'ru' ? 'ЦОК' : 'COX' }}
-          </text>
-        </g>
-
-        <!-- Complex V: FoF1 ATP Synthase (Fo rotor in IMM, stalk, F1 catalytic sphere in matrix) -->
-        <g class="membrane-complex-deco" transform="translate(2025, 2740)">
-          <svg:title>{{ localeService.locale() === 'ru' ? 'Комплекс V (F₀F₁ АТФ-синтаза)' : 'Complex V (F₀F₁ ATP synthase)' }}</svg:title>
-          <!-- Fo stator/rotor in IMM -->
-          <rect x="8" y="5" width="44" height="28" rx="6" class="complex-protein-body" />
-          <text x="30" y="22" text-anchor="middle" class="complex-sub">F₀</text>
-          <!-- Central gamma stalk -->
-          <line x1="30" y1="33" x2="30" y2="56" class="atp-synthase-stalk" />
-          <!-- F1 alpha3-beta3 catalytic head -->
-          <circle cx="30" cy="74" r="22" class="complex-protein-body" />
-          <text x="30" y="70" text-anchor="middle" class="complex-label">V</text>
-          <text x="30" y="84" text-anchor="middle" class="complex-sub">
-            {{ localeService.locale() === 'ru' ? 'F₁ АТФ' : 'F₁ ATP' }}
-          </text>
-        </g>
+        <g
+          ma-membrane-complex
+          [complexId]="'I'"
+          [x]="1100"
+          [y]="2748"
+          [locale]="localeService.locale()"
+        ></g>
+        <g
+          ma-membrane-complex
+          [complexId]="'II'"
+          [x]="1270"
+          [y]="2755"
+          [locale]="localeService.locale()"
+        ></g>
+        <g
+          ma-membrane-complex
+          [complexId]="'III'"
+          [x]="1520"
+          [y]="2748"
+          [locale]="localeService.locale()"
+        ></g>
+        <g
+          ma-membrane-complex
+          [complexId]="'IV'"
+          [x]="1775"
+          [y]="2748"
+          [locale]="localeService.locale()"
+        ></g>
+        <g
+          ma-membrane-complex
+          [complexId]="'V'"
+          [x]="2025"
+          [y]="2740"
+          [locale]="localeService.locale()"
+        ></g>
 
         <!-- Final ATP Synthesis Product Terminal Badge -->
         <g
-          class="atp-terminal-badge"
-          transform="translate(2055, 3110)"
-          (click)="selectMetaboliteByCode('MET_ATP')"
-          role="button"
-          tabindex="0"
-          [attr.aria-label]="localeService.locale() === 'ru' ? 'Синтез АТФ' : 'ATP Yield'"
-        >
-          <rect x="-65" y="0" width="130" height="42" rx="10" class="atp-terminal-bg" />
-          <text x="0" y="17" text-anchor="middle" class="atp-terminal-title">АТФ ⚡</text>
-          <text x="0" y="32" text-anchor="middle" class="atp-terminal-sub">
-            {{ localeService.locale() === 'ru' ? 'Синтез АТФ • Продукт' : 'ATP Yield • Product' }}
-          </text>
-        </g>
+          ma-atp-terminal
+          [x]="2055"
+          [y]="3110"
+          [locale]="localeService.locale()"
+          (terminalClick)="selectMetaboliteByCode('MET_ATP')"
+        ></g>
       </g>
 
       <!-- 5. Metabolite Node Tiles (Substrates & Products) -->

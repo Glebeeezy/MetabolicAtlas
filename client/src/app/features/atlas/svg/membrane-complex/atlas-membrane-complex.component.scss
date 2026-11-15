@@ -1,0 +1,44 @@
+:host {
+  display: contents;
+}
+
+.membrane-complex-deco {
+  cursor: pointer;
+
+  .complex-protein-body {
+    fill: #0c1a2e;
+    stroke: #0ea5e9;
+    stroke-width: 1.8px;
+    filter: drop-shadow(0 2px 6px rgba(14, 165, 233, 0.3));
+    transition: stroke 0.2s ease, filter 0.2s ease, fill 0.2s ease;
+  }
+
+  &:hover .complex-protein-body {
+    stroke: #38bdf8;
+    fill: #0f2744;
+    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.5));
+  }
+
+  .complex-label {
+    font-size: 14px;
+    font-weight: 900;
+    fill: #38bdf8;
+    dominant-baseline: central;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .complex-sub {
+    font-size: 8.5px;
+    font-weight: 700;
+    fill: #94a3b8;
+    letter-spacing: 0.04em;
+    dominant-baseline: central;
+  }
+
+  .atp-synthase-stalk {
+    fill: none;
+    stroke: #0ea5e9;
+    stroke-width: 3.5px;
+    stroke-linecap: round;
+  }
+}
