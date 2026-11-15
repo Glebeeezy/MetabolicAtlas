@@ -1,5 +1,4 @@
-:host,
-ma-atlas-shell {
+:host {
   display: flex;
   flex: 1;
   width: 100%;
@@ -7,12 +6,6 @@ ma-atlas-shell {
   min-height: 0;
   position: relative;
   overflow: hidden;
-
-  --color-reaction-line: #38bdf8;
-  --color-cofactor-line: #94a3b8;
-  --color-reaction-active: #fb7185;
-  --color-substrate-accent: #38bdf8;
-  --color-product-accent: #fb7185;
 }
 
 .canvas-viewport {

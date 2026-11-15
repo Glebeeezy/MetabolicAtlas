@@ -7,7 +7,6 @@ import {
   OnDestroy,
   OnInit,
   signal,
-  ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
