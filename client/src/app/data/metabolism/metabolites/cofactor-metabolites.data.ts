@@ -32,6 +32,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Glycolysis",
         "isCurrentPathway": false,
         "role": "cofactor",
+        "reactionCode": "R_PGK",
+        "stepNumber": 7,
         "detailsRu": "Генерируется на стадиях 7 (PGK) и 10 (PK) субстратным фосфорилированием (+4 брутто, +2 нетто АТФ / глюкозу).",
         "detailsEn": "Generated in steps 7 (PGK) and 10 (PK) via substrate-level phosphorylation (net +2 ATP / glucose)."
       }
@@ -68,6 +70,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Glycolysis",
         "isCurrentPathway": false,
         "role": "cofactor",
+        "reactionCode": "R_HK",
+        "stepNumber": 1,
         "detailsRu": "Фосфорилируется в АТФ на стадиях 7 (PGK) и 10 (PK).",
         "detailsEn": "Phosphorylated to ATP in steps 7 and 10."
       }
@@ -106,6 +110,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Glycolysis",
         "isCurrentPathway": false,
         "role": "cofactor",
+        "reactionCode": "R_GAPDH",
+        "stepNumber": 6,
         "detailsRu": "Выделяется при фосфорилировании гексоз и окислении НАД+; расходуется пируваткиназой.",
         "detailsEn": "Product of hexose kinase reactions and GAPDH; consumed by pyruvate kinase."
       }
@@ -145,6 +151,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Citric Acid Cycle (TCA)",
         "isCurrentPathway": true,
         "role": "cofactor",
+        "reactionCode": "R_IDH",
+        "stepNumber": 3,
         "detailsRu": "Окислительный кофермент изоцитрат- (ст. 3), α-кетоглутарат- (ст. 4) и малатдегидрогеназы (ст. 8).",
         "detailsEn": "Oxidizing coenzyme for isocitrate (step 3), α-ketoglutarate (step 4), and malate dehydrogenases (step 8)."
       },
@@ -154,6 +162,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Glycolysis (Cytosol)",
         "isCurrentPathway": false,
         "role": "cofactor",
+        "reactionCode": "R_GAPDH",
+        "stepNumber": 6,
         "detailsRu": "Окисление глицеральдегид-3-фосфата (ГАФДГ); требует непрерывной челночной регенерации.",
         "detailsEn": "Oxidation of glyceraldehyde-3-phosphate (GAPDH); requires continuous shuttle regeneration."
       },
@@ -163,6 +173,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Pyruvate Dehydrogenase Complex",
         "isCurrentPathway": false,
         "role": "cofactor",
+        "reactionCode": "R_PDH",
+        "stepNumber": 1,
         "detailsRu": "Окисление дигидролипоата ферментом E3 (дигидролипоилдегидрогеназой).",
         "detailsEn": "Reoxidizes dihydrolipoamide via subunit E3 (dihydrolipoyl dehydrogenase)."
       },
@@ -172,6 +184,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Electron Transport Chain (Complex I)",
         "isCurrentPathway": false,
         "role": "product",
+        "reactionCode": "R_ETC_CI",
+        "stepNumber": 1,
         "detailsRu": "Регенерируется из НАДН Комплексом I дыхательной цепи с переносом протонов в межмембранное пространство.",
         "detailsEn": "Regenerated from NADH by Complex I with concomitant proton translocation into intermembrane space."
       }
@@ -211,6 +225,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Citric Acid Cycle (TCA)",
         "isCurrentPathway": true,
         "role": "product",
+        "reactionCode": "R_IDH",
+        "stepNumber": 3,
         "detailsRu": "Образуется на стадиях 3 (ИДГ3), 4 (ОГДГ) и 8 (МДГ2) — суммарно 3 НАДН за оборот цикла.",
         "detailsEn": "Formed in steps 3 (IDH3), 4 (α-KGDH), and 8 (MDH2) — total of 3 NADH per cycle turn."
       },
@@ -220,6 +236,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Electron Transport Chain (Complex I)",
         "isCurrentPathway": false,
         "role": "substrate",
+        "reactionCode": "R_ETC_CI",
+        "stepNumber": 1,
         "detailsRu": "Главный донор электронов в Комплекс I; окисление дает выход ~2.5 АТФ на молекулу.",
         "detailsEn": "Primary electron donor to Complex I; oxidation yields ~2.5 ATP per molecule."
       },
@@ -230,7 +248,9 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "isCurrentPathway": false,
         "role": "product",
         "detailsRu": "Генерируется при окислении пирувата до ацетил-КоА.",
-        "detailsEn": "Generated during oxidative decarboxylation of pyruvate to Acetyl-CoA."
+        "detailsEn": "Generated during oxidative decarboxylation of pyruvate to Acetyl-CoA.",
+        "reactionCode": "R_PDH",
+        "stepNumber": 1
       }
     ]
   },
@@ -268,6 +288,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Citric Acid Cycle (TCA)",
         "isCurrentPathway": true,
         "role": "cofactor",
+        "reactionCode": "R_SDH",
+        "stepNumber": 6,
         "detailsRu": "Стадия 6 (СДГ): акцептор пары протонов и электронов при окислении сукцината в фумарат.",
         "detailsEn": "Step 6 (SDH): two-electron acceptor in the oxidation of succinate to fumarate."
       },
@@ -314,6 +336,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Citric Acid Cycle (TCA)",
         "isCurrentPathway": true,
         "role": "product",
+        "reactionCode": "R_SDH",
+        "stepNumber": 6,
         "detailsRu": "Образуется на стадии 6 сукцинатдегидрогеназой; дает ~1.5 АТФ при передаче электронов в убихинон.",
         "detailsEn": "Formed in step 6 by succinate dehydrogenase; yields ~1.5 ATP upon electron transfer to ubiquinone."
       },
@@ -324,7 +348,9 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "isCurrentPathway": false,
         "role": "intermediate",
         "detailsRu": "Восстанавливает убихинон до убихинола (QH₂) во внутренней мембране.",
-        "detailsEn": "Reduces ubiquinone to ubiquinol (QH₂) within the inner mitochondrial membrane."
+        "detailsEn": "Reduces ubiquinone to ubiquinol (QH₂) within the inner mitochondrial membrane.",
+        "reactionCode": "R_ETC_CII",
+        "stepNumber": 2
       }
     ]
   },
@@ -360,6 +386,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Citric Acid Cycle (TCA)",
         "isCurrentPathway": true,
         "role": "cofactor",
+        "reactionCode": "R_SUCL",
+        "stepNumber": 5,
         "detailsRu": "Стадия 5: фосфорилируется до ГТФ за счет энергии тиоэфирной связи сукцинил-КоА.",
         "detailsEn": "Step 5: phosphorylated to GTP driven by high-energy thioester bond cleavage of succinyl-CoA."
       }
@@ -397,6 +425,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Citric Acid Cycle (TCA)",
         "isCurrentPathway": true,
         "role": "product",
+        "reactionCode": "R_SUCL",
+        "stepNumber": 5,
         "detailsRu": "Стадия 5: прямой макроэргический выход одного оборота цикла (сукцинил-КоА-синтетаза).",
         "detailsEn": "Step 5: direct macroergic output of one cycle revolution (succinyl-CoA synthetase)."
       },
@@ -459,6 +489,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Citric Acid Cycle (TCA)",
         "isCurrentPathway": true,
         "role": "cofactor",
+        "reactionCode": "R_CS",
+        "stepNumber": 1,
         "detailsRu": "Освобождается на стадиях 1 и 5, связывается на стадии 4 с образованием сукцинил-КоА.",
         "detailsEn": "Released in steps 1 and 5, condensed in step 4 to form succinyl-CoA."
       },
@@ -469,7 +501,9 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "isCurrentPathway": false,
         "role": "substrate",
         "detailsRu": "Принимает ацетильную группу от E2 ➔ Ацетил-КоА.",
-        "detailsEn": "Accepts acetyl group from E2 subunit yielding Acetyl-CoA."
+        "detailsEn": "Accepts acetyl group from E2 subunit yielding Acetyl-CoA.",
+        "reactionCode": "R_PDH",
+        "stepNumber": 1
       },
       {
         "pathwayCode": "PWY_BETA_OX",
@@ -517,6 +551,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Citric Acid Cycle (TCA)",
         "isCurrentPathway": true,
         "role": "cofactor",
+        "reactionCode": "R_SUCL",
+        "stepNumber": 5,
         "detailsRu": "Стадия 5: субстрат сукцинил-КоА-синтетазы (образование фосфогистидинового интермедиата).",
         "detailsEn": "Step 5: substrate for succinyl-CoA synthetase forming phosphohistidine enzyme intermediate."
       },
@@ -527,7 +563,9 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "isCurrentPathway": false,
         "role": "substrate",
         "detailsRu": "Субстрат митохондриальной АТФ-синтазы (Комплекс V): АДФ + Фᵢ ➔ АТФ.",
-        "detailsEn": "Substrate for mitochondrial ATP synthase (Complex V): ADP + Pᵢ ➔ ATP."
+        "detailsEn": "Substrate for mitochondrial ATP synthase (Complex V): ADP + Pᵢ ➔ ATP.",
+        "reactionCode": "R_ATP_SYN",
+        "stepNumber": 5
       }
     ]
   },
@@ -579,7 +617,9 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "isCurrentPathway": true,
         "role": "product",
         "detailsRu": "Стадии 3 (ИДГ3) и 4 (ОГДГ): выделение двух молекул CO₂ за оборот.",
-        "detailsEn": "Steps 3 (IDH3) and 4 (α-KGDH): release of two CO₂ molecules per cycle turn."
+        "detailsEn": "Steps 3 (IDH3) and 4 (α-KGDH): release of two CO₂ molecules per cycle turn.",
+        "reactionCode": "R_IDH",
+        "stepNumber": 3
       },
       {
         "pathwayCode": "PWY_UREA",
@@ -588,7 +628,9 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "isCurrentPathway": false,
         "role": "substrate",
         "detailsRu": "Субстрат карбамоилфосфатсинтетазы I (в форме бикарбоната HCO₃⁻).",
-        "detailsEn": "Substrate for carbamoyl phosphate synthetase I (as bicarbonate HCO₃⁻)."
+        "detailsEn": "Substrate for carbamoyl phosphate synthetase I (as bicarbonate HCO₃⁻).",
+        "reactionCode": "R_CPS1",
+        "stepNumber": 1
       },
       {
         "pathwayCode": "PWY_GNG",
@@ -636,6 +678,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Citric Acid Cycle (TCA)",
         "isCurrentPathway": true,
         "role": "cofactor",
+        "reactionCode": "R_SDH",
+        "stepNumber": 6,
         "detailsRu": "Стадия 6 (СДГ): акцептор электронов от FADH₂ с образованием убихинола (QH₂).",
         "detailsEn": "Step 6 (SDH): terminal electron acceptor from FADH₂ forming ubiquinol (QH₂)."
       },
@@ -646,7 +690,9 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "isCurrentPathway": false,
         "role": "intermediate",
         "detailsRu": "Переносчик электронов от Комплексов I и II к Комплексу III.",
-        "detailsEn": "Mobile electron shuttle linking Complexes I & II to Complex III."
+        "detailsEn": "Mobile electron shuttle linking Complexes I & II to Complex III.",
+        "reactionCode": "R_ETC_CI",
+        "stepNumber": 1
       }
     ]
   },
@@ -683,6 +729,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Citric Acid Cycle (TCA)",
         "isCurrentPathway": true,
         "role": "cofactor",
+        "reactionCode": "R_FUM",
+        "stepNumber": 7,
         "detailsRu": "Стадии 1 (гидролиз цитрил-КоА), 2 (гидратация цис-аконитата) и 7 (гидратация фумарата).",
         "detailsEn": "Steps 1 (citryl-CoA hydrolysis), 2 (cis-aconitate hydration), and 7 (fumarate hydration)."
       },
@@ -693,7 +741,9 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "isCurrentPathway": false,
         "role": "cofactor",
         "detailsRu": "Расщепляет β-1,4-гликозидную связь лактозы на D-галактозу и D-глюкозу.",
-        "detailsEn": "Hydrolyzes lactose β-1,4 glycosidic bond into D-galactose and D-glucose."
+        "detailsEn": "Hydrolyzes lactose β-1,4 glycosidic bond into D-galactose and D-glucose.",
+        "reactionCode": "R_GALK",
+        "stepNumber": 1
       },
       {
         "pathwayCode": "PW-FRUCTOSE",
@@ -702,7 +752,9 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "isCurrentPathway": false,
         "role": "cofactor",
         "detailsRu": "Расщепляет α-1↔2-β связь сахарозы на D-фруктозу и D-глюкозу.",
-        "detailsEn": "Hydrolyzes sucrose α-1↔2-β glycosidic bond into D-fructose and D-glucose."
+        "detailsEn": "Hydrolyzes sucrose α-1↔2-β glycosidic bond into D-fructose and D-glucose.",
+        "reactionCode": "R_KHK",
+        "stepNumber": 1
       }
     ]
   },
@@ -740,6 +792,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Glycogen Metabolism (Glycogenesis)",
         "isCurrentPathway": true,
         "role": "cofactor",
+        "reactionCode": "R_UGP2",
+        "stepNumber": 1,
         "detailsRu": "Стадия 1 (UGP2): отдаёт УМФ-фрагмент на Г1Ф для образования УДФ-глюкозы с выходом ФФᵢ.",
         "detailsEn": "Step 1 (UGP2): transfers UMP onto G1P releasing PPᵢ to form UDP-glucose."
       }
@@ -779,6 +833,8 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Glycogen Metabolism (Glycogenesis)",
         "isCurrentPathway": true,
         "role": "product",
+        "reactionCode": "R_GYS",
+        "stepNumber": 2,
         "detailsRu": "Стадия 2 (GYS): освобождается при переносе остатка глюкозы с УДФ-глюкозы на гликоген (регенерация УДФ + АТФ ➔ УТФ + АДФ).",
         "detailsEn": "Step 2 (GYS): released upon glucosyl transfer from UDP-glucose onto glycogen (regenerated to UTP using 1 ATP)."
       }
@@ -820,8 +876,96 @@ export const BIOLOGICAL_COFACTOR_METABOLITES: BiologicalMetabolite[] = [
         "pathwayNameEn": "Glycogen Metabolism (Glycogenesis)",
         "isCurrentPathway": true,
         "role": "product",
+        "reactionCode": "R_UGP2",
+        "stepNumber": 1,
         "detailsRu": "Стадия 1 (UGP2): образуется при атаке Г1Ф на α-фосфат УТФ и немедленно расщепляется пирофосфатазой (PPA1), сдвигая реакцию к УДФ-глюкозе.",
         "detailsEn": "Step 1 (UGP2): expelled during UDP-glucose formation and rapidly hydrolyzed by PPA1 to pull glycogenesis forward."
+      }
+    ]
+  },
+  {
+    "id": "c0000001-0000-0000-0000-000000000018",
+    "code": "MET_AMP",
+    "nameRu": "Аденозинмонофосфат",
+    "nameEn": "Adenosine monophosphate",
+    "abbrevRu": "АМФ",
+    "abbrevEn": "AMP",
+    "formula": "C₁₀H₁₄N₅O₇P",
+    "carbons": "10C",
+    "carbonsEn": "10C",
+    "smiles": "C1C(C(C(O1)N2C=NC3=C2N=CN=C3N)O)OP(=O)([O-])[O-]",
+    "chebi": "CHEBI:16027",
+    "inchiKey": "UDMBCSSLTHHNCD-KQYNXXCUSA-L",
+    "descriptionRu": "Аденозин-5'-монофосфат. Продукт расщепления АТФ аденилилирующими лигазами (включая аргининосукцинатсинтетазу ASS1 орнитинового цикла) с одновременным выделением пирофосфата (ФФᵢ). Ключевой аллостерический активатор АМФК (AMPK) и гликогенфосфорилазы b.",
+    "descriptionEn": "Adenosine monophosphate. Produced by adenylating ligases including argininosuccinate synthase (ASS1) with pyrophosphate release. Primary cellular energy sensor activating AMPK.",
+    "synonymsRu": [
+      "АМФ",
+      "Аденозинмонофосфат",
+      "Аденозин-5'-монофосфат",
+      "AMP"
+    ],
+    "synonymsEn": [
+      "AMP",
+      "Adenosine monophosphate",
+      "Adenosine 5'-monophosphate",
+      "5'-AMP"
+    ],
+    "isCofactor": true,
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Орнитиновый цикл (Цикл мочевины)",
+        "pathwayNameEn": "Urea Cycle (Krebs-Henseleit)",
+        "isCurrentPathway": false,
+        "role": "product",
+        "reactionCode": "R_ASS1",
+        "stepNumber": 3,
+        "detailsRu": "Стадия 3 (ASS1): выделяется при конденсации цитруллина и аспартата после расщепления промежуточного цитруллил-АМФ.",
+        "detailsEn": "Step 3 (ASS1): released during citrulline and aspartate condensation."
+      }
+    ]
+  },
+  {
+    "id": "c0000001-0000-0000-0000-000000000019",
+    "code": "MET_BICARBONATE",
+    "nameRu": "Бикарбонат (HCO₃⁻)",
+    "nameEn": "Bicarbonate (HCO₃⁻)",
+    "abbrevRu": "HCO₃⁻",
+    "abbrevEn": "HCO₃⁻",
+    "formula": "CHO₃⁻",
+    "carbons": "1C",
+    "carbonsEn": "1C",
+    "smiles": "C(=O)(O)[O-]",
+    "chebi": "CHEBI:17544",
+    "inchiKey": "BVKZGUZCCUSVTD-UHFFFAOYSA-M",
+    "descriptionRu": "Гидрокарбонат-анион (HCO₃⁻). Основной физиологический буфер плазмы крови и субстрат реакций карбоксилирования: синтеза карбамоилфосфата (CPS1) в орнитиновом цикле, карбоксилирования пирувата (PC) и пропионил-КоА (PCC).",
+    "descriptionEn": "Bicarbonate anion (HCO₃⁻). Major physiological blood buffer and one-carbon donor for biotin-dependent carboxylases (PCC, PC) and carbamoyl phosphate synthetase (CPS1).",
+    "synonymsRu": [
+      "Бикарбонат",
+      "Гидрокарбонат",
+      "HCO3-",
+      "HCO₃⁻",
+      "Бикарбонат (HCO₃⁻)"
+    ],
+    "synonymsEn": [
+      "Bicarbonate",
+      "Hydrogen carbonate",
+      "HCO3-",
+      "HCO₃⁻",
+      "Bicarbonate (HCO₃⁻)"
+    ],
+    "isCofactor": true,
+    "pathwaysRu": [
+      {
+        "pathwayCode": "PW-UREA-CYCLE",
+        "pathwayNameRu": "Орнитиновый цикл (Цикл мочевины)",
+        "pathwayNameEn": "Urea Cycle (Krebs-Henseleit)",
+        "isCurrentPathway": false,
+        "role": "substrate",
+        "reactionCode": "R_CPS1",
+        "stepNumber": 1,
+        "detailsRu": "Стадия 1 (CPS1): служит источником углерода для синтеза карбамоилфосфата, активируясь 1-й молекулой АТФ в карбоксифосфат.",
+        "detailsEn": "Step 1 (CPS1): provides carbon backbone for carbamoyl phosphate synthesis."
       }
     ]
   }

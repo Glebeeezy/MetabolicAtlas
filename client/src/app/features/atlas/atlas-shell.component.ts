@@ -124,13 +124,25 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   readonly crossroads = this.metabolismService.crossroads;
   readonly sectorConfigs = this.metabolismService.sectorConfigs;
   readonly macroSubpathways = MACRO_SUBPATHWAYS;
-  private static readonly COVERED_CORRIDOR_HIGHWAYS = new Set(['hw-gly-pdh', 'hw-hub-tca']);
+  private static readonly COVERED_CORRIDOR_HIGHWAYS = new Set([
+    'hw-gly-pdh',
+    'hw-hub-tca',
+    'hw-amino-acetyl',
+    'hw-amino-akg',
+    'hw-urea-fumarate',
+  ]);
+  private static readonly COVERED_CROSSROADS = new Set(['cr-akg-cross']);
 
   readonly superHighways = this.metabolismService.superHighways;
   readonly visibleSuperHighways = computed(() =>
     this.lodLevel() >= 2
       ? this.superHighways.filter((hw) => !AtlasShellComponent.COVERED_CORRIDOR_HIGHWAYS.has(hw.id))
       : this.superHighways
+  );
+  readonly visibleCrossroads = computed(() =>
+    this.lodLevel() >= 2
+      ? this.crossroads.filter((cr) => !AtlasShellComponent.COVERED_CROSSROADS.has(cr.id))
+      : this.crossroads
   );
 
   // Active selections & highlights (delegated to AtlasHighlightService)
@@ -144,6 +156,7 @@ export class AtlasShellComponent implements OnInit, OnDestroy {
   readonly selectedHighway = this.highlight.selectedHighway;
   readonly activeCarrierFilter = this.highlight.activeCarrierFilter;
   readonly selectedCofactorName = this.highlight.selectedCofactorName;
+  readonly selectedCofactorAliases = this.highlight.selectedCofactorAliases;
 
   readonly metaboliteMap = this.highlight.metaboliteMap;
   readonly reactionMap = this.highlight.reactionMap;

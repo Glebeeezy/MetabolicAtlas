@@ -42,6 +42,30 @@ export class AtlasHighlightService {
     return null;
   });
 
+  readonly selectedCofactorAliases = computed<ReadonlySet<string> | null>(() => {
+    const met = this.selectedMetabolite();
+    if (!met) return null;
+    const aliases = [
+      met.nameRu,
+      met.nameEn,
+      met.abbrevRu,
+      met.abbrevEn,
+      ...(met.synonymsRu ?? []),
+      ...(met.synonymsEn ?? []),
+    ];
+    const set = new Set<string>();
+    for (const a of aliases) {
+      if (!a) continue;
+      const norm = AtlasHighlightService.normalizeCofactorToken(a);
+      if (norm) {
+        set.add(norm);
+        const withoutParen = norm.replace(/\s*\([^)]*\)/g, '').trim();
+        if (withoutParen) set.add(withoutParen);
+      }
+    }
+    return set.size > 0 ? set : null;
+  });
+
   // Fast ID dictionaries
   readonly metaboliteMap = computed(() => {
     const map = new Map<string, HumanMetaboliteNode>();
@@ -448,7 +472,9 @@ export class AtlasHighlightService {
         list.push({ rx: r, role: 'substrate' });
       } else if (r.targetMetaboliteId === metId || r.secondaryTargetId === metId) {
         list.push({ rx: r, role: 'product' });
-      } else if (targetMet && targetMet.isCofactor) {
+      } else if (r.branches?.some((b) => b.metaboliteId === metId)) {
+        list.push({ rx: r, role: 'product' });
+      } else if (targetMet) {
         const matches = (candidate: string) => this.doesCofactorMatchCandidate(targetMet, candidate);
 
         const isSub =

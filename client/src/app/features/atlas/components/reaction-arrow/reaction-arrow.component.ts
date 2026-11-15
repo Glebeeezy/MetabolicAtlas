@@ -174,7 +174,7 @@ interface RenderableReactionSegment {
           [attr.transform]="'translate(' + (arc.inX || 0) + ',' + (arc.inY || 0) + ')'"
         >
           @for (item of arc.inItems; track item.name + (item.textEn || item.text)) {
-            @let isItemSel = isCofactorActive(item.name, item.nameEn);
+            @let isItemSel = isCofactorActive(item.name, item.nameEn, item.text, item.textEn);
             @let activeText = getItemText(item);
             @let activeName = getItemName(item);
             @let chipW = getChipWidth(activeText);
@@ -216,7 +216,7 @@ interface RenderableReactionSegment {
         @let chipW = getChipWidth(activeText);
         <svg:g
           class="cofactor-pill-group cofactor-pill-item"
-          [class.is-active]="isCofactorActive(arc.inCofactor || arc.inText, arc.inCofactorEn)"
+          [class.is-active]="isCofactorActive(arc.inCofactor, arc.inCofactorEn, arc.inText, arc.inTextEn)"
           [attr.transform]="'translate(' + (arc.inX || 0) + ',' + (arc.inY || 0) + ')'"
           (click)="onCofactorClick(arc.inCofactor || arc.inText, $event)"
           role="button"
@@ -231,7 +231,7 @@ interface RenderableReactionSegment {
             height="20"
             rx="5"
             class="cofactor-chip-bg"
-            [class.cofactor-chip-bg--active]="isCofactorActive(arc.inCofactor || arc.inText, arc.inCofactorEn)"
+            [class.cofactor-chip-bg--active]="isCofactorActive(arc.inCofactor, arc.inCofactorEn, arc.inText, arc.inTextEn)"
           />
           <svg:text
             x="0"
@@ -239,7 +239,7 @@ interface RenderableReactionSegment {
             text-anchor="middle"
             dominant-baseline="central"
             class="cofactor-pill-text cofactor-pill-text--in"
-            [class.cofactor-pill-text--active]="isCofactorActive(arc.inCofactor || arc.inText, arc.inCofactorEn)"
+            [class.cofactor-pill-text--active]="isCofactorActive(arc.inCofactor, arc.inCofactorEn, arc.inText, arc.inTextEn)"
           >
             {{ activeText }}
           </svg:text>
@@ -253,7 +253,7 @@ interface RenderableReactionSegment {
           [attr.transform]="'translate(' + (arc.outX || 0) + ',' + (arc.outY || 0) + ')'"
         >
           @for (item of arc.outItems; track item.name + (item.textEn || item.text)) {
-            @let isItemSel = isCofactorActive(item.name, item.nameEn);
+            @let isItemSel = isCofactorActive(item.name, item.nameEn, item.text, item.textEn);
             @let activeText = getItemText(item);
             @let activeName = getItemName(item);
             @let chipW = getChipWidth(activeText);
@@ -297,7 +297,7 @@ interface RenderableReactionSegment {
         @let chipW = getChipWidth(activeText);
         <svg:g
           class="cofactor-pill-group cofactor-pill-item"
-          [class.is-active]="isCofactorActive(arc.outCofactor || arc.outText, arc.outCofactorEn)"
+          [class.is-active]="isCofactorActive(arc.outCofactor, arc.outCofactorEn, arc.outText, arc.outTextEn)"
           [attr.transform]="'translate(' + (arc.outX || 0) + ',' + (arc.outY || 0) + ')'"
           (click)="onCofactorClick(arc.outCofactor || arc.outText, $event)"
           role="button"
@@ -312,7 +312,7 @@ interface RenderableReactionSegment {
             height="20"
             rx="5"
             class="cofactor-chip-bg"
-            [class.cofactor-chip-bg--active]="isCofactorActive(arc.outCofactor || arc.outText, arc.outCofactorEn)"
+            [class.cofactor-chip-bg--active]="isCofactorActive(arc.outCofactor, arc.outCofactorEn, arc.outText, arc.outTextEn)"
           />
           <svg:text
             x="0"
@@ -322,7 +322,7 @@ interface RenderableReactionSegment {
             class="cofactor-pill-text cofactor-pill-text--out"
             [class.cofactor-pill-text--energy]="arc.isEnergy"
             [class.cofactor-pill-text--gtp]="arc.isGtp"
-            [class.cofactor-pill-text--active]="isCofactorActive(arc.outCofactor || arc.outText, arc.outCofactorEn)"
+            [class.cofactor-pill-text--active]="isCofactorActive(arc.outCofactor, arc.outCofactorEn, arc.outText, arc.outTextEn)"
           >
             {{ activeText }}
           </svg:text>
@@ -687,6 +687,7 @@ export class ReactionArrowComponent {
   readonly isDimmed = input<boolean>(false);
   readonly isFluxAnimated = input<boolean>(false);
   readonly selectedCofactorName = input<string | null>(null);
+  readonly selectedCofactorAliases = input<ReadonlySet<string> | null>(null);
   readonly showEnzymeLabel = input<boolean>(false);
 
   readonly reactionClick = output<ReactionArrowData>();
@@ -867,7 +868,32 @@ export class ReactionArrowComponent {
     return arc.outCofactor || arc.outText || '';
   }
 
-  isCofactorActive(name: string, nameEn?: string): boolean {
+  isCofactorActive(name?: string, nameEn?: string, text?: string, textEn?: string): boolean {
+    const aliases = this.selectedCofactorAliases();
+    if (aliases && aliases.size > 0) {
+      const candidates = [name, nameEn, text, textEn].filter(
+        (c): c is string => typeof c === 'string' && c.trim().length > 0
+      );
+      for (const cand of candidates) {
+        const norm = cand
+          .trim()
+          .toLowerCase()
+          .replace(/ᵢ/g, 'i')
+          .replace(/₂/g, '2')
+          .replace(/⁺/g, '+')
+          .replace(/′/g, "'");
+        if (aliases.has(norm)) return true;
+        const noParen = norm.replace(/\s*\([^)]*\)/g, '').trim();
+        if (noParen && aliases.has(noParen)) return true;
+        const tokens = norm
+          .split(/[\s()+/,➔→]+/)
+          .map((t) => t.replace(/^[+−\-]+|[+−\-]+$/g, ''))
+          .filter(Boolean);
+        if (tokens.some((t) => aliases.has(t))) return true;
+      }
+      return false;
+    }
+
     const sel = this.selectedCofactorName();
     if (!sel || (!name && !nameEn)) return false;
     const a = sel.trim().toLowerCase();
@@ -880,14 +906,12 @@ export class ReactionArrowComponent {
   }
 
   isArcHighlighted(): boolean {
-    const sel = this.selectedCofactorName();
-    if (!sel) return false;
     const arc = this.reaction().cofactorArc;
     if (!arc) return false;
-    if (arc.inItems?.some((i) => this.isCofactorActive(i.name, i.nameEn))) return true;
-    if (arc.outItems?.some((i) => this.isCofactorActive(i.name, i.nameEn))) return true;
-    if (arc.inCofactor && this.isCofactorActive(arc.inCofactor, arc.inCofactorEn)) return true;
-    if (arc.outCofactor && this.isCofactorActive(arc.outCofactor, arc.outCofactorEn)) return true;
+    if (arc.inItems?.some((i) => this.isCofactorActive(i.name, i.nameEn, i.text, i.textEn))) return true;
+    if (arc.outItems?.some((i) => this.isCofactorActive(i.name, i.nameEn, i.text, i.textEn))) return true;
+    if (arc.inCofactor && this.isCofactorActive(arc.inCofactor, arc.inCofactorEn, arc.inText, arc.inTextEn)) return true;
+    if (arc.outCofactor && this.isCofactorActive(arc.outCofactor, arc.outCofactorEn, arc.outText, arc.outTextEn)) return true;
     return false;
   }
 

@@ -1461,14 +1461,12 @@ export const REACTION_LAYOUTS: ReactionLayout[] = [
   {
     "reactionId": "d0000007-0000-0000-0000-000000000002",
     "pathData": "M 2755 1957 L 2900 1957",
-    "secondaryPathData": "M 2977 1774 L 2977 1920",
     "tooltipX": 2828,
     "tooltipY": 1940
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000003",
     "pathData": "M 3055 1957 C 3130 1957, 3175 1817, 3250 1817",
-    "secondaryPathData": "M 3327 1324 L 3327 1780",
     "tooltipX": 3152,
     "tooltipY": 1870,
     "cofactorArc": {
@@ -1512,21 +1510,20 @@ export const REACTION_LAYOUTS: ReactionLayout[] = [
   {
     "reactionId": "d0000007-0000-0000-0000-000000000004",
     "pathData": "M 3327 1854 L 3327 2020",
-    "secondaryPathData": "M 3327 1937 C 3100 1937, 2700 2050, 2300 2050",
+    "secondaryPathData": "M 3327 1937 C 2700 1937, 1700 2351, 1282 2351",
     "tooltipX": 3345,
     "tooltipY": 1937
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000005",
     "pathData": "M 3250 2057 C 3180 2057, 3120 2177, 3055 2177",
-    "secondaryPathData": "M 3150 2117 C 2950 2117, 2750 2070, 2677 1994",
     "tooltipX": 3150,
     "tooltipY": 2135,
     "cofactorArc": {
       "preset": "tangent-swoop",
       "path": "M 3125 2060 C 3133 2085, 3143 2117, 3151 2117 C 3159 2117, 3169 2085, 3177 2060",
-      "inCofactor": "Вода",
-      "inCofactorEn": "Water",
+      "inCofactor": "Вода (H₂O)",
+      "inCofactorEn": "Water (H₂O)",
       "inText": "+ H₂O",
       "inTextRu": "+ H₂O",
       "inTextEn": "+ H₂O",
@@ -1556,14 +1553,12 @@ export const REACTION_LAYOUTS: ReactionLayout[] = [
   {
     "reactionId": "d0000007-0000-0000-0000-000000000008",
     "pathData": "M 2800 2357 C 2600 2357, 2350 2351, 2140 2351",
-    "secondaryPathData": "M 2600 2357 C 2600 2150, 2677 1950, 2677 1774",
     "tooltipX": 2470,
     "tooltipY": 2335
   },
   {
     "reactionId": "d0000007-0000-0000-0000-000000000009",
     "pathData": "M 2655 2357 L 2800 2357",
-    "secondaryPathData": "M 2727 2357 C 2727 2150, 2677 1950, 2677 1774",
     "tooltipX": 2727,
     "tooltipY": 2340
   },

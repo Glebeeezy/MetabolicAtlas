@@ -106,7 +106,8 @@ export const AMINO_CATABOLISM_REACTIONS: BiologicalReaction[] = [
     ],
     products: [
       { name: 'Сукцинил-КоА', nameEn: 'Succinyl-CoA', formula: 'C₂₅H₄₀N₇O₁₉P₃S' },
-      { name: 'АДФ + Фᵢ', nameEn: 'ADP + Pi', formula: 'ADP + Pi', isCo: true },
+      { name: 'Аденозиндифосфат', nameEn: 'Adenosine diphosphate', formula: 'C₁₀H₁₂N₅O₁₀P₂³⁻', isCo: true },
+      { name: 'Неорганический фосфат (Фᵢ)', nameEn: 'Inorganic phosphate (Pi)', formula: 'HPO₄²⁻', isCo: true },
     ],
     mechanismRu: 'Биотин-зависимое карбоксилирование пропионил-КоА в D-метилмалонил-КоА (PCC), рацемизация в L-изомер, и витамин B₁₂ (аденозилкобаламин)-зависимая изомеризация метилмалонил-КоА-мутазой (MUT) в Сукцинил-КоА (анаплероз ЦТК).',
     mechanismEn: 'Biotin-dependent carboxylation by PCC followed by B12-dependent rearrangement by methylmalonyl-CoA mutase into succinyl-CoA.',

@@ -93,7 +93,7 @@ export const PATHWAY_SUPER_HIGHWAYS: PathwaySuperHighway[] = [
     "targetMetaboliteCode": "MET_FUMARATE",
     "nameRu": "Шунт цикла мочевины (ASL) ➔ Фумарат",
     "nameEn": "Urea cycle shunt (ASL) ➔ Fumarate",
-    "pathData": "M 2300 2050 C 1850 2220, 1500 2320, 1282 2351",
+    "pathData": "M 3327 1937 C 2700 1937, 1700 2351, 1282 2351",
     "carbonFlux": "4C",
     "isAnabolic": false,
     "isCatabolic": true,

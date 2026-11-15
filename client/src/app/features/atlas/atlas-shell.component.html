@@ -275,7 +275,7 @@
         ma-crossroads-layer
         class="crossroads-layer"
         pointer-events="none"
-        [crossroads]="crossroads"
+        [crossroads]="visibleCrossroads()"
         [locale]="localeService.locale()"
       ></g>
 
@@ -296,6 +296,7 @@
             [isDimmed]="isDim"
             [isFluxAnimated]="isFluxAnimated()"
             [selectedCofactorName]="selectedCofactorName()"
+            [selectedCofactorAliases]="selectedCofactorAliases()"
             [showEnzymeLabel]="lodLevel() >= 2"
             (reactionClick)="onReactionClick($event)"
             (reactionHover)="hoveredReaction.set($event)"

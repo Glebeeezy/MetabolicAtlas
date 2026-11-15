@@ -11,22 +11,22 @@ import {
 } from './index';
 
 describe('Metabolic Data Integrity & Topology Specs', () => {
-  it('should have strictly unique UUIDs across all 67 metabolites', () => {
+  it('should have strictly unique UUIDs across all 69 metabolites', () => {
     const ids = new Set<string>();
     for (const met of ALL_METABOLITES) {
       expect(ids.has(met.id), `Duplicate metabolite UUID: ${met.id} (${met.code})`).toBe(false);
       ids.add(met.id);
     }
-    expect(ids.size).toBe(67);
+    expect(ids.size).toBe(69);
   });
 
-  it('should have strictly unique codes across all 67 metabolites', () => {
+  it('should have strictly unique codes across all 69 metabolites', () => {
     const codes = new Set<string>();
     for (const met of ALL_METABOLITES) {
       expect(codes.has(met.code), `Duplicate metabolite code: ${met.code}`).toBe(false);
       codes.add(met.code);
     }
-    expect(codes.size).toBe(67);
+    expect(codes.size).toBe(69);
   });
 
   it('should have strictly unique UUIDs across all 49 reactions', () => {
@@ -86,8 +86,8 @@ describe('Metabolic Data Integrity & Topology Specs', () => {
     }
   });
 
-  it('should preserve all SVG structures and layouts for all 67 metabolites', () => {
-    expect(METABOLITE_LAYOUTS.length).toBe(67);
+  it('should preserve all SVG structures and layouts for all 69 metabolites', () => {
+    expect(METABOLITE_LAYOUTS.length).toBe(69);
     for (const layout of METABOLITE_LAYOUTS) {
       expect(layout.skeletalSvg).toBeTruthy();
       expect(Number.isFinite(layout.width)).toBe(true);
@@ -100,7 +100,7 @@ describe('Metabolic Data Integrity & Topology Specs', () => {
       expect(met.height).toBeGreaterThan(0);
     }
 
-    // All 17 cofactor metabolites have isCofactor = true
+    // All 19 cofactor metabolites have isCofactor = true
     for (const met of COFACTOR_METABOLITES) {
       expect(met.isCofactor).toBe(true);
     }

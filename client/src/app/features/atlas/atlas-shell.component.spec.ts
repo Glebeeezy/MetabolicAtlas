@@ -995,12 +995,16 @@ describe('AtlasShellComponent', () => {
     expect(component.lodLevel()).toBe(1);
     expect(component.visibleSuperHighways().some((h) => h.id === 'hw-gly-pdh')).toBe(true);
     expect(component.visibleSuperHighways().some((h) => h.id === 'hw-hub-tca')).toBe(true);
+    expect(component.visibleSuperHighways().some((h) => h.id === 'hw-urea-fumarate')).toBe(true);
+    expect(component.visibleCrossroads().some((c) => c.id === 'cr-akg-cross')).toBe(true);
 
     component.zoom.set(80);
     fixture.detectChanges();
     expect(component.lodLevel()).toBe(2);
     expect(component.visibleSuperHighways().some((h) => h.id === 'hw-gly-pdh')).toBe(false);
     expect(component.visibleSuperHighways().some((h) => h.id === 'hw-hub-tca')).toBe(false);
+    expect(component.visibleSuperHighways().some((h) => h.id === 'hw-urea-fumarate')).toBe(false);
+    expect(component.visibleCrossroads().some((c) => c.id === 'cr-akg-cross')).toBe(false);
   });
 
   it('should render simplified abbrev cards at LOD 1 and full tiles + enzyme badges at LOD 2+', () => {

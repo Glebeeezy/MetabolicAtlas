@@ -670,5 +670,25 @@ export const METABOLITE_LAYOUTS: MetaboliteLayout[] = [
     "color": "#E11D48",
     "skeletalSvg": "<path d=\"M 10 24 L 20 16 L 30 24\" stroke=\"#E11D48\" stroke-width=\"2\" fill=\"none\"/><circle cx=\"30\" cy=\"24\" r=\"3\" fill=\"#F59E0B\"/>",
     "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"45\" y=\"50\" fill=\"#CBD5E1\" font-size=\"12\" font-weight=\"700\">CH₃—CH₂—CO</text>\n  <line x1=\"118\" y1=\"46\" x2=\"145\" y2=\"46\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <rect x=\"148\" y=\"32\" width=\"65\" height=\"28\" rx=\"6\" fill=\"rgba(245, 158, 11, 0.16)\" stroke=\"#F59E0B\" stroke-width=\"1.4\"/>\n  <text x=\"180\" y=\"46\" fill=\"#F59E0B\" font-size=\"11\" font-weight=\"800\" text-anchor=\"middle\" dominant-baseline=\"central\">S-CoA</text>\n  <text x=\"120\" y=\"80\" fill=\"#94A3B8\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">Пропионил-КоА (BCAA ➔ Сукцинил-КоА)</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "c0000001-0000-0000-0000-000000000018",
+    "x": 0,
+    "y": 0,
+    "width": 0,
+    "height": 0,
+    "color": "#94A3B8",
+    "skeletalSvg": "<circle cx=\"20\" cy=\"20\" r=\"14\" fill=\"#94A3B8\" fill-opacity=\"0.2\"/><text x=\"20\" y=\"24\" fill=\"#94A3B8\" font-size=\"11\" font-weight=\"800\" text-anchor=\"middle\">AMP</text>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <rect x=\"25\" y=\"35\" width=\"60\" height=\"28\" rx=\"6\" fill=\"rgba(148,163,184,0.2)\" stroke=\"#94A3B8\" stroke-width=\"1.5\"/>\n  <text x=\"55\" y=\"52\" fill=\"#CBD5E1\" font-weight=\"800\" font-size=\"11\" text-anchor=\"middle\" dominant-baseline=\"central\">Adenosine</text>\n  <line x1=\"85\" y1=\"49\" x2=\"110\" y2=\"49\" stroke=\"#94A3B8\" stroke-width=\"2\"/>\n  <text x=\"130\" y=\"52\" fill=\"#94A3B8\" font-weight=\"700\" font-size=\"10\" text-anchor=\"middle\">P</text>\n</svg>"
+  },
+  {
+    "metaboliteId": "c0000001-0000-0000-0000-000000000019",
+    "x": 0,
+    "y": 0,
+    "width": 0,
+    "height": 0,
+    "color": "#38BDF8",
+    "skeletalSvg": "<circle cx=\"20\" cy=\"20\" r=\"14\" fill=\"#38BDF8\" fill-opacity=\"0.2\"/><text x=\"20\" y=\"24\" fill=\"#38BDF8\" font-size=\"9\" font-weight=\"800\" text-anchor=\"middle\">HCO3</text>",
+    "structureSvg": "<svg viewBox=\"0 0 240 100\" class=\"molecule-structure-svg\" preserveAspectRatio=\"xMidYMid meet\">\n  <text x=\"120\" y=\"55\" fill=\"#38BDF8\" font-weight=\"800\" font-size=\"16\" text-anchor=\"middle\">HCO₃⁻</text>\n</svg>"
   }
 ];

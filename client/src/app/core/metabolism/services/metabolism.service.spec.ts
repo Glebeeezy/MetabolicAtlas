@@ -16,10 +16,10 @@ describe('MetabolismService & MetabolismIndexService', () => {
     indexService = TestBed.inject(MetabolismIndexService);
   });
 
-  it('should provide full list of canvas metabolites (50 human + 17 cofactors = 67 total)', () => {
+  it('should provide full list of canvas metabolites (50 human + 19 cofactors = 69 total)', () => {
     expect(service.canvasMetabolites.length).toBe(50);
-    expect(service.cofactorMetabolites.length).toBe(17);
-    expect(service.allMetabolites.length).toBe(67);
+    expect(service.cofactorMetabolites.length).toBe(19);
+    expect(service.allMetabolites.length).toBe(69);
   });
 
   it('should provide full list of reactions (49 total)', () => {
@@ -76,7 +76,7 @@ describe('MetabolismService & MetabolismIndexService', () => {
 
   it('should stream data via Observable API (preparing for future ASP.NET Core 10 backend)', async () => {
     const metabolites = await firstValueFrom(service.getMetabolites$());
-    expect(metabolites.length).toBe(67);
+    expect(metabolites.length).toBe(69);
 
     const reactions = await firstValueFrom(service.getReactions$());
     expect(reactions.length).toBe(49);
